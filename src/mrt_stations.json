@@ -1,0 +1,3927 @@
+[
+  {
+    "data": {
+      "allData": [
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.90325246673858,
+                1.319778951553634
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 1,
+              "STN_NAME": "EUNOS MRT STATION",
+              "STN_NO": "EW7",
+              "index": 0
+            },
+            "type": "Feature"
+          },
+          1,
+          "EUNOS MRT STATION",
+          "EW7"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.73259673807368,
+                1.3423528208747413
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 2,
+              "STN_NAME": "CHINESE GARDEN MRT STATION",
+              "STN_NO": "EW25",
+              "index": 1
+            },
+            "type": "Feature"
+          },
+          2,
+          "CHINESE GARDEN MRT STATION",
+          "EW25"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.83297990773863,
+                1.4173833701535437
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 3,
+              "STN_NAME": "KHATIB MRT STATION",
+              "STN_NO": "NS14",
+              "index": 2
+            },
+            "type": "Feature"
+          },
+          3,
+          "KHATIB MRT STATION",
+          "NS14"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.76216541090051,
+                1.4251776987704452
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 4,
+              "STN_NAME": "KRANJI MRT STATION",
+              "STN_NO": "NS7",
+              "index": 3
+            },
+            "type": "Feature"
+          },
+          4,
+          "KRANJI MRT STATION",
+          "NS7"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.81681667014934,
+                1.2895627264024503
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 5,
+              "STN_NAME": "REDHILL MRT STATION",
+              "STN_NO": "EW18",
+              "index": 4
+            },
+            "type": "Feature"
+          },
+          5,
+          "REDHILL MRT STATION",
+          "EW18"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.74740511413825,
+                1.3975350177934094
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 6,
+              "STN_NAME": "YEW TEE MRT STATION",
+              "STN_NO": "NS5",
+              "index": 5
+            },
+            "type": "Feature"
+          },
+          6,
+          "YEW TEE MRT STATION",
+          "NS5"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.69732151293638,
+                1.3375868822047463
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 7,
+              "STN_NAME": "PIONEER MRT STATION",
+              "STN_NO": "EW28",
+              "index": 6
+            },
+            "type": "Feature"
+          },
+          7,
+          "PIONEER MRT STATION",
+          "EW28"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.79830451562928,
+                1.3024387353271674
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 8,
+              "STN_NAME": "COMMONWEALTH MRT STATION",
+              "STN_NO": "EW20",
+              "index": 7
+            },
+            "type": "Feature"
+          },
+          8,
+          "COMMONWEALTH MRT STATION",
+          "EW20"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.89306035525192,
+                1.3181120822952754
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 9,
+              "STN_NAME": "PAYA LEBAR MRT STATION",
+              "STN_NO": "EW8",
+              "index": 8
+            },
+            "type": "Feature"
+          },
+          9,
+          "PAYA LEBAR MRT STATION",
+          "EW8"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.95337169417603,
+                1.3432028949307242
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 10,
+              "STN_NAME": "SIMEI MRT STATION",
+              "STN_NO": "EW3",
+              "index": 9
+            },
+            "type": "Feature"
+          },
+          10,
+          "SIMEI MRT STATION",
+          "EW3"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.94514868864933,
+                1.353301356342431
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 11,
+              "STN_NAME": "TAMPINES MRT STATION",
+              "STN_NO": "EW2",
+              "index": 10
+            },
+            "type": "Feature"
+          },
+          11,
+          "TAMPINES MRT STATION",
+          "EW2"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.80098800081262,
+                1.440585001085408
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 12,
+              "STN_NAME": "ADMIRALTY MRT STATION",
+              "STN_NO": "NS10",
+              "index": 11
+            },
+            "type": "Feature"
+          },
+          12,
+          "ADMIRALTY MRT STATION",
+          "NS10"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8350050461949,
+                1.4294430808107972
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 13,
+              "STN_NAME": "YISHUN MRT STATION",
+              "STN_NO": "NS13",
+              "index": 12
+            },
+            "type": "Feature"
+          },
+          13,
+          "YISHUN MRT STATION",
+          "NS13"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.94926811824573,
+                1.3729837735794865
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 14,
+              "STN_NAME": "PASIR RIS MRT STATION",
+              "STN_NO": "EW1",
+              "index": 13
+            },
+            "type": "Feature"
+          },
+          14,
+          "PASIR RIS MRT STATION",
+          "EW1"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.76529887432669,
+                1.3149544924235912
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 15,
+              "STN_NAME": "CLEMENTI MRT STATION",
+              "STN_NO": "EW23",
+              "index": 14
+            },
+            "type": "Feature"
+          },
+          15,
+          "CLEMENTI MRT STATION",
+          "EW23"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.88290604466073,
+                1.316432611657835
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 16,
+              "STN_NAME": "ALJUNIED MRT STATION",
+              "STN_NO": "EW9",
+              "index": 15
+            },
+            "type": "Feature"
+          },
+          16,
+          "ALJUNIED MRT STATION",
+          "EW9"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84993299389015,
+                1.3693473037885606
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 17,
+              "STN_NAME": "ANG MO KIO MRT STATION",
+              "STN_NO": "NS16",
+              "index": 16
+            },
+            "type": "Feature"
+          },
+          17,
+          "ANG MO KIO MRT STATION",
+          "NS16"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.96154821070824,
+                1.3345497778378088
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 18,
+              "STN_NAME": "EXPO MRT STATION",
+              "STN_NO": "CG1",
+              "index": 17
+            },
+            "type": "Feature"
+          },
+          18,
+          "EXPO MRT STATION",
+          "CG1"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.74434094618185,
+                1.3853616928288064
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 19,
+              "STN_NAME": "CHOA CHU KANG MRT STATION",
+              "STN_NO": "NS4",
+              "index": 18
+            },
+            "type": "Feature"
+          },
+          19,
+          "CHOA CHU KANG MRT STATION",
+          "NS4"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.742286544005,
+                1.3331526198940624
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 20,
+              "STN_NAME": "JURONG EAST MRT STATION",
+              "STN_NO": "EW24 / NS1",
+              "index": 19
+            },
+            "type": "Feature"
+          },
+          20,
+          "JURONG EAST MRT STATION",
+          "EW24 / NS1"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.80588433389231,
+                1.294860932794984
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 21,
+              "STN_NAME": "QUEENSTOWN MRT STATION",
+              "STN_NO": "EW19",
+              "index": 20
+            },
+            "type": "Feature"
+          },
+          21,
+          "QUEENSTOWN MRT STATION",
+          "EW19"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.63687867834915,
+                1.3404637656482041
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 22,
+              "STN_NAME": "TUAS LINK MRT STATION",
+              "STN_NO": "EW33",
+              "index": 21
+            },
+            "type": "Feature"
+          },
+          22,
+          "TUAS LINK MRT STATION",
+          "EW33"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.66055295590829,
+                1.3195052149382032
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 23,
+              "STN_NAME": "GUL CIRCLE MRT STATION",
+              "STN_NO": "EW30",
+              "index": 22
+            },
+            "type": "Feature"
+          },
+          23,
+          "GUL CIRCLE MRT STATION",
+          "EW30"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.78648513490775,
+                1.4368751282107524
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 24,
+              "STN_NAME": "WOODLANDS MRT STATION",
+              "STN_NO": "NS9",
+              "index": 23
+            },
+            "type": "Feature"
+          },
+          24,
+          "WOODLANDS MRT STATION",
+          "NS9"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.64907547830923,
+                1.3210265532422623
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 25,
+              "STN_NAME": "TUAS CRESCENT MRT STATION",
+              "STN_NO": "EW31",
+              "index": 24
+            },
+            "type": "Feature"
+          },
+          25,
+          "TUAS CRESCENT MRT STATION",
+          "EW31"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.87138654135957,
+                1.3114889096421598
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 26,
+              "STN_NAME": "KALLANG MRT STATION",
+              "STN_NO": "EW10",
+              "index": 25
+            },
+            "type": "Feature"
+          },
+          26,
+          "KALLANG MRT STATION",
+          "EW10"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.63961405603068,
+                1.3299890890491324
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 27,
+              "STN_NAME": "TUAS WEST ROAD MRT STATION",
+              "STN_NO": "EW32",
+              "index": 26
+            },
+            "type": "Feature"
+          },
+          27,
+          "TUAS WEST ROAD MRT STATION",
+          "EW32"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.79019153517402,
+                1.3071834665473296
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 28,
+              "STN_NAME": "BUONA VISTA MRT STATION",
+              "STN_NO": "EW21",
+              "index": 27
+            },
+            "type": "Feature"
+          },
+          28,
+          "BUONA VISTA MRT STATION",
+          "EW21"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.77863784163824,
+                1.3114052929253044
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 29,
+              "STN_NAME": "DOVER MRT STATION",
+              "STN_NO": "EW22",
+              "index": 28
+            },
+            "type": "Feature"
+          },
+          29,
+          "DOVER MRT STATION",
+          "EW22"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8200461405486,
+                1.4490508212272915
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 30,
+              "STN_NAME": "SEMBAWANG MRT STATION",
+              "STN_NO": "NS11",
+              "index": 29
+            },
+            "type": "Feature"
+          },
+          30,
+          "SEMBAWANG MRT STATION",
+          "NS11"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.91294938836371,
+                1.3210382488510815
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 31,
+              "STN_NAME": "KEMBANGAN MRT STATION",
+              "STN_NO": "EW6",
+              "index": 30
+            },
+            "type": "Feature"
+          },
+          31,
+          "KEMBANGAN MRT STATION",
+          "EW6"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.74956676385263,
+                1.34903410857667
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 32,
+              "STN_NAME": "BUKIT BATOK MRT STATION",
+              "STN_NO": "NS2",
+              "index": 31
+            },
+            "type": "Feature"
+          },
+          32,
+          "BUKIT BATOK MRT STATION",
+          "NS2"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84955813143834,
+                1.3699331752384756
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 33,
+              "STN_NAME": "ANG MO KIO MRT STATION",
+              "STN_NO": "NS16",
+              "index": 32
+            },
+            "type": "Feature"
+          },
+          33,
+          "ANG MO KIO MRT STATION",
+          "NS16"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.70606462259629,
+                1.3386040545032705
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 34,
+              "STN_NAME": "BOON LAY MRT STATION",
+              "STN_NO": "EW27",
+              "index": 33
+            },
+            "type": "Feature"
+          },
+          34,
+          "BOON LAY MRT STATION",
+          "EW27"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.75189350208234,
+                1.3587618572614426
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 35,
+              "STN_NAME": "BUKIT GOMBAK MRT STATION",
+              "STN_NO": "NS3",
+              "index": 34
+            },
+            "type": "Feature"
+          },
+          35,
+          "BUKIT GOMBAK MRT STATION",
+          "NS3"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.77407146126237,
+                1.432514420635639
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 36,
+              "STN_NAME": "MARSILING MRT STATION",
+              "STN_NO": "NS8",
+              "index": 35
+            },
+            "type": "Feature"
+          },
+          36,
+          "MARSILING MRT STATION",
+          "NS8"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.92998449462085,
+                1.3239799688877432
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 37,
+              "STN_NAME": "BEDOK MRT STATION",
+              "STN_NO": "EW5",
+              "index": 36
+            },
+            "type": "Feature"
+          },
+          37,
+          "BEDOK MRT STATION",
+          "EW5"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.67837514285084,
+                1.327717173091677
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 38,
+              "STN_NAME": "JOO KOON MRT STATION",
+              "STN_NO": "EW29",
+              "index": 37
+            },
+            "type": "Feature"
+          },
+          38,
+          "JOO KOON MRT STATION",
+          "EW29"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.72094926847906,
+                1.344259249394694
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 39,
+              "STN_NAME": "LAKESIDE MRT STATION",
+              "STN_NO": "EW26",
+              "index": 38
+            },
+            "type": "Feature"
+          },
+          39,
+          "LAKESIDE MRT STATION",
+          "EW26"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.94634646062303,
+                1.3271871345383524
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 40,
+              "STN_NAME": "TANAH MERAH MRT STATION",
+              "STN_NO": "EW4",
+              "index": 39
+            },
+            "type": "Feature"
+          },
+          40,
+          "TANAH MERAH MRT STATION",
+          "EW4"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84494728975453,
+                1.3817560461130007
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 41,
+              "STN_NAME": "YIO CHU KANG MRT STATION",
+              "STN_NO": "NS15",
+              "index": 40
+            },
+            "type": "Feature"
+          },
+          41,
+          "YIO CHU KANG MRT STATION",
+          "NS15"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.91272735563106,
+                1.402286677493705
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 42,
+              "STN_NAME": "OASIS LRT STATION",
+              "STN_NO": "PE6",
+              "index": 41
+            },
+            "type": "Feature"
+          },
+          42,
+          "OASIS LRT STATION",
+          "PE6"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.90483155051895,
+                1.409612685086604
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 43,
+              "STN_NAME": "SAM KEE LRT STATION",
+              "STN_NO": "PW1",
+              "index": 42
+            },
+            "type": "Feature"
+          },
+          43,
+          "SAM KEE LRT STATION",
+          "PW1"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.88930481043604,
+                1.3971701964580394
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 44,
+              "STN_NAME": "FARMWAY LRT STATION",
+              "STN_NO": "SW2",
+              "index": 43
+            },
+            "type": "Feature"
+          },
+          44,
+          "FARMWAY LRT STATION",
+          "SW2"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.88125622197447,
+                1.3982128283971724
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 45,
+              "STN_NAME": "KUPANG LRT STATION",
+              "STN_NO": "SW3",
+              "index": 44
+            },
+            "type": "Feature"
+          },
+          45,
+          "KUPANG LRT STATION",
+          "SW3"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8905394271554,
+                1.3867239215279972
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 46,
+              "STN_NAME": "RENJONG LRT STATION",
+              "STN_NO": "SW8",
+              "index": 45
+            },
+            "type": "Feature"
+          },
+          46,
+          "RENJONG LRT STATION",
+          "SW8"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.76301363378569,
+                1.3779098979822
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 47,
+              "STN_NAME": "BUKIT PANJANG LRT STATION",
+              "STN_NO": "BP6",
+              "index": 46
+            },
+            "type": "Feature"
+          },
+          47,
+          "BUKIT PANJANG LRT STATION",
+          "BP6"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.77080858250892,
+                1.3845207961752204
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 48,
+              "STN_NAME": "FAJAR LRT STATION",
+              "STN_NO": "BP10",
+              "index": 47
+            },
+            "type": "Feature"
+          },
+          48,
+          "FAJAR LRT STATION",
+          "BP10"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.90241191198504,
+                1.4051947013024295
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 50,
+              "STN_NAME": "PUNGGOL LRT STATION",
+              "STN_NO": "PTC",
+              "index": 48
+            },
+            "type": "Feature"
+          },
+          50,
+          "PUNGGOL LRT STATION",
+          "PTC"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.90215631639114,
+                1.4159017194387642
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 51,
+              "STN_NAME": "SAMUDERA LRT STATION",
+              "STN_NO": "PW4",
+              "index": 49
+            },
+            "type": "Feature"
+          },
+          51,
+          "SAMUDERA LRT STATION",
+          "PW4"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.90031381767348,
+                1.411870458453224
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 52,
+              "STN_NAME": "NIBONG LRT STATION",
+              "STN_NO": "PW5",
+              "index": 50
+            },
+            "type": "Feature"
+          },
+          52,
+          "NIBONG LRT STATION",
+          "PW5"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.89720965031772,
+                1.405088584853961
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 53,
+              "STN_NAME": "SOO TECK LRT STATION",
+              "STN_NO": "PW7",
+              "index": 51
+            },
+            "type": "Feature"
+          },
+          53,
+          "SOO TECK LRT STATION",
+          "PW7"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.91648666197361,
+                1.3995848527611061
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 54,
+              "STN_NAME": "KADALOOR LRT STATION",
+              "STN_NO": "PE5",
+              "index": 52
+            },
+            "type": "Feature"
+          },
+          54,
+          "KADALOOR LRT STATION",
+          "PE5"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.91258085480962,
+                1.3939092261174832
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 55,
+              "STN_NAME": "CORAL EDGE LRT STATION",
+              "STN_NO": "PE3",
+              "index": 53
+            },
+            "type": "Feature"
+          },
+          55,
+          "CORAL EDGE LRT STATION",
+          "PE3"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.875635156456,
+                1.3973181549952196
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 56,
+              "STN_NAME": "THANGGAM LRT STATION",
+              "STN_NO": "SW4",
+              "index": 54
+            },
+            "type": "Feature"
+          },
+          56,
+          "THANGGAM LRT STATION",
+          "SW4"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.74905551939963,
+                1.3786027659830227
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 57,
+              "STN_NAME": "KEAT HONG LRT STATION",
+              "STN_NO": "BP3",
+              "index": 55
+            },
+            "type": "Feature"
+          },
+          57,
+          "KEAT HONG LRT STATION",
+          "BP3"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.90860354364459,
+                1.4052348361719877
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 58,
+              "STN_NAME": "DAMAI LRT STATION",
+              "STN_NO": "PE7",
+              "index": 56
+            },
+            "type": "Feature"
+          },
+          58,
+          "DAMAI LRT STATION",
+          "PE7"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.90596194407671,
+                1.3992819850199294
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 59,
+              "STN_NAME": "COVE LRT STATION",
+              "STN_NO": "PE1",
+              "index": 57
+            },
+            "type": "Feature"
+          },
+          59,
+          "COVE LRT STATION",
+          "PE1"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.91616605898797,
+                1.3945244957690093
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 60,
+              "STN_NAME": "RIVIERA LRT STATION",
+              "STN_NO": "PE4",
+              "index": 58
+            },
+            "type": "Feature"
+          },
+          60,
+          "RIVIERA LRT STATION",
+          "PE4"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.76236722595078,
+                1.382692295824158
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 61,
+              "STN_NAME": "SENJA LRT STATION",
+              "STN_NO": "BP13",
+              "index": 59
+            },
+            "type": "Feature"
+          },
+          61,
+          "SENJA LRT STATION",
+          "BP13"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.76450333815912,
+                1.3867030250139176
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 62,
+              "STN_NAME": "JELAPANG LRT STATION",
+              "STN_NO": "BP12",
+              "index": 60
+            },
+            "type": "Feature"
+          },
+          62,
+          "JELAPANG LRT STATION",
+          "BP12"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.7666689602233,
+                1.3777503338172186
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 63,
+              "STN_NAME": "PETIR LRT STATION",
+              "STN_NO": "BP7",
+              "index": 61
+            },
+            "type": "Feature"
+          },
+          63,
+          "PETIR LRT STATION",
+          "BP7"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.75371223219976,
+                1.376684679443904
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 64,
+              "STN_NAME": "TECK WHYE LRT STATION",
+              "STN_NO": "BP4",
+              "index": 62
+            },
+            "type": "Feature"
+          },
+          64,
+          "TECK WHYE LRT STATION",
+          "BP4"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.7445537312414,
+                1.3848363599658227
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 65,
+              "STN_NAME": "CHOA CHU KANG LRT STATION",
+              "STN_NO": "BP1",
+              "index": 63
+            },
+            "type": "Feature"
+          },
+          65,
+          "CHOA CHU KANG LRT STATION",
+          "BP1"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.74529180004262,
+                1.380298287217279
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 66,
+              "STN_NAME": "SOUTH VIEW LRT STATION",
+              "STN_NO": "BP2",
+              "index": 64
+            },
+            "type": "Feature"
+          },
+          66,
+          "SOUTH VIEW LRT STATION",
+          "BP2"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.88002960034996,
+                1.3920798387725961
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 67,
+              "STN_NAME": "LAYAR LRT STATION",
+              "STN_NO": "SW6",
+              "index": 65
+            },
+            "type": "Feature"
+          },
+          67,
+          "LAYAR LRT STATION",
+          "SW6"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.90217398876608,
+                1.3839789018335358
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 68,
+              "STN_NAME": "KANGKAR LRT STATION",
+              "STN_NO": "SE4",
+              "index": 66
+            },
+            "type": "Feature"
+          },
+          68,
+          "KANGKAR LRT STATION",
+          "SE4"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.90895021696649,
+                1.3969120530632706
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 69,
+              "STN_NAME": "MERIDIAN LRT STATION",
+              "STN_NO": "PE2",
+              "index": 67
+            },
+            "type": "Feature"
+          },
+          69,
+          "MERIDIAN LRT STATION",
+          "PE2"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.89379718083637,
+                1.3962776313358056
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 70,
+              "STN_NAME": "CHENG LIM LRT STATION",
+              "STN_NO": "SW1",
+              "index": 68
+            },
+            "type": "Feature"
+          },
+          70,
+          "CHENG LIM LRT STATION",
+          "SW1"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.90665079046649,
+                1.4168485204957642
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 71,
+              "STN_NAME": "PUNGGOL POINT LRT STATION",
+              "STN_NO": "PW3",
+              "index": 69
+            },
+            "type": "Feature"
+          },
+          71,
+          "PUNGGOL POINT LRT STATION",
+          "PW3"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.89855845405019,
+                1.4084524256476925
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 72,
+              "STN_NAME": "SUMANG LRT STATION",
+              "STN_NO": "PW6",
+              "index": 70
+            },
+            "type": "Feature"
+          },
+          72,
+          "SUMANG LRT STATION",
+          "PW6"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.87630861136874,
+                1.391885887744099
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 73,
+              "STN_NAME": "FERNVALE LRT STATION",
+              "STN_NO": "SW5",
+              "index": 71
+            },
+            "type": "Feature"
+          },
+          73,
+          "FERNVALE LRT STATION",
+          "SW5"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.88584414990798,
+                1.3893479529596915
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 74,
+              "STN_NAME": "TONGKANG LRT STATION",
+              "STN_NO": "SW7",
+              "index": 72
+            },
+            "type": "Feature"
+          },
+          74,
+          "TONGKANG LRT STATION",
+          "SW7"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.77127017861255,
+                1.3761428827850453
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 76,
+              "STN_NAME": "PENDING LRT STATION",
+              "STN_NO": "BP8",
+              "index": 73
+            },
+            "type": "Feature"
+          },
+          76,
+          "PENDING LRT STATION",
+          "BP8"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.90657762270219,
+                1.4127708938635442
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 77,
+              "STN_NAME": "TECK LEE LRT STATION",
+              "STN_NO": "PW2",
+              "index": 74
+            },
+            "type": "Feature"
+          },
+          77,
+          "TECK LEE LRT STATION",
+          "PW2"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.77264907257147,
+                1.3800178972420893
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 80,
+              "STN_NAME": "BANGKIT LRT STATION",
+              "STN_NO": "BP9",
+              "index": 75
+            },
+            "type": "Feature"
+          },
+          80,
+          "BANGKIT LRT STATION",
+          "BP9"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.90543910424039,
+                1.3880927037751065
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 81,
+              "STN_NAME": "BAKAU LRT STATION",
+              "STN_NO": "SE3",
+              "index": 76
+            },
+            "type": "Feature"
+          },
+          81,
+          "BAKAU LRT STATION",
+          "SE3"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.90597359531118,
+                1.391468496838552
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 82,
+              "STN_NAME": "RUMBIA LRT STATION",
+              "STN_NO": "SE2",
+              "index": 77
+            },
+            "type": "Feature"
+          },
+          82,
+          "RUMBIA LRT STATION",
+          "SE2"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.90049245062795,
+                1.394493046198061
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 83,
+              "STN_NAME": "COMPASSVALE LRT STATION",
+              "STN_NO": "SE1",
+              "index": 78
+            },
+            "type": "Feature"
+          },
+          83,
+          "COMPASSVALE LRT STATION",
+          "SE1"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.7601397773561,
+                1.380321008493098
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 85,
+              "STN_NAME": "TEN MILE JUNCTION LRT STATION",
+              "STN_NO": "BP14",
+              "index": 79
+            },
+            "type": "Feature"
+          },
+          85,
+          "TEN MILE JUNCTION LRT STATION",
+          "BP14"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.89719466951306,
+                1.3842335606705791
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 89,
+              "STN_NAME": "RANGGUNG LRT STATION",
+              "STN_NO": "SE5",
+              "index": 80
+            },
+            "type": "Feature"
+          },
+          89,
+          "RANGGUNG LRT STATION",
+          "SE5"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.75803409838677,
+                1.378618844452898
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 90,
+              "STN_NAME": "PHOENIX LRT STATION",
+              "STN_NO": "BP5",
+              "index": 81
+            },
+            "type": "Feature"
+          },
+          90,
+          "PHOENIX LRT STATION",
+          "BP5"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.76959839678055,
+                1.387772130860871
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 91,
+              "STN_NAME": "SEGAR LRT STATION",
+              "STN_NO": "BP11",
+              "index": 82
+            },
+            "type": "Feature"
+          },
+          91,
+          "SEGAR LRT STATION",
+          "BP11"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.89544258366469,
+                1.3916093638162625
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 92,
+              "STN_NAME": "SENGKANG LRT STATION",
+              "STN_NO": "STC",
+              "index": 83
+            },
+            "type": "Feature"
+          },
+          92,
+          "SENGKANG LRT STATION",
+          "STC"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8506673717784,
+                1.29686168652761
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 93,
+              "STN_NAME": "BRAS BASAH MRT STATION",
+              "STN_NO": "CC2",
+              "index": 84
+            },
+            "type": "Feature"
+          },
+          93,
+          "BRAS BASAH MRT STATION",
+          "CC2"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8902870313664,
+                1.326345371661255
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 94,
+              "STN_NAME": "MACPHERSON MRT STATION",
+              "STN_NO": "CC10",
+              "index": 85
+            },
+            "type": "Feature"
+          },
+          94,
+          "MACPHERSON MRT STATION",
+          "CC10"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.85258589234446,
+                1.2929362428460898
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 95,
+              "STN_NAME": "CITY HALL MRT STATION",
+              "STN_NO": "EW13 / NS25",
+              "index": 86
+            },
+            "type": "Feature"
+          },
+          95,
+          "CITY HALL MRT STATION",
+          "EW13 / NS25"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.95463446292973,
+                1.3561914830369988
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 96,
+              "STN_NAME": "TAMPINES EAST MRT STATION",
+              "STN_NO": "DT33",
+              "index": 87
+            },
+            "type": "Feature"
+          },
+          96,
+          "TAMPINES EAST MRT STATION",
+          "DT33"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.93843697135364,
+                1.345515305301687
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 97,
+              "STN_NAME": "TAMPINES WEST MRT STATION",
+              "STN_NO": "DT31",
+              "index": 88
+            },
+            "type": "Feature"
+          },
+          97,
+          "TAMPINES WEST MRT STATION",
+          "DT31"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8719006257067,
+                1.3215058380176015
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 98,
+              "STN_NAME": "GEYLANG BAHRU MRT STATION",
+              "STN_NO": "DT24",
+              "index": 89
+            },
+            "type": "Feature"
+          },
+          98,
+          "GEYLANG BAHRU MRT STATION",
+          "DT24"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.86297798747471,
+                1.313672232544493
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 99,
+              "STN_NAME": "BENDEMEER MRT STATION",
+              "STN_NO": "DT23",
+              "index": 90
+            },
+            "type": "Feature"
+          },
+          99,
+          "BENDEMEER MRT STATION",
+          "DT23"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.85038425491675,
+                1.2988642704173563
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 100,
+              "STN_NAME": "BENCOOLEN MRT STATION",
+              "STN_NO": "DT21",
+              "index": 91
+            },
+            "type": "Feature"
+          },
+          100,
+          "BENCOOLEN MRT STATION",
+          "DT21"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.82144306908835,
+                1.2654726398620932
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 101,
+              "STN_NAME": "HARBOURFRONT MRT STATION",
+              "STN_NO": "NE1 / CC29",
+              "index": 92
+            },
+            "type": "Feature"
+          },
+          101,
+          "HARBOURFRONT MRT STATION",
+          "NE1 / CC29"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.86085298825701,
+                1.2928915520921707
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 102,
+              "STN_NAME": "PROMENADE MRT STATION",
+              "STN_NO": "DT15",
+              "index": 93
+            },
+            "type": "Feature"
+          },
+          102,
+          "PROMENADE MRT STATION",
+          "DT15"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.85686833309623,
+                1.299550745709391
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 103,
+              "STN_NAME": "BUGIS MRT STATION",
+              "STN_NO": "DT14",
+              "index": 94
+            },
+            "type": "Feature"
+          },
+          103,
+          "BUGIS MRT STATION",
+          "DT14"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.78463142679293,
+                1.2934626331445025
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 104,
+              "STN_NAME": "KENT RIDGE MRT STATION",
+              "STN_NO": "CC24",
+              "index": 95
+            },
+            "type": "Feature"
+          },
+          104,
+          "KENT RIDGE MRT STATION",
+          "CC24"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8893505901091,
+                1.3260768829225387
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 105,
+              "STN_NAME": "MACPHERSON MRT STATION",
+              "STN_NO": "DT26",
+              "index": 96
+            },
+            "type": "Feature"
+          },
+          105,
+          "MACPHERSON MRT STATION",
+          "DT26"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.90207263840725,
+                1.4045467277879453
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 106,
+              "STN_NAME": "PUNGGOL MRT STATION",
+              "STN_NO": "NE17",
+              "index": 97
+            },
+            "type": "Feature"
+          },
+          106,
+          "PUNGGOL MRT STATION",
+          "NE17"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84586422934751,
+                1.2765212466930367
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 107,
+              "STN_NAME": "TANJONG PAGAR MRT STATION",
+              "STN_NO": "EW15",
+              "index": 98
+            },
+            "type": "Feature"
+          },
+          107,
+          "TANJONG PAGAR MRT STATION",
+          "EW15"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.78745750783136,
+                1.2997598785919828
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 108,
+              "STN_NAME": "ONE-NORTH MRT STATION",
+              "STN_NO": "CC23",
+              "index": 99
+            },
+            "type": "Feature"
+          },
+          108,
+          "ONE-NORTH MRT STATION",
+          "CC23"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84915441902234,
+                1.3513086801158973
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 109,
+              "STN_NAME": "BISHAN MRT STATION",
+              "STN_NO": "CC15",
+              "index": 100
+            },
+            "type": "Feature"
+          },
+          109,
+          "BISHAN MRT STATION",
+          "CC15"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8753503351789,
+                1.302840629633221
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 110,
+              "STN_NAME": "STADIUM MRT STATION",
+              "STN_NO": "CC6",
+              "index": 101
+            },
+            "type": "Feature"
+          },
+          110,
+          "STADIUM MRT STATION",
+          "CC6"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.85570641401688,
+                1.3004650763152474
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 111,
+              "STN_NAME": "BUGIS MRT STATION",
+              "STN_NO": "EW12",
+              "index": 102
+            },
+            "type": "Feature"
+          },
+          111,
+          "BUGIS MRT STATION",
+          "EW12"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.83907516234414,
+                1.300260055065435
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 112,
+              "STN_NAME": "SOMERSET MRT STATION",
+              "STN_NO": "NS23",
+              "index": 103
+            },
+            "type": "Feature"
+          },
+          112,
+          "SOMERSET MRT STATION",
+          "NS23"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.83224145206776,
+                1.3039810124368738
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 113,
+              "STN_NAME": "ORCHARD MRT STATION",
+              "STN_NO": "NS22",
+              "index": 104
+            },
+            "type": "Feature"
+          },
+          113,
+          "ORCHARD MRT STATION",
+          "NS22"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.85547701633953,
+                1.3054036422232496
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 114,
+              "STN_NAME": "JALAN BESAR MRT STATION",
+              "STN_NO": "DT22",
+              "index": 105
+            },
+            "type": "Feature"
+          },
+          114,
+          "JALAN BESAR MRT STATION",
+          "DT22"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8590797651326,
+                1.2818737884915348
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 115,
+              "STN_NAME": "BAYFRONT MRT STATION",
+              "STN_NO": "DT16 / CE1",
+              "index": 106
+            },
+            "type": "Feature"
+          },
+          115,
+          "BAYFRONT MRT STATION",
+          "DT16 / CE1"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8954846941606,
+                1.3916946260989846
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 116,
+              "STN_NAME": "SENGKANG MRT STATION",
+              "STN_NO": "NE16",
+              "index": 107
+            },
+            "type": "Feature"
+          },
+          116,
+          "SENGKANG MRT STATION",
+          "NE16"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.83068955013684,
+                1.3337288823214393
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 117,
+              "STN_NAME": "BUKIT BROWN MRT STATION",
+              "STN_NO": "CC18",
+              "index": 108
+            },
+            "type": "Feature"
+          },
+          117,
+          "BUKIT BROWN MRT STATION",
+          "CC18"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8825280808101,
+                1.3062019048312332
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 118,
+              "STN_NAME": "MOUNTBATTEN MRT STATION",
+              "STN_NO": "CC7",
+              "index": 109
+            },
+            "type": "Feature"
+          },
+          118,
+          "MOUNTBATTEN MRT STATION",
+          "CC7"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.88506485633648,
+                1.3601791711791476
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 119,
+              "STN_NAME": "KOVAN MRT STATION",
+              "STN_NO": "NE13",
+              "index": 110
+            },
+            "type": "Feature"
+          },
+          119,
+          "KOVAN MRT STATION",
+          "NE13"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84432826960976,
+                1.2924789279174786
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 120,
+              "STN_NAME": "FORT CANNING MRT STATION",
+              "STN_NO": "DT20",
+              "index": 111
+            },
+            "type": "Feature"
+          },
+          120,
+          "FORT CANNING MRT STATION",
+          "DT20"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.80758610574657,
+                1.3175106118957627
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 121,
+              "STN_NAME": "FARRER ROAD MRT STATION",
+              "STN_NO": "CC20",
+              "index": 112
+            },
+            "type": "Feature"
+          },
+          121,
+          "FARRER ROAD MRT STATION",
+          "CC20"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.96237570744739,
+                1.335382137333549
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 122,
+              "STN_NAME": "EXPO MRT STATION",
+              "STN_NO": "DT35",
+              "index": 113
+            },
+            "type": "Feature"
+          },
+          122,
+          "EXPO MRT STATION",
+          "DT35"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.85284044403967,
+                1.2794461903787189
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 123,
+              "STN_NAME": "DOWNTOWN MRT STATION",
+              "STN_NO": "DT17",
+              "index": 114
+            },
+            "type": "Feature"
+          },
+          123,
+          "DOWNTOWN MRT STATION",
+          "DT17"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.79065341005081,
+                1.3064916691077753
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 124,
+              "STN_NAME": "BUONA VISTA MRT STATION",
+              "STN_NO": "CC22",
+              "index": 115
+            },
+            "type": "Feature"
+          },
+          124,
+          "BUONA VISTA MRT STATION",
+          "CC22"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8555041055269,
+                1.2933216076112346
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 125,
+              "STN_NAME": "ESPLANADE MRT STATION",
+              "STN_NO": "CC3",
+              "index": 116
+            },
+            "type": "Feature"
+          },
+          125,
+          "ESPLANADE MRT STATION",
+          "CC3"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.86363701849633,
+                1.2997668352679752
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 126,
+              "STN_NAME": "NICOLL HIGHWAY MRT STATION",
+              "STN_NO": "CC5",
+              "index": 117
+            },
+            "type": "Feature"
+          },
+          126,
+          "NICOLL HIGHWAY MRT STATION",
+          "CC5"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8395298207641,
+                1.3376745080443357
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 127,
+              "STN_NAME": "CALDECOTT MRT STATION",
+              "STN_NO": "CC17",
+              "index": 118
+            },
+            "type": "Feature"
+          },
+          127,
+          "CALDECOTT MRT STATION",
+          "CC17"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.85459777754355,
+                1.2764273547505993
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 128,
+              "STN_NAME": "MARINA BAY MRT STATION",
+              "STN_NO": "NS27",
+              "index": 119
+            },
+            "type": "Feature"
+          },
+          128,
+          "MARINA BAY MRT STATION",
+          "NS27"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.85509398222224,
+                1.2761506366169828
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 129,
+              "STN_NAME": "MARINA BAY MRT STATION",
+              "STN_NO": "CE2",
+              "index": 120
+            },
+            "type": "Feature"
+          },
+          129,
+          "MARINA BAY MRT STATION",
+          "CE2"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.80293962041993,
+                1.2723327315964705
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 130,
+              "STN_NAME": "LABRADOR PARK MRT STATION",
+              "STN_NO": "CC27",
+              "index": 121
+            },
+            "type": "Feature"
+          },
+          130,
+          "LABRADOR PARK MRT STATION",
+          "CC27"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84342677594405,
+                1.2843595782329758
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 131,
+              "STN_NAME": "CHINATOWN MRT STATION",
+              "STN_NO": "NE4",
+              "index": 122
+            },
+            "type": "Feature"
+          },
+          131,
+          "CHINATOWN MRT STATION",
+          "NE4"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84445120071658,
+                1.28474896906149
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 132,
+              "STN_NAME": "CHINATOWN MRT STATION",
+              "STN_NO": "DT19",
+              "index": 123
+            },
+            "type": "Feature"
+          },
+          132,
+          "CHINATOWN MRT STATION",
+          "DT19"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.83781099412444,
+                1.3136071021936844
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 133,
+              "STN_NAME": "NEWTON MRT STATION",
+              "STN_NO": "DT11",
+              "index": 124
+            },
+            "type": "Feature"
+          },
+          133,
+          "NEWTON MRT STATION",
+          "DT11"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.80732220761244,
+                1.3258832089224415
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 134,
+              "STN_NAME": "TAN KAH KEE MRT STATION",
+              "STN_NO": "DT8",
+              "index": 125
+            },
+            "type": "Feature"
+          },
+          134,
+          "TAN KAH KEE MRT STATION",
+          "DT8"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.82701943092408,
+                1.2861933928589773
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 135,
+              "STN_NAME": "TIONG BAHRU MRT STATION",
+              "STN_NO": "EW17",
+              "index": 126
+            },
+            "type": "Feature"
+          },
+          135,
+          "TIONG BAHRU MRT STATION",
+          "EW17"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.76741825445679,
+                1.3623448685278572
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 136,
+              "STN_NAME": "HILLVIEW MRT STATION",
+              "STN_NO": "DT3",
+              "index": 127
+            },
+            "type": "Feature"
+          },
+          136,
+          "HILLVIEW MRT STATION",
+          "DT3"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.78380665887377,
+                1.335665120759763
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 137,
+              "STN_NAME": "KING ALBERT PARK MRT STATION",
+              "STN_NO": "DT6",
+              "index": 128
+            },
+            "type": "Feature"
+          },
+          137,
+          "KING ALBERT PARK MRT STATION",
+          "DT6"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.88324750918025,
+                1.3268767147126104
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 138,
+              "STN_NAME": "MATTAR MRT STATION",
+              "STN_NO": "DT25",
+              "index": 129
+            },
+            "type": "Feature"
+          },
+          138,
+          "MATTAR MRT STATION",
+          "DT25"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8992525249775,
+                1.3299568257038388
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 139,
+              "STN_NAME": "UBI MRT STATION",
+              "STN_NO": "DT27",
+              "index": 130
+            },
+            "type": "Feature"
+          },
+          139,
+          "UBI MRT STATION",
+          "DT27"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.77579428529513,
+                1.341223175711347
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 140,
+              "STN_NAME": "BEAUTY WORLD MRT STATION",
+              "STN_NO": "DT5",
+              "index": 131
+            },
+            "type": "Feature"
+          },
+          140,
+          "BEAUTY WORLD MRT STATION",
+          "DT5"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.90845973446473,
+                1.334967301564284
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 141,
+              "STN_NAME": "KAKI BUKIT MRT STATION",
+              "STN_NO": "DT28",
+              "index": 132
+            },
+            "type": "Feature"
+          },
+          141,
+          "KAKI BUKIT MRT STATION",
+          "DT28"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.94306049746142,
+                1.3550774289959928
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 142,
+              "STN_NAME": "TAMPINES MRT STATION",
+              "STN_NO": "DT32",
+              "index": 133
+            },
+            "type": "Feature"
+          },
+          142,
+          "TAMPINES MRT STATION",
+          "DT32"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.91797832977373,
+                1.334742116758396
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 143,
+              "STN_NAME": "BEDOK NORTH MRT STATION",
+              "STN_NO": "DT29",
+              "index": 134
+            },
+            "type": "Feature"
+          },
+          143,
+          "BEDOK NORTH MRT STATION",
+          "DT29"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84611515467653,
+                1.2987013066295279
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 144,
+              "STN_NAME": "DHOBY GHAUT MRT STATION",
+              "STN_NO": "NS24",
+              "index": 135
+            },
+            "type": "Feature"
+          },
+          144,
+          "DHOBY GHAUT MRT STATION",
+          "NS24"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8723680895014,
+                1.3505952564433292
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 145,
+              "STN_NAME": "SERANGOON MRT STATION",
+              "STN_NO": "CC13",
+              "index": 136
+            },
+            "type": "Feature"
+          },
+          145,
+          "SERANGOON MRT STATION",
+          "CC13"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.87081830937528,
+                1.3391900455251486
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 146,
+              "STN_NAME": "WOODLEIGH MRT STATION",
+              "STN_NO": "NE11",
+              "index": 137
+            },
+            "type": "Feature"
+          },
+          146,
+          "WOODLEIGH MRT STATION",
+          "NE11"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84382561881564,
+                1.3204407908478955
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 147,
+              "STN_NAME": "NOVENA MRT STATION",
+              "STN_NO": "NS20",
+              "index": 138
+            },
+            "type": "Feature"
+          },
+          147,
+          "NOVENA MRT STATION",
+          "NS20"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.87357484685865,
+                1.3497078753792582
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 148,
+              "STN_NAME": "SERANGOON MRT STATION",
+              "STN_NO": "NE12",
+              "index": 139
+            },
+            "type": "Feature"
+          },
+          148,
+          "SERANGOON MRT STATION",
+          "NE12"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.93223462362495,
+                1.3366078298104889
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 149,
+              "STN_NAME": "BEDOK RESERVOIR MRT STATION",
+              "STN_NO": "DT30",
+              "index": 140
+            },
+            "type": "Feature"
+          },
+          149,
+          "BEDOK RESERVOIR MRT STATION",
+          "DT30"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.86285976963768,
+                1.2713367113291665
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 150,
+              "STN_NAME": "MARINA SOUTH PIER MRT STATION",
+              "STN_NO": "NS28",
+              "index": 141
+            },
+            "type": "Feature"
+          },
+          150,
+          "MARINA SOUTH PIER MRT STATION",
+          "NS28"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8541771415317,
+                1.3123598402121333
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 151,
+              "STN_NAME": "FARRER PARK MRT STATION",
+              "STN_NO": "NE8",
+              "index": 142
+            },
+            "type": "Feature"
+          },
+          151,
+          "FARRER PARK MRT STATION",
+          "NE8"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.89217884546738,
+                1.3174302679767838
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 152,
+              "STN_NAME": "PAYA LEBAR MRT STATION",
+              "STN_NO": "CC9",
+              "index": 143
+            },
+            "type": "Feature"
+          },
+          152,
+          "PAYA LEBAR MRT STATION",
+          "CC9"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.87975890622818,
+                1.3428283377375758
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 153,
+              "STN_NAME": "BARTLEY MRT STATION",
+              "STN_NO": "CC12",
+              "index": 144
+            },
+            "type": "Feature"
+          },
+          153,
+          "BARTLEY MRT STATION",
+          "CC12"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.88866260393202,
+                1.308382639266994
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 154,
+              "STN_NAME": "DAKOTA MRT STATION",
+              "STN_NO": "CC8",
+              "index": 145
+            },
+            "type": "Feature"
+          },
+          154,
+          "DAKOTA MRT STATION",
+          "CC8"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.79135031315468,
+                1.2762135226853317
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 155,
+              "STN_NAME": "PASIR PANJANG MRT STATION",
+              "STN_NO": "CC26",
+              "index": 146
+            },
+            "type": "Feature"
+          },
+          155,
+          "PASIR PANJANG MRT STATION",
+          "CC26"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.83957474121884,
+                1.2797645431827152
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 156,
+              "STN_NAME": "OUTRAM PARK MRT STATION",
+              "STN_NO": "NE3",
+              "index": 147
+            },
+            "type": "Feature"
+          },
+          156,
+          "OUTRAM PARK MRT STATION",
+          "NE3"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84655520929545,
+                1.288386024201138
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 157,
+              "STN_NAME": "CLARKE QUAY MRT STATION",
+              "STN_NO": "NE5",
+              "index": 148
+            },
+            "type": "Feature"
+          },
+          157,
+          "CLARKE QUAY MRT STATION",
+          "NE5"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84814396447486,
+                1.35083898769384
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 158,
+              "STN_NAME": "BISHAN MRT STATION",
+              "STN_NO": "NS17",
+              "index": 149
+            },
+            "type": "Feature"
+          },
+          158,
+          "BISHAN MRT STATION",
+          "NS17"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.81613165313718,
+                1.3224239786997276
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 159,
+              "STN_NAME": "BOTANIC GARDENS MRT STATION",
+              "STN_NO": "DT9",
+              "index": 150
+            },
+            "type": "Feature"
+          },
+          159,
+          "BOTANIC GARDENS MRT STATION",
+          "DT9"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.83942313256992,
+                1.3487072630182217
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 160,
+              "STN_NAME": "MARYMOUNT MRT STATION",
+              "STN_NO": "CC16",
+              "index": 151
+            },
+            "type": "Feature"
+          },
+          160,
+          "MARYMOUNT MRT STATION",
+          "CC16"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.78181045132068,
+                1.2825421566428978
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 161,
+              "STN_NAME": "HAW PAR VILLA MRT STATION",
+              "STN_NO": "CC25",
+              "index": 152
+            },
+            "type": "Feature"
+          },
+          161,
+          "HAW PAR VILLA MRT STATION",
+          "CC25"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.86415193804753,
+                1.3516121710256268
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 162,
+              "STN_NAME": "LORONG CHUAN MRT STATION",
+              "STN_NO": "CC14",
+              "index": 153
+            },
+            "type": "Feature"
+          },
+          162,
+          "LORONG CHUAN MRT STATION",
+          "CC14"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.86282920810696,
+                1.3073570200955593
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 163,
+              "STN_NAME": "LAVENDER MRT STATION",
+              "STN_NO": "EW11",
+              "index": 154
+            },
+            "type": "Feature"
+          },
+          163,
+          "LAVENDER MRT STATION",
+          "EW11"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84548818475203,
+                1.2997054585231402
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 164,
+              "STN_NAME": "DHOBY GHAUT MRT STATION",
+              "STN_NO": "NE6",
+              "index": 155
+            },
+            "type": "Feature"
+          },
+          164,
+          "DHOBY GHAUT MRT STATION",
+          "NE6"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84623911230818,
+                1.2988428164759378
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 165,
+              "STN_NAME": "DHOBY GHAUT MRT STATION",
+              "STN_NO": "CC1",
+              "index": 156
+            },
+            "type": "Feature"
+          },
+          165,
+          "DHOBY GHAUT MRT STATION",
+          "CC1"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8881948611533,
+                1.3354333222229111
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 166,
+              "STN_NAME": "TAI SENG MRT STATION",
+              "STN_NO": "CC11",
+              "index": 157
+            },
+            "type": "Feature"
+          },
+          166,
+          "TAI SENG MRT STATION",
+          "CC11"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.85242168070484,
+                1.303916483964584
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 167,
+              "STN_NAME": "ROCHOR MRT STATION",
+              "STN_NO": "DT13",
+              "index": 158
+            },
+            "type": "Feature"
+          },
+          167,
+          "ROCHOR MRT STATION",
+          "DT13"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8485846253818,
+                1.3071982229111017
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 168,
+              "STN_NAME": "LITTLE INDIA MRT STATION",
+              "STN_NO": "DT12",
+              "index": 159
+            },
+            "type": "Feature"
+          },
+          168,
+          "LITTLE INDIA MRT STATION",
+          "DT12"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8496469665727,
+                1.306800025312331
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 169,
+              "STN_NAME": "LITTLE INDIA MRT STATION",
+              "STN_NO": "NE7",
+              "index": 160
+            },
+            "type": "Feature"
+          },
+          169,
+          "LITTLE INDIA MRT STATION",
+          "NE7"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8260244022441,
+                1.3200655570067263
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 170,
+              "STN_NAME": "STEVENS MRT STATION",
+              "STN_NO": "DT10",
+              "index": 161
+            },
+            "type": "Feature"
+          },
+          170,
+          "STEVENS MRT STATION",
+          "DT10"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.76153511473323,
+                1.3790021167176651
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 171,
+              "STN_NAME": "BUKIT PANJANG MRT STATION",
+              "STN_NO": "DT1",
+              "index": 162
+            },
+            "type": "Feature"
+          },
+          171,
+          "BUKIT PANJANG MRT STATION",
+          "DT1"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.76469442231105,
+                1.3693698310643405
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 172,
+              "STN_NAME": "CASHEW MRT STATION",
+              "STN_NO": "DT2",
+              "index": 163
+            },
+            "type": "Feature"
+          },
+          172,
+          "CASHEW MRT STATION",
+          "DT2"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.79724631666136,
+                1.33078638736398
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 173,
+              "STN_NAME": "SIXTH AVENUE MRT STATION",
+              "STN_NO": "DT7",
+              "index": 164
+            },
+            "type": "Feature"
+          },
+          173,
+          "SIXTH AVENUE MRT STATION",
+          "DT7"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84750176434052,
+                1.3326289871231982
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 174,
+              "STN_NAME": "TOA PAYOH MRT STATION",
+              "STN_NO": "NS19",
+              "index": 165
+            },
+            "type": "Feature"
+          },
+          174,
+          "TOA PAYOH MRT STATION",
+          "NS19"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.7938508924381,
+                1.4272599787112434
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 175,
+              "STN_NAME": "WOODLANDS SOUTH MRT STATION",
+              "STN_NO": "TE3",
+              "index": 166
+            },
+            "type": "Feature"
+          },
+          175,
+          "WOODLANDS SOUTH MRT STATION",
+          "TE3"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8690556652726,
+                1.3313795246192912
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 176,
+              "STN_NAME": "POTONG PASIR MRT STATION",
+              "STN_NO": "NE10",
+              "index": 167
+            },
+            "type": "Feature"
+          },
+          176,
+          "POTONG PASIR MRT STATION",
+          "NE10"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.89238051891202,
+                1.3712922916785348
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 177,
+              "STN_NAME": "HOUGANG MRT STATION",
+              "STN_NO": "NE14",
+              "index": 168
+            },
+            "type": "Feature"
+          },
+          177,
+          "HOUGANG MRT STATION",
+          "NE14"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.86168650187011,
+                1.31939570602305
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 178,
+              "STN_NAME": "BOON KENG MRT STATION",
+              "STN_NO": "NE9",
+              "index": 169
+            },
+            "type": "Feature"
+          },
+          178,
+          "BOON KENG MRT STATION",
+          "NE9"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.96147178867872,
+                1.3417374838931937
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 179,
+              "STN_NAME": "UPPER CHANGI MRT STATION",
+              "STN_NO": "DT34",
+              "index": 170
+            },
+            "type": "Feature"
+          },
+          179,
+          "UPPER CHANGI MRT STATION",
+          "DT34"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.98836465850562,
+                1.3573145453309752
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 180,
+              "STN_NAME": "CHANGI AIRPORT MRT STATION",
+              "STN_NO": "CG2",
+              "index": 171
+            },
+            "type": "Feature"
+          },
+          180,
+          "CHANGI AIRPORT MRT STATION",
+          "CG2"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.78793080705853,
+                1.436066981292872
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 181,
+              "STN_NAME": "WOODLANDS MRT STATION",
+              "STN_NO": "TE2",
+              "index": 172
+            },
+            "type": "Feature"
+          },
+          181,
+          "WOODLANDS MRT STATION",
+          "TE2"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84679784541262,
+                1.340471684451096
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 182,
+              "STN_NAME": "BRADDELL MRT STATION",
+              "STN_NO": "NS18",
+              "index": 173
+            },
+            "type": "Feature"
+          },
+          182,
+          "BRADDELL MRT STATION",
+          "NS18"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.89312156478562,
+                1.3828778581472214
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 183,
+              "STN_NAME": "BUANGKOK MRT STATION",
+              "STN_NO": "NE15",
+              "index": 174
+            },
+            "type": "Feature"
+          },
+          183,
+          "BUANGKOK MRT STATION",
+          "NE15"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.86099915588731,
+                1.293218051489324
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 184,
+              "STN_NAME": "PROMENADE MRT STATION",
+              "STN_NO": "CC4",
+              "index": 175
+            },
+            "type": "Feature"
+          },
+          184,
+          "PROMENADE MRT STATION",
+          "CC4"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.81498275034427,
+                1.3221101929847618
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 185,
+              "STN_NAME": "BOTANIC GARDENS MRT STATION",
+              "STN_NO": "CC19",
+              "index": 176
+            },
+            "type": "Feature"
+          },
+          185,
+          "BOTANIC GARDENS MRT STATION",
+          "CC19"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.85146171209142,
+                1.2841256105732015
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 186,
+              "STN_NAME": "RAFFLES PLACE MRT STATION",
+              "STN_NO": "EW14 / NS26",
+              "index": 177
+            },
+            "type": "Feature"
+          },
+          186,
+          "RAFFLES PLACE MRT STATION",
+          "EW14 / NS26"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.79619182386182,
+                1.3118347904021292
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 187,
+              "STN_NAME": "HOLLAND VILLAGE MRT STATION",
+              "STN_NO": "CC21",
+              "index": 178
+            },
+            "type": "Feature"
+          },
+          187,
+          "HOLLAND VILLAGE MRT STATION",
+          "CC21"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.8391264975839,
+                1.2814049781301338
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 188,
+              "STN_NAME": "OUTRAM PARK MRT STATION",
+              "STN_NO": "EW16",
+              "index": 179
+            },
+            "type": "Feature"
+          },
+          188,
+          "OUTRAM PARK MRT STATION",
+          "EW16"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.80974863683596,
+                1.270753211458576
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 189,
+              "STN_NAME": "TELOK BLANGAH MRT STATION",
+              "STN_NO": "CC28",
+              "index": 180
+            },
+            "type": "Feature"
+          },
+          189,
+          "TELOK BLANGAH MRT STATION",
+          "CC28"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.84830280619303,
+                1.2822895361922515
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 190,
+              "STN_NAME": "TELOK AYER MRT STATION",
+              "STN_NO": "DT18",
+              "index": 181
+            },
+            "type": "Feature"
+          },
+          190,
+          "TELOK AYER MRT STATION",
+          "DT18"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.83798529963303,
+                1.312320099555636
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 191,
+              "STN_NAME": "NEWTON MRT STATION",
+              "STN_NO": "NS21",
+              "index": 182
+            },
+            "type": "Feature"
+          },
+          191,
+          "NEWTON MRT STATION",
+          "NS21"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.82971180000006,
+                1.4431367000000255
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 0,
+              "STN_NAME": "CANBERRA MRT STATION",
+              "STN_NO": "NS12",
+              "index": 183
+            },
+            "type": "Feature"
+          },
+          0,
+          "CANBERRA MRT STATION",
+          "NS12"
+        ],
+        [
+          {
+            "geometry": {
+              "coordinates": [
+                103.78569270000008,
+                1.4482925000000364
+              ],
+              "type": "Point"
+            },
+            "properties": {
+              "OBJECTID": 0,
+              "STN_NAME": "WOODLANDS NORTH MRT STATION",
+              "STN_NO": "TE1",
+              "index": 184
+            },
+            "type": "Feature"
+          },
+          0,
+          "WOODLANDS NORTH MRT STATION",
+          "TE1"
+        ]
+      ],
+      "color": [
+        143,
+        47,
+        191
+      ],
+      "fields": [
+        {
+          "analyzerType": "GEOMETRY",
+          "format": "",
+          "name": "_geojson",
+          "type": "geojson"
+        },
+        {
+          "analyzerType": "INT",
+          "format": "",
+          "name": "OBJECTID",
+          "type": "integer"
+        },
+        {
+          "analyzerType": "STRING",
+          "format": "",
+          "name": "STN_NAME",
+          "type": "string"
+        },
+        {
+          "analyzerType": "STRING",
+          "format": "",
+          "name": "STN_NO",
+          "type": "string"
+        }
+      ],
+      "id": "MRTLRTStnPtt.shp",
+      "label": "new dataset"
+    },
+    "version": "v1"
+  }
+]

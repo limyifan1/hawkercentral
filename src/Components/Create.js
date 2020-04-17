@@ -1,22 +1,34 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import '../App.css';
 import {db, storage} from './Firestore'
+import {Typeahead} from 'react-bootstrap-typeahead';
+import {InputGroup, Button, FormControl} from 'react-bootstrap'
+import logo from '../mrt_logo.png';
+import Select from 'react-select'
+
 import Component from '../Components'
+
 import {
 	withRouter
 } from 'react-router-dom';
 
-const API_KEY = `${process.env.REACT_APP_GKEY}`
+// const API_KEY = `${process.env.REACT_APP_GKEY}`
 
-const addData = (postal,street,price,description,url,latitude,longitude) => {
+const addData = (name,postal,street,price
+                  ,description,url,latitude
+                  ,longitude,unit,delivery,islandwide,cuisine) => {
   db.collection("hawkers").add({
+    name: name,
     postal: postal,
     street: street,
-    price: price,
     description: description,
     url: url,
     latitude: latitude,
-    longitude: longitude
+    longitude: longitude,
+    unit: unit,
+    delivery:delivery,
+    islandwide:islandwide==="false",
+    cuisine: cuisine
   })
   .then(function(docRef) {
       console.log("Document written with ID: ", docRef.id);
@@ -33,6 +45,7 @@ export class Create extends React.Component {
     super(props);
 
     this.state = {
+      name: '',
       postal: 0,
       street: '',
       price: 0,
@@ -42,7 +55,18 @@ export class Create extends React.Component {
       imageName: 'Upload Image',
       longitude: -122.3710252,
       latitude: 47.63628904,
+      unit:'',
+      multiValue: [],
+      cuisineValue: [],
+      islandwide:false
     };
+
+    this.handleMultiChange = this.handleMultiChange.bind(this);
+    this.handleCuisineChange = this.handleCuisineChange.bind(this);
+  }
+
+  componentWillMount() {
+    this.getFirestoreData();
   }
 
   apiHasLoaded(map, maps){
@@ -55,9 +79,9 @@ export class Create extends React.Component {
     }
   }
 
-  async getPostal (event) {
-    event.preventDefault();
-    let data = await this.callPostal()
+  async getPostal(postal) {
+    // event.preventDefault();
+    let data = await this.callPostal(postal)
     console.log(data['ADDRESS'])
     this.setState({street:data['ADDRESS'],
                   longitude:data['LONGITUDE'],
@@ -65,13 +89,13 @@ export class Create extends React.Component {
                 })
   }
 
-  callPostal = () =>{
-    return fetch('https://developers.onemap.sg/commonapi/search?searchVal='+this.state.postal+'&returnGeom=Y&getAddrDetails=Y').then(function(response) {
+  callPostal = (postal) =>{
+    return fetch('https://developers.onemap.sg/commonapi/search?searchVal='+postal+'&returnGeom=Y&getAddrDetails=Y').then(function(response) {
       return response.json();
     }).then(function(jsonResponse) {
-      // console.log(jsonResponse['results'])
+      console.log(jsonResponse['results'])
+      console.log(postal)
       return jsonResponse['results'][0]
-      //Success message
     },(error)=>{
       console.log(error)
     })
@@ -79,16 +103,21 @@ export class Create extends React.Component {
 
   handleSubmit = (event) => {
     addData(
+      this.state.name,
       this.state.postal,
       this.state.street,
       this.state.price,
       this.state.description,
       this.state.url,
       this.state.latitude,
-      this.state.longitude
+      this.state.longitude,
+      this.state.unit,
+      this.state.multiValue,
+      this.state.islandwide,
+      this.state.cuisineValue,
       )
     event.preventDefault();
-    this.props.history.push('/listing')
+    this.props.history.push('/')
   }
 
   handleChange = (event) => {
@@ -96,6 +125,9 @@ export class Create extends React.Component {
     const value = target.value;
     const name = target.name;
     this.setState({[name]: value});
+    if (name === "postal" && value.toString().length === 6){
+      this.getPostal(value)
+    }
   }
 
   handleImageAsFile = (event) => {
@@ -128,7 +160,131 @@ export class Create extends React.Component {
          this.setState({url: fireBaseUrl})
        })
     })
-  }  
+  }
+
+  async getFirestoreData() {
+    let fireData = await this.retrieveData();
+    let data_mrt = []
+    let data_cuisine = []
+    let current = new Set()
+    fireData[1].forEach(function(doc){
+      if (doc.exists){
+        var d = doc.data()
+        data_cuisine.push(d)
+      }
+    })
+    fireData[0].forEach(function(doc){
+      if (doc.exists){
+        var d = doc.data()
+        d.label = d.name
+        d.value = d.name
+        if (!current.has(d.name)){
+          data_mrt.push(d)
+          current.add(d.name)
+        }
+      }
+    });
+    
+    data_mrt = data_mrt.sort(function(a,b){
+      var x = a.name.toLowerCase();
+      var y = b.name.toLowerCase();
+      return x < y ? -1 : x > y ? 1 : 0;
+    })
+    data_cuisine = data_cuisine.sort(function(a,b){
+      var x = a.label.toLowerCase();
+      var y = b.label.toLowerCase();
+      return x < y ? -1 : x > y ? 1 : 0;
+    })
+    this.setState({data:data_mrt, cuisineOptions:data_cuisine})
+  }
+
+  retrieveData = async () => {
+    try {
+      const querySnapshot_mrt = await db.collection("mrt").get();
+      const querySnapshot_cuisine = await db.collection("cuisine").get();
+      return [querySnapshot_mrt,querySnapshot_cuisine];
+    }
+    catch (error) {
+      console.log("Error getting document:", error);
+    }
+  }
+
+  handleMultiChange(option) {
+    this.setState(state => {
+      return {
+        multiValue: option
+      };
+    });
+  }
+
+  handleCuisineChange(option) {
+    this.setState(state => {
+      return {
+        cuisineValue: option
+      };
+    });
+  }
+
+  cuisineSearch() {
+    return (<Fragment>
+          <Select
+            isMulti
+            name="name"
+            options={this.state.cuisineOptions}
+            className="basic-multi-select"
+            classNamePrefix="select"
+            value={this.state.cuisineValue}
+            onChange={this.handleCuisineChange}
+            />
+    </Fragment>)
+  }
+
+
+  deliverySearch() {
+    return (<Fragment>
+          <Select
+            isMulti
+            name="name"
+            options={this.state.data}
+            className="basic-multi-select"
+            classNamePrefix="select"
+            value={this.state.multiValue}
+            onChange={this.handleMultiChange}
+            />
+
+    {/* <Typeahead
+    // id="basic-typeahead-example"
+    labelKey="name"
+    onChange={(selected) => {
+      this.setState({selected});
+    }}
+    options={this.state.data}
+    placeholder="Search By MRT"
+    selected={this.state.selected}
+    renderMenuItemChildren={this._renderMenuItemChildren}
+    multiple
+    clearButton
+    /> */}
+    </Fragment>)
+  }
+
+  _renderMenuItemChildren = (option,props,index) => {
+    return (
+      <div>
+        <div class="row">
+          <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+            <img style={{"width":"20px"}} src={logo} alt="logo"/>
+          </div>
+          <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+            <div>{option.name}</div>
+          </div>
+          <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+          </div>
+        </div>
+      </div>
+    )
+  }
+
 
   render({ apiReady, maps, map } = this.state) {
     return (
@@ -138,9 +294,9 @@ export class Create extends React.Component {
           <div class="col">
             <div class="card shadow" style={{"width": "100%", "margin-top": "10px"}}>
               <div class="card-body">
-                <h5 class="card-title">Upload Images</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Upload images of your listed hawker stall below</h6>
-                <p class="card-text">Listings with images are much more likely to get leads. </p>
+                <h5 class="card-title create-title create-title">Upload Images</h5>
+                <h6 class="card-subtitle mb-2 text-muted create-title">Upload images of your listed hawker stall below</h6>
+                <p class="card-text create-title">Listings with images are much more likely to get orders. </p>
                 {this.state.url?<img src={this.state.url} style={{'width':'100px'}}></img>:null}
                 <form onSubmit={this.handleFireBaseUpload}>
                   <div class="custom-file" onChange={this.handleImageAsFile} style={{"margin-top": "10px"}}>
@@ -156,35 +312,47 @@ export class Create extends React.Component {
             <div class="card shadow" style={{"width": "100%", "margin-top": "10px"}}>
               <form onSubmit={this.handleSubmit}>
                 <div class="card-body">
-                  <h5 class="card-title">Property Details</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Please enter more details regarding your property listing. </h6>
-                  <div class="form-group">
-                    <label for="postalcode">Postal Code</label>
+                  <h5 class="card-title create-title">Stall Details</h5>
+                  <h6 class="card-subtitle mb-2 text-muted create-title">Please enter more details regarding your stall listing. </h6>
+                  <div class="form-group create-title">
+                    <label for="name">Stall Name</label>
                     <div class="input-group">
-                      <input onChange={this.handleChange} value={this.state.postal} type="number" class="form-control" name="postal" placeholder="Enter Postal Code"></input>
-                      <div class="input-group-append">
-                        <input type="button" value="Search" onClick={this.getPostal.bind(this)} class="btn btn-primary"/>
-                      </div>
+                      <input onChange={this.handleChange} value={this.state.name} type="text" class="form-control" name="name" placeholder="Enter Stall Name"></input>
                     </div>
                   </div>
-                  <div class="form-group">
+                  <div class="form-group create-title">
+                    <label for="street">Cuisine Category <b>(You can select multiple)</b></label>
+                    {this.cuisineSearch()}
+                  </div>
+                  <div class="form-group create-title">
+                    <label for="postalcode">Postal Code</label>
+                    <div class="input-group">
+                      <input onChange={this.handleChange.bind(this)} value={this.state.postal} type="number" class="form-control" name="postal" placeholder="Enter Postal Code"></input>
+                    </div>
+                  </div>
+                  <div class="form-group create-title">
                     <label for="street">Street Name</label>
                     <input onChange={this.handleChange} value={this.state.street} type="text" class="form-control" name="street" placeholder="Enter Street Name"></input>
                   </div>
-                  <div class="form-group">
-                    <label for="price">Price</label>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">$</span>
-                      </div>
-                      <input onChange={this.handleChange} value={this.state.price} type="number" class="form-control" name="price" placeholder="Enter Price"></input>
-                    </div>
+                  <div class="form-group create-title">
+                    <label for="unit">Unit #</label>
+                    <input onChange={this.handleChange} value={this.state.unit} type="text" class="form-control" name="unit" placeholder="Enter Unit Number"></input>
                   </div>
-                  <div class="form-group">
-                    <label for="street">Description</label>
+                  <div class="form-check create-title">
+                    <input onChange={this.handleChange} type="checkbox" value={this.state.islandwide} name="islandwide" class="form-check-input"></input>
+                    <label for="delivery">Do you offer islandwide delivery?</label>
+                  </div>
+                  <div class="form-group create-title">
+                    <label for="street">(Optional) Which locations do you deliver to? <b>(Choose your nearest MRT station)</b></label>
+                    {this.deliverySearch()}
+                  </div>
+                  <div class="form-group create-title">
+                    <label for="description">Description</label>
                     <input onChange={this.handleChange} value={this.state.description} type="text" class="form-control" name="description" placeholder="Enter Description"></input>
                   </div>
-                  <input type="submit" value="Submit" class="btn btn-primary"/>
+                  <div class="create-title">
+                    <input type="submit" value="Submit" class="btn btn-primary"/>
+                  </div>
                 </div>
               </form>
             </div>
@@ -199,7 +367,7 @@ export class Create extends React.Component {
     //   yesIWantToUseGoogleMapApiInternals
     //   onGoogleApiLoaded={({ map, maps }) => this.apiHasLoaded(map, maps)}
     //   >
-    //     {apiReady && <Component.SearchBox
+    //     {apiReady && <Component.deliverySearch
     //       map={map}
     //       maps={maps}
     //     />}

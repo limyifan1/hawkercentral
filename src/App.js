@@ -5,6 +5,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Components from './Components'
+import 'react-multi-carousel/lib/styles.css';
 
 function App() {
   return (
@@ -14,6 +15,10 @@ function App() {
         <Route exact path="/" component={Components.Home} />
         <Route exact path="/listing" component={Components.Listing}/>
         <Route exact path="/create" component={Components.Create}/>
+        <Route exact path="/nearby" component={Components.Nearby}/>
+
+        <Route exact path="/news" component={Components.News}/>
+
         <body>
         <script src="/__/firebase/7.14.0/firebase-app.js"></script>
         <script src="/__/firebase/7.14.0/firebase-analytics.js"></script>
