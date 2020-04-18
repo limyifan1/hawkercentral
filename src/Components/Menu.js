@@ -1,34 +1,79 @@
-import React from 'react';
-import { Link} from 'react-router-dom';
-import {Navbar, Nav, NavDropdown} from 'react-bootstrap';
+import React from "react";
+import { Link } from "react-router-dom";
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
+import logo from "../foodleh.png";
+import name from "../logo-brown.png";
+
 
 export class Menu extends React.Component {
-    render() {
-      return (
-        <Navbar bg="light" expand="lg" variant="light" style={{position:"fixed",width:"100%","zIndex":"9999"}}>
-          <Navbar.Brand as={Link} to="/" style={{"color":"#B48300"}}>FoodLeh?</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-              <Nav.Link as={Link} to="/">Home</Nav.Link>
-              <Nav.Link as={Link} to="/listing">Listings</Nav.Link>
-              <Nav.Link as={Link} to="/create">Create</Nav.Link>
-              {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-              </NavDropdown> */}
-            </Nav>
-            {/* <Form inline>
-              <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-              <Button variant="outline-success">Search</Button>
-            </Form> */}
-          </Navbar.Collapse>
-        </Navbar>
-      );
-    }
+  render() {
+    return (
+      <Navbar
+        bg="light"
+        variant="light"
+        style={{ position: "fixed", width: "100%", zIndex: "9999" }}
+      >
+        <Navbar.Brand as={Link} to="/" style={{ color: "#B48300" }}>
+          <img
+            alt=""
+            src={logo}
+            width="15"
+            height="25"
+            className="d-inline-block align-top"
+          />{" "}
+          <img
+            alt=""
+            src={name}
+            width="80"
+            height="25"
+            className="d-inline-block align-top"
+          />
+        </Navbar.Brand>
+        <Navbar.Toggle />
+        <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
+          <Nav.Link href="#" as={Link} to="/" id="menu-link" style={{"color":"grey"}}>
+            Home
+          </Nav.Link>
+          <Nav.Link href="#listing" as={Link} to="/listing" id="menu-link" style={{"color":"grey"}}>
+            Listings
+          </Nav.Link>
+          <Nav.Link href="#create" as={Link} to="/create" id="menu-link" style={{"color":"grey"}}>
+            Create
+          </Nav.Link>
+        </Navbar.Collapse>
+      </Navbar>
+      // <Navbar
+      //   bg="light"
+      //   variant="light"
+      //   style={{ position: "fixed", width: "100%", zIndex: "9999" }}
+      // >
+      // <Navbar.Brand as={Link} to="/" style={{ color: "#B48300" }}>
+      //   <img
+      //     alt=""
+      //     src={logo}
+      //     width="20"
+      //     height="30"
+      //     className="d-inline-block align-top"
+      //   />{' '}
+      //    Foodleh
+      //  </Navbar.Brand>
+      //   <Navbar.Toggle />
+      //   <Navbar.Collapse id="basic-navbar-nav justify-content-end">
+      //     <Nav className="mr-auto">
+      // <Nav.Link href="#" as={Link} to="/">
+      //   Home
+      // </Nav.Link>
+      // <Nav.Link href="#listing" as={Link} to="/listing">
+      //   Listings
+      // </Nav.Link>
+      // <Nav.Link href="#create" as={Link} to="/create">
+      //   Create
+      // </Nav.Link>
+      //     </Nav>
+      //    </Navbar.Collapse>
+      // </Navbar>
+    );
   }
+}
 
-  export default Menu
+export default Menu;

@@ -10,18 +10,22 @@ const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
     items: 6,
+    partialVisibilityGutter: 30,
   },
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
     items: 5,
+    partialVisibilityGutter: 30,
   },
   tablet: {
     breakpoint: { max: 1024, min: 464 },
     items: 2,
+    partialVisibilityGutter: 30,
   },
   mobile: {
     breakpoint: { max: 464, min: 0 },
-    items: 1,
+    items: 2,
+    partialVisibilityGutter: 10,
   },
 };
 
@@ -40,7 +44,7 @@ export class Nearby extends React.Component {
   }
 
   componentWillMount() {
-    this.getFirestoreData();
+    this.retrieveData();
     console.log("run");
   }
 
@@ -49,68 +53,48 @@ export class Nearby extends React.Component {
   }
 
   retrieveData = async (query) => {
-    let string;
-    if (query === "islandwide") {
-      string = {
-        longitude: this.state.longitude,
-        latitude: this.state.latitude,
-      };
-      try {
-        const response = await fetch(
-          "https://us-central1-hawkercentral.cloudfunctions.net/islandwide",
-          {
+    let string = {
+      longitude: this.state.longitude,
+      latitude: this.state.latitude,
+      query: this.state.query,
+      distance: this.state.distance,
+    };
+    let urls = [
+      "https://us-central1-hawkercentral.cloudfunctions.net/islandwide",
+      "https://us-central1-hawkercentral.cloudfunctions.net/nearby",
+    ];
+    try {
+      Promise.all(
+        urls.map((url) =>
+          fetch(url, {
             method: "POST",
             mode: "cors",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(string),
-          }
-        );
-        return response.json();
-      } catch (error) {
-        return error;
-      }
-    } else if (query === "nearby") {
-      string = {
-        longitude: this.state.longitude,
-        latitude: this.state.latitude,
-        query: this.state.query,
-        distance: this.state.distance,
-      };
-      try {
-        const response = await fetch(
-          "https://us-central1-hawkercentral.cloudfunctions.net/nearby",
-          {
-            method: "POST",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(string),
-          }
-        );
-        return response.json();
-      } catch (error) {
-        return error;
-      }
+          })
+            .then((response) => {
+              return response.json();
+            })
+            .then((data) => {
+              return data;
+            })
+            .catch((error) => {
+              return error;
+            })
+        )
+      ).then((data) => {
+        this.setState({
+          islandwide: data[0],
+          nearby: data[1],
+          retrieved: true,
+        });
+      });
+    } catch (error) {
+      return error;
     }
   };
-
-  async getFirestoreData() {
-    let islandwide_data = await this.retrieveData("islandwide");
-    let nearby_data = await this.retrieveData("nearby");
-    let islandwide = [];
-    let nearby = [];
-    islandwide_data.forEach(function (doc) {
-      islandwide.push(doc);
-    });
-    nearby_data.forEach(function (doc) {
-      nearby.push(doc);
-    });
-    console.log(nearby);
-    this.setState({ islandwide: islandwide, nearby: nearby, retrieved: true });
-  }
 
   render() {
     let result = {
@@ -122,6 +106,7 @@ export class Nearby extends React.Component {
         result["islandwide"].push(
           <p style={{ padding: "6px" }}>
             <Item
+              id={data["id"]}
               name={data["name"]}
               street={data["street"]}
               pic={data["url"]}
@@ -134,6 +119,7 @@ export class Nearby extends React.Component {
         result["nearby"].push(
           <p style={{ padding: "6px" }}>
             <Item
+              id={data["id"]}
               name={data["name"]}
               street={data["street"]}
               pic={data["url"]}
@@ -159,24 +145,47 @@ export class Nearby extends React.Component {
                       <h2>Near You</h2>
                     </div>
                   </div>
-                  <Carousel responsive={responsive}>{result.nearby}</Carousel>
+                  <Carousel
+                    responsive={responsive}
+                    ssr={true}
+                    infinite={false}
+                    partialVisible={true}
+                    swipeable={true}
+                    draggable={true}
+                    minimumTouchDrag={0}
+                    transitionDuration={0}
+                    slidesToSlide={2}
+                  >
+                    {result.nearby}
+                  </Carousel>
                 </div>
               ) : null}
-              
               <div>
                 <div class="row">
                   <div class="col-md-12" style={{ textAlign: "left" }}>
                     <h2>Islandwide Delivery</h2>
                   </div>
                 </div>
-                <Carousel responsive={responsive}>{result.islandwide}</Carousel>
+                <Carousel
+                  responsive={responsive}
+                  ssr={true}
+                  infinite={false}
+                  partialVisible={true}
+                  swipeable={true}
+                  draggable={true}
+                  minimumTouchDrag={0}
+                  transitionDuration={0}
+                  slidesToSlide={2}
+                >
+                  {result.islandwide}
+                </Carousel>
               </div>
-              )
             </div>
           </div>
         ) : (
           <div class="row h-100 page-container">
             <div class="col-sm-12 my-auto">
+              <h3>Please give us a moment while we load your results</h3>
               <Spinner class="" animation="grow" />
             </div>
           </div>

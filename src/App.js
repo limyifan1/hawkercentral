@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 // import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -16,7 +15,7 @@ function App() {
         <Route exact path="/listing" component={Components.Listing}/>
         <Route exact path="/create" component={Components.Create}/>
         <Route exact path="/nearby" component={Components.Nearby}/>
-
+        <Route exact path="/info" component={Components.Info}/>
         <Route exact path="/news" component={Components.News}/>
 
         <body>

@@ -69,12 +69,12 @@ const addData = (data) => {
 
 const getData = async () =>{
     await db.collection("hawkers")
-        .where("postal","==","730355")
-        .where("name","==","Fan Fan Chee Cheong Fu")
+        .where("postal","==","730366")
         .get().then(snapshot=>{
         snapshot.forEach((doc) => {
           if (doc.exists){
-              console.log(doc.data())
+            console.log(doc.id)
+            console.log(doc.data())
             }
           }
         );
@@ -86,6 +86,24 @@ const getData = async () =>{
       }
     )
 }
+
+const getDoc = async () =>{
+  await db.collection('hawkers').doc('3XC0EDF2stjpBDVCGAFu')
+      .get().then(snapshot=>{
+        if(snapshot.exists){
+          console.log(snapshot.id)
+
+          console.log(snapshot.data())
+        }
+      console.log("Fetched successfully!")
+      return true
+    }
+  ).catch(error => {
+    console.log(error)
+    }
+  )
+}
+
 // getData()
 // addData(data)
 
@@ -120,4 +138,6 @@ var cuisines = [
     "Halal",
     "Pizza"
 ]
-addCuisine(cuisines)
+// addCuisine(cuisines)
+
+getDoc()
