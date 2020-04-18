@@ -69,7 +69,7 @@ const addData = (data) => {
 
 const getData = async () =>{
     await db.collection("hawkers")
-        .where("postal","==","730366")
+      .limit(1)
         .get().then(snapshot=>{
         snapshot.forEach((doc) => {
           if (doc.exists){
@@ -140,4 +140,8 @@ var cuisines = [
 ]
 // addCuisine(cuisines)
 
-getDoc()
+// getData()
+
+// console.log(new Date())
+var hi = "hello"
+console.log(hi.slice(-1))

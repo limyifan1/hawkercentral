@@ -29,6 +29,28 @@ const responsive = {
   },
 };
 
+
+function distance_calc(lat1, lon1, lat2, lon2) {
+  if (lat1 === lat2 && lon1 === lon2) {
+    return 0;
+  } else {
+    var radlat1 = (Math.PI * lat1) / 180;
+    var radlat2 = (Math.PI * lat2) / 180;
+    var theta = lon1 - lon2;
+    var radtheta = (Math.PI * theta) / 180;
+    var dist =
+      Math.sin(radlat1) * Math.sin(radlat2) +
+      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    if (dist > 1) {
+      dist = 1;
+    }
+    dist = Math.acos(dist);
+    dist = (dist * 180) / Math.PI;
+    dist = dist * 60 * 1.1515;
+    return dist * 1.609344;
+  }
+}
+
 export class Nearby extends React.Component {
   constructor(props) {
     super(props);
@@ -58,6 +80,7 @@ export class Nearby extends React.Component {
       latitude: this.state.latitude,
       query: this.state.query,
       distance: this.state.distance,
+      limit: 10
     };
     let urls = [
       "https://us-central1-hawkercentral.cloudfunctions.net/islandwide",
@@ -101,7 +124,9 @@ export class Nearby extends React.Component {
       islandwide: [],
       nearby: [],
     };
-    if (this.state.retrieved) {
+    if (this.state !== undefined && this.state.retrieved) {
+      let longitude = this.state.longitude
+      let latitude = this.state.latitude
       this.state.islandwide.forEach(function (data) {
         result["islandwide"].push(
           <p style={{ padding: "6px" }}>
@@ -111,11 +136,14 @@ export class Nearby extends React.Component {
               street={data["street"]}
               pic={data["url"]}
               summary={data["description"]}
+              distance={distance_calc(data["latitude"],data["longitude"],latitude,longitude).toString()}
             />
           </p>
         );
       });
+
       this.state.nearby.forEach(function (data) {
+        console.log(distance_calc(data["latitude"],data["longitude"],latitude,longitude))
         result["nearby"].push(
           <p style={{ padding: "6px" }}>
             <Item
@@ -124,6 +152,7 @@ export class Nearby extends React.Component {
               street={data["street"]}
               pic={data["url"]}
               summary={data["description"]}
+              distance={distance_calc(data["latitude"],data["longitude"],latitude,longitude).toString()}
             />
           </p>
         );

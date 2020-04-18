@@ -57,6 +57,7 @@ export class Listing extends React.Component {
       longitude: this.state.longitude,
       latitude: this.state.latitude,
       cuisine: "Local",
+      limit: 10
     };
     let urls = [
       "https://us-central1-hawkercentral.cloudfunctions.net/islandwide",

@@ -35,10 +35,15 @@ exports.all = functions.https.onRequest(async (req, res) => {
     let distance_filter = req.body.distance;
     let data
     var result = [];
+    let limit = 9999
+    if (req.body.limit){
+      limit = req.body.limit
+    }
     await admin
       .app()
       .firestore()
       .collection("hawkers")
+      .limit(limit)
       .get()
       .then((snapshot) => {
         snapshot.forEach((doc) => {
@@ -68,10 +73,15 @@ exports.nearby = functions.https.onRequest(async (req, res) => {
     let distance_filter = req.body.distance;
     var result = [];
     let data
+    let limit = 9999
+    if (req.body.limit){
+      limit = req.body.limit
+    }
     await admin
       .app()
       .firestore()
       .collection("hawkers")
+      .limit(limit)
       .get()
       .then((snapshot) => {
         snapshot.forEach((doc) => {
@@ -110,11 +120,16 @@ exports.islandwide = functions.https.onRequest(async (req, res) => {
     let distance_filter = req.body.distance;
     var result = [];
     let data
+    let limit = 9999
+    if (req.body.limit){
+      limit = req.body.limit
+    }
     await admin
       .app()
       .firestore()
       .collection("hawkers")
       .where("islandwide", "==", true)
+      .limit(limit)
       .get()
       .then((snapshot) => {
         snapshot.forEach((doc) => {
@@ -145,11 +160,17 @@ exports.region = functions.https.onRequest(async (req, res) => {
     let region = req.body.region;
     var result = [];
     let data
+    let limit = 9999
+    if (req.body.limit){
+      limit = req.body.limit
+    }
+
     await admin
       .app()
       .firestore()
       .collection("hawkers")
       .where(region, "==", true)
+      .limit(limit)
       .get()
       .then((snapshot) => {
         snapshot.forEach((doc) => {
@@ -180,11 +201,17 @@ exports.cuisine = functions.https.onRequest(async (req, res) => {
     let cuisine = req.body.cuisine;
     var result = [];
     let data
+    let limit = 9999
+    if (req.body.limit){
+      limit = req.body.limit
+    }
+
     await admin
       .app()
       .firestore()
       .collection("hawkers")
       .where("cuisine", "array-contains", cuisine)
+      .limit(limit)
       .get()
       .then((snapshot) => {
         snapshot.forEach((doc) => {

@@ -17,6 +17,7 @@ function App() {
         <Route exact path="/nearby" component={Components.Nearby}/>
         <Route exact path="/info" component={Components.Info}/>
         <Route exact path="/news" component={Components.News}/>
+        <Route exact path="/about" component={Components.About}/>
 
         <body>
         <script src="/__/firebase/7.14.0/firebase-app.js"></script>
