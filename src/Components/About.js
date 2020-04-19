@@ -1,7 +1,7 @@
 import React from "react";
 import "../App.css";
 import logo from "../logo-black.png";
-import home from "../home.png";
+import invisible from "../invisible.jpeg";
 
 export class About extends React.Component {
   render() {
@@ -14,7 +14,7 @@ export class About extends React.Component {
               class="col-xs-8 col-sm-8 col-md-8 col-lg-8"
               style={{ textAlign: "center" }}
             >
-              <img src={home} style={{ width: "50%" }} />
+              <img src={invisible} style={{ width: "50%" }} />
               <br />
               <br />
               <br />
@@ -47,6 +47,8 @@ export class About extends React.Component {
                     <h4>#sgunited #dabao #circuitbreaker #covid19</h4>
                   </b>
                 </span>
+
+                Please email foodleh@outlook.com for questions, enquiries, or concerns. 
               </p>
             </div>
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>

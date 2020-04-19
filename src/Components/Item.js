@@ -35,17 +35,21 @@ export class Item extends React.Component {
                       position: "absolute",
                       top: "105px",
                       right: "5px",
-                      zIndex:"100"
+                      zIndex: "0",
                     }}
                   >
-                    <span class="badge badge-info" style={{backgroundColor:"#b48300"}}>{this.props.distance.slice(0,4)+" km away"}</span>
-                    
+                    <span
+                      class="badge badge-info"
+                      style={{ backgroundColor: "#b48300" }}
+                    >
+                      {this.props.distance.slice(0, 4) + " km away"}
+                    </span>
                   </div>
                 ) : null}
                 <img
                   src={this.props.pic}
                   class="card-img card-img-top"
-                  style={{ height: "120px", maxHeight: "160px" }}
+                  style={{ height: "140px", maxHeight: "160px" }}
                   alt=""
                 />
               </div>
@@ -53,10 +57,28 @@ export class Item extends React.Component {
               <img
                 src={placeholder}
                 class="card-img card-img-top"
-                style={{ height: "120px", maxHeight: "160px" }}
+                style={{ height: "140px", maxHeight: "160px" }}
                 alt=""
               />
             )}
+            {this.props.promo ? (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "10px",
+                  right: "3px",
+                  zIndex: "0",
+                }}
+              >
+                <span
+                  class="badge badge-danger"
+                  style={{ backgroundColor: "red", fontSize:"16px"}}
+                >
+                  {this.props.promo}
+                </span>
+              </div>
+            ) : null}
+
             <figcaption>
               <div class="card-body" style={{ width: "100%", height: "100%" }}>
                 {this.props.name ? (

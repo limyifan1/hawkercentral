@@ -24,6 +24,8 @@ export class Search extends React.Component {
     this.state = {
       data: [],
       selected: [],
+      street: "",
+      postal: ""
     };
   }
 
@@ -95,24 +97,32 @@ export class Search extends React.Component {
 
   handleClick = async (event) => {
     event.preventDefault();
-    await this.getPostal();
-    this.props.history.push({
-      pathname: "/nearby",
-      search:
-        "?postal=" +
-        this.state.postal +
-        "&lng=" +
-        this.state.longitude +
-        "&lat=" +
-        this.state.latitude +
-        "&street=" +
-        this.state.street +
-        "&distance=3"+
-        "&option="+
-        this.props.option
-      // state: { detail: response.data }
-    });
-    // this.props.history.push('/listing')
+    if (this.props.option === ""){
+      alert("Please choose either da bao or delivery thank you :)")
+    }
+    else if(this.state.postal.length !== 6){
+      alert("Please enter a valid postal code thank you :)")
+    }
+    else{
+      await this.getPostal();
+      this.props.history.push({
+        pathname: "/nearby",
+        search:
+          "?postal=" +
+          this.state.postal +
+          "&lng=" +
+          this.state.longitude +
+          "&lat=" +
+          this.state.latitude +
+          "&street=" +
+          this.state.street +
+          "&distance=3"+
+          "&option="+
+          this.props.option
+        // state: { detail: response.data }
+      });
+      // this.props.history.push('/listing')  
+    }
   };
 
   handleSubmit = (event) => {

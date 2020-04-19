@@ -61,15 +61,16 @@
 
 .home-option {
   width: 150px;
+  filter: drop-shadow(1px 1px 7px grey)
 }
 
 .home-option:hover {
-  filter: drop-shadow(4px 4px 10px black)
+  filter: drop-shadow(1px 1px 10px grey)
 }
 
 .home-option-clicked {
   width: 150px;
-  filter: drop-shadow(4px 4px 10px black)
+  filter: drop-shadow(3px 3px 10px black)
 }
 
 .main-caption{
@@ -87,7 +88,7 @@
     height: 800px;
   }
   .home-banner {
-    width: 50%;
+    width: 40%;
   }
   .home-iwant {
     width: 10%;
@@ -105,7 +106,7 @@
     height: 750px;
   }
   .home-banner {
-    width: 50%;
+    width: 40%;
   }
   .home-iwant {
     width: 10%;
@@ -125,7 +126,7 @@
     display: none;
   }
   .home-banner {
-    width: 50%;
+    width: 30%;
   }
   .home-iwant {
     width: 10%;
@@ -307,3 +308,4 @@ figure.effect-bubba:hover p {
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
+

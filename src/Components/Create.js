@@ -61,10 +61,7 @@ const addData = async ({
   unit,
   description,
   description_detailed,
-  north,
-  south,
-  east,
-  west,
+  region,
   islandwide,
   delivery,
   price,
@@ -76,10 +73,15 @@ const addData = async ({
   sms,
   inperson,
   opening,
-  closing,
+  pickup_option,
+  delivery_option,
+  website,
+  promo,
+  condition,
 }) => {
   let now = new Date();
-  let id = await db.collection("hawkers")
+  let id = await db
+    .collection("hawkers")
     .add({
       name: name,
       postal: postal,
@@ -96,12 +98,8 @@ const addData = async ({
       longitude: longitude,
       unit: unit,
       delivery: delivery,
-      islandwide: islandwide === "false",
       cuisine: cuisine,
-      north: north,
-      south: south,
-      east: east,
-      west: west,
+      region: region,
       price: price,
       contact: contact,
       call: call,
@@ -110,17 +108,21 @@ const addData = async ({
       inperson: inperson,
       lastmodified: now,
       opening: opening,
-      closing: closing,
+      delivery_option: delivery_option,
+      pickup_option: pickup_option,
+      website: website,
+      promo: promo,
+      condition: condition,
     })
     .then(function (docRef) {
-      console.log(docRef.id)
-      return docRef.id
+      console.log(docRef.id);
+      return docRef.id;
     })
     .catch(function (error) {
       console.error("Error adding document: ", error);
       // alert("Failed")
     });
-    return id
+  return id;
 };
 
 export class Create extends React.Component {
@@ -150,23 +152,23 @@ export class Create extends React.Component {
       longitude: -122.3710252,
       latitude: 47.63628904,
       unit: "",
+      delivery_option: false,
+      pickup_option: false,
       delivery: [],
       cuisineValue: [],
-      islandwide: false,
-      north: false,
-      south: false,
-      east: false,
-      west: false,
       call: false,
       whatsapp: false,
       sms: false,
       inperson: false,
       contact: "",
       docid: "",
-      opening: "07:00",
-      closing: "21:00",
+      opening: "",
+      region: [],
+      website: "",
+      promo: "",
+      condition: "",
     };
-
+    this.handleRegionChange = this.handleRegionChange.bind(this);
     this.handleMultiChange = this.handleMultiChange.bind(this);
     this.handleCuisineChange = this.handleCuisineChange.bind(this);
   }
@@ -188,12 +190,13 @@ export class Create extends React.Component {
   async getPostal(postal) {
     // event.preventDefault();
     let data = await this.callPostal(postal);
-    console.log(data["ADDRESS"]);
-    this.setState({
-      street: data["ADDRESS"],
-      longitude: data["LONGITUDE"],
-      latitude: data["LATITUDE"],
-    });
+    if (data !== undefined) {
+      this.setState({
+        street: data["ADDRESS"],
+        longitude: data["LONGITUDE"],
+        latitude: data["LATITUDE"],
+      });
+    }
   }
 
   callPostal = (postal) => {
@@ -232,10 +235,7 @@ export class Create extends React.Component {
       unit: this.state.unit,
       description: this.state.description,
       description_detailed: this.state.description_detailed,
-      north: this.state.north,
-      south: this.state.south,
-      east: this.state.east,
-      west: this.state.west,
+      region: this.state.region,
       islandwide: this.state.islandwide,
       delivery: this.state.delivery,
       price: this.state.price,
@@ -247,14 +247,17 @@ export class Create extends React.Component {
       sms: this.state.sms,
       inperson: this.state.inperson,
       opening: this.state.opening,
-      closing: this.state.closing,
-    }).then((id)=>{
+      pickup_option: this.state.pickup_option,
+      delivery_option: this.state.delivery_option,
+      website: this.state.website,
+      promo: this.state.promo,
+      condition: this.state.condition,
+    }).then((id) => {
       this.props.history.push({
         pathname: "/info",
         search: "?id=" + id,
       });
-    }
-    );
+    });
     event.preventDefault();
   };
 
@@ -265,6 +268,17 @@ export class Create extends React.Component {
     this.setState({ [name]: value });
     if (name === "postal" && value.toString().length === 6) {
       this.getPostal(value);
+    }
+    if (
+      name === "delivery_option" ||
+      name === "pickup_option" ||
+      name === "call" ||
+      name === "whatsapp" ||
+      name === "sms" ||
+      name === "inperson"
+    ) {
+      const checked = target.checked;
+      this.setState({ [name]: checked });
     }
   };
 
@@ -367,6 +381,14 @@ export class Create extends React.Component {
     });
   }
 
+  handleRegionChange(option) {
+    this.setState((state) => {
+      return {
+        region: option,
+      };
+    });
+  }
+
   handleCuisineChange(option) {
     this.setState((state) => {
       return {
@@ -386,6 +408,44 @@ export class Create extends React.Component {
           classNamePrefix="select"
           value={this.state.cuisineValue}
           onChange={this.handleCuisineChange}
+          placeholder="E.g. Asian, Local, Beverages"
+        />
+      </Fragment>
+    );
+  }
+
+  regionSearch() {
+    return (
+      <Fragment>
+        <Select
+          isMulti
+          name="name"
+          options={[
+            {
+              label: "Islandwide",
+              value: "islandwide",
+            },
+            {
+              label: "North",
+              value: "north",
+            },
+            {
+              label: "South",
+              value: "south",
+            },
+            {
+              label: "East",
+              value: "east",
+            },
+            {
+              label: "West",
+              value: "west",
+            },
+          ]}
+          className="basic-multi-select"
+          classNamePrefix="select"
+          value={this.state.region}
+          onChange={this.handleRegionChange}
         />
       </Fragment>
     );
@@ -457,15 +517,14 @@ export class Create extends React.Component {
             >
               <div class="card-body">
                 <h5 class="card-title create-title create-title">
-                  Upload Images
+                  Upload Images{" "}
                 </h5>
                 <h6 class="card-subtitle mb-2 text-muted create-title">
                   Upload images of your listed hawker stall below
                 </h6>
                 <p class="card-text create-title">
-                  Listings with images are much more likely to get orders.{" "}
+                  <b>If available, please upload your menu</b>
                 </p>
-
                 <div class="row">
                   <div class="col-4">
                     <form
@@ -488,7 +547,7 @@ export class Create extends React.Component {
                                 "object-fit": "cover",
                               }}
                               name="imageFile1"
-                              alt=''
+                              alt=""
                             ></img>
                           </label>
                         ) : (
@@ -524,7 +583,7 @@ export class Create extends React.Component {
                                 "object-fit": "cover",
                               }}
                               name="imageFile2"
-                              alt=''
+                              alt=""
                             ></img>
                           </label>
                         ) : (
@@ -560,7 +619,7 @@ export class Create extends React.Component {
                                 "object-fit": "cover",
                               }}
                               name="imageFile3"
-                              alt=''
+                              alt=""
                             ></img>
                           </label>
                         ) : (
@@ -598,7 +657,7 @@ export class Create extends React.Component {
                                 "object-fit": "cover",
                               }}
                               name="imageFile4"
-                              alt=''
+                              alt=""
                             ></img>
                           </label>
                         ) : (
@@ -634,7 +693,7 @@ export class Create extends React.Component {
                                 "object-fit": "cover",
                               }}
                               name="imageFile5"
-                              alt=''
+                              alt=""
                             ></img>
                           </label>
                         ) : (
@@ -699,6 +758,7 @@ export class Create extends React.Component {
                 </p>
                 <p class="center" style={{ width: "220px" }}>
                   <Item
+                    promo={this.state.promo}
                     name={this.state.name}
                     pic={this.state.image1}
                     summary={this.state.description}
@@ -771,7 +831,7 @@ export class Create extends React.Component {
                       type="text"
                       class="form-control"
                       name="unit"
-                      placeholder="Enter Unit Number"
+                      placeholder="E.g. #01-01"
                     ></input>
                   </div>
                   <div class="form-group create-title">
@@ -784,153 +844,231 @@ export class Create extends React.Component {
                       type="text"
                       class="form-control"
                       name="description"
-                      placeholder="Enter Description"
+                      placeholder="E.g. Best Chicken Rice in town"
                     ></input>
                   </div>
                   <div class="form-group create-title">
-                    <label for="description_long">
-                      Detailed Description <b>(max 500 words)</b>
+                    <label for="description_detailed">
+                      Menu, Price List, and additional details{" "}
                     </label>
                     <textarea
                       onChange={this.handleChange}
-                      value={this.state.description_long}
+                      value={this.state.description_detailed}
                       type="text"
                       class="form-control"
-                      name="description_long"
-                      placeholder="Enter Description"
+                      name="description_detailed"
+                      placeholder="E.g. Soy Sauce Chicken Rice: $4.00 (limited to 500 per day)"
                       rows="3"
                     ></textarea>
                   </div>
                   <div class="form-group create-title">
-                    <label for="description">Opening Hours</label>
-
-                    <div class="row" style={{ textAlign: "center" }}>
-                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <label for="website">General Promotion (if any) </label>
+                    <div class="form-row">
+                      <div class="col-5">
+                        <small>
+                          Discount <b>(8 chars)</b>
+                        </small>
                         <input
                           onChange={this.handleChange}
-                          value={this.state.opening}
-                          type="time"
+                          value={this.state.promo}
+                          name="promo"
+                          type="text"
                           class="form-control"
-                          name="opening"
-                          placeholder="Enter Description"
-                        ></input>
+                          placeholder="e.g. 10% or $5 off"
+                          maxlength="8"
+                        />
                       </div>
-                      <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-                        {" "}
-                        <label class="checkbox-inline">
-                          to
-                          <br />
-                        </label>
-                      </div>
-                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                      <div class="col-7">
+                        <small>Condition (if any)</small>
                         <input
                           onChange={this.handleChange}
-                          value={this.state.closing}
-                          type="time"
+                          value={this.state.condition}
+                          name="condition"
+                          type="text"
                           class="form-control"
-                          name="closing"
-                          placeholder="Enter Description"
-                        ></input>
+                          placeholder="e.g. any order / above $20 order size"
+                        />
                       </div>
                     </div>
                   </div>
+
+                  <div class="form-group create-title">
+                    <label for="website">
+                      Website / Facebook/ Google Listing Link
+                    </label>
+                    <input
+                      onChange={this.handleChange}
+                      value={this.state.website}
+                      type="text"
+                      class="form-control"
+                      name="website"
+                      placeholder="www.example.com"
+                      rows="3"
+                    ></input>
+                  </div>
+                  <div class="form-group create-title">
+                    <label for="description">Opening Hours</label>
+                    <textarea
+                      onChange={this.handleChange}
+                      value={this.state.opening}
+                      type="text"
+                      class="form-control"
+                      name="opening"
+                      placeholder="E.g. Monday: 7:00 to 20:00"
+                      rows="3"
+                    ></textarea>
+                  </div>
                   <div class="form-group create-title">
                     <label for="description">
-                      Where do you deliver to? (NSEWC or select island-wide
-                      delivery)
+                      Do you offer dabao(pick-up), delivery, or both?
                     </label>
                     <div class="form-check create-title">
                       <label class="checkbox-inline">
                         <input
                           onChange={this.handleChange}
                           type="checkbox"
-                          value={this.state.north}
-                          name="north"
+                          value={this.state.pickup_option}
+                          name="pickup_option"
                           class="form-check-input"
                         ></input>
-                        North
+                        Dabao (Self-Pickup)
                       </label>
                       <br />
                       <label class="checkbox-inline">
                         <input
                           onChange={this.handleChange}
                           type="checkbox"
-                          value={this.state.south}
-                          name="south"
+                          checked={this.state.delivery_option}
+                          name="delivery_option"
                           class="form-check-input"
                         ></input>
-                        South
+                        Delivery
                       </label>
                       <br />
-                      <label class="checkbox-inline">
-                        <input
-                          onChange={this.handleChange}
-                          type="checkbox"
-                          value={this.state.east}
-                          name="east"
-                          class="form-check-input"
-                        ></input>
-                        East
-                      </label>
-                      <br />
-                      <label class="checkbox-inline">
-                        <input
-                          onChange={this.handleChange}
-                          type="checkbox"
-                          value={this.state.west}
-                          name="west"
-                          class="form-check-input"
-                        ></input>
-                        West
-                      </label>
-                      <br />
-                      <label class="checkbox-inline">
-                        <input
-                          onChange={this.handleChange}
-                          type="checkbox"
-                          value={this.state.islandwide}
-                          name="islandwide"
-                          class="form-check-input"
-                        ></input>
-                        Island-wide
-                      </label>
                     </div>
                   </div>
+                  {this.state.delivery_option === false ? null : (
+                    <div>
+                      <div class="card shadow">
+                        <div class="card-body">
+                          <h5 class="card-title create-title">
+                            {" "}
+                            Delivery Options
+                          </h5>
+                          <div class=" form-group create-title">
+                            <label for="description">
+                              Which regions do you deliver to? (Select
+                              Island-wide Delivery or NSEWC)
+                            </label>
+                            {this.regionSearch()}
+                            {/* <div class="form-check create-title">
+                          <label class="checkbox-inline">
+                            <input
+                              onChange={this.handleChange}
+                              type="checkbox"
+                              value={this.state.north}
+                              name="north"
+                              class="form-check-input"
+                            ></input>
+                            North
+                          </label>
+                          <br />
+                          <label class="checkbox-inline">
+                            <input
+                              onChange={this.handleChange}
+                              type="checkbox"
+                              value={this.state.south}
+                              name="south"
+                              class="form-check-input"
+                            ></input>
+                            South
+                          </label>
+                          <br />
+                          <label class="checkbox-inline">
+                            <input
+                              onChange={this.handleChange}
+                              type="checkbox"
+                              value={this.state.east}
+                              name="east"
+                              class="form-check-input"
+                            ></input>
+                            East
+                          </label>
+                          <br />
+                          <label class="checkbox-inline">
+                            <input
+                              onChange={this.handleChange}
+                              type="checkbox"
+                              value={this.state.west}
+                              name="west"
+                              class="form-check-input"
+                            ></input>
+                            West
+                          </label>
+                          <br />
+                          <label class="checkbox-inline">
+                            <input
+                              onChange={this.handleChange}
+                              type="checkbox"
+                              value={this.state.islandwide}
+                              name="islandwide"
+                              class="form-check-input"
+                            ></input>
+                            Island-wide
+                          </label>
+                        </div> */}
+                          </div>
+                          <div class="form-group create-title ">
+                            <label for="street">
+                              Which nearest MRT do you deliver to? (Ignore if
+                              you deliver Island-wide)
+                            </label>
+                            {this.deliverySearch()}
+                          </div>
+                          <div class="form-group create-title ">
+                            <label for="price">Delivery Fees: </label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span
+                                  class="input-group-text"
+                                  id="basic-addon1"
+                                >
+                                  $
+                                </span>
+                              </div>
+                              <input
+                                onChange={this.handleChange}
+                                value={this.state.price}
+                                type="number"
+                                class="form-control"
+                                name="price"
+                                placeholder="Enter Price"
+                              ></input>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <br />
+                    </div>
+                  )}
                   <div class="form-group create-title">
-                    <label for="street">
-                      Where do you deliver to? (Choose nearest MRT station/
-                      select Island-wide above)
-                    </label>
-                    {this.deliverySearch()}
-                  </div>
-                  <div class="form-group create-title">
-                    <label for="price">Delivery Fees: </label>
+                    <label for="unit">Contact Number: </label>
+
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1">
-                          $
+                          +65
                         </span>
                       </div>
                       <input
                         onChange={this.handleChange}
-                        value={this.state.price}
+                        value={this.state.contact}
                         type="number"
                         class="form-control"
-                        name="price"
-                        placeholder="Enter Price"
+                        name="contact"
+                        placeholder="9xxxxxxx"
                       ></input>
                     </div>
-                  </div>
-                  <div class="form-group create-title">
-                    <label for="unit">Contact Number: </label>
-                    <input
-                      onChange={this.handleChange}
-                      value={this.state.contact}
-                      type="number"
-                      class="form-control"
-                      name="contact"
-                      placeholder="Enter Contact Number"
-                    ></input>
                   </div>
                   <div class="form-group create-title">
                     <label for="unit">Contact Channels: </label>
@@ -992,6 +1130,7 @@ export class Create extends React.Component {
                       </p>
                       <p class="center" style={{ width: "220px" }}>
                         <Item
+                          promo={this.state.promo}
                           name={this.state.name}
                           pic={this.state.image1}
                           summary={this.state.description}

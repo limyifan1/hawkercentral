@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import "../App.css";
 import Item from "./Item";
 import Carousel from "react-multi-carousel";
@@ -6,29 +6,62 @@ import "react-multi-carousel/lib/styles.css";
 import queryString from "query-string";
 import { Spinner } from "react-bootstrap";
 import { db } from "./Firestore";
+import Select from "react-select";
 
-const responsive = {
-  superLargeDesktop: {
-    breakpoint: { max: 4000, min: 3000 },
-    items: 6,
-    partialVisibilityGutter: 30,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 5,
-    partialVisibilityGutter: 30,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-    partialVisibilityGutter: 30,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 2,
-    partialVisibilityGutter: 10,
-  },
-};
+const cuisines = [
+  "American",
+  "Healthy",
+  "Sandwiches",
+  "Asian",
+  "Indian",
+  "Seafood",
+  "Bakery and Cakes",
+  "Indonesia",
+  "Local",
+  "Beverages",
+  "Italian",
+  "Sushi",
+  "Burgers",
+  "Japanese",
+  "Thai",
+  "Chicken",
+  "Korean",
+  "Vegetarian",
+  "Vegan",
+  "Chinese",
+  "Malay",
+  "Vietnamese",
+  "Dessert",
+  "Malaysian",
+  "Western",
+  "Fast Food",
+  "Meat",
+  "Halal",
+  "Pizza",
+];
+
+// const responsive = {
+//   superLargeDesktop: {
+//     breakpoint: { max: 4000, min: 3000 },
+//     items: 6,
+//     partialVisibilityGutter: 30,
+//   },
+//   desktop: {
+//     breakpoint: { max: 3000, min: 1024 },
+//     items: 5,
+//     partialVisibilityGutter: 30,
+//   },
+//   tablet: {
+//     breakpoint: { max: 1024, min: 464 },
+//     items: 2,
+//     partialVisibilityGutter: 30,
+//   },
+//   mobile: {
+//     breakpoint: { max: 464, min: 0 },
+//     items: 2,
+//     partialVisibilityGutter: 10,
+//   },
+// };
 
 function distance_calc(lat1, lon1, lat2, lon2) {
   if (lat1 === lat2 && lon1 === lon2) {
@@ -61,8 +94,16 @@ export class Nearby extends React.Component {
       longitude: queryString.parse(this.props.location.search).lng,
       latitude: queryString.parse(this.props.location.search).lat,
       distance: queryString.parse(this.props.location.search).distance,
+      pickup:
+        queryString.parse(this.props.location.search).option === "selfcollect",
+      delivery:
+        queryString.parse(this.props.location.search).option === "delivery",
       retrieved: false,
+      search: "",
+      cuisineValue: [],
     };
+
+    this.handleCuisineChange = this.handleCuisineChange.bind(this);
   }
 
   componentWillMount() {
@@ -76,7 +117,7 @@ export class Nearby extends React.Component {
 
   retrieveData = async () => {
     let data = [];
-    let temp
+    let temp;
     await db
       .collection("hawkers")
       .limit(30)
@@ -84,8 +125,8 @@ export class Nearby extends React.Component {
       .then((snapshot) => {
         snapshot.forEach((doc) => {
           if (doc.exists) {
-            temp = doc.data()
-            temp.id = doc.id
+            temp = doc.data();
+            temp.id = doc.id;
             data.push(temp);
           }
         });
@@ -96,6 +137,55 @@ export class Nearby extends React.Component {
         console.log(error);
       });
     this.setState({ data: data, retrieved: true });
+  };
+
+  handleCuisineChange(option) {
+    this.setState((state) => {
+      return {
+        cuisineValue: option,
+      };
+    });
+  }
+
+  cuisineSearch() {
+    let cuisine_format = [];
+    cuisines.forEach((element) => {
+      cuisine_format.push({
+        label: element,
+        value: element,
+      });
+    });
+    const select = () => {
+      return (
+        <span style={{zIndex:"9999"}}>
+        <Select
+          isMulti
+          name="name"
+          options={cuisine_format}
+          className="basic-multi-select"
+          classNamePrefix="select"
+          value={this.state.cuisineValue}
+          onChange={this.handleCuisineChange}
+          placeholder="Filter By Cuisine"
+        />
+        </span>
+      );
+    };
+    return (
+      <span>
+        <span class="d-none d-md-block">{select()}</span>
+        <span class="d-block d-md-none" style={{ margin: "10px" }}>
+          {select()}
+        </span>
+      </span>
+    );
+  }
+
+  handleChange = (event) => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState({ [name]: value });
   };
 
   // retrieveData = async (query) => {
@@ -145,123 +235,166 @@ export class Nearby extends React.Component {
 
   render() {
     let result = {
-      islandwide: [],
       nearby: [],
     };
     if (this.state.data !== undefined && this.state.retrieved) {
       let longitude = this.state.longitude;
       let latitude = this.state.latitude;
       let filtered = [];
-      filtered = this.state.data.filter((d) => d.islandwide === true);
-      result.islandwide = filtered.map((data) => {
-        return (
-          <p style={{ padding: "6px" }}>
-            <Item
-              id={data["id"]}
-              name={data["name"]}
-              street={data["street"]}
-              pic={data["url"]}
-              summary={data["description"]}
-              distance={distance_calc(
-                data["latitude"],
-                data["longitude"],
-                latitude,
-                longitude
-              ).toString()}
-            />
-          </p>
-        );
-      });
-
       filtered = this.state.data.filter(
         (d) =>
           distance_calc(d["latitude"], d["longitude"], latitude, longitude) <
-          this.state.distance
+            this.state.distance &&
+          (d["pickup_option"] === this.state.pickup ||
+            d["delivery_option"] === this.state.delivery)
       );
+
+      if (
+        this.state.cuisineValue !== null &&
+        this.state.cuisineValue.length !== 0
+      ) {
+        // console.log(this.state.cuisineValue[0] === this.state.data[0].cuisine[0])
+        var items = this.state.cuisineValue.map((x) => {
+          return x.value;
+        });
+
+        filtered = this.state.data.filter((d) => {
+          let toggle = false;
+          if (d.cuisine !== undefined) {
+            let values = d.cuisine.map((x) => {
+              return x.value;
+            });
+            values.forEach((element) => {
+              if (items.includes(element)) {
+                toggle = true;
+              }
+            });
+          }
+          return toggle;
+        });
+      }
+
+      if (this.state.search.length !== 0) {
+        filtered = filtered.filter((d) => {
+          return (
+            d.name.toLowerCase().includes(this.state.search.toLowerCase()) ||
+            d.description
+              .toLowerCase()
+              .includes(this.state.search.toLowerCase()) ||
+            d.description_detailed
+              .toLowerCase()
+              .includes(this.state.search.toLowerCase())
+          );
+        });
+      }
+
       result.nearby = filtered.map((data) => {
         return (
-          <p style={{ padding: "6px" }}>
-            <Item
-              id={data["id"]}
-              name={data["name"]}
-              street={data["street"]}
-              pic={data["url"]}
-              summary={data["description"]}
-              distance={distance_calc(
-                data["latitude"],
-                data["longitude"],
-                latitude,
-                longitude
-              ).toString()}
-            />
-          </p>
+          <span>
+            <div
+              class="d-inline-block d-md-none"
+              style={{ "padding-left": "40px","padding-right": "40px"}}
+            >
+              <Item
+                promo={data["promo"]}
+                id={data["id"]}
+                name={data["name"]}
+                street={data["street"]}
+                pic={data["url"]}
+                summary={data["description"]}
+                distance={distance_calc(
+                  data["latitude"],
+                  data["longitude"],
+                  latitude,
+                  longitude
+                ).toString()}
+              />
+            </div>
+            <div
+              class="d-none d-md-inline-block"
+              style={{ padding: "6px", width: "220px" }}
+            >
+              <Item
+                promo={data["promo"]}
+                id={data["id"]}
+                name={data["name"]}
+                street={data["street"]}
+                pic={data["url"]}
+                summary={data["description"]}
+                distance={distance_calc(
+                  data["latitude"],
+                  data["longitude"],
+                  latitude,
+                  longitude
+                ).toString()}
+              />
+            </div>
+          </span>
         );
       });
     }
 
-      return (
-        <div>
-          {this.state.retrieved ? (
-            <div>
-              <div
-                class="container"
-                style={{ paddingTop: "56px", width: "100%" }}
-              >
-                {result.nearby.length > 0 ? (
-                  <div>
-                    <div class="row">
-                      <div class="col-md-12" style={{ textAlign: "left" }}>
-                        <h2>Near You</h2>
-                      </div>
-                    </div>
-                    <Carousel
-                      responsive={responsive}
-                      ssr={true}
-                      infinite={false}
-                      partialVisible={true}
-                      swipeable={true}
-                      draggable={true}
-                      minimumTouchDrag={0}
-                      transitionDuration={0}
-                      slidesToSlide={2}
-                    >
-                      {result.nearby}
-                    </Carousel>
+    return (
+      <div>
+        {this.state.retrieved ? (
+          <div>
+            <div
+              class="container"
+              style={{ paddingTop: "56px", width: "100%" }}
+            >
+              <div class="container" style={{ paddingTop: "27px" }}>
+                <div class="row">
+                  <div class="col-xs-4 col-sm-6 col-md-6 col-lg-4 d-flex justify-content-left">
+                    <h3>
+                      Near You at{" "}
+                      <span style={{ color: "#b48300" }}>
+                        {this.state.query}
+                      </span>
+                    </h3>
                   </div>
-                ) : null}
-                <div>
-                  <div class="row">
-                    <div class="col-md-12" style={{ textAlign: "left" }}>
-                      <h2>Islandwide Delivery</h2>
-                    </div>
-                  </div>
-                  <Carousel
-                    responsive={responsive}
-                    ssr={true}
-                    infinite={false}
-                    partialVisible={true}
-                    swipeable={true}
-                    draggable={true}
-                    minimumTouchDrag={0}
-                    transitionDuration={0}
-                    slidesToSlide={2}
-                  >
-                    {result.islandwide}
-                  </Carousel>
                 </div>
+                <div class="row">
+                  <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7 d-flex justify-content-left">
+                    <input
+                      class="form-control"
+                      type="text"
+                      value={this.state.search}
+                      name="search"
+                      placeholder="   Search by Name, Category, Food, Items e.g. Chicken Rice"
+                      style={{
+                        width: "100%",
+                        height: "38px",
+                        "border-radius": "1rem",
+                      }}
+                      onChange={this.handleChange}
+                    ></input>
+                  </div>
+                  <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                    {this.cuisineSearch()}
+                  </div>
+                </div>
+                {result.nearby.length > 0 ? (
+                  <div class="row float-left">{result.nearby}</div>
+                ) : (
+                  <div class="row float-left">
+                    <br /> No Results Found
+                  </div>
+                )}
               </div>
+              <div></div>
             </div>
-          ) : (
-            <div class="row h-100 page-container">
-              <div class="col-sm-12 my-auto">
-                <h3>Please give us a moment while we load your results</h3>
-                <Spinner class="" animation="grow" />
-              </div>
+          </div>
+        ) : (
+          <div class="row h-100 page-container">
+            <div class="col-sm-12 my-auto">
+              <h3>Please give us a moment while we load your results</h3>
+              <Spinner class="" animation="grow" />
             </div>
-          )}
-        </div>
-      );
-    }
+          </div>
+        )}
+      </div>
+    );
   }
+}
 
 export default Nearby;

@@ -105,8 +105,9 @@ export class Home extends React.Component {
     if (this.state.retrieved) {
       this.state.all.forEach(function (data) {
         result["all"].push(
-          <p style={{ padding: "6px" }}>
+          <p style={{ padding: "10px", width: "200px"}}>
             <Item
+              promo={data["promo"]}
               id={data["id"]}
               name={data["name"]}
               street={data["street"]}
@@ -182,7 +183,7 @@ export class Home extends React.Component {
                 </span>
                 <br />
                 <br />
-                <div>{this.state.option ==="" ? <br /> : (this.state.option ==="delivery"?<span class=" main-caption">Living the lazy life?</span>:<span class="label label-default main-caption">Living the hardworking life?</span>) }</div>
+                <div>{this.state.option ==="" ? <span class=" main-caption">Choose Da Bao Or Delivery</span> : (this.state.option ==="delivery"?<span class=" main-caption">Living the lazy life?</span>:<span class="label label-default main-caption">Living the hardworking life?</span>) }</div>
                 <br />
                 <Component.Search option={this.state.option} />
               </div>
