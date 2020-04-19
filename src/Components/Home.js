@@ -3,6 +3,9 @@ import Component from "../Components";
 import Carousel from "react-multi-carousel";
 import home from "../home.png";
 import Item from "./Item";
+import i_want from "../i_want.jpeg";
+import delivery from "../delivery.jpeg";
+import self_collect from "../self_collect.jpeg";
 
 const responsive = {
   superLargeDesktop: {
@@ -33,8 +36,12 @@ export class Home extends React.Component {
 
     this.state = {
       data: [],
+      option: "",
       retrieved: false,
     };
+
+    this.handleCollect = this.handleCollect.bind(this);
+    this.handleDelivery = this.handleDelivery.bind(this);
   }
 
   componentWillMount() {
@@ -50,7 +57,7 @@ export class Home extends React.Component {
       longitude: this.state.longitude,
       latitude: this.state.latitude,
       cuisine: "Local",
-      limit: 15
+      limit: 15,
     };
     let urls = ["https://us-central1-hawkercentral.cloudfunctions.net/all"];
     try {
@@ -84,6 +91,12 @@ export class Home extends React.Component {
       return error;
     }
   };
+  handleCollect() {
+    this.setState({ option: "selfcollect" });
+  }
+  handleDelivery() {
+    this.setState({ option: "delivery" });
+  }
 
   render() {
     let result = {
@@ -105,47 +118,97 @@ export class Home extends React.Component {
       });
     }
 
+    let selfcollect =
+      this.state.option === "selfcollect"
+        ? "home-option-clicked"
+        : "home-option";
+
+    let delivery_option =
+      this.state.option === "delivery" ? "home-option-clicked" : "home-option";
+
     return (
       <div>
-        <div
-          class="jumbotron row"
-          style={{ "background-color": "white" }}
-        >
+        <div class="jumbotron row" style={{ "background-color": "white" }}>
           <div class="container" style={{ "margin-top": "57px" }}>
             <div class="row">
-              <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"> </div>
+              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"> </div>
               <div
-                class="col-xs-6 col-sm-6 col-md-6 col-lg-6"
+                class="col-xs-10 col-sm-10 col-md-10 col-lg-10"
                 style={{ textAlign: "center" }}
               >
-                <img src={home} style={{ width: "100%" }} />
+                <img alt="" class="home-banner" src={home} />
                 <br />
                 <br />
-                <Component.Search />
+                <img alt="" class="home-iwant" src={i_want} />
+                <br />
+                <br />
+                <span class="row d-none d-md-inline-block">
+                  <span class="col-sm-2 col-md-2 col-lg-2"></span>
+                  <span class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <img
+                      onClick={this.handleCollect}
+                      alt=""
+                      class={selfcollect}
+                      src={self_collect}
+                    />
+                  </span>
+                  <span class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <img
+                      alt=""
+                      onClick={this.handleDelivery}
+                      class={delivery_option}
+                      src={delivery}
+                    />
+                  </span>
+                  <span class="col-sm-2 col-md-2 col-lg-2"></span>
+                </span>
+                <span class="row d-inline-block d-md-none">
+                  <span>
+                    <img
+                      alt=""
+                      onClick={this.handleCollect}
+                      class={selfcollect}
+                      src={self_collect}
+                    />
+                  </span>
+                  <span>
+                    <img
+                      alt=""
+                      onClick={this.handleDelivery}
+                      class={delivery_option}
+                      src={delivery}
+                    />
+                  </span>
+                </span>
+                <br />
+                <br />
+                <div>{this.state.option ==="" ? <br /> : (this.state.option ==="delivery"?<span class=" main-caption">Living the lazy life?</span>:<span class="label label-default main-caption">Living the hardworking life?</span>) }</div>
+                <br />
+                <Component.Search option={this.state.option} />
               </div>
-              <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"></div>
+              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
             </div>
           </div>
           <br />
           <br />
         </div>
         <Carousel
-            responsive={responsive}
-            ssr={true}
-            infinite={true}
-            // partialVisible={true}
-            swipeable={true}
-            draggable={true}
-            minimumTouchDrag={0}
-            transitionDuration={0}
-            slidesToSlide={1}
-            arrows={false}
-            autoPlay={true}
-            centerMode={true}
-            autoPlaySpeed={2000}
-          >
-            {result.all}
-          </Carousel>
+          responsive={responsive}
+          ssr={true}
+          infinite={true}
+          // partialVisible={true}
+          swipeable={true}
+          draggable={true}
+          minimumTouchDrag={0}
+          transitionDuration={0}
+          slidesToSlide={1}
+          arrows={false}
+          autoPlay={true}
+          centerMode={true}
+          autoPlaySpeed={2000}
+        >
+          {result.all}
+        </Carousel>
       </div>
     );
   }

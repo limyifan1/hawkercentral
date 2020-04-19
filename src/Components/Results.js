@@ -50,6 +50,7 @@ export class Results extends React.Component {
               street={data['street']}
               pic={data['url']}
               summary={data['description']}
+              id={data['id']}
             />
           </p>
         )

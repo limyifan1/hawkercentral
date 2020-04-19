@@ -140,8 +140,63 @@ var cuisines = [
 ]
 // addCuisine(cuisines)
 
-// getData()
 
+const addData2 = async () =>{
+  await db.collection("hawkers")
+      .add(
+        {
+          name:"hi"
+        }
+      ).then(snapshot=>{
+      snapshot.forEach((doc) => {
+        if (doc.exists){
+          console.log(doc.id)
+          console.log(doc.data())
+          }
+        }
+      );
+      console.log("Fetched successfully!")
+      return true
+    }
+  ).catch(error => {
+    console.log(error)
+    }
+  )
+}
+
+function addData3 ({
+  url,
+  image2,
+  image3,
+  image4,
+  image5,
+  image6,
+  name,
+  cuisine,
+  postal,
+  street,
+  unit,
+  description,
+  description_detailed,
+  north,
+  south,
+  east,
+  west,
+  islandwide,
+  delivery,
+  price,
+  contact,
+  latitude,
+  longitude,
+  call,
+  whatsapp,
+  sms,
+  inperson,
+  opening,
+  closing
+}){
+  console.log(name)
+}
+
+addData3({name:"hello"})
 // console.log(new Date())
-var hi = "hello"
-console.log(hi.slice(-1))

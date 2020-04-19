@@ -6,6 +6,7 @@ import { Spinner } from "react-bootstrap";
 import Item from "./Item";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { db } from "./Firestore";
 
 const responsive = {
   superLargeDesktop: {
@@ -52,58 +53,83 @@ export class Listing extends React.Component {
     this.setState({ data: val });
   }
 
-  retrieveData = async (query) => {
-    let string = {
-      longitude: this.state.longitude,
-      latitude: this.state.latitude,
-      cuisine: "Local",
-      limit: 10
-    };
-    let urls = [
-      "https://us-central1-hawkercentral.cloudfunctions.net/islandwide",
-      "https://us-central1-hawkercentral.cloudfunctions.net/cuisine",
-    ];
-    try {
-      Promise.all(
-        urls.map((url) =>
-          fetch(url, {
-            method: "POST",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(string),
-          })
-            .then((response) => {
-              return response.json();
-            })
-            .then((data) => {
-              return data;
-            })
-            .catch((error) => {
-              return error;
-            })
-        )
-      ).then((data) => {
-        this.setState({
-          islandwide: data[0],
-          cuisine: data[1],
-          retrieved: true,
+  retrieveData = async () => {
+    let data = [];
+    let temp
+    await db
+      .collection("hawkers")
+      .limit(30)
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          if (doc.exists) {
+            temp = doc.data()
+            temp.id = doc.id
+            data.push(temp);
+          }
         });
+        console.log("Fetched successfully!");
+        return true;
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    } catch (error) {
-      return error;
-    }
+    this.setState({ data: data, retrieved: true });
   };
+  // retrieveData = async (query) => {
+  //   let string = {
+  //     longitude: this.state.longitude,
+  //     latitude: this.state.latitude,
+  //     cuisine: "Local",
+  //     limit: 10
+  //   };
+  //   let urls = [
+  //     "https://us-central1-hawkercentral.cloudfunctions.net/islandwide",
+  //     "https://us-central1-hawkercentral.cloudfunctions.net/cuisine",
+  //   ];
+  //   try {
+  //     Promise.all(
+  //       urls.map((url) =>
+  //         fetch(url, {
+  //           method: "POST",
+  //           mode: "cors",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify(string),
+  //         })
+  //           .then((response) => {
+  //             return response.json();
+  //           })
+  //           .then((data) => {
+  //             return data;
+  //           })
+  //           .catch((error) => {
+  //             return error;
+  //           })
+  //       )
+  //     ).then((data) => {
+  //       this.setState({
+  //         islandwide: data[0],
+  //         cuisine: data[1],
+  //         retrieved: true,
+  //       });
+  //     });
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
   render() {
     let result = {
       islandwide: [],
       local: [],
     };
-    if (this.state.retrieved) {
-      this.state.islandwide.forEach(function (data) {
-        result["islandwide"].push(
+    if (this.state.retrieved && this.state.data !== undefined) {
+      let filtered = [];
+      filtered = this.state.data.filter((d) => d.islandwide === true);
+      result.islandwide = filtered.map((data) => {
+        return (
           <p style={{ padding: "6px" }}>
             <Item
               id={data["id"]}
@@ -115,8 +141,11 @@ export class Listing extends React.Component {
           </p>
         );
       });
-      this.state.cuisine.forEach(function (data) {
-        result["local"].push(
+      filtered = this.state.data.filter(
+        (d) => d.cuisine && d.cuisine.includes("Local")
+      );
+      result.local = filtered.map((data) => {
+        return (
           <p style={{ padding: "6px" }}>
             <Item
               id={data["id"]}

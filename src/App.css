@@ -59,6 +59,24 @@
   object-fit: cover;
 }
 
+.home-option {
+  width: 150px;
+}
+
+.home-option:hover {
+  filter: drop-shadow(4px 4px 10px black)
+}
+
+.home-option-clicked {
+  width: 150px;
+  filter: drop-shadow(4px 4px 10px black)
+}
+
+.main-caption{
+  color: #b48300;
+  font-weight: bold
+}
+
 @media only screen and (max-width: 2000px) {
   .banner-img-top {
     width: 100%;
@@ -68,6 +86,13 @@
   .home-jumbo {
     height: 800px;
   }
+  .home-banner {
+    width: 50%;
+  }
+  .home-iwant {
+    width: 10%;
+  }
+
 }
 
 @media only screen and (max-width: 1200px) {
@@ -78,6 +103,12 @@
   }
   .home-jumbo {
     height: 750px;
+  }
+  .home-banner {
+    width: 50%;
+  }
+  .home-iwant {
+    width: 10%;
   }
 }
 
@@ -90,8 +121,14 @@
   .home-jumbo {
     height: 200px;
   }
-  .preview-small{
-    display:none
+  .preview-small {
+    display: none;
+  }
+  .home-banner {
+    width: 50%;
+  }
+  .home-iwant {
+    width: 10%;
   }
 }
 
@@ -104,6 +141,12 @@
   .home-jumbo {
     height: 200px;
   }
+  .home-banner {
+    width: 80%;
+  }
+  .home-iwant {
+    width: 20%;
+  }
 }
 
 @media only screen and (min-device-width: 0px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
@@ -114,6 +157,12 @@
   }
   .home-jumbo {
     height: 670px;
+  }
+  .home-banner {
+    width: 80%;
+  }
+  .home-iwant {
+    width: 20%;
   }
 }
 

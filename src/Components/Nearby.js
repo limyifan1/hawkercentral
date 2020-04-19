@@ -5,6 +5,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import queryString from "query-string";
 import { Spinner } from "react-bootstrap";
+import { db } from "./Firestore";
 
 const responsive = {
   superLargeDesktop: {
@@ -28,7 +29,6 @@ const responsive = {
     partialVisibilityGutter: 10,
   },
 };
-
 
 function distance_calc(lat1, lon1, lat2, lon2) {
   if (lat1 === lat2 && lon1 === lon2) {
@@ -74,61 +74,87 @@ export class Nearby extends React.Component {
     this.setState({ data: val });
   }
 
-  retrieveData = async (query) => {
-    let string = {
-      longitude: this.state.longitude,
-      latitude: this.state.latitude,
-      query: this.state.query,
-      distance: this.state.distance,
-      limit: 10
-    };
-    let urls = [
-      "https://us-central1-hawkercentral.cloudfunctions.net/islandwide",
-      "https://us-central1-hawkercentral.cloudfunctions.net/nearby",
-    ];
-    try {
-      Promise.all(
-        urls.map((url) =>
-          fetch(url, {
-            method: "POST",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(string),
-          })
-            .then((response) => {
-              return response.json();
-            })
-            .then((data) => {
-              return data;
-            })
-            .catch((error) => {
-              return error;
-            })
-        )
-      ).then((data) => {
-        this.setState({
-          islandwide: data[0],
-          nearby: data[1],
-          retrieved: true,
+  retrieveData = async () => {
+    let data = [];
+    let temp
+    await db
+      .collection("hawkers")
+      .limit(30)
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          if (doc.exists) {
+            temp = doc.data()
+            temp.id = doc.id
+            data.push(temp);
+          }
         });
+        console.log("Fetched successfully!");
+        return true;
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    } catch (error) {
-      return error;
-    }
+    this.setState({ data: data, retrieved: true });
   };
+
+  // retrieveData = async (query) => {
+  //   let string = {
+  //     longitude: this.state.longitude,
+  //     latitude: this.state.latitude,
+  //     query: this.state.query,
+  //     distance: this.state.distance,
+  //     limit: 10
+  //   };
+  //   let urls = [
+  //     "https://us-central1-hawkercentral.cloudfunctions.net/islandwide",
+  //     "https://us-central1-hawkercentral.cloudfunctions.net/nearby",
+  //   ];
+  //   try {
+  //     Promise.all(
+  //       urls.map((url) =>
+  //         fetch(url, {
+  //           method: "POST",
+  //           mode: "cors",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify(string),
+  //         })
+  //           .then((response) => {
+  //             return response.json();
+  //           })
+  //           .then((data) => {
+  //             return data;
+  //           })
+  //           .catch((error) => {
+  //             return error;
+  //           })
+  //       )
+  //     ).then((data) => {
+  //       this.setState({
+  //         islandwide: data[0],
+  //         nearby: data[1],
+  //         retrieved: true,
+  //       });
+  //     });
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
   render() {
     let result = {
       islandwide: [],
       nearby: [],
     };
-    if (this.state !== undefined && this.state.retrieved) {
-      let longitude = this.state.longitude
-      let latitude = this.state.latitude
-      this.state.islandwide.forEach(function (data) {
-        result["islandwide"].push(
+    if (this.state.data !== undefined && this.state.retrieved) {
+      let longitude = this.state.longitude;
+      let latitude = this.state.latitude;
+      let filtered = [];
+      filtered = this.state.data.filter((d) => d.islandwide === true);
+      result.islandwide = filtered.map((data) => {
+        return (
           <p style={{ padding: "6px" }}>
             <Item
               id={data["id"]}
@@ -136,15 +162,24 @@ export class Nearby extends React.Component {
               street={data["street"]}
               pic={data["url"]}
               summary={data["description"]}
-              distance={distance_calc(data["latitude"],data["longitude"],latitude,longitude).toString()}
+              distance={distance_calc(
+                data["latitude"],
+                data["longitude"],
+                latitude,
+                longitude
+              ).toString()}
             />
           </p>
         );
       });
 
-      this.state.nearby.forEach(function (data) {
-        console.log(distance_calc(data["latitude"],data["longitude"],latitude,longitude))
-        result["nearby"].push(
+      filtered = this.state.data.filter(
+        (d) =>
+          distance_calc(d["latitude"], d["longitude"], latitude, longitude) <
+          this.state.distance
+      );
+      result.nearby = filtered.map((data) => {
+        return (
           <p style={{ padding: "6px" }}>
             <Item
               id={data["id"]}
@@ -152,26 +187,52 @@ export class Nearby extends React.Component {
               street={data["street"]}
               pic={data["url"]}
               summary={data["description"]}
-              distance={distance_calc(data["latitude"],data["longitude"],latitude,longitude).toString()}
+              distance={distance_calc(
+                data["latitude"],
+                data["longitude"],
+                latitude,
+                longitude
+              ).toString()}
             />
           </p>
         );
       });
     }
 
-    return (
-      <div>
-        {this.state.retrieved ? (
-          <div>
-            <div
-              class="container"
-              style={{ paddingTop: "56px", width: "100%" }}
-            >
-              {result.nearby.length > 0 ? (
+      return (
+        <div>
+          {this.state.retrieved ? (
+            <div>
+              <div
+                class="container"
+                style={{ paddingTop: "56px", width: "100%" }}
+              >
+                {result.nearby.length > 0 ? (
+                  <div>
+                    <div class="row">
+                      <div class="col-md-12" style={{ textAlign: "left" }}>
+                        <h2>Near You</h2>
+                      </div>
+                    </div>
+                    <Carousel
+                      responsive={responsive}
+                      ssr={true}
+                      infinite={false}
+                      partialVisible={true}
+                      swipeable={true}
+                      draggable={true}
+                      minimumTouchDrag={0}
+                      transitionDuration={0}
+                      slidesToSlide={2}
+                    >
+                      {result.nearby}
+                    </Carousel>
+                  </div>
+                ) : null}
                 <div>
                   <div class="row">
                     <div class="col-md-12" style={{ textAlign: "left" }}>
-                      <h2>Near You</h2>
+                      <h2>Islandwide Delivery</h2>
                     </div>
                   </div>
                   <Carousel
@@ -185,43 +246,22 @@ export class Nearby extends React.Component {
                     transitionDuration={0}
                     slidesToSlide={2}
                   >
-                    {result.nearby}
+                    {result.islandwide}
                   </Carousel>
                 </div>
-              ) : null}
-              <div>
-                <div class="row">
-                  <div class="col-md-12" style={{ textAlign: "left" }}>
-                    <h2>Islandwide Delivery</h2>
-                  </div>
-                </div>
-                <Carousel
-                  responsive={responsive}
-                  ssr={true}
-                  infinite={false}
-                  partialVisible={true}
-                  swipeable={true}
-                  draggable={true}
-                  minimumTouchDrag={0}
-                  transitionDuration={0}
-                  slidesToSlide={2}
-                >
-                  {result.islandwide}
-                </Carousel>
               </div>
             </div>
-          </div>
-        ) : (
-          <div class="row h-100 page-container">
-            <div class="col-sm-12 my-auto">
-              <h3>Please give us a moment while we load your results</h3>
-              <Spinner class="" animation="grow" />
+          ) : (
+            <div class="row h-100 page-container">
+              <div class="col-sm-12 my-auto">
+                <h3>Please give us a moment while we load your results</h3>
+                <Spinner class="" animation="grow" />
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-    );
+          )}
+        </div>
+      );
+    }
   }
-}
 
 export default Nearby;

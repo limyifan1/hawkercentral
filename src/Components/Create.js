@@ -47,7 +47,7 @@ const icon = (
     </svg>
   </div>
 );
-const addData = (
+const addData = async ({
   url,
   image2,
   image3,
@@ -76,10 +76,10 @@ const addData = (
   sms,
   inperson,
   opening,
-  closing
-) => {
+  closing,
+}) => {
   let now = new Date();
-  db.collection("hawkers")
+  let id = await db.collection("hawkers")
     .add({
       name: name,
       postal: postal,
@@ -113,14 +113,14 @@ const addData = (
       closing: closing,
     })
     .then(function (docRef) {
-      this.setState({ docid: docRef.id });
-      console.log("Document written with ID: ", docRef.id);
-      // alert("Sent")
+      console.log(docRef.id)
+      return docRef.id
     })
     .catch(function (error) {
       console.error("Error adding document: ", error);
       // alert("Failed")
     });
+    return id
 };
 
 export class Create extends React.Component {
@@ -129,7 +129,7 @@ export class Create extends React.Component {
 
     this.state = {
       name: "",
-      postal: null,
+      postal: "",
       street: "",
       price: 0,
       description: "",
@@ -161,7 +161,7 @@ export class Create extends React.Component {
       whatsapp: false,
       sms: false,
       inperson: false,
-      contact: null,
+      contact: "",
       docid: "",
       opening: "07:00",
       closing: "21:00",
@@ -217,8 +217,8 @@ export class Create extends React.Component {
       );
   };
 
-  handleSubmit = (event) => {
-    addData({
+  handleSubmit = async (event) => {
+    await addData({
       url: this.state.image1,
       image2: this.state.image2,
       image3: this.state.image3,
@@ -248,9 +248,14 @@ export class Create extends React.Component {
       inperson: this.state.inperson,
       opening: this.state.opening,
       closing: this.state.closing,
-    });
+    }).then((id)=>{
+      this.props.history.push({
+        pathname: "/info",
+        search: "?id=" + id,
+      });
+    }
+    );
     event.preventDefault();
-    this.props.history.push("/info" + this.state.docid);
   };
 
   handleChange = (event) => {
@@ -483,6 +488,7 @@ export class Create extends React.Component {
                                 "object-fit": "cover",
                               }}
                               name="imageFile1"
+                              alt=''
                             ></img>
                           </label>
                         ) : (
@@ -518,6 +524,7 @@ export class Create extends React.Component {
                                 "object-fit": "cover",
                               }}
                               name="imageFile2"
+                              alt=''
                             ></img>
                           </label>
                         ) : (
@@ -553,6 +560,7 @@ export class Create extends React.Component {
                                 "object-fit": "cover",
                               }}
                               name="imageFile3"
+                              alt=''
                             ></img>
                           </label>
                         ) : (
@@ -590,6 +598,7 @@ export class Create extends React.Component {
                                 "object-fit": "cover",
                               }}
                               name="imageFile4"
+                              alt=''
                             ></img>
                           </label>
                         ) : (
@@ -625,6 +634,7 @@ export class Create extends React.Component {
                                 "object-fit": "cover",
                               }}
                               name="imageFile5"
+                              alt=''
                             ></img>
                           </label>
                         ) : (
@@ -660,6 +670,7 @@ export class Create extends React.Component {
                                 "object-fit": "cover",
                               }}
                               name="imageFile6"
+                              alt=""
                             ></img>
                           </label>
                         ) : (
@@ -701,7 +712,7 @@ export class Create extends React.Component {
               class="card shadow"
               style={{ width: "100%", "margin-top": "10px" }}
             >
-              <form onSubmit={this.handleSubmit}>
+              <form>
                 <div class="card-body">
                   <h5 class="card-title create-title">Stall Details</h5>
                   <h6 class="card-subtitle mb-2 text-muted create-title">
@@ -778,7 +789,7 @@ export class Create extends React.Component {
                   </div>
                   <div class="form-group create-title">
                     <label for="description_long">
-                      Detailed Description <b>(max 150 words)</b>
+                      Detailed Description <b>(max 500 words)</b>
                     </label>
                     <textarea
                       onChange={this.handleChange}
@@ -793,7 +804,7 @@ export class Create extends React.Component {
                   <div class="form-group create-title">
                     <label for="description">Opening Hours</label>
 
-                    <div class="row">
+                    <div class="row" style={{ textAlign: "center" }}>
                       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <input
                           onChange={this.handleChange}
@@ -804,7 +815,13 @@ export class Create extends React.Component {
                           placeholder="Enter Description"
                         ></input>
                       </div>
-                      <span>to</span>
+                      <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                        {" "}
+                        <label class="checkbox-inline">
+                          to
+                          <br />
+                        </label>
+                      </div>
                       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <input
                           onChange={this.handleChange}
@@ -987,11 +1004,16 @@ export class Create extends React.Component {
                   </div>
                   <br />
                   <div class="create-title">
-                    <input
-                      type="submit"
-                      value="Submit"
-                      class="btn btn-primary"
-                    />
+                    <Button
+                      class="shadow-sm"
+                      style={{
+                        backgroundColor: "#b48300",
+                        borderColor: "#b48300",
+                      }}
+                      onClick={this.handleSubmit}
+                    >
+                      Submit
+                    </Button>
                   </div>
                 </div>
               </form>

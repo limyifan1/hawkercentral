@@ -21,6 +21,7 @@ export class Menu extends React.Component {
             height="25"
             className="d-inline-block align-top"
           />{" "}
+          <div class="d-none d-md-inline-block">
           <img
             alt=""
             src={name}
@@ -28,6 +29,7 @@ export class Menu extends React.Component {
             height="25"
             className="d-inline-block align-top"
           />
+          </div>
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
