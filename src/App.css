@@ -60,6 +60,7 @@
 }
 
 .home-option {
+  padding: 5px;
   width: 150px;
   filter: drop-shadow(1px 1px 3px grey)
 }
@@ -75,7 +76,6 @@
 
 .main-caption{
   color: #b48300;
-  font-weight: bold
 }
 
 @media (device-height: 568px) and (device-width: 320px) and (-webkit-min-device-pixel-ratio: 2){
@@ -88,7 +88,7 @@
     height: 670px;
   }
   .home-banner {
-    width: 80%;
+    width: 90%;
   }
   .home-iwant {
     width: 20%;
@@ -102,6 +102,9 @@
   .item-card{
     width: 260px !important;
     height: 250px;
+  }
+  .right-items{
+    padding-top: 5%;
   }
 }
 
@@ -117,10 +120,10 @@
     height: 800px;
   }
   .home-banner {
-    width: 40%;
+    width: 110%;
   }
   .home-iwant {
-    width: 10%;
+    width: 20%;
   }
   .nearby-card{
     padding: 6px;
@@ -130,6 +133,10 @@
     width: 180px !important;
     height: 250px;
   }
+  .right-items{
+    padding-top: 5%;
+  }
+
 }
 
 @media only screen and (max-width: 1200px) {
@@ -142,10 +149,10 @@
     height: 750px;
   }
   .home-banner {
-    width: 40%;
+    width: 110%;
   }
   .home-iwant {
-    width: 10%;
+    width: 20%;
   }
   .nearby-card{
     padding: 6px;
@@ -170,10 +177,10 @@
     display: none;
   }
   .home-banner {
-    width: 30%;
+    width: 110%;
   }
   .home-iwant {
-    width: 10%;
+    width: 20%;
   }
   .nearby-card{
     padding: 6px;
@@ -183,6 +190,10 @@
     width: 260px !important;
     height: 250px;
   }
+  .right-items{
+    padding-top: 5%;
+  }
+
 
 }
 
@@ -196,7 +207,7 @@
     height: 200px;
   }
   .home-banner {
-    width: 80%;
+    width: 120%;
   }
   .home-iwant {
     width: 20%;
@@ -210,6 +221,10 @@
   .item-card{
     width: 150px !important;
     height: 250px;
+  }
+  .right-items{
+    padding-top: 0px;
+
   }
 
 }
@@ -240,6 +255,10 @@
     width: 150px !important;
     height: 250px;
   }
+  .right-items{
+    padding-top: 0%;
+  }
+
 }
 
 .pinDefault {
@@ -279,6 +298,10 @@
   }
 }
 
+.basic-multi-select{
+  z-index: 5;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -315,6 +338,7 @@ figure.effect-bubba img {
   opacity: 1;
   -webkit-transition: opacity 0.35s;
   transition: opacity 0.35s;
+  z-index: -5;
 }
 
 figure.effect-bubba:hover img {
