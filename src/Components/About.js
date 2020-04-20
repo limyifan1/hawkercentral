@@ -34,7 +34,7 @@ export class About extends React.Component {
                   simply select either "dabao" or "delivery", and key in their
                   postal code to browse through listings near their home
                   address. <br/> <br /> Sounds too good to be true? What's the catch? Boh
-                  leh... <img src={logo} alt='' style={{ height: "20px" }} /> is a purely non-profit intiative devised to
+                  leh... <img src={logo} alt='' style={{ height: "20px" }} /> is a purely non-profit initiative devised to
                   help local F&B stall owners to be seen on online platforms. <br />  <br />
                   "If we don't give discounts, we're pretty much invisible on
                   the delivery platform" While that is true of other
@@ -43,6 +43,9 @@ export class About extends React.Component {
                   to each User. There's no need to eat into profit margins, and
                   best of all, no more steep 30-40% commision! <br/> <br/> Steady lah, time
                   to dabao and save our local F&B stall owners! 
+                  <br />
+                  <br />
+                  <b>- Produly Presented by Cheeps and Yi Fan</b>
                   <br />
                   <br />
                   <br />

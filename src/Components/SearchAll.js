@@ -1,8 +1,6 @@
 import React, { Fragment } from "react";
 import "../App.css";
 import Item from "./Item";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
 import queryString from "query-string";
 import { Spinner } from "react-bootstrap";
 import { db } from "./Firestore";
@@ -40,29 +38,6 @@ const cuisines = [
   "Pizza",
 ];
 
-// const responsive = {
-//   superLargeDesktop: {
-//     breakpoint: { max: 4000, min: 3000 },
-//     items: 6,
-//     partialVisibilityGutter: 30,
-//   },
-//   desktop: {
-//     breakpoint: { max: 3000, min: 1024 },
-//     items: 5,
-//     partialVisibilityGutter: 30,
-//   },
-//   tablet: {
-//     breakpoint: { max: 1024, min: 464 },
-//     items: 2,
-//     partialVisibilityGutter: 30,
-//   },
-//   mobile: {
-//     breakpoint: { max: 464, min: 0 },
-//     items: 2,
-//     partialVisibilityGutter: 10,
-//   },
-// };
-
 function distance_calc(lat1, lon1, lat2, lon2) {
   if (lat1 === lat2 && lon1 === lon2) {
     return 0;
@@ -84,20 +59,18 @@ function distance_calc(lat1, lon1, lat2, lon2) {
   }
 }
 
-export class Nearby extends React.Component {
+export class SearchAll extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       data: [],
-      query: queryString.parse(this.props.location.search).postal,
-      longitude: queryString.parse(this.props.location.search).lng,
-      latitude: queryString.parse(this.props.location.search).lat,
-      distance: queryString.parse(this.props.location.search).distance,
-      pickup:
-        queryString.parse(this.props.location.search).option === "selfcollect",
-      delivery:
-        queryString.parse(this.props.location.search).option === "delivery",
+      query: "",
+      longitude: "",
+      latitude: "",
+      distance: "",
+      pickup: "",
+      delivery: "",
       retrieved: false,
       search: "",
       cuisineValue: [],
@@ -120,7 +93,7 @@ export class Nearby extends React.Component {
     let temp;
     await db
       .collection("hawkers")
-      .limit(100)
+      .limit(999)
       .get()
       .then((snapshot) => {
         snapshot.forEach((doc) => {
@@ -238,30 +211,26 @@ export class Nearby extends React.Component {
       nearby: [],
     };
     if (this.state.data !== undefined && this.state.retrieved) {
-      let longitude = this.state.longitude;
-      let latitude = this.state.latitude;
-      console.log(this.state.data);
+      let filtered = this.state.data;
+      // filtered = this.state.data.filter(
+      //   (d) =>
+      //     d["pickup_option"] === this.state.pickup ||
+      //     d["delivery_option"] === this.state.delivery
+      // );
 
-      let filtered = [];
-      filtered = this.state.data.filter(
-        (d) =>
-          d["pickup_option"] === this.state.pickup ||
-          d["delivery_option"] === this.state.delivery
-      );
-
-      if (this.state.pickup) {
-        filtered = this.state.data.filter(
-          (d) =>
-            distance_calc(d["latitude"], d["longitude"], latitude, longitude) <
-            this.state.distance
-        );
-      } else if (this.state.delivery) {
-        filtered = this.state.data.filter(
-          (d) =>
-            distance_calc(d["latitude"], d["longitude"], latitude, longitude) <=
-              10 || d.region.filter((f) => f.value === "islandwide").length >= 1
-        );
-      }
+      // if (this.state.pickup) {
+      //   filtered = this.state.data.filter(
+      //     (d) =>
+      //       distance_calc(d["latitude"], d["longitude"], latitude, longitude) <
+      //       this.state.distance
+      //   );
+      // } else if (this.state.delivery) {
+      //   filtered = this.state.data.filter(
+      //     (d) =>
+      //       distance_calc(d["latitude"], d["longitude"], latitude, longitude) <=
+      //         10 || d.region.filter((f) => f.value === "islandwide").length >= 1
+      //   );
+      // }
 
       if (
         this.state.cuisineValue !== null &&
@@ -302,16 +271,16 @@ export class Nearby extends React.Component {
         });
       }
 
-      filtered.forEach((element) => {
-        element.distance = distance_calc(
-          element["latitude"],
-          element["longitude"],
-          latitude,
-          longitude
-        ).toString();
-      });
+      // filtered.forEach((element) => {
+      //   element.distance = distance_calc(
+      //     element["latitude"],
+      //     element["longitude"],
+      //     latitude,
+      //     longitude
+      //   ).toString();
+      // });
 
-      filtered = filtered.sort((a, b) => a.distance - b.distance);
+      // filtered = filtered.sort((a, b) => a.distance - b.distance);
 
       result.nearby = filtered.map((data) => {
         return (
@@ -328,7 +297,7 @@ export class Nearby extends React.Component {
                 street={data["street"]}
                 pic={data["url"]}
                 summary={data["description"]}
-                distance={data["distance"]}
+                // distance={data["distance"]}
               />
             </div>
             {/* <div
@@ -366,21 +335,9 @@ export class Nearby extends React.Component {
               <div class="container" style={{ paddingTop: "27px" }}>
                 <div class="row">
                   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-left">
-                    {this.state.pickup ? (
                       <h3>
-                        Near You at{" "}
-                        <span style={{ color: "#b48300" }}>
-                          {this.state.query}
-                        </span>
+                        All Listings
                       </h3>
-                    ) : (
-                      <h3>
-                        Delivers to You at{" "}
-                        <span style={{ color: "#b48300" }}>
-                          {this.state.query}
-                        </span>
-                      </h3>
-                    )}
                   </div>
                 </div>
                 <div class="row">
@@ -429,4 +386,4 @@ export class Nearby extends React.Component {
   }
 }
 
-export default Nearby;
+export default SearchAll;

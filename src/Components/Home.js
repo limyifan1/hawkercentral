@@ -45,52 +45,52 @@ export class Home extends React.Component {
   }
 
   componentWillMount() {
-    this.retrieveData();
+    // this.retrieveData();
   }
 
   getData(val) {
     this.setState({ data: val });
   }
 
-  retrieveData = async (query) => {
-    let string = {
-      longitude: this.state.longitude,
-      latitude: this.state.latitude,
-      cuisine: "Local",
-      limit: 15,
-    };
-    let urls = ["https://us-central1-hawkercentral.cloudfunctions.net/all"];
-    try {
-      Promise.all(
-        urls.map((url) =>
-          fetch(url, {
-            method: "POST",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(string),
-          })
-            .then((response) => {
-              return response.json();
-            })
-            .then((data) => {
-              return data;
-            })
-            .catch((error) => {
-              return error;
-            })
-        )
-      ).then((data) => {
-        this.setState({
-          all: data[0],
-          retrieved: true,
-        });
-      });
-    } catch (error) {
-      return error;
-    }
-  };
+  // retrieveData = async (query) => {
+  //   let string = {
+  //     longitude: this.state.longitude,
+  //     latitude: this.state.latitude,
+  //     cuisine: "Local",
+  //     limit: 15,
+  //   };
+  //   let urls = ["https://us-central1-hawkercentral.cloudfunctions.net/all"];
+  //   try {
+  //     Promise.all(
+  //       urls.map((url) =>
+  //         fetch(url, {
+  //           method: "POST",
+  //           mode: "cors",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify(string),
+  //         })
+  //           .then((response) => {
+  //             return response.json();
+  //           })
+  //           .then((data) => {
+  //             return data;
+  //           })
+  //           .catch((error) => {
+  //             return error;
+  //           })
+  //       )
+  //     ).then((data) => {
+  //       this.setState({
+  //         all: data[0],
+  //         retrieved: true,
+  //       });
+  //     });
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
   handleCollect() {
     this.setState({ option: "selfcollect" });
   }
@@ -137,7 +137,7 @@ export class Home extends React.Component {
               </div>
               <div
                 class="col-xs-6 col-sm-6 col-md-6 col-lg-6 align-items-center right-items"
-                style={{ textAlign: "center"}}
+                style={{ textAlign: "center" }}
               >
                 <br />
                 <br />
@@ -151,7 +151,7 @@ export class Home extends React.Component {
                       alt=""
                       class={selfcollect}
                       src={self_collect}
-                      style={{"width":"30%"}}
+                      style={{ width: "30%" }}
                     />
                   </span>
                   <span class="col">
@@ -160,7 +160,7 @@ export class Home extends React.Component {
                       onClick={this.handleDelivery}
                       class={delivery_option}
                       src={delivery}
-                      style={{"width":"30%"}}
+                      style={{ width: "30%" }}
                     />
                   </span>
                 </span>
@@ -186,17 +186,27 @@ export class Home extends React.Component {
                 <br />
                 <div>
                   {this.state.option === "" ? (
-                    <span class=" main-caption">choose <b>da bao</b> or <b>delivery</b></span>
+                    <span class=" main-caption">
+                      choose <b>da bao</b> or <b>delivery</b>
+                    </span>
                   ) : this.state.option === "delivery" ? (
-                    <span class=" main-caption">living the <b>lazy</b> life?</span>
+                    <span class=" main-caption">
+                      now enter your <b>postal code</b>
+                      <br />
+                      <br />
+                      <Component.Search option={this.state.option} />
+                    </span>
                   ) : (
                     <span class="label label-default main-caption">
-                      living the <b>hardworking</b> life?
+                      <span class=" main-caption">
+                        now enter your <b>postal code</b>
+                        <br />
+                        <br />
+                        <Component.Search option={this.state.option} />
+                      </span>
                     </span>
                   )}
                 </div>
-                <br />
-                <Component.Search option={this.state.option} />
               </div>
             </div>
             {/* 
@@ -272,7 +282,7 @@ export class Home extends React.Component {
           </div>
           <br />
         </div>
-        <Carousel
+        {/* <Carousel
           responsive={responsive}
           ssr={true}
           infinite={true}
@@ -288,7 +298,7 @@ export class Home extends React.Component {
           autoPlaySpeed={2000}
         >
           {result.all}
-        </Carousel>
+        </Carousel> */}
       </div>
     );
   }

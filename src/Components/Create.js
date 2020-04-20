@@ -60,7 +60,7 @@ const addData = async ({
   street,
   unit,
   description,
-  description_detailed,
+  description_detail,
   region,
   islandwide,
   delivery,
@@ -78,6 +78,7 @@ const addData = async ({
   website,
   promo,
   condition,
+  delivery_detail,
 }) => {
   let now = new Date();
   let id = await db
@@ -87,7 +88,7 @@ const addData = async ({
       postal: postal,
       street: street,
       description: description,
-      description_detailed: description_detailed,
+      description_detail: description_detail,
       url: url,
       image2: image2,
       image3: image3,
@@ -113,6 +114,7 @@ const addData = async ({
       website: website,
       promo: promo,
       condition: condition,
+      delivery_detail: delivery_detail,
     })
     .then(function (docRef) {
       console.log(docRef.id);
@@ -135,7 +137,7 @@ export class Create extends React.Component {
       street: "",
       price: "",
       description: "",
-      description_detailed: "",
+      description_detail: "",
       image1: "",
       image2: "",
       image3: "",
@@ -167,6 +169,7 @@ export class Create extends React.Component {
       website: "",
       promo: "",
       condition: "",
+      delivery_detail: "",
     };
     this.handleRegionChange = this.handleRegionChange.bind(this);
     this.handleMultiChange = this.handleMultiChange.bind(this);
@@ -234,7 +237,7 @@ export class Create extends React.Component {
       street: this.state.street,
       unit: this.state.unit,
       description: this.state.description,
-      description_detailed: this.state.description_detailed,
+      description_detail: this.state.description_detail,
       region: this.state.region,
       islandwide: this.state.islandwide,
       delivery: this.state.delivery,
@@ -441,45 +444,38 @@ export class Create extends React.Component {
               label: "West",
               value: "west",
             },
+            {
+              label: "Central",
+              value: "central",
+            },
           ]}
           className="basic-multi-select"
           classNamePrefix="select"
           value={this.state.region}
           onChange={this.handleRegionChange}
+          placeholder="e.g. Islandwide, North, South, East, West"
         />
       </Fragment>
     );
   }
 
-  deliverySearch() {
-    return (
-      <Fragment>
-        <Select
-          isMulti
-          name="name"
-          options={this.state.data}
-          className="basic-multi-select"
-          classNamePrefix="select"
-          value={this.state.delivery}
-          onChange={this.handleMultiChange}
-        />
+  // deliverySearch() {
+  //   return (
+  //     <Fragment>
+  //       <Select
+  //         isMulti
+  //         name="name"
+  //         options={this.state.data}
+  //         // className="basic-multi-select"
+  //         classNamePrefix="select"
+  //         value={this.state.delivery}
+  //         onChange={this.handleMultiChange}
+  //         placeholder="e.g. Woodlands, Bishan, Jurong East"
+  //       />
 
-        {/* <Typeahead
-    // id="basic-typeahead-example"
-    labelKey="name"
-    onChange={(selected) => {
-      this.setState({selected});
-    }}
-    options={this.state.data}
-    placeholder="Search By MRT"
-    selected={this.state.selected}
-    renderMenuItemChildren={this._renderMenuItemChildren}
-    multiple
-    clearButton
-    /> */}
-      </Fragment>
-    );
-  }
+  //     </Fragment>
+  //   );
+  // }
 
   _renderMenuItemChildren = (option, props, index) => {
     return (
@@ -756,7 +752,7 @@ export class Create extends React.Component {
                 <p class="card-text create-title">
                   This is how your listing will look like to users:{" "}
                 </p>
-                <p class="center" style={{ width: "220px" }}>
+                <p class="d-flex justify-content-center">
                   <Item
                     promo={this.state.promo}
                     name={this.state.name}
@@ -848,15 +844,15 @@ export class Create extends React.Component {
                     ></input>
                   </div>
                   <div class="form-group create-title">
-                    <label for="description_detailed">
+                    <label for="description_detail">
                       Menu, Price List, and additional details{" "}
                     </label>
                     <textarea
                       onChange={this.handleChange}
-                      value={this.state.description_detailed}
+                      value={this.state.description_detail}
                       type="text"
                       class="form-control"
-                      name="description_detailed"
+                      name="description_detail"
                       placeholder="E.g. Soy Sauce Chicken Rice: $4.00 (limited to 500 per day)"
                       rows="3"
                     ></textarea>
@@ -919,9 +915,7 @@ export class Create extends React.Component {
                     ></textarea>
                   </div>
                   <div class="form-group create-title">
-                    <label for="description">
-                      Do you offer dabao(pick-up), delivery, or both?
-                    </label>
+                    <label for="description">Self-Collection </label>
                     <div class="form-check create-title">
                       <label class="checkbox-inline">
                         <input
@@ -931,7 +925,7 @@ export class Create extends React.Component {
                           name="pickup_option"
                           class="form-check-input"
                         ></input>
-                        Dabao (Self-Pickup)
+                        Self-Collection
                       </label>
                       <br />
                       <label class="checkbox-inline">
@@ -1018,13 +1012,13 @@ export class Create extends React.Component {
                           </label>
                         </div> */}
                           </div>
-                          <div class="form-group create-title ">
+                          {/* <div class="form-group create-title ">
                             <label for="street">
-                              Which nearest MRT do you deliver to? (Ignore if
-                              you deliver Island-wide)
+                              Which nearest MRT do you deliver to? (Can select
+                              multiple)
                             </label>
                             {this.deliverySearch()}
-                          </div>
+                          </div> */}
                           <div class="form-group create-title ">
                             <label for="price">Delivery Fees: </label>
                             <div class="input-group">
@@ -1037,6 +1031,20 @@ export class Create extends React.Component {
                                 placeholder="e.g. $2.99 for below $30"
                               ></input>
                             </div>
+                          </div>
+                          <div class="form-group create-title">
+                            <label for="delivery_detail">
+                              Details regarding delivery:{" "}
+                            </label>
+                            <textarea
+                              onChange={this.handleChange}
+                              value={this.state.delivery_detail}
+                              type="text"
+                              class="form-control"
+                              name="delivery_detail"
+                              placeholder="E.g. Only deliver to Bukit Batok for orders above $30"
+                              rows="3"
+                            ></textarea>
                           </div>
                         </div>
                       </div>
@@ -1120,7 +1128,7 @@ export class Create extends React.Component {
                       <p class="card-text create-title">
                         This is how your listing will look like to users:{" "}
                       </p>
-                      <p class="center" style={{ width: "220px" }}>
+                      <p class="d-flex justify-content-center">
                         <Item
                           promo={this.state.promo}
                           name={this.state.name}

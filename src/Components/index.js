@@ -9,9 +9,9 @@ import Nearby from './Nearby'
 import Info from './Info'
 import About from './About'
 import Popup from './Popup'
-
 import News from './News'
+import SearchAll from './SearchAll'
 
 import {db, storage} from './Firestore'
 
-export default {Home, Menu, Create, Search, Listing, Item, Results, Nearby, News, Info, About, Popup, db, storage}
+export default {Home, Menu, Create, Search, Listing, Item, Results, Nearby, News, Info, About, Popup, SearchAll, db, storage}

@@ -62,10 +62,9 @@ const addData = async ({
   street,
   unit,
   description,
-  description_detailed,
+  description_detail,
   region,
   islandwide,
-  delivery,
   price,
   contact,
   latitude,
@@ -81,6 +80,7 @@ const addData = async ({
   promo,
   condition,
   docid,
+  delivery_detail,
 }) => {
   let now = new Date();
   let id = await db
@@ -91,7 +91,7 @@ const addData = async ({
       postal: postal,
       street: street,
       description: description,
-      description_detailed: description_detailed,
+      description_detail: description_detail,
       url: url,
       image2: image2,
       image3: image3,
@@ -101,7 +101,6 @@ const addData = async ({
       latitude: latitude,
       longitude: longitude,
       unit: unit,
-      delivery: delivery,
       cuisine: cuisine,
       region: region,
       price: price,
@@ -117,6 +116,7 @@ const addData = async ({
       website: website,
       promo: promo,
       condition: condition,
+      delivery_detail: delivery_detail,
     })
     .then(function (d) {
       //   console.log(docRef.id);
@@ -139,7 +139,7 @@ export class Popup extends React.Component {
       street: this.props.data.street,
       price: this.props.data.price,
       description: this.props.data.description,
-      description_detailed: this.props.data.description_detailed,
+      description_detail: this.props.data.description_detail,
       image1: this.props.data.url,
       image2: this.props.data.image2,
       image3: this.props.data.image3,
@@ -158,7 +158,6 @@ export class Popup extends React.Component {
       unit: this.props.data.unit,
       delivery_option: this.props.data.delivery_option,
       pickup_option: this.props.data.pickup_option,
-      delivery: this.props.data.delivery,
       cuisineValue: this.props.data.cuisine,
       call: this.props.data.call,
       whatsapp: this.props.data.whatsapp,
@@ -173,6 +172,7 @@ export class Popup extends React.Component {
       condition: this.props.data.condition,
       show: false,
       setShow: false,
+      delivery_detail: this.props.data.delivery_detail,
     };
     this.handleRegionChange = this.handleRegionChange.bind(this);
     this.handleMultiChange = this.handleMultiChange.bind(this);
@@ -241,10 +241,9 @@ export class Popup extends React.Component {
       street: this.state.street,
       unit: this.state.unit,
       description: this.state.description,
-      description_detailed: this.state.description_detailed,
+      description_detail: this.state.description_detail,
       region: this.state.region,
       islandwide: this.state.islandwide,
-      delivery: this.state.delivery,
       price: this.state.price,
       contact: this.state.contact,
       latitude: this.state.latitude,
@@ -260,6 +259,7 @@ export class Popup extends React.Component {
       promo: this.state.promo,
       condition: this.state.condition,
       docid: this.props.id,
+      delivery_detail: this.state.delivery_detail,
     }).then((id) => {
       window.location.reload();
       //   this.props.history.push({
@@ -450,45 +450,37 @@ export class Popup extends React.Component {
               label: "West",
               value: "west",
             },
+            {
+              label: "Central",
+              value: "central",
+            },
           ]}
           className="basic-multi-select"
           classNamePrefix="select"
           value={this.state.region}
           onChange={this.handleRegionChange}
+          placeholder="e.g. Islandwide, North, South, East, West"
         />
       </Fragment>
     );
   }
 
-  deliverySearch() {
-    return (
-      <Fragment>
-        <Select
-          isMulti
-          name="name"
-          options={this.state.data}
-          className="basic-multi-select"
-          classNamePrefix="select"
-          value={this.state.delivery}
-          onChange={this.handleMultiChange}
-        />
+  // deliverySearch() {
+  //   return (
+  //     <Fragment>
+  //       <Select
+  //         isMulti
+  //         name="name"
+  //         options={this.state.data}
+  //         // className="basic-multi-select"
+  //         classNamePrefix="select"
+  //         value={this.state.delivery}
+  //         onChange={this.handleMultiChange}
+  //       />
 
-        {/* <Typeahead
-    // id="basic-typeahead-example"
-    labelKey="name"
-    onChange={(selected) => {
-      this.setState({selected});
-    }}
-    options={this.state.data}
-    placeholder="Search By MRT"
-    selected={this.state.selected}
-    renderMenuItemChildren={this._renderMenuItemChildren}
-    multiple
-    clearButton
-    /> */}
-      </Fragment>
-    );
-  }
+  //   </Fragment>
+  // );
+  // }
 
   _renderMenuItemChildren = (option, props, index) => {
     return (
@@ -558,7 +550,9 @@ export class Popup extends React.Component {
                 "overflow-y": "auto",
               }}
             >
-              <h5><b>Trust you hor, don't anyhow change</b></h5>
+              <h5>
+                <b>Trust you hor, don't anyhow change</b>
+              </h5>
 
               <div class="row">
                 <div class="col">
@@ -882,15 +876,15 @@ export class Popup extends React.Component {
                           ></input>
                         </div>
                         <div class="form-group create-title">
-                          <label for="description_detailed">
+                          <label for="description_detail">
                             Menu, Price List, and additional details{" "}
                           </label>
                           <textarea
                             onChange={this.handleChange}
-                            value={this.state.description_detailed}
+                            value={this.state.description_detail}
                             type="text"
                             class="form-control"
-                            name="description_detailed"
+                            name="description_detail"
                             placeholder="E.g. Soy Sauce Chicken Rice: $4.00 (limited to 500 per day)"
                             rows="3"
                           ></textarea>
@@ -956,7 +950,7 @@ export class Popup extends React.Component {
                         </div>
                         <div class="form-group create-title">
                           <label for="description">
-                            Do you offer dabao(pick-up), delivery, or both?
+                            Do you offer self-collection, delivery, or both?
                           </label>
                           <div class="form-check create-title">
                             <label class="checkbox-inline">
@@ -968,7 +962,7 @@ export class Popup extends React.Component {
                                 name="pickup_option"
                                 class="form-check-input"
                               ></input>
-                              Dabao (Self-Pickup)
+                              Self-Collection
                             </label>
                             <br />
                             <label class="checkbox-inline">
@@ -998,69 +992,6 @@ export class Popup extends React.Component {
                                     Island-wide Delivery or NSEWC)
                                   </label>
                                   {this.regionSearch()}
-                                  <div class="form-check create-title">
-                                    <label class="checkbox-inline">
-                                      <input
-                                        onChange={this.handleChange}
-                                        type="checkbox"
-                                        value={this.state.north}
-                                        name="north"
-                                        class="form-check-input"
-                                      ></input>
-                                      North
-                                    </label>
-                                    <br />
-                                    <label class="checkbox-inline">
-                                      <input
-                                        onChange={this.handleChange}
-                                        type="checkbox"
-                                        value={this.state.south}
-                                        name="south"
-                                        class="form-check-input"
-                                      ></input>
-                                      South
-                                    </label>
-                                    <br />
-                                    <label class="checkbox-inline">
-                                      <input
-                                        onChange={this.handleChange}
-                                        type="checkbox"
-                                        value={this.state.east}
-                                        name="east"
-                                        class="form-check-input"
-                                      ></input>
-                                      East
-                                    </label>
-                                    <br />
-                                    <label class="checkbox-inline">
-                                      <input
-                                        onChange={this.handleChange}
-                                        type="checkbox"
-                                        value={this.state.west}
-                                        name="west"
-                                        class="form-check-input"
-                                      ></input>
-                                      West
-                                    </label>
-                                    <br />
-                                    <label class="checkbox-inline">
-                                      <input
-                                        onChange={this.handleChange}
-                                        type="checkbox"
-                                        value={this.state.islandwide}
-                                        name="islandwide"
-                                        class="form-check-input"
-                                      ></input>
-                                      Island-wide
-                                    </label>
-                                  </div>
-                                </div>
-                                <div class="form-group create-title ">
-                                  <label for="street">
-                                    Which nearest MRT do you deliver to? (Ignore
-                                    if you deliver Island-wide)
-                                  </label>
-                                  {this.deliverySearch()}
                                 </div>
                                 <div class="form-group create-title ">
                                   <label for="price">Delivery Fees: </label>
@@ -1074,6 +1005,20 @@ export class Popup extends React.Component {
                                       placeholder="e.g. $2.99 for below $30"
                                     ></input>
                                   </div>
+                                </div>
+                                <div class="form-group create-title">
+                                  <label for="delivery_detail">
+                                    Details regarding delivery:{" "}
+                                  </label>
+                                  <textarea
+                                    onChange={this.handleChange}
+                                    value={this.state.delivery_detail}
+                                    type="text"
+                                    class="form-control"
+                                    name="delivery_detail"
+                                    placeholder="E.g. Only deliver to Bukit Batok for orders above $30"
+                                    rows="3"
+                                  ></textarea>
                                 </div>
                               </div>
                             </div>
@@ -1163,7 +1108,7 @@ export class Popup extends React.Component {
                             <p class="card-text create-title">
                               This is how your listing will look like to users:{" "}
                             </p>
-                            <p class="center" style={{ width: "220px" }}>
+                            <p class="d-flex justify-content-center">
                               <Item
                                 promo={this.state.promo}
                                 name={this.state.name}

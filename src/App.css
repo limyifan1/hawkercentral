@@ -109,6 +109,12 @@
   .hashtag{
     width: 100%;
   }
+  .image-gallery-content.fullscreen img{
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+  }
+
 }
 
 
@@ -142,7 +148,11 @@
   .hashtag{
     width: 60%;
   }
-
+  .image-gallery-content.fullscreen img{
+    width: 30%;
+    height: 100%;
+    z-index: 99999;
+  }
 
 }
 
@@ -171,6 +181,11 @@
   }
   .hashtag{
     width: 60%;
+  }
+  .image-gallery-content.fullscreen img{
+    width: 40%;
+    height: 100%;
+    z-index: 99999;
   }
 
 
@@ -208,7 +223,11 @@
   .hashtag{
     width: 50%;
   }
-
+  .image-gallery-content.fullscreen img{
+    width: 25%;
+    height: 100%;
+    z-index: 99999;
+  }
 
 }
 
@@ -244,9 +263,11 @@
   .hashtag{
     width: 60%;
   }
-
-
-
+  .image-gallery-content.fullscreen img{
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+  }
 }
 
 
@@ -281,7 +302,12 @@
   .hashtag{
     width: 100%;
   }
-
+  .image-gallery-content.fullscreen img{
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+  }
+  
 
 }
 
@@ -322,8 +348,19 @@
   }
 }
 
+.image-gallery-slide img {
+  width: 100%;
+  height: 250px;
+}
+
+.image-gallery-thumbnails img{
+  width: 100%;
+  height: 50px;
+  object-fit: cover;
+}
+
 .basic-multi-select{
-  z-index: 5;
+  z-index: 99999;
 }
 
 .App-header {

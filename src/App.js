@@ -15,7 +15,8 @@ function App() {
         <Route exact path="/create" component={Components.Create} />
         <Route exact path="/nearby" component={Components.Nearby} />
         <Route exact path="/info" component={Components.Info} />
-        <Route exact path="/news" component={Components.News} />
+        {/* <Route exact path="/news" component={Components.News} /> */}
+        <Route exact path="/searchall" component={Components.SearchAll} />
         <Route exact path="/about" component={Components.About} />
 
         <body>

@@ -7,7 +7,7 @@ import { db } from "./Firestore";
 import whatsapp from "../WhatsApp.svg";
 import "react-image-gallery/styles/css/image-gallery.css";
 import ImageGallery from "react-image-gallery";
-import Component from "./index"
+import Component from "./index";
 
 export class Nearby extends React.Component {
   constructor(props) {
@@ -99,7 +99,6 @@ export class Nearby extends React.Component {
   render() {
     let cuisine = [];
     let regions = [];
-    let mrt = [];
     let photos = [];
 
     let link = "https://wa.me/65" + this.state.data.contact;
@@ -109,9 +108,6 @@ export class Nearby extends React.Component {
       });
       this.state.data.region.forEach((element) => {
         regions.push(<span class="badge badge-warning">{element.label}</span>);
-      });
-      this.state.data.delivery.forEach((element) => {
-        mrt.push(<span class="badge badge-danger">{element.label}</span>);
       });
       if (this.state.data.url) {
         photos.push({
@@ -156,21 +152,25 @@ export class Nearby extends React.Component {
         {this.state.retrieved ? (
           <div style={{ paddingTop: "56px", width: "100%" }}>
             <div class="row">
-              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+              <div
+                class="jumbotron col-xs-6 col-sm-6 col-md-6 col-lg-6"
+                style={{ height: "320px", backgroundColor: "white" }}
+              >
                 {/* <img src={this.state.data.url} /> */}
-                <div
-                  class="col-12"
-                  style={{ zIndex: "", alignItems: "center" }}
-                >
+                <div style={{ zIndex: "", alignItems: "center" }}>
                   {photos.length !== 0 ? (
                     <ImageGallery
                       items={photos}
+                      renderFullscreenButton={this.renderFullscreenButton}
+                      lazyLoad={false}
                       useBrowserFullscreen={false}
                       showPlayButton={false}
-                      ref={this.myRef}
-                      renderFullscreenButton={this.renderFullscreenButton}
                       useTranslate3D={false}
                       slideDuration={100}
+                      isRTL={false}
+                      slideInterval={2000}
+                      slideOnThumbnailOver={false}
+                      thumbnailPosition={"bottom"}
                     />
                   ) : null}
                 </div>
@@ -183,7 +183,7 @@ export class Nearby extends React.Component {
                   <div class="">
                     <h2>{this.state.data.name}</h2>
                   </div>
-                  <Component.Popup data={this.state.data} id={this.state.id}/>
+                  <Component.Popup data={this.state.data} id={this.state.id} />
                   <svg
                     class="bi bi-house-fill"
                     width="1em"
@@ -261,7 +261,6 @@ export class Nearby extends React.Component {
                     <circle cx="18.5" cy="18.5" r="2.5"></circle>
                   </svg>{" "}
                   {regions}
-                  {mrt}
                   <br />
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -352,7 +351,13 @@ export class Nearby extends React.Component {
                     <b>Detailed Description</b>
                   </h6>
                   <p style={{ "white-space": "pre-line" }}>
-                    {this.state.data.description_detailed}
+                    {this.state.data.description_detail}
+                  </p>
+                  <h6>
+                    <b>Details Regarding Delivery</b>
+                  </h6>
+                  <p style={{ "white-space": "pre-line" }}>
+                    {this.state.data.delivery_detail}
                   </p>
                   <h6>
                     <b>Delivery Fees</b>
@@ -367,13 +372,17 @@ export class Nearby extends React.Component {
                     {this.state.data.opening}
                   </p>
                   <h6>
-                    <b>Website/Online Reviews</b>
+                    <b> Website / Facebook/ Google Listing Link</b>
                   </h6>
-                  <p>{this.state.data.website}</p>
+                  <p>
+                    {this.state.data.website ? (
+                      <a href={this.state.data.website}>Website Link</a>
+                    ) : null}
+                  </p>
                   <p style={{ color: "grey" }}>
                     <small>
-                      Are you the owner? Email foodleh@outlook.com to claim this
-                      listing.{" "}
+                      Are you the owner? Email foodleh@outlook.com for
+                      enquiries.{" "}
                     </small>
                   </p>
                 </div>
