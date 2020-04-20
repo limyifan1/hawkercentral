@@ -47,7 +47,7 @@ export class About extends React.Component {
                   <br />
                   <br />
                   <b>
-                  <img src={hashtag} alt="" style={{ width: "100%" }} />
+                  <img src={hashtag} alt="" class="hashtag" />
                   </b>
                 </span>
                 <br/>

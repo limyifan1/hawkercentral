@@ -255,7 +255,6 @@ export class Nearby extends React.Component {
         );
       }
 
-
       if (
         this.state.cuisineValue !== null &&
         this.state.cuisineValue.length !== 0
@@ -295,6 +294,17 @@ export class Nearby extends React.Component {
         });
       }
 
+      filtered.forEach((element) => {
+        element.distance = distance_calc(
+          element["latitude"],
+          element["longitude"],
+          latitude,
+          longitude
+        ).toString();
+      });
+
+      filtered = filtered.sort((a,b)=>a.distance - b.distance)
+
       result.nearby = filtered.map((data) => {
         return (
           <span>
@@ -310,12 +320,7 @@ export class Nearby extends React.Component {
                 street={data["street"]}
                 pic={data["url"]}
                 summary={data["description"]}
-                distance={distance_calc(
-                  data["latitude"],
-                  data["longitude"],
-                  latitude,
-                  longitude
-                ).toString()}
+                distance={data["distance"]}
               />
             </div>
             {/* <div

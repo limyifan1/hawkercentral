@@ -106,6 +106,9 @@
   .right-items{
     padding-top: 5%;
   }
+  .hashtag{
+    width: 100%;
+  }
 }
 
 
@@ -136,6 +139,10 @@
   .right-items{
     padding-top: 5%;
   }
+  .hashtag{
+    width: 60%;
+  }
+
 
 }
 
@@ -162,6 +169,11 @@
     width: 180px !important;
     height: 250px;
   }
+  .hashtag{
+    width: 60%;
+  }
+
+
 }
 
 @media screen and (min-device-width: 1200px) and (max-device-width: 1600px) and (-webkit-min-device-pixel-ratio: 1) {
@@ -192,6 +204,9 @@
   }
   .right-items{
     padding-top: 5%;
+  }
+  .hashtag{
+    width: 50%;
   }
 
 
@@ -226,6 +241,11 @@
     padding-top: 0px;
 
   }
+  .hashtag{
+    width: 60%;
+  }
+
+
 
 }
 
@@ -258,6 +278,10 @@
   .right-items{
     padding-top: 0%;
   }
+  .hashtag{
+    width: 100%;
+  }
+
 
 }
 
