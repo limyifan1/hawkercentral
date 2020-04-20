@@ -133,7 +133,7 @@ export class Create extends React.Component {
       name: "",
       postal: "",
       street: "",
-      price: 0,
+      price: "",
       description: "",
       description_detailed: "",
       image1: "",
@@ -1028,21 +1028,13 @@ export class Create extends React.Component {
                           <div class="form-group create-title ">
                             <label for="price">Delivery Fees: </label>
                             <div class="input-group">
-                              <div class="input-group-prepend">
-                                <span
-                                  class="input-group-text"
-                                  id="basic-addon1"
-                                >
-                                  $
-                                </span>
-                              </div>
                               <input
                                 onChange={this.handleChange}
                                 value={this.state.price}
-                                type="number"
+                                type="text"
                                 class="form-control"
                                 name="price"
-                                placeholder="Enter Price"
+                                placeholder="e.g. $2.99 for below $30"
                               ></input>
                             </div>
                           </div>

@@ -23,8 +23,8 @@ export class Item extends React.Component {
       <div>
         {this.props.name !== undefined ? (
           <figure
-            class="card shadow effect-bubba"
-            style={{ width: "100%", height: "240px" }}
+            class="card shadow effect-bubba item-card"
+            style={{margin:"5px"}}
             onClick={this.handleClick}
           >
             {this.props.pic ? (
@@ -46,20 +46,23 @@ export class Item extends React.Component {
                     </span>
                   </div>
                 ) : null}
+                <div style={{height: "120px"}}>
+                  <img
+                    src={this.props.pic}
+                    class="card-img-top"
+                    alt=""
+                  />
+                </div>
+              </div>
+            ) : (
+              <div>
                 <img
-                  src={this.props.pic}
+                  src={placeholder}
                   class="card-img card-img-top"
                   style={{ height: "140px", maxHeight: "160px" }}
                   alt=""
                 />
               </div>
-            ) : (
-              <img
-                src={placeholder}
-                class="card-img card-img-top"
-                style={{ height: "140px", maxHeight: "160px" }}
-                alt=""
-              />
             )}
             {this.props.promo ? (
               <div
@@ -72,7 +75,7 @@ export class Item extends React.Component {
               >
                 <span
                   class="badge badge-danger"
-                  style={{ backgroundColor: "red", fontSize:"16px"}}
+                  style={{ backgroundColor: "red", fontSize: "16px" }}
                 >
                   {this.props.promo}
                 </span>

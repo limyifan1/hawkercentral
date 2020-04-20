@@ -7,6 +7,7 @@ import { db } from "./Firestore";
 import whatsapp from "../WhatsApp.svg";
 import "react-image-gallery/styles/css/image-gallery.css";
 import ImageGallery from "react-image-gallery";
+import Component from "./index"
 
 export class Nearby extends React.Component {
   constructor(props) {
@@ -41,6 +42,59 @@ export class Nearby extends React.Component {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  renderFullscreenButton = (onClick, isFullscreen) => {
+    if (!isFullscreen) {
+      return (
+        <button
+          type="button"
+          style={{
+            width: "100%",
+            height: "100%",
+            backgroundColor: "black",
+            position: "absolute",
+            opacity: "0",
+          }}
+          value="click"
+          className={`image-gallery-fullscreen-button${
+            isFullscreen ? " active" : ""
+          }`}
+          onClick={onClick}
+        />
+      );
+    } else if (isFullscreen) {
+      return (
+        <div
+          style={{
+            width: "15%",
+            height: "15%",
+            top: "10%",
+            right: "10%",
+            // backgroundColor: "black",
+            position: "absolute",
+            opacity: "0.9",
+          }}
+          onClick={onClick}
+          value="click"
+        >
+          <svg
+            class="bi bi-x-circle-fill"
+            width="100%"
+            height="100%"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M16 8A8 8 0 110 8a8 8 0 0116 0zm-4.146-3.146a.5.5 0 00-.708-.708L8 7.293 4.854 4.146a.5.5 0 10-.708.708L7.293 8l-3.147 3.146a.5.5 0 00.708.708L8 8.707l3.146 3.147a.5.5 0 00.708-.708L8.707 8l3.147-3.146z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+      );
+    }
   };
 
   render() {
@@ -107,13 +161,17 @@ export class Nearby extends React.Component {
                 {/* <img src={this.state.data.url} /> */}
                 <div
                   class="col-12"
-                  style={{ zIndex: "99999", alignItems: "center" }}
+                  style={{ zIndex: "", alignItems: "center" }}
                 >
                   {photos.length !== 0 ? (
                     <ImageGallery
                       items={photos}
                       useBrowserFullscreen={false}
                       showPlayButton={false}
+                      ref={this.myRef}
+                      renderFullscreenButton={this.renderFullscreenButton}
+                      useTranslate3D={false}
+                      slideDuration={100}
                     />
                   ) : null}
                 </div>
@@ -123,7 +181,10 @@ export class Nearby extends React.Component {
                   class="container"
                   style={{ textAlign: "left", paddingTop: "10px" }}
                 >
-                  <h2>{this.state.data.name}</h2>
+                  <div class="">
+                    <h2>{this.state.data.name}</h2>
+                  </div>
+                  <Component.Popup data={this.state.data} id={this.state.id}/>
                   <svg
                     class="bi bi-house-fill"
                     width="1em"
@@ -226,9 +287,7 @@ export class Nearby extends React.Component {
                       {this.state.data.call ? <span>Call </span> : null}
                       {") "}{" "}
                       {this.state.data.whatsapp ? (
-                        <a
-                          href={link}
-                        >
+                        <a href={link}>
                           <span
                             class="card shadow-lg"
                             style={{
@@ -269,8 +328,8 @@ export class Nearby extends React.Component {
                     <div
                       class="card shadow"
                       style={{
-                        color: "white",
-                        backgroundColor: "red",
+                        color: "black",
+                        backgroundColor: "white",
                         height: "40px",
                       }}
                     >

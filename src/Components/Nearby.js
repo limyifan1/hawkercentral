@@ -157,24 +157,24 @@ export class Nearby extends React.Component {
     });
     const select = () => {
       return (
-        <span style={{zIndex:"9999"}}>
-        <Select
-          isMulti
-          name="name"
-          options={cuisine_format}
-          className="basic-multi-select"
-          classNamePrefix="select"
-          value={this.state.cuisineValue}
-          onChange={this.handleCuisineChange}
-          placeholder="Filter By Cuisine"
-        />
+        <span style={{ zIndex: "9999" }}>
+          <Select
+            isMulti
+            name="name"
+            options={cuisine_format}
+            className="basic-multi-select"
+            classNamePrefix="select"
+            value={this.state.cuisineValue}
+            onChange={this.handleCuisineChange}
+            placeholder="Filter By Cuisine"
+          />
         </span>
       );
     };
     return (
       <span>
         <span class="d-none d-md-block">{select()}</span>
-        <span class="d-block d-md-none" style={{ margin: "10px" }}>
+        <span class="d-block d-md-none" style={{ margin: "5px" }}>
           {select()}
         </span>
       </span>
@@ -243,11 +243,18 @@ export class Nearby extends React.Component {
       let filtered = [];
       filtered = this.state.data.filter(
         (d) =>
-          distance_calc(d["latitude"], d["longitude"], latitude, longitude) <
-            this.state.distance &&
-          (d["pickup_option"] === this.state.pickup ||
-            d["delivery_option"] === this.state.delivery)
+          d["pickup_option"] === this.state.pickup ||
+          d["delivery_option"] === this.state.delivery
       );
+
+      if (this.state.pickup) {
+        filtered = this.state.data.filter(
+          (d) =>
+            distance_calc(d["latitude"], d["longitude"], latitude, longitude) <
+            this.state.distance
+        );
+      }
+
 
       if (
         this.state.cuisineValue !== null &&
@@ -258,7 +265,7 @@ export class Nearby extends React.Component {
           return x.value;
         });
 
-        filtered = this.state.data.filter((d) => {
+        filtered = filtered.filter((d) => {
           let toggle = false;
           if (d.cuisine !== undefined) {
             let values = d.cuisine.map((x) => {
@@ -292,8 +299,9 @@ export class Nearby extends React.Component {
         return (
           <span>
             <div
-              class="d-inline-block d-md-none"
-              style={{ "padding-left": "40px","padding-right": "40px"}}
+            // class="nearby-card col-md-4"
+            // class="d-inline-block d-md-none"
+            // style={{width:"100%"}}
             >
               <Item
                 promo={data["promo"]}
@@ -310,7 +318,7 @@ export class Nearby extends React.Component {
                 ).toString()}
               />
             </div>
-            <div
+            {/* <div
               class="d-none d-md-inline-block"
               style={{ padding: "6px", width: "220px" }}
             >
@@ -328,7 +336,7 @@ export class Nearby extends React.Component {
                   longitude
                 ).toString()}
               />
-            </div>
+            </div> */}
           </span>
         );
       });
@@ -344,13 +352,22 @@ export class Nearby extends React.Component {
             >
               <div class="container" style={{ paddingTop: "27px" }}>
                 <div class="row">
-                  <div class="col-xs-4 col-sm-6 col-md-6 col-lg-4 d-flex justify-content-left">
-                    <h3>
-                      Near You at{" "}
-                      <span style={{ color: "#b48300" }}>
-                        {this.state.query}
-                      </span>
-                    </h3>
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-left">
+                    {this.state.pickup ? (
+                      <h3>
+                        Near You at{" "}
+                        <span style={{ color: "#b48300" }}>
+                          {this.state.query}
+                        </span>
+                      </h3>
+                    ) : (
+                      <h3>
+                        Delivers to You at{" "}
+                        <span style={{ color: "#b48300" }}>
+                          {this.state.query}
+                        </span>
+                      </h3>
+                    )}
                   </div>
                 </div>
                 <div class="row">
@@ -374,7 +391,9 @@ export class Nearby extends React.Component {
                   </div>
                 </div>
                 {result.nearby.length > 0 ? (
-                  <div class="row float-left">{result.nearby}</div>
+                  <div class="row float-left d-flex justify-content-center justify-content-md-start justify-content-lg-start">
+                    {result.nearby}
+                  </div>
                 ) : (
                   <div class="row float-left">
                     <br /> No Results Found

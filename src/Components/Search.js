@@ -116,7 +116,7 @@ export class Search extends React.Component {
           this.state.latitude +
           "&street=" +
           this.state.street +
-          "&distance=3"+
+          "&distance=5"+
           "&option="+
           this.props.option
         // state: { detail: response.data }

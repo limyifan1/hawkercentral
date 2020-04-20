@@ -54,9 +54,9 @@
 }
 
 .card-img-top {
-  width: 100%;
-  height: 20vw;
   object-fit: cover;
+  width:100%;
+  height: 100%;
 }
 
 .home-option {
@@ -78,6 +78,35 @@
   font-weight: bold
 }
 
+@media (device-height: 568px) and (device-width: 320px) and (-webkit-min-device-pixel-ratio: 2){
+  .banner-img-top {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+  }
+  .home-jumbo {
+    height: 670px;
+  }
+  .home-banner {
+    width: 80%;
+  }
+  .home-iwant {
+    width: 20%;
+  }
+  .nearby-card{
+    padding: 6px;
+    width: 100%;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  .item-card{
+    width: 260px !important;
+    height: 250px;
+  }
+}
+
+
+
 @media only screen and (max-width: 2000px) {
   .banner-img-top {
     width: 100%;
@@ -92,6 +121,14 @@
   }
   .home-iwant {
     width: 10%;
+  }
+  .nearby-card{
+    padding: 6px;
+    width: 220px
+  }
+  .item-card{
+    width: 180px !important;
+    height: 250px;
   }
 }
 
@@ -109,6 +146,14 @@
   }
   .home-iwant {
     width: 10%;
+  }
+  .nearby-card{
+    padding: 6px;
+    width: 220px
+  }
+  .item-card{
+    width: 180px !important;
+    height: 250px;
   }
 }
 
@@ -130,6 +175,15 @@
   .home-iwant {
     width: 10%;
   }
+  .nearby-card{
+    padding: 6px;
+    width: 220px
+  }
+  .item-card{
+    width: 260px !important;
+    height: 250px;
+  }
+
 }
 
 @media screen and (min-device-width: 480px) and (max-device-width: 1200px) and (-webkit-min-device-pixel-ratio: 1) {
@@ -147,7 +201,19 @@
   .home-iwant {
     width: 20%;
   }
+  .nearby-card{
+    padding: 6px;
+    width: 100%;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  .item-card{
+    width: 150px !important;
+    height: 250px;
+  }
+
 }
+
 
 @media only screen and (min-device-width: 0px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
   .banner-img-top {
@@ -163,6 +229,16 @@
   }
   .home-iwant {
     width: 20%;
+  }
+  .nearby-card{
+    padding: 6px;
+    width: 100%;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  .item-card{
+    width: 150px !important;
+    height: 250px;
   }
 }
 
@@ -308,3 +384,7 @@ figure.effect-bubba:hover p {
   transform: translate3d(0, 0, 0);
 }
 
+.modal-dialog{
+  width: 80%;
+  max-width: 90% !important;
+}
