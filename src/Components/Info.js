@@ -71,9 +71,8 @@ export class Nearby extends React.Component {
             height: "15%",
             top: "10%",
             right: "10%",
-            // backgroundColor: "black",
             position: "absolute",
-            opacity: "0.9",
+            opacity: "0.8",
           }}
           onClick={onClick}
           value="click"
@@ -83,7 +82,7 @@ export class Nearby extends React.Component {
             width="100%"
             height="100%"
             viewBox="0 0 16 16"
-            fill="currentColor"
+            fill="#b48300"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
@@ -359,7 +358,7 @@ export class Nearby extends React.Component {
                     <b>Delivery Fees</b>
                   </h6>
                   <p style={{ "white-space": "pre-line" }}>
-                    ${this.state.data.price}
+                    {this.state.data.price}
                   </p>
                   <h6>
                     <b>Opening Hours</b>

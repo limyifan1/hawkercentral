@@ -15,7 +15,6 @@ export class About extends React.Component {
               class="col-xs-8 col-sm-8 col-md-8 col-lg-8"
               style={{ textAlign: "center" }}
             >
-              <img src={invisible} style={{ width: "50%" }} />
               <br />
               <br />
               <br />
@@ -38,28 +37,24 @@ export class About extends React.Component {
                   to advertize their stall to the masses. Application users can
                   simply select either "dabao" or "delivery", and key in their
                   postal code to browse through listings near their home
-                  address. <br/> Sounds too good to be true? What's the catch? Boh
-                  leh... Foodleh is a purely non-profit intiative devised to
-                  help local F&B stall owners to be seen on online platforms. <br />
+                  address. <br/> <br /> Sounds too good to be true? What's the catch? Boh
+                  leh... <img src={logo} alt='' style={{ height: "20px" }} /> is a purely non-profit intiative devised to
+                  help local F&B stall owners to be seen on online platforms. <br />  <br />
                   "If we don't give discounts, we're pretty much invisible on
                   the delivery platform" While that is true of other
-                  applications, Foodleh doesn't discriminates, with each listing
+                  applications, <img src={logo} alt='' style={{ height: "20px" }} /> doesn't discriminates, with each listing
                   given an equal opportunity to shine based on their proximity
                   to each User. There's no need to eat into profit margins, and
-                  best of all, no more steep 30-40% commision! Steady lah, time
-                  to dabao and save our local F&B stall owners! is a web
-                  application designed to bridge hawker stalls in Singapore with
-                  all Singaporean foodies! With the implementation of the
-                  Circuit Breaker in place to fight COVID-19, numerous hawker
-                  stalls are struggling to stay open in light of reduced human
-                  traffic flow.
+                  best of all, no more steep 30-40% commision! <br/> <br/> Steady lah, time
+                  to dabao and save our local F&B stall owners! 
                   <br />
                   <br />
                   <br />
                   <b>
-                  <img src={hashtag} alt="" style={{ height: "10%" }} />
+                  <img src={hashtag} alt="" style={{ width: "100%" }} />
                   </b>
                 </span>
+                <br/>
                 Please email foodleh@outlook.com for questions, enquiries, or
                 concerns.
               </p>
