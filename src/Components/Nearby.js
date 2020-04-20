@@ -157,7 +157,7 @@ export class Nearby extends React.Component {
     });
     const select = () => {
       return (
-        <span style={{ zIndex: "9999" }}>
+        <span style={{ zIndex: "5" }}>
           <Select
             isMulti
             name="name"

@@ -140,13 +140,13 @@ export class Search extends React.Component {
             style={{ margin: "0 auto" }}
           >
             <div class="row">
-              <div class="col-xs-2 col-sm-2 col-md-2"></div>
-              <div class="col-xs-8 col-sm-8 col-md-8">
+              <div class="col-xs-3 col-sm-2 col-md-2"></div>
+              <div class="col-xs-6 col-sm-8 col-md-8">
                 <div class="shadow-lg" style={{ width: "100%" }}>
                   {this.searchBox()}
                 </div>
               </div>
-              <div class="col-xs-2 col-sm-2 col-md-2"></div>
+              <div class="col-xs-3 col-sm-2 col-md-2"></div>
             </div>
 
             <div class="row">

@@ -105,7 +105,7 @@ export class Home extends React.Component {
     if (this.state.retrieved) {
       this.state.all.forEach(function (data) {
         result["all"].push(
-          <p style={{ padding: "10px", width: "200px"}}>
+          <p style={{ padding: "10px", width: "200px" }}>
             <Item
               promo={data["promo"]}
               id={data["id"]}
@@ -132,12 +132,83 @@ export class Home extends React.Component {
         <div class="jumbotron row" style={{ "background-color": "white" }}>
           <div class="container" style={{ "margin-top": "57px" }}>
             <div class="row">
+              <div class="col">
+                <img alt="" class="home-banner" src={home} />
+              </div>
+              <div
+                class="col-xs-6 col-sm-6 col-md-6 col-lg-6 align-items-center right-items"
+                style={{ textAlign: "center"}}
+              >
+                <br />
+                <br />
+                <img alt="" class="home-iwant" src={i_want} />
+                <br />
+                <br />
+                <span class="row d-none d-md-inline-block">
+                  <span class="col">
+                    <img
+                      onClick={this.handleCollect}
+                      alt=""
+                      class={selfcollect}
+                      src={self_collect}
+                      style={{"width":"30%"}}
+                    />
+                  </span>
+                  <span class="col">
+                    <img
+                      alt=""
+                      onClick={this.handleDelivery}
+                      class={delivery_option}
+                      src={delivery}
+                      style={{"width":"30%"}}
+                    />
+                  </span>
+                </span>
+                <span class="row d-inline-block d-md-none">
+                  <span>
+                    <img
+                      alt=""
+                      onClick={this.handleCollect}
+                      class={selfcollect}
+                      src={self_collect}
+                    />
+                  </span>
+                  <span>
+                    <img
+                      alt=""
+                      onClick={this.handleDelivery}
+                      class={delivery_option}
+                      src={delivery}
+                    />
+                  </span>
+                </span>
+                <br />
+                <br />
+                <div>
+                  {this.state.option === "" ? (
+                    <span class=" main-caption">choose <b>da bao</b> or <b>delivery</b></span>
+                  ) : this.state.option === "delivery" ? (
+                    <span class=" main-caption">living the <b>lazy</b> life?</span>
+                  ) : (
+                    <span class="label label-default main-caption">
+                      living the <b>hardworking</b> life?
+                    </span>
+                  )}
+                </div>
+                <br />
+                <Component.Search option={this.state.option} />
+              </div>
+            </div>
+            {/* 
+
               <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"> </div>
               <div
                 class="col-xs-10 col-sm-10 col-md-10 col-lg-10"
                 style={{ textAlign: "center" }}
               >
-                <img alt="" class="home-banner" src={home} />
+                <div class="col-6">
+                  <img alt="" class="home-banner" src={home} />
+                </div>
                 <br />
                 <br />
                 <img alt="" class="home-iwant" src={i_want} />
@@ -183,14 +254,22 @@ export class Home extends React.Component {
                 </span>
                 <br />
                 <br />
-                <div>{this.state.option ==="" ? <span class=" main-caption">Choose Da Bao Or Delivery</span> : (this.state.option ==="delivery"?<span class=" main-caption">Living the lazy life?</span>:<span class="label label-default main-caption">Living the hardworking life?</span>) }</div>
+                <div>
+                  {this.state.option === "" ? (
+                    <span class=" main-caption">Choose Da Bao Or Delivery</span>
+                  ) : this.state.option === "delivery" ? (
+                    <span class=" main-caption">Living the lazy life?</span>
+                  ) : (
+                    <span class="label label-default main-caption">
+                      Living the hardworking life?
+                    </span>
+                  )}
+                </div>
                 <br />
                 <Component.Search option={this.state.option} />
               </div>
-              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
-            </div>
+              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div> */}
           </div>
-          <br />
           <br />
         </div>
         <Carousel

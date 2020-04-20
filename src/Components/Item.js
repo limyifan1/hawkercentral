@@ -35,7 +35,7 @@ export class Item extends React.Component {
                       position: "absolute",
                       top: "105px",
                       right: "5px",
-                      zIndex: "0",
+                      zIndex: "1",
                     }}
                   >
                     <span

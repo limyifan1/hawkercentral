@@ -15,10 +15,6 @@ export class About extends React.Component {
               class="col-xs-8 col-sm-8 col-md-8 col-lg-8"
               style={{ textAlign: "center" }}
             >
-              <br />
-              <br />
-              <br />
-
               <h3
                 class="row card-title justify-content-center"
                 style={{ textAlign: "center", padding: "10px 10px 10px" }}
