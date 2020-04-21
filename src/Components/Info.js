@@ -50,16 +50,15 @@ export class Nearby extends React.Component {
     if (this.state.data.menuitem) {
       let data = [];
       for (let i = 0; i < this.state.data.menuitem.length; i = i + 1) {
-        if(this.state.data.menuitem[i]!==""){
+        if (this.state.data.menuitem[i] !== "") {
           data.push(
             <div>
               {this.state.data.menuitem[i]} - ${this.state.data.menuprice[i]}
             </div>
           );
-  
         }
       }
-      return data
+      return data;
     }
   };
 
@@ -122,12 +121,16 @@ export class Nearby extends React.Component {
 
     let link = "https://wa.me/65" + this.state.data.contact;
     if (this.state.retrieved) {
-      this.state.data.cuisine.forEach((element) => {
-        cuisine.push(<span class="badge badge-info">{element.label}</span>);
-      });
-      this.state.data.region.forEach((element) => {
-        regions.push(<span class="badge badge-warning">{element.label}</span>);
-      });
+      if (this.state.data.cuisine) {
+        this.state.data.cuisine.forEach((element) => {
+          cuisine.push(<span class="badge badge-info">{element.label}</span>);
+        });
+      }
+      if (this.state.data.region) {
+        this.state.data.region.forEach((element) => {
+          regions.push(<span class="badge badge-warning">{element.label}</span>);
+        });
+      }
       if (this.state.data.url) {
         photos.push({
           original: this.state.data.url,
@@ -233,8 +236,16 @@ export class Nearby extends React.Component {
                       clip-rule="evenodd"
                     />
                   </svg>{" "}
-                  <a href={"https://maps.google.com/?ll="+this.state.data.latitude+","+this.state.data.longitude}>{this.state.data.unit} {this.state.data.street}</a>
-                  
+                  <a
+                    href={
+                      "https://maps.google.com/?ll=" +
+                      this.state.data.latitude +
+                      "," +
+                      this.state.data.longitude
+                    }
+                  >
+                    {this.state.data.unit} {this.state.data.street}
+                  </a>
                   <br />
                   <svg
                     class="bi bi-tag-fill"
@@ -359,13 +370,13 @@ export class Nearby extends React.Component {
                       style={{
                         color: "black",
                         backgroundColor: "white",
-                        "height":"70px"
+                        height: "70px",
                       }}
                     >
                       <span class="card-body">
                         <div
                           class="card-title"
-                          style={{ position: "absolute", top: "6px",}}
+                          style={{ position: "absolute", top: "6px" }}
                         >
                           <b>Promotion: {this.state.data.promo}</b>{" "}
                           {this.state.data.condition}

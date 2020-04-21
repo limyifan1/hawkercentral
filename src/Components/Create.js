@@ -15,7 +15,24 @@ import { withRouter } from "react-router-dom";
 
 export class Create extends React.Component {
   render() {
-    return <div><Component.ListForm toggle={"create"}/></div>;
+    return (
+      <div>
+        {" "}
+        <div
+        class="jumbotron"
+        style={{
+          "padding-top": "70px",
+          "padding-bottom": "240px",
+          height: "100%",
+          "background-color": "white",
+        }}
+      >
+
+        <h3>Create Hawker Listing</h3>
+        <Component.ListForm toggle={"create"} />
+        </div>
+      </div>
+    );
   }
 }
 

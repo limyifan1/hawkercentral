@@ -82,10 +82,11 @@ const addData = async ({
   menu,
   menuitem,
   menuprice,
-  toggle
+  toggle,
+  docid,
 }) => {
   let now = new Date();
-  let field = {
+  var field = {
     name: name,
     postal: postal,
     street: street,
@@ -117,22 +118,39 @@ const addData = async ({
     promo: promo,
     condition: condition,
     delivery_detail: delivery_detail,
-    claps: 0,
     menu: menu,
     menuitem: menuitem,
     menuprice: menuprice,
-    toggle: toggle,
+    docid: docid,
   };
   if (toggle === "create") {
     let id = await db
       .collection("hawkers")
-      .add(field)
+      .add({
+        ...field,
+        claps: 0,
+      })
       .then(function (docRef) {
         console.log(docRef.id);
         return docRef.id;
       })
       .catch(function (error) {
         console.error("Error adding document: ", error);
+      });
+    return id;
+  } else if (toggle === "edit") {
+    console.log(field);
+    let id = await db
+      .collection("hawkers")
+      .doc(docid)
+      .update(field)
+      .then(function (d) {
+        //   console.log(docRef.id);
+        //   return docRef.id;
+      })
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+        // alert("Failed")
       });
     return id;
   }
@@ -192,6 +210,44 @@ export class ListForm extends React.Component {
 
   componentWillMount() {
     this.getFirestoreData();
+    if (this.props.toggle === "edit") {
+      this.setState({
+        name: this.props.data.name,
+        postal: this.props.data.postal,
+        street: this.props.data.street,
+        price: this.props.data.price,
+        description: this.props.data.description,
+        description_detail: this.props.data.description_detail,
+        image1: this.props.data.url ? this.props.data.url : "",
+        image2: this.props.data.image2 ? this.props.data.image2 : "",
+        image3: this.props.data.image3 ? this.props.data.image3 : "",
+        image4: this.props.data.image4 ? this.props.data.image4 : "",
+        image5: this.props.data.image5 ? this.props.data.image5 : "",
+        image6: this.props.data.image6 ? this.props.data.image6 : "",
+        imageName: "Upload Image",
+        longitude: this.props.data.longitude,
+        latitude: this.props.data.latitude,
+        unit: this.props.data.unit,
+        delivery_option: this.props.data.delivery_option,
+        pickup_option: this.props.data.pickup_option,
+        cuisineValue: this.props.data.cuisine,
+        call: this.props.data.call,
+        whatsapp: this.props.data.whatsapp,
+        sms: this.props.data.sms,
+        inperson: this.props.data.inperson,
+        contact: this.props.data.contact,
+        docid: this.props.id,
+        opening: this.props.data.opening,
+        region: this.props.data.region,
+        website: this.props.data.website,
+        promo: this.props.data.promo,
+        condition: this.props.data.condition,
+        delivery_detail: this.props.data.delivery_detail,
+        menu: this.props.data.menu,
+        menuitem: this.props.data.menuitem,
+        menuprice: this.props.data.menuprice,
+      });
+    }
   }
 
   apiHasLoaded(map, maps) {
@@ -243,6 +299,7 @@ export class ListForm extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     this.getPostal(this.state.postal);
+    console.log(this.state);
     await addData({
       url: this.state.image1,
       image2: this.state.image2,
@@ -278,12 +335,18 @@ export class ListForm extends React.Component {
       menu: this.state.menu,
       menuitem: this.state.menuitem,
       menuprice: this.state.menuprice,
-      toggle: this.props.toggle
+      toggle: this.props.toggle,
+      docid: this.state.docid,
     }).then((id) => {
-      this.props.history.push({
-        pathname: "/info",
-        search: "?id=" + id,
-      });
+      if (this.props.toggle === "create") {
+        this.props.history.push({
+          pathname: "/info",
+          search: "?id=" + id,
+        });
+      }
+      else{
+        window.location.reload();
+      }
     });
   };
 
@@ -430,7 +493,7 @@ export class ListForm extends React.Component {
   handleRegionChange(option) {
     this.setState((state) => {
       return {
-        region: option,
+        region: option ? option : [],
       };
     });
   }
@@ -438,7 +501,7 @@ export class ListForm extends React.Component {
   handleCuisineChange(option) {
     this.setState((state) => {
       return {
-        cuisineValue: option,
+        cuisineValue: option ? option : [],
       };
     });
   }
@@ -538,16 +601,7 @@ export class ListForm extends React.Component {
 
   render({ apiReady, maps, map } = this.state) {
     return (
-      <div
-        class="jumbotron"
-        style={{
-          "padding-top": "70px",
-          "padding-bottom": "240px",
-          height: "100%",
-          "background-color": "white",
-        }}
-      >
-        <h3>Create Hawker Listing</h3>
+      <div>
         <Form onSubmit={this.handleSubmit.bind(this)}>
           <div class="row">
             <div class="col">
