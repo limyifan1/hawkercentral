@@ -106,9 +106,9 @@ export class Item extends React.Component {
             ) : null}
 
             <figcaption>
-              <div class="card-body" style={{ width: "100%", height: "100%" }}>
+              <div class="card-body" style={{ width: "100%", height: "100%"}}>
                 {this.props.name ? (
-                  <h6 class="card-title">
+                  <h6 class="card-title d-flex justify-content-center" style={{ textAlign:"center", width: "100%"}}>
                     {this.props.name.length > 23
                       ? this.props.name.slice(0, 23) + "..."
                       : this.props.name}
@@ -118,7 +118,7 @@ export class Item extends React.Component {
                 )}
 
                 {this.props.summary ? (
-                  <p class="card-text" style={{ lineHeight: "1.0" }}>
+                  <p class="card-text d-flex justify-content-center" style={{ lineHeight: "1.0" }}>
                     <small>
                       {this.props.summary.length > 35
                         ? this.props.summary.slice(0, 35) + "..."

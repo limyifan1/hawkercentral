@@ -3,14 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@mojs/core": "^0.288.2",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
+    "cheerio": "^1.0.0-rc.3",
     "firebase": "^7.14.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0",
     "react-bootstrap-typeahead": "^4.2.2",
+    "react-clap-button": "^1.2.8",
     "react-dom": "^16.13.1",
     "react-image-gallery": "^1.0.7",
     "react-multi-carousel": "^2.5.5",
@@ -41,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "main": "index.js",
+  "author": "limyifan1 <limyifan1@gmail.com>",
+  "license": "MIT"
 }

@@ -46,6 +46,23 @@ export class Nearby extends React.Component {
       });
   };
 
+  getMenu = () => {
+    if (this.state.data.menuitem) {
+      let data = [];
+      for (let i = 0; i < this.state.data.menuitem.length; i = i + 1) {
+        if(this.state.data.menuitem[i]!==""){
+          data.push(
+            <div>
+              {this.state.data.menuitem[i]} - ${this.state.data.menuprice[i]}
+            </div>
+          );
+  
+        }
+      }
+      return data
+    }
+  };
+
   renderFullscreenButton = (onClick, isFullscreen) => {
     if (!isFullscreen) {
       return (
@@ -169,7 +186,7 @@ export class Nearby extends React.Component {
                 style={{ height: "320px", backgroundColor: "white" }}
               >
                 {/* <img src={this.state.data.url} /> */}
-                <div style={{alignItems: "center"}}>
+                <div style={{ alignItems: "center" }}>
                   {photos.length !== 0 ? (
                     <ImageGallery
                       items={photos}
@@ -216,7 +233,8 @@ export class Nearby extends React.Component {
                       clip-rule="evenodd"
                     />
                   </svg>{" "}
-                  {this.state.data.unit} {this.state.data.street}
+                  <a href={"https://maps.google.com/?ll="+this.state.data.latitude+","+this.state.data.longitude}>{this.state.data.unit} {this.state.data.street}</a>
+                  
                   <br />
                   <svg
                     class="bi bi-tag-fill"
@@ -341,13 +359,13 @@ export class Nearby extends React.Component {
                       style={{
                         color: "black",
                         backgroundColor: "white",
-                        height: "40px",
+                        "height":"70px"
                       }}
                     >
                       <span class="card-body">
                         <div
                           class="card-title"
-                          style={{ position: "absolute", top: "6px" }}
+                          style={{ position: "absolute", top: "6px",}}
                         >
                           <b>Promotion: {this.state.data.promo}</b>{" "}
                           {this.state.data.condition}
@@ -355,39 +373,63 @@ export class Nearby extends React.Component {
                       </span>
                     </div>
                   ) : null}
-                    <Clap id={this.state.id} claps={this.state.data.claps}/>
-                  <h6>
+                  <br />
+                  <Clap
+                    collection={"hawkers"}
+                    id={this.state.id}
+                    claps={this.state.data.claps}
+                  />
+                  <br />
+                  <h6 style={{ marginBottom: "0px" }}>
                     <b>Brief Description</b>
                   </h6>
-                  <p>{this.state.data.description}</p>
-                  <h6>
+                  <p style={{ marginBottom: "20px" }}>
+                    {this.state.data.description}
+                  </p>
+                  <h6 style={{ marginBottom: "0px" }}>
                     <b>Detailed Description</b>
                   </h6>
-                  <p style={{ "white-space": "pre-line" }}>
+                  <p
+                    style={{ "white-space": "pre-line", marginBottom: "20px" }}
+                  >
                     {this.state.data.description_detail}
                   </p>
-                  <h6>
+                  {this.state.data.menu ? (
+                    <div>
+                      <h6 style={{ marginBottom: "0px" }}>
+                        <b>Menu Items</b>
+                      </h6>
+                      <p>{this.getMenu()} </p>
+                    </div>
+                  ) : null}
+                  <h6 style={{ marginBottom: "0px" }}>
                     <b>Details Regarding Delivery</b>
                   </h6>
-                  <p style={{ "white-space": "pre-line" }}>
+                  <p
+                    style={{ "white-space": "pre-line", marginBottom: "20px" }}
+                  >
                     {this.state.data.delivery_detail}
                   </p>
-                  <h6>
+                  <h6 style={{ marginBottom: "0px" }}>
                     <b>Delivery Fees</b>
                   </h6>
-                  <p style={{ "white-space": "pre-line" }}>
+                  <p
+                    style={{ "white-space": "pre-line", marginBottom: "20px" }}
+                  >
                     {this.state.data.price}
                   </p>
-                  <h6>
+                  <h6 style={{ marginBottom: "0px" }}>
                     <b>Opening Hours</b>
                   </h6>
-                  <p style={{ "white-space": "pre-line" }}>
+                  <p
+                    style={{ "white-space": "pre-line", marginBottom: "20px" }}
+                  >
                     {this.state.data.opening}
                   </p>
-                  <h6>
-                    <b> Website / Facebook/ Google Listing Link</b>
+                  <h6 style={{ marginBottom: "0px" }}>
+                    <b> Link </b>
                   </h6>
-                  <p>
+                  <p style={{ marginBottom: "20px" }}>
                     {this.state.data.website ? (
                       <a href={this.state.data.website}>Website Link</a>
                     ) : null}

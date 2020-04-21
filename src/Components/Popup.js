@@ -81,43 +81,15 @@ const addData = async ({
   condition,
   docid,
   delivery_detail,
+  menu,
+  menuitem,
+  menuprice
 }) => {
   let now = new Date();
   let id = await db
     .collection("hawkers")
     .doc(docid)
-    .update({
-      name: name,
-      postal: postal,
-      street: street,
-      description: description,
-      description_detail: description_detail,
-      url: url,
-      image2: image2,
-      image3: image3,
-      image4: image4,
-      image5: image5,
-      image6: image6,
-      latitude: latitude,
-      longitude: longitude,
-      unit: unit,
-      cuisine: cuisine,
-      region: region,
-      price: price,
-      contact: contact,
-      call: call,
-      whatsapp: whatsapp,
-      sms: sms,
-      inperson: inperson,
-      lastmodified: now,
-      opening: opening,
-      delivery_option: delivery_option,
-      pickup_option: pickup_option,
-      website: website,
-      promo: promo,
-      condition: condition,
-      delivery_detail: delivery_detail,
-    })
+    .update()
     .then(function (d) {
       //   console.log(docRef.id);
       //   return docRef.id;
@@ -153,8 +125,8 @@ export class Popup extends React.Component {
       imageFile5: this.props.data.imageFile5,
       imageFile6: this.props.data.imageFile6,
       imageName: "Upload Image",
-      longitude: -122.3710252,
-      latitude: 47.63628904,
+      longitude: this.props.data.longitude,
+      latitude: this.props.data.latitude,
       unit: this.props.data.unit,
       delivery_option: this.props.data.delivery_option,
       pickup_option: this.props.data.pickup_option,
@@ -173,6 +145,9 @@ export class Popup extends React.Component {
       show: false,
       setShow: false,
       delivery_detail: this.props.data.delivery_detail,
+      menu: this.props.data.menu,
+      menuitem: this.props.data.menuitem,
+      menuprice: this.props.data.menuprice,
     };
     this.handleRegionChange = this.handleRegionChange.bind(this);
     this.handleMultiChange = this.handleMultiChange.bind(this);
@@ -228,6 +203,7 @@ export class Popup extends React.Component {
 
   handleSubmit = async (event) => {
     this.setHide();
+    await this.getPostal(this.state.postal);
     await addData({
       url: this.state.image1,
       image2: this.state.image2,
@@ -260,6 +236,9 @@ export class Popup extends React.Component {
       condition: this.state.condition,
       docid: this.props.id,
       delivery_detail: this.state.delivery_detail,
+      menu: this.state.menu,
+      menuitem: this.state.menuitem,
+      menuprice: this.state.menuprice,
     }).then((id) => {
       window.location.reload();
       //   this.props.history.push({
@@ -274,7 +253,6 @@ export class Popup extends React.Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    this.setState({ [name]: value });
     if (name === "postal" && value.toString().length === 6) {
       this.getPostal(value);
     }
@@ -288,6 +266,28 @@ export class Popup extends React.Component {
     ) {
       const checked = target.checked;
       this.setState({ [name]: checked });
+    } else if (name.slice(0, 8) === "menuitem") {
+      let current = this.state.menuitem;
+      current[parseInt(name.slice(8, 9))] = target.value;
+      this.setState({
+        menuitem: current,
+      });
+    } else if (name.slice(0, 9) === "menuprice") {
+      let current = this.state.menuprice;
+      current[parseInt(name.slice(9, 10))] = target.value;
+      this.setState({
+        menuprice: current,
+      });
+    } else {
+      this.setState({ [name]: value });
+    }
+  };
+
+  handleMenu = () => {
+    if (this.state.menu) {
+      this.setState({ menu: false });
+    } else {
+      this.setState({ menu: true });
     }
   };
 
@@ -526,7 +526,7 @@ export class Popup extends React.Component {
             color: "black",
             width: "50px",
             alignText: "center",
-            fontSize: "10px"
+            fontSize: "10px",
           }}
         >
           Edit
@@ -878,7 +878,7 @@ export class Popup extends React.Component {
                         </div>
                         <div class="form-group create-title">
                           <label for="description_detail">
-                            Menu, Price List, and additional details{" "}
+                            Additional Details{" "}
                           </label>
                           <textarea
                             onChange={this.handleChange}
@@ -886,7 +886,7 @@ export class Popup extends React.Component {
                             type="text"
                             class="form-control"
                             name="description_detail"
-                            placeholder="E.g. Soy Sauce Chicken Rice: $4.00 (limited to 500 per day)"
+                            placeholder="e.g. For a limited time, buy 3 get 1 free and islandwide delivery"
                             rows="3"
                           ></textarea>
                         </div>
@@ -1026,6 +1026,368 @@ export class Popup extends React.Component {
                             <br />
                           </div>
                         )}
+
+                        <div class="create-title">
+                          <Button
+                            class="shadow-sm"
+                            style={{
+                              backgroundColor: "blue",
+                              borderColor: "blue",
+                            }}
+                            onClick={this.handleMenu}
+                            name="menu"
+                          >
+                            Add Menu Items
+                          </Button>
+                          <br />
+                        </div>
+                        {this.state.menu ? (
+                          <div>
+                            <br />
+                            <div class="card shadow">
+                              <div class="card-body">
+                                <h5 class="card-title create-title">
+                                  {" "}
+                                  Menu Items
+                                </h5>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <small>Menu Item</small>
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[0]}
+                                      name="menuitem0"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder="E.g. Chicken Rice"
+                                      maxlength="60"
+                                    />
+                                  </div>
+                                  <div class="col-5">
+                                    <small>Price</small>
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                        </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[0]}
+                                        name="menuprice0"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[1]}
+                                      name="menuitem1"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder="E.g. Chicken Rice"
+                                      maxlength="60"
+                                    />
+                                  </div>
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                        </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[1]}
+                                        name="menuprice1"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[2]}
+                                      name="menuitem2"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder="E.g. Chicken Rice"
+                                      maxlength="60"
+                                    />
+                                  </div>
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                        </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[2]}
+                                        name="menuprice2"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[3]}
+                                      name="menuitem3"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder="E.g. Chicken Rice"
+                                      maxlength="60"
+                                    />
+                                  </div>
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                        </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[3]}
+                                        name="menuprice3"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[4]}
+                                      name="menuitem4"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder="E.g. Chicken Rice"
+                                      maxlength="60"
+                                    />
+                                  </div>
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                        </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[4]}
+                                        name="menuprice4"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[5]}
+                                      name="menuitem5"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder="E.g. Chicken Rice"
+                                      maxlength="60"
+                                    />
+                                  </div>
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                        </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[5]}
+                                        name="menuprice5"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[6]}
+                                      name="menuitem6"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder="E.g. Chicken Rice"
+                                      maxlength="60"
+                                    />
+                                  </div>
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                        </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[6]}
+                                        name="menuprice6"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[7]}
+                                      name="menuitem7"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder="E.g. Chicken Rice"
+                                      maxlength="60"
+                                    />
+                                  </div>
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                        </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[7]}
+                                        name="menuprice7"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[8]}
+                                      name="menuitem8"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder="E.g. Chicken Rice"
+                                      maxlength="60"
+                                    />
+                                  </div>
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                        </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[8]}
+                                        name="menuprice8"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[9]}
+                                      name="menuitem9"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder="E.g. Chicken Rice"
+                                      maxlength="60"
+                                    />
+                                  </div>
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                        </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[9]}
+                                        name="menuprice9"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ) : null}
+                        <br />
+
                         <div class="form-group create-title">
                           <label for="unit">Contact Number: </label>
 
@@ -1109,7 +1471,13 @@ export class Popup extends React.Component {
                             <p class="card-text create-title">
                               This is how your listing will look like to users:{" "}
                             </p>
-                            <p class="d-flex justify-content-center">
+                            <p
+                              class="d-flex justify-content-center"
+                              style={{
+                                alignContent: "center",
+                                alignText: "center",
+                              }}
+                            >
                               <Item
                                 promo={this.state.promo}
                                 name={this.state.name}
@@ -1117,6 +1485,7 @@ export class Popup extends React.Component {
                                 summary={this.state.description}
                               />
                             </p>
+
                             <p class="card-text create-title">
                               Not satisfied? Just change the fields!{" "}
                             </p>

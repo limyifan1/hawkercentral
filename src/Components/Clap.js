@@ -12,15 +12,14 @@ class Clap extends React.Component {
     };
     this._handleClick = this._handleClick.bind(this);
     this.updateClap = this.updateClap.bind(this);
-
   }
 
   updateClap = async () => {
     await db
-      .collection("hawkers")
+      .collection(this.props.collection)
       .doc(this.props.id)
       .update({
-          claps: this.state.countTotal + 1
+        claps: this.state.countTotal + 1,
       })
       .then((snapshot) => {
         console.log("Updated successfully!");
@@ -110,7 +109,7 @@ class Clap extends React.Component {
   _handleClick() {
     if (this.state.count < 5) {
       this._animationTimeline.replay();
-      this.updateClap()
+      this.updateClap();
       this.setState(function (prevState, nextState) {
         return {
           count: Math.min(prevState.count + 1, 5),
@@ -152,7 +151,13 @@ class Clap extends React.Component {
           style={{ fontSize: "10px" }}
           class="d-flex align-items-center justify-content-center"
         >
-          Clap to support <br /> your hawker! (max 5){" "}
+          {this.props.toggle === "about" ? (
+            <span>Clap to support this initiative!</span>
+          ) : (
+            <span>
+              Clap to support <br /> your hawker! (max 5){" "}
+            </span>
+          )}
         </span>
       </div>
     );

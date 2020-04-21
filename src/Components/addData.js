@@ -316,7 +316,46 @@ const getData = async () => {
     .then((snapshot) => {
       snapshot.forEach(async (doc) => {
         if (doc.exists) {
-          await db.collection("hawkers").doc(doc.id).update({claps: Math.floor((Math.random() * 10) + 1)})
+          await db
+            .collection("hawkers")
+            .doc(doc.id)
+            .update({
+              menu: false,
+              menuitem: [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+              ],
+              menuprice: [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+              ],
+            });
         }
       });
       console.log("Fetched successfully!");
@@ -326,4 +365,44 @@ const getData = async () => {
       console.log(error);
     });
 };
-getData()
+
+const changeData = async () => {
+  await db
+    .collection("hawkers")
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach(async (doc) => {
+        if (doc.exists) {
+          let postal = await getPostal(doc.data().postal);
+
+          console.log(postal.latitude, postal.latitude)
+          if (postal !== undefined) {
+            await db
+              .collection("hawkers")
+              .doc(doc.id)
+              .update({
+                longitude: postal.longitude,
+                latitude: postal.latitude,
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
+          // let opening = doc.data().opening.slice(0,1) === '\n' ? doc.data().opening.slice(1,doc.data().opening.length) === '\n':doc.data().opening
+        }
+      });
+      console.log("Fetched successfully!");
+      return true;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+// changeData();
+
+const test = async () => {
+  console.log(await getPostal(730366));
+};
+
+changeData();
