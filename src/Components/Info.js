@@ -5,9 +5,11 @@ import queryString from "query-string";
 import { Spinner } from "react-bootstrap";
 import { db } from "./Firestore";
 import whatsapp from "../WhatsApp.svg";
-import "react-image-gallery/styles/css/image-gallery.css";
 import ImageGallery from "react-image-gallery";
 import Component from "./index";
+import placeholder from "../placeholder.png";
+import ClapButton from "react-clap-button";
+import Clap from "./Clap";
 
 export class Nearby extends React.Component {
   constructor(props) {
@@ -145,7 +147,17 @@ export class Nearby extends React.Component {
           thumbnail: this.state.data.image5,
         });
       }
+      if (photos.length === 0) {
+        photos.push({
+          original:
+            "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/images%2Fplaceholder.png?alt=media&token=29588604-3e5f-4c15-b109-89115227b19a",
+          thumbnail:
+            "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/images%2Fplaceholder.png?alt=media&token=29588604-3e5f-4c15-b109-89115227b19a",
+        });
+      }
     }
+
+    const onCountChange = ({ count, countTotal }) => {};
 
     return (
       <div>
@@ -157,17 +169,17 @@ export class Nearby extends React.Component {
                 style={{ height: "320px", backgroundColor: "white" }}
               >
                 {/* <img src={this.state.data.url} /> */}
-                <div style={{ zIndex: "", alignItems: "center" }}>
+                <div style={{alignItems: "center"}}>
                   {photos.length !== 0 ? (
                     <ImageGallery
                       items={photos}
                       renderFullscreenButton={this.renderFullscreenButton}
-                      lazyLoad={false}
+                      // lazyLoad={false}
                       useBrowserFullscreen={false}
                       showPlayButton={false}
                       useTranslate3D={false}
                       slideDuration={100}
-                      isRTL={false}
+                      // isRTL={false}
                       slideInterval={2000}
                       slideOnThumbnailOver={false}
                       thumbnailPosition={"bottom"}
@@ -184,6 +196,7 @@ export class Nearby extends React.Component {
                     <h2>{this.state.data.name}</h2>
                   </div>
                   <Component.Popup data={this.state.data} id={this.state.id} />
+                  <link rel="stylesheet" href="applause-button.css" />
                   <svg
                     class="bi bi-house-fill"
                     width="1em"
@@ -342,7 +355,7 @@ export class Nearby extends React.Component {
                       </span>
                     </div>
                   ) : null}
-                  <br />
+                    <Clap id={this.state.id} claps={this.state.data.claps}/>
                   <h6>
                     <b>Brief Description</b>
                   </h6>

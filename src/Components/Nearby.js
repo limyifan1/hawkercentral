@@ -329,6 +329,7 @@ export class Nearby extends React.Component {
                 pic={data["url"]}
                 summary={data["description"]}
                 distance={data["distance"]}
+                claps={data["claps"]}
               />
             </div>
             {/* <div

@@ -1,4 +1,5 @@
 import React from "react";
+import "react-image-gallery/styles/css/image-gallery.css";
 import "./App.css";
 // import 'react-bootstrap-typeahead/css/Typeahead.css';
 import "bootstrap/dist/css/bootstrap.min.css";

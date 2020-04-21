@@ -526,6 +526,7 @@ export class Popup extends React.Component {
             color: "black",
             width: "50px",
             alignText: "center",
+            fontSize: "10px"
           }}
         >
           Edit

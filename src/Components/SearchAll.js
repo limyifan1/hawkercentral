@@ -271,6 +271,8 @@ export class SearchAll extends React.Component {
         });
       }
 
+      filtered = filtered.sort((a,b)=>b.claps-a.claps)
+
       // filtered.forEach((element) => {
       //   element.distance = distance_calc(
       //     element["latitude"],
@@ -297,6 +299,7 @@ export class SearchAll extends React.Component {
                 street={data["street"]}
                 pic={data["url"]}
                 summary={data["description"]}
+                claps={data["claps"]}
                 // distance={data["distance"]}
               />
             </div>

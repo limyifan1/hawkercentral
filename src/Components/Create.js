@@ -115,6 +115,7 @@ const addData = async ({
       promo: promo,
       condition: condition,
       delivery_detail: delivery_detail,
+      claps:0
     })
     .then(function (docRef) {
       console.log(docRef.id);
