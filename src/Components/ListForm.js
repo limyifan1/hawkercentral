@@ -902,6 +902,7 @@ export class ListForm extends React.Component {
                           class="form-control"
                           name="postal"
                           placeholder="Enter Postal Code"
+                          min="0"
                         ></input>
                       </div>
                     </div>

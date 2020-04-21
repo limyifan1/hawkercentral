@@ -36,6 +36,7 @@ const cuisines = [
   "Meat",
   "Halal",
   "Pizza",
+  "Mediterranean"
 ];
 
 function distance_calc(lat1, lon1, lat2, lon2) {
@@ -379,7 +380,7 @@ export class SearchAll extends React.Component {
         ) : (
           <div class="row h-100 page-container">
             <div class="col-sm-12 my-auto">
-              <h3>Please give us a moment while we load your results</h3>
+              <h3>Loading</h3>
               <Spinner class="" animation="grow" />
             </div>
           </div>

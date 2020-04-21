@@ -64,10 +64,10 @@
   /* height: 10em;  */
   /* overflow: hidden;  */
   height: 38px;
-  word-break:break-all !important;
+  word-break:break-word !important;
 }
 .card-text {
-  word-break:break-all !important;
+  word-break:break-word !important;
 }
 
 .home-option {

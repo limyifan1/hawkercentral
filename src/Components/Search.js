@@ -25,7 +25,7 @@ export class Search extends React.Component {
       data: [],
       selected: [],
       street: "",
-      postal: ""
+      postal: "",
     };
   }
 
@@ -67,11 +67,13 @@ export class Search extends React.Component {
 
   async getPostal() {
     let data = await this.callPostal();
-    this.setState({
-      street: data["ADDRESS"],
-      longitude: data["LONGITUDE"],
-      latitude: data["LATITUDE"],
-    });
+    if (data !== undefined) {
+      this.setState({
+        street: data["ADDRESS"],
+        longitude: data["LONGITUDE"],
+        latitude: data["LATITUDE"],
+      });
+    }
   }
 
   callPostal = async () => {
@@ -97,31 +99,33 @@ export class Search extends React.Component {
 
   handleClick = async (event) => {
     event.preventDefault();
-    if (this.props.option === ""){
-      alert("Please choose either da bao or delivery thank you :)")
-    }
-    else if(this.state.postal.length !== 6){
-      alert("Please enter a valid postal code thank you :)")
-    }
-    else{
+    if (this.props.option === "") {
+      alert("Please choose either da bao or delivery thank you :)");
+    } else if (this.state.postal.length !== 6) {
+      alert("Please enter a valid postal code thank you :)");
+    } else {
       await this.getPostal();
-      this.props.history.push({
-        pathname: "/nearby",
-        search:
-          "?postal=" +
-          this.state.postal +
-          "&lng=" +
-          this.state.longitude +
-          "&lat=" +
-          this.state.latitude +
-          "&street=" +
-          this.state.street +
-          "&distance=5"+
-          "&option="+
-          this.props.option
-        // state: { detail: response.data }
-      });
-      // this.props.history.push('/listing')  
+      if (this.state.street === "") {
+        alert("Please enter a valid postal code thank you :)");
+      } else {
+        this.props.history.push({
+          pathname: "/nearby",
+          search:
+            "?postal=" +
+            this.state.postal +
+            "&lng=" +
+            this.state.longitude +
+            "&lat=" +
+            this.state.latitude +
+            "&street=" +
+            this.state.street +
+            "&distance=5" +
+            "&option=" +
+            this.props.option,
+          // state: { detail: response.data }
+        });
+      }
+      // this.props.history.push('/listing')
     }
   };
 

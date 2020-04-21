@@ -50,10 +50,10 @@ export class Nearby extends React.Component {
     if (this.state.data.menuitem) {
       let data = [];
       for (let i = 0; i < this.state.data.menuitem.length; i = i + 1) {
-        if (this.state.data.menuitem[i] !== "") {
+        if (this.state.data.menuitem[i] !== "" && this.state.data.menuitem !== undefined) {
           data.push(
             <div>
-              {this.state.data.menuitem[i]} - ${this.state.data.menuprice[i]}
+              {this.state.data.menuitem?this.state.data.menuitem[i]:null} - ${this.state.data.menuprice?this.state.data.menuprice[i]:null}
             </div>
           );
         }
@@ -458,7 +458,7 @@ export class Nearby extends React.Component {
         ) : (
           <div class="row h-100 page-container">
             <div class="col-sm-12 my-auto">
-              <h3>Please give us a moment while we load your results</h3>
+              <h3>Loading</h3>
               <Spinner class="" animation="grow" />
             </div>
           </div>

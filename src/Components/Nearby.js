@@ -38,6 +38,7 @@ const cuisines = [
   "Meat",
   "Halal",
   "Pizza",
+  "Mediterranean"
 ];
 
 // const responsive = {
@@ -425,7 +426,7 @@ export class Nearby extends React.Component {
         ) : (
           <div class="row h-100 page-container">
             <div class="col-sm-12 my-auto">
-              <h3>Please give us a moment while we load your results</h3>
+              <h3>Loading</h3>
               <Spinner class="" animation="grow" />
             </div>
           </div>
