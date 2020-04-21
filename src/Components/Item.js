@@ -109,12 +109,12 @@ export class Item extends React.Component {
               <div class="card-body" style={{ width: "100%", height: "100%"}}>
                 {this.props.name ? (
                   <h6 class="card-title d-flex justify-content-center" style={{ textAlign:"center", width: "100%"}}>
-                    {this.props.name.length > 23
-                      ? this.props.name.slice(0, 23) + "..."
+                    {this.props.name.length > 28
+                      ? this.props.name.slice(0, 28) + "..."
                       : this.props.name}
                   </h6>
                 ) : (
-                  <h6 class="card-title">Sample Stall Name</h6>
+                  <h6 class="card-title">Sample Name</h6>
                 )}
 
                 {this.props.summary ? (

@@ -64,6 +64,10 @@
   /* height: 10em;  */
   /* overflow: hidden;  */
   height: 38px;
+  word-break:break-all !important;
+}
+.card-text {
+  word-break:break-all !important;
 }
 
 .home-option {
