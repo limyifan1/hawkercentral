@@ -82,56 +82,60 @@ const addData = async ({
   menu,
   menuitem,
   menuprice,
+  toggle
 }) => {
   let now = new Date();
-  let id = await db
-    .collection("hawkers")
-    .add({
-      name: name,
-      postal: postal,
-      street: street,
-      description: description,
-      description_detail: description_detail,
-      url: url,
-      image2: image2,
-      image3: image3,
-      image4: image4,
-      image5: image5,
-      image6: image6,
-      latitude: latitude,
-      longitude: longitude,
-      unit: unit,
-      delivery: delivery,
-      cuisine: cuisine,
-      region: region,
-      price: price,
-      contact: contact,
-      call: call,
-      whatsapp: whatsapp,
-      sms: sms,
-      inperson: inperson,
-      lastmodified: now,
-      opening: opening,
-      delivery_option: delivery_option,
-      pickup_option: pickup_option,
-      website: website,
-      promo: promo,
-      condition: condition,
-      delivery_detail: delivery_detail,
-      claps: 0,
-      menu: menu,
-      menuitem: menuitem,
-      menuprice: menuprice,
-    })
-    .then(function (docRef) {
-      console.log(docRef.id);
-      return docRef.id;
-    })
-    .catch(function (error) {
-      console.error("Error adding document: ", error);
-      // alert("Failed")
-    });
-  return id;
+  let field = {
+    name: name,
+    postal: postal,
+    street: street,
+    description: description,
+    description_detail: description_detail,
+    url: url,
+    image2: image2,
+    image3: image3,
+    image4: image4,
+    image5: image5,
+    image6: image6,
+    latitude: latitude,
+    longitude: longitude,
+    unit: unit,
+    delivery: delivery,
+    cuisine: cuisine,
+    region: region,
+    price: price,
+    contact: contact,
+    call: call,
+    whatsapp: whatsapp,
+    sms: sms,
+    inperson: inperson,
+    lastmodified: now,
+    opening: opening,
+    delivery_option: delivery_option,
+    pickup_option: pickup_option,
+    website: website,
+    promo: promo,
+    condition: condition,
+    delivery_detail: delivery_detail,
+    claps: 0,
+    menu: menu,
+    menuitem: menuitem,
+    menuprice: menuprice,
+    toggle: toggle,
+  };
+  if (toggle === "create") {
+    let id = await db
+      .collection("hawkers")
+      .add(field)
+      .then(function (docRef) {
+        console.log(docRef.id);
+        return docRef.id;
+      })
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+      });
+    return id;
+  }
 };
 
 export class ListForm extends React.Component {
@@ -184,7 +188,6 @@ export class ListForm extends React.Component {
     this.handleRegionChange = this.handleRegionChange.bind(this);
     this.handleMultiChange = this.handleMultiChange.bind(this);
     this.handleCuisineChange = this.handleCuisineChange.bind(this);
-
   }
 
   componentWillMount() {
@@ -275,6 +278,7 @@ export class ListForm extends React.Component {
       menu: this.state.menu,
       menuitem: this.state.menuitem,
       menuprice: this.state.menuprice,
+      toggle: this.props.toggle
     }).then((id) => {
       this.props.history.push({
         pathname: "/info",

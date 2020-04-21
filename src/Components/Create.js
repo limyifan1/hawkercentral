@@ -15,7 +15,7 @@ import { withRouter } from "react-router-dom";
 
 export class Create extends React.Component {
   render() {
-    return <div><Component.ListForm /></div>;
+    return <div><Component.ListForm toggle={"create"}/></div>;
   }
 }
 
