@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react";
 import Component from "../Components";
 import Carousel from "react-multi-carousel";
-import home from "../home.png";
+import home from "../home (1).png";
 import Item from "./Item";
 import i_want from "../i_want.jpeg";
 import delivery from "../delivery.jpeg";

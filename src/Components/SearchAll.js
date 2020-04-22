@@ -36,7 +36,8 @@ const cuisines = [
   "Meat",
   "Halal",
   "Pizza",
-  "Mediterranean"
+  "Mediterranean",
+  "Grocery Shopping"
 ];
 
 function distance_calc(lat1, lon1, lat2, lon2) {

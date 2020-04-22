@@ -975,7 +975,7 @@ export class ListForm extends React.Component {
                           />
                         </div>
                         <div class="col-7">
-                          <small>Condition (if any)</small>
+                          <small>Condition (max 40 chars)</small>
                           <input
                             onChange={this.handleChange}
                             value={this.state.condition}

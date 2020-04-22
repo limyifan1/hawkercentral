@@ -50,10 +50,14 @@ export class Nearby extends React.Component {
     if (this.state.data.menuitem) {
       let data = [];
       for (let i = 0; i < this.state.data.menuitem.length; i = i + 1) {
-        if (this.state.data.menuitem[i] !== "" && this.state.data.menuitem !== undefined) {
+        if (
+          this.state.data.menuitem[i] !== "" &&
+          this.state.data.menuitem !== undefined
+        ) {
           data.push(
             <div>
-              {this.state.data.menuitem?this.state.data.menuitem[i]:null} - ${this.state.data.menuprice?this.state.data.menuprice[i]:null}
+              {this.state.data.menuitem ? this.state.data.menuitem[i] : null} -
+              ${this.state.data.menuprice ? this.state.data.menuprice[i] : null}
             </div>
           );
         }
@@ -128,7 +132,9 @@ export class Nearby extends React.Component {
       }
       if (this.state.data.region) {
         this.state.data.region.forEach((element) => {
-          regions.push(<span class="badge badge-warning">{element.label}</span>);
+          regions.push(
+            <span class="badge badge-warning">{element.label}</span>
+          );
         });
       }
       if (this.state.data.url) {
@@ -370,16 +376,18 @@ export class Nearby extends React.Component {
                       style={{
                         color: "black",
                         backgroundColor: "white",
-                        height: "70px",
+                        height: "35px",
                       }}
                     >
                       <span class="card-body">
                         <div
                           class="card-title"
-                          style={{ position: "absolute", top: "6px" }}
+                          style={{ position: "absolute", top: "6px", fontSize:"13px" }}
                         >
-                          <b>Promotion: {this.state.data.promo}</b>{" "}
-                          {this.state.data.condition}
+                          <b>{this.state.data.promo}</b>: {" "}
+                          { this.state.data.condition && this.state.data.condition.length > 40
+                            ? this.state.data.condition.slice(0, 40) + "..."
+                            : this.state.data.condition}
                         </div>
                       </span>
                     </div>

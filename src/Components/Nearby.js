@@ -38,7 +38,8 @@ const cuisines = [
   "Meat",
   "Halal",
   "Pizza",
-  "Mediterranean"
+  "Mediterranean",
+  "Grocery Shopping"
 ];
 
 // const responsive = {

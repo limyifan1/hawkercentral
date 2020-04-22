@@ -64,16 +64,19 @@ export class About extends React.Component {
                 <span>
                   <img src={logo} alt="" style={{ height: "20px" }} /> is an
                   easy-to-use web application designed to bridge hawker stalls
-                  and restaurant owners in Singapore with all Singaporeasn via a
-                  free online platform. Stall owners can easily create a listing
-                  to advertize their stall to the masses. Application users can
-                  simply select either "dabao" or "delivery", and key in their
-                  postal code to browse through listings near their home
-                  address. <br /> <br /> Sounds too good to be true? What's the
-                  catch? Boh leh...{" "}
+                  and restaurant owners in Singapore with all Singaporeans via a
+                  free online platform (orhhh… that means it’s like Carousell,
+                  but for food lah! wah so creative I like).
+                  <br />
+                  <br />
+                  Sounds too good to be true? What's the catch? Boh leh...{" "}
                   <img src={logo} alt="" style={{ height: "20px" }} /> is a
                   purely non-profit initiative devised to help local F&B stall
-                  owners to be seen on online platforms. <br /> <br />
+                  owners to be seen online. It’s also a community-based platform
+                  where listings can be created and edited by members of the
+                  public.
+                  <br />
+                  <br />
                   "If we don't give discounts, we're pretty much invisible on
                   the delivery platform" While that is true of other
                   applications,{" "}
@@ -81,8 +84,19 @@ export class About extends React.Component {
                   discriminates, with each listing given an equal opportunity to
                   shine based on their proximity to each User. There's no need
                   to eat into profit margins, and best of all, no more steep
-                  30-40% commision! <br /> <br /> Steady lah, time to dabao and
-                  save our local F&B stall owners!
+                  commissions!
+                  <br />
+                  <br />
+                  Steady lah, time to dabao and save our local F&B stall owners!
+                 <hr />
+                 <b>How to Use</b>
+                 <br/>
+                 <b>(for App Users)</b> At the “Home”
+                  page, select either "dabao" or "delivery", and key in your
+                  postal code. Start browsing listings! Encourage your favourite
+                  businesses during this tough period by giving them a virtual
+                  “clap” too! <br/><br/><b>(for Local F&B businesses)</b> Go to the “Create” page
+                  and fill in the form. Voila! All done in a matter of minutes!
                   <br />
                   <br />
                   <div class="row d-flex justify-content-center">
