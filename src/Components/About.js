@@ -57,83 +57,93 @@ export class About extends React.Component {
               >
                 About Us
               </h3>
-              <p
-                class="row card-title justify-content-center align-items-center"
-                style={{ textAlign: "center", padding: "30px 30px 30px" }}
-              >
-                <span>
-                  <img src={logo} alt="" style={{ height: "20px" }} /> is an
-                  easy-to-use web application designed to bridge hawker stalls
-                  and restaurant owners in Singapore with all Singaporeans via a
-                  free online platform (orhhh… that means it’s like Carousell,
-                  but for food lah! wah so creative I like).
-                  <br />
-                  <br />
-                  Sounds too good to be true? What's the catch? Boh leh...{" "}
-                  <img src={logo} alt="" style={{ height: "20px" }} /> is a
-                  purely non-profit initiative devised to help local F&B stall
-                  owners to be seen online. It’s also a community-based platform
-                  where listings can be created and edited by members of the
-                  public.
-                  <br />
-                  <br />
-                  "If we don't give discounts, we're pretty much invisible on
-                  the delivery platform" While that is true of other
-                  applications,{" "}
-                  <img src={logo} alt="" style={{ height: "20px" }} /> doesn't
-                  discriminates, with each listing given an equal opportunity to
-                  shine based on their proximity to each User. There's no need
-                  to eat into profit margins, and best of all, no more steep
-                  commissions!
-                  <br />
-                  <br />
-                  Steady lah, time to dabao and save our local F&B stall owners!
-                 <hr />
-                 <b>How to Use</b>
-                 <br/>
-                 <b>(for App Users)</b> At the “Home”
-                  page, select either "dabao" or "delivery", and key in your
-                  postal code. Start browsing listings! Encourage your favourite
-                  businesses during this tough period by giving them a virtual
-                  “clap” too! <br/><br/><b>(for Local F&B businesses)</b> Go to the “Create” page
-                  and fill in the form. Voila! All done in a matter of minutes!
-                  <br />
-                  <br />
-                  <div class="row d-flex justify-content-center">
-                    {this.state.retrieved ? (
-                      <Clap
-                        toggle="about"
-                        collection={"etc"}
-                        id={this.state.id}
-                        claps={this.state.data.claps}
-                      />
-                    ) : null}
+              <div>
+                <p
+                  class="row card-title justify-content-center"
+                  style={{ textAlign: "center", padding: "30px 30px 30px" }}
+                >
+                  <div>
+                    <img src={logo} alt="" style={{ height: "20px" }} /> is an
+                    easy-to-use web application designed to bridge hawker stalls
+                    and restaurant owners in Singapore with all Singaporeans via
+                    a free online platform (orhhh… that means it’s like
+                    Carousell, but for food lah! wah so creative I like).
+                    <br />
+                    <br />
+                    Sounds too good to be true? What's the catch? Boh leh...{" "}
+                    <img src={logo} alt="" style={{ height: "20px" }} /> is a
+                    purely non-profit initiative devised to help local F&B stall
+                    owners to be seen online. It’s also a community-based
+                    platform where listings can be created and edited by members
+                    of the public.
+                    <br />
+                    <br />
+                    "If we don't give discounts, we're pretty much invisible on
+                    the delivery platform" While that is true of other
+                    applications,{" "}
+                    <img src={logo} alt="" style={{ height: "20px" }} /> doesn't
+                    discriminates, with each listing given an equal opportunity
+                    to shine based on their proximity to each User. There's no
+                    need to eat into profit margins, and best of all, no more
+                    steep commissions!
+                    <br />
+                    <br />
+                    Steady lah, time to dabao and save our local F&B stall
+                    owners!
+                    <hr />
+                    <b>How to Use</b>
+                    <br />
+                    <b>(for App Users)</b> At the “Home” page, select either
+                    "dabao" or "delivery", and key in your postal code. Start
+                    browsing listings! Encourage your favourite businesses
+                    during this tough period by giving them a virtual “clap”
+                    too! <br />
+                    <br />
+                    <b>(for Local F&B businesses)</b> Go to the “Create” page
+                    and fill in the form. Voila! All done in a matter of
+                    minutes!
+                    <br />
+                    <br />
+                    <div class="row d-flex justify-content-center">
+                      {this.state.retrieved ? (
+                        <Clap
+                          toggle="about"
+                          collection={"etc"}
+                          id={this.state.id}
+                          claps={this.state.data.claps}
+                        />
+                      ) : null}
+                      <br />
+                      <br />
+                    </div>
+                    <br />
+                    <br />
+                    <b>
+                      <img src={hashtag} alt="" class="hashtag" />
+                    </b>
+                    <br />
+                    <br />
+                    Please email foodleh@outlook.com for questions, enquiries,
+                    or concerns.
+                    <br />
+                    <br />
+                    Credit: Initial listings from The Smart Local
+                    <br />
+                    <br />
+                    <a href="https://github.com/limyifan1/hawkercentral">Github Link</a> 
+                    <br />
+                    (Feel free to send pull requests)
+                    <br />
+                    <br />
+                    &copy; 2020 Foodleh? by Yi Fan and Cheeps
+                    <br />
                     <br />
                     <br />
                   </div>
-                  <br />
-                  <b>
-                    <img src={hashtag} alt="" class="hashtag" />
-                  </b>
-                </span>
-                <br />
-                Please email foodleh@outlook.com for questions, enquiries, or
-                concerns.
-                <br />
-                <br />
-                <br />
-                &copy; 2020 Foodleh? by Yi Fan and Cheeps
-                <br />
-                <br />
-                <br />
-              </p>
+                </p>
+              </div>
             </div>
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
-            <div class="row">
-              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
-              <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8"></div>
-              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
-            </div>
           </div>
         </div>
       </div>

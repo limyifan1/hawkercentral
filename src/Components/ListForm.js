@@ -983,6 +983,7 @@ export class ListForm extends React.Component {
                             type="text"
                             class="form-control"
                             placeholder="e.g. any order / above $20 order size"
+                            maxlength="40"
                           />
                         </div>
                       </div>
