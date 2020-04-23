@@ -70,21 +70,6 @@
   word-break:break-word !important;
 }
 
-.home-option {
-  padding: 5px;
-  width: 150px;
-  filter: drop-shadow(1px 1px 3px grey);
-}
-
-.home-option:hover {
-  filter: drop-shadow(1px 1px 7px grey);
-}
-
-.home-option-clicked {
-  width: 170px;
-  filter: drop-shadow(0px 0px 7px #b48300);
-}
-
 .main-caption {
   color: #b48300;
 }
