@@ -18,6 +18,11 @@
 .env.test.local
 .env.production.local
 
+# ide settings
+.idea/
+.tern-project
+.vscode
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
