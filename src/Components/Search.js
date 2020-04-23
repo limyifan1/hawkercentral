@@ -18,16 +18,10 @@ function titleCase(str) {
 }
 
 export class Search extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      data: [],
-      selected: [],
-      street: "",
-      postal: "",
-    };
-  }
+  state = {
+    postal: '',
+    loading: false,
+  };
 
   _renderMenuItemChildren = (option, props, index) => {
     return (
@@ -52,124 +46,94 @@ export class Search extends React.Component {
     this.setState({ [name]: value });
   };
 
-  searchBox() {
-    return (
-      <input
-        onChange={this.handleChange}
-        value={this.state.postal}
-        type="number"
-        class="form-control"
-        name="postal"
-        placeholder="Enter Your Postal Code"
-      ></input>
-    );
-  }
-
   async getPostal() {
-    let data = await this.callPostal();
-    if (data !== undefined) {
-      this.setState({
-        street: data["ADDRESS"],
-        longitude: data["LONGITUDE"],
-        latitude: data["LATITUDE"],
-      });
+    this.setState({ loading: true });
+
+    try {
+      return await this.callPostal();
+    } finally {
+      this.setState({ loading: false });
     }
   }
 
   callPostal = async () => {
-    return await fetch(
-      "https://developers.onemap.sg/commonapi/search?searchVal=" +
-        this.state.postal +
-        "&returnGeom=Y&getAddrDetails=Y"
-    )
-      .then(function (response) {
-        return response.json();
-      })
-      .then(
-        function (jsonResponse) {
-          // console.log(jsonResponse['results'])
-          return jsonResponse["results"][0];
-          //Success message
-        },
-        (error) => {
-          console.log(error);
-        }
+    try {
+      const response = await fetch(
+        "https://developers.onemap.sg/commonapi/search?searchVal=" +
+          this.state.postal +
+          "&returnGeom=Y&getAddrDetails=Y"
       );
-  };
-
-  handleClick = async (event) => {
-    event.preventDefault();
-    if (this.props.option === "") {
-      alert("Please choose either da bao or delivery thank you :)");
-    } else if (this.state.postal.length !== 6) {
-      alert("Please enter a valid postal code thank you :)");
-    } else {
-      await this.getPostal();
-      if (this.state.street === "") {
-        alert("Please enter a valid postal code thank you :)");
-      } else {
-        this.props.history.push({
-          pathname: "/nearby",
-          search:
-            "?postal=" +
-            this.state.postal +
-            "&lng=" +
-            this.state.longitude +
-            "&lat=" +
-            this.state.latitude +
-            "&street=" +
-            this.state.street +
-            "&distance=5" +
-            "&option=" +
-            this.props.option,
-          // state: { detail: response.data }
-        });
-      }
-      // this.props.history.push('/listing')
+      
+      return (await response.json()).results[0];
+    } catch (error) {
+      console.log(error);
+      throw error;
     }
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
-    alert("You selected: " + this.state.selected[0].name);
+
+    if (this.props.option === "") {
+      alert("Please choose either da bao or delivery thank you :)");
+      return;
+    }
+
+    const postal = await this.getPostal();
+    if (postal.ADDRESS === "") {
+      alert("Please enter a valid postal code thank you :)");
+      return;
+    }
+
+    const search = new URLSearchParams();
+    search.append('postal', this.state.postal);
+    search.append('street', postal.ADDRESS);
+    search.append('lng', postal.LONGITUDE);
+    search.append('lat', postal.LATITUDE);
+    search.append('distance', '5');
+    search.append('option', this.props.option);
+
+    this.props.history.push({
+      pathname: "/nearby",
+      search: search.toString(),
+    });
   };
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <div class="row">
-          <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
-          <div
-            class="col-xs-10 col-sm-10 col-md-10 col-lg-10"
-            style={{ margin: "0 auto" }}
-          >
-            <div class="row">
-              <div class="col-xs-3 col-sm-2 col-md-2"></div>
-              <div class="col-xs-6 col-sm-8 col-md-8">
-                <div class="shadow-lg" style={{ width: "100%" }}>
-                  {this.searchBox()}
-                </div>
-              </div>
-              <div class="col-xs-3 col-sm-2 col-md-2"></div>
-            </div>
-
-            <div class="row">
-              <div class="col-lg-12 col-lg-offset-12">
-                <br />
-                <Button
-                  class="shadow-sm"
-                  type="submit"
-                  variant="outline-secondary"
-                  onClick={this.handleClick}
-                  style={{ backgroundColor: "#b48300", borderColor: "#b48300" }}
-                >
-                  <div style={{ color: "white" }}>Search</div>
-                </Button>
-              </div>
+        <div class="row justify-content-center">
+          <div class="col-xs-6 col-sm-8 col-md-8">
+            <div class="shadow-lg" style={{ width: "100%" }}>
+              <input
+                onChange={this.handleChange}
+                value={this.state.postal}
+                type="text"
+                pattern="[0-9]{6}"
+                maxLength={6}
+                minLength={6}
+                class="form-control"
+                name="postal"
+                placeholder="Enter Your Postal Code"
+                autoComplete="postal-code"
+                autoFocus
+                required
+              />
             </div>
           </div>
-          <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-            {/* {this.state.selected.length > 0?this.state.selected[0].name:null} */}
+        </div>
+
+        <div class="row mt-4">
+          <div class="col">
+            <Button
+              class="shadow-sm"
+              type="submit"
+              variant="outline-secondary"
+              style={{ backgroundColor: "#b48300", borderColor: "#b48300" }}
+              disabled={this.state.loading}
+            >
+              <span style={{ color: "white" }}>{this.state.loading ? 'Searching...' : 'Search'}</span>
+            </Button>
           </div>
         </div>
       </form>

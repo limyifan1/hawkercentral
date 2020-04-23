@@ -1,4 +1,5 @@
 import React, { PropTypes } from "react";
+import classnames from 'classnames';
 import Component from "../Components";
 import Carousel from "react-multi-carousel";
 import home from "../home (1).png";
@@ -6,6 +7,8 @@ import Item from "./Item";
 import i_want from "../i_want.jpeg";
 import delivery from "../delivery.jpeg";
 import self_collect from "../self_collect.jpeg";
+
+import './Home.css';
 
 const responsive = {
   superLargeDesktop: {
@@ -30,19 +33,15 @@ const responsive = {
   },
 };
 
-export class Home extends React.Component {
-  constructor(props) {
-    super(props);
+const SELF_COLLECT_OPTION = 'selfcollect';
+const HOME_DELIVERY_OPTION = 'delivery';
 
-    this.state = {
-      data: [],
-      option: "",
-      retrieved: false,
-    };
-
-    this.handleCollect = this.handleCollect.bind(this);
-    this.handleDelivery = this.handleDelivery.bind(this);
-  }
+export class Home extends React.PureComponent {
+  state = {
+    data: [],
+    option: "",
+    retrieved: false,
+  };
 
   componentWillMount() {
     // this.retrieveData();
@@ -91,11 +90,11 @@ export class Home extends React.Component {
   //     return error;
   //   }
   // };
-  handleCollect() {
-    this.setState({ option: "selfcollect" });
+  handleCollect = () => {
+    this.setState({ option: SELF_COLLECT_OPTION });
   }
-  handleDelivery() {
-    this.setState({ option: "delivery" });
+  handleDelivery = () => {
+    this.setState({ option: HOME_DELIVERY_OPTION });
   }
 
   render() {
@@ -103,9 +102,9 @@ export class Home extends React.Component {
       all: [],
     };
     if (this.state.retrieved) {
-      this.state.all.forEach(function (data) {
-        result["all"].push(
-          <p style={{ padding: "10px", width: "200px" }}>
+      this.state.all.forEach((data) => {
+        result.all.push(
+          <p style={{ padding: "10px", width: "200px" }} key={data["id"]}>
             <Item
               promo={data["promo"]}
               id={data["id"]}
@@ -119,72 +118,50 @@ export class Home extends React.Component {
       });
     }
 
-    let selfcollect =
-      this.state.option === "selfcollect"
-        ? "home-option-clicked"
-        : "home-option";
-
-    let delivery_option =
-      this.state.option === "delivery" ? "home-option-clicked" : "home-option";
-
     return (
-      <div class="container-fluid pt-4">
-        <div class="row pt-5" style={{ "background-color": "white" }}>
-          <div class="container" style={{ "margin-top": "57px" }}>
+      <div className="home">
+        <div class="jumbotron row">
+          <div class="container">
+//       <div class="container-fluid pt-4">
+//         <div class="row pt-5" style={{ "background-color": "white" }}>
+//           <div class="container" style={{ "margin-top": "57px" }}>
             <div class="row">
               <div class="col">
-                <img alt="" class="home-banner" src={home} />
+                <img alt="Cut the middlemen - Save our local F&amp;B" class="home-banner" src={home} />
               </div>
-              <div
-                class="col-xs-6 col-sm-6 col-md-6 col-lg-6 align-items-center right-items"
-                style={{ textAlign: "center" }}
-              >
+              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 align-items-center">
                 <br />
                 <br />
-                <img alt="" class="home-iwant" src={i_want} />
-                <br />
-                <br />
-                <span class="row d-none d-md-inline-block">
-                  <span class="col">
+                <img alt="I want..." class="home-iwant" src={i_want} />
+
+                <div class="row justify-content-center collect-options">
+                  <div className="col-sm-12 col-md-auto">
+                  <button type="button" onClick={this.handleCollect} className={classnames({
+                    clicked: this.state.option === SELF_COLLECT_OPTION,
+                  })}>
                     <img
-                      onClick={this.handleCollect}
-                      alt=""
-                      class={selfcollect}
-                      src={self_collect}
-                      style={{ width: "30%" }}
-                    />
-                  </span>
-                  <span class="col">
-                    <img
-                      alt=""
-                      onClick={this.handleDelivery}
-                      class={delivery_option}
-                      src={delivery}
-                      style={{ width: "30%" }}
-                    />
-                  </span>
-                </span>
-                <span class="row d-inline-block d-md-none">
-                  <span>
-                    <img
-                      alt=""
-                      onClick={this.handleCollect}
-                      class={selfcollect}
+                      alt="Self Collect"
                       src={self_collect}
                     />
-                  </span>
-                  <span>
-                    <img
-                      alt=""
-                      onClick={this.handleDelivery}
-                      class={delivery_option}
-                      src={delivery}
-                    />
-                  </span>
-                </span>
+                  </button>
+                  </div>
+
+                  <div className="col-sm-12 col-md-auto">
+                    <button type="button" onClick={this.handleDelivery} className={classnames({
+                      clicked: this.state.option === HOME_DELIVERY_OPTION,
+                    })}>
+                      <img
+                        alt="Home Delivery"
+                        src={delivery}
+                      />
+                    </button>
+                  </div>
+                </div>
                 <br />
                 <br />
+
                 <div>
+                  {renderPostalCodeForm(this.state.option)}
                   {this.state.option === "" ? (
                     <span class=" main-caption">
                       choose <b>da bao</b> or <b>delivery</b>
@@ -316,6 +293,30 @@ export class Home extends React.Component {
         </Carousel> */}
       </div>
     );
+  }
+}
+
+function renderPostalCodeForm(option) {
+  switch(option) {
+    case "":
+      return (
+        <span class=" main-caption">
+          choose <b>da bao</b> or <b>delivery</b>
+        </span>
+      )
+
+    case HOME_DELIVERY_OPTION:
+    case SELF_COLLECT_OPTION:
+      return (
+        <span class="label label-default main-caption">
+          <span class="main-caption">
+            now enter your <strong>postal code</strong>
+            <br />
+            <br />
+            <Component.Search option={option} />
+          </span>
+        </span>
+      );
   }
 }
 
