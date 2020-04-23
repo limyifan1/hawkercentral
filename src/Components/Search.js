@@ -19,10 +19,7 @@ function titleCase(str) {
 
 export class Search extends React.Component {
   state = {
-    data: [],
-    selected: [],
-    street: "",
-    postal: "",
+    postal: '',
     loading: false,
   };
 
@@ -49,61 +46,29 @@ export class Search extends React.Component {
     this.setState({ [name]: value });
   };
 
-  searchBox() {
-    return (
-      <>
-        <input
-          onChange={this.handleChange}
-          value={this.state.postal}
-          type="text"
-          pattern="[0-9]{6}"
-          maxLength={6}
-          minLength={6}
-          class="form-control"
-          name="postal"
-          placeholder="Enter Your Postal Code"
-          autoFocus
-          required
-        />
-      </>
-    );
-  }
-
   async getPostal() {
-    this.setState({ loading: true })
+    this.setState({ loading: true });
+
     try {
-      const data = await this.callPostal();
-      if (data !== undefined) {
-        this.setState({
-          street: data["ADDRESS"],
-          longitude: data["LONGITUDE"],
-          latitude: data["LATITUDE"],
-        });
-      }
+      return await this.callPostal();
     } finally {
       this.setState({ loading: false });
     }
   }
 
   callPostal = async () => {
-    return await fetch(
-      "https://developers.onemap.sg/commonapi/search?searchVal=" +
-        this.state.postal +
-        "&returnGeom=Y&getAddrDetails=Y"
-    )
-      .then(function (response) {
-        return response.json();
-      })
-      .then(
-        function (jsonResponse) {
-          // console.log(jsonResponse['results'])
-          return jsonResponse["results"][0];
-          //Success message
-        },
-        (error) => {
-          console.log(error);
-        }
+    try {
+      const response = await fetch(
+        "https://developers.onemap.sg/commonapi/search?searchVal=" +
+          this.state.postal +
+          "&returnGeom=Y&getAddrDetails=Y"
       );
+      
+      return (await response.json()).results[0];
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   };
 
   handleSubmit = async (event) => {
@@ -112,29 +77,25 @@ export class Search extends React.Component {
     if (this.props.option === "") {
       alert("Please choose either da bao or delivery thank you :)");
       return;
-    } 
+    }
 
-    await this.getPostal();
-    if (this.state.street === "") {
+    const postal = await this.getPostal();
+    if (postal.ADDRESS === "") {
       alert("Please enter a valid postal code thank you :)");
       return;
     }
 
+    const search = new URLSearchParams();
+    search.append('postal', this.state.postal);
+    search.append('street', postal.ADDRESS);
+    search.append('lng', postal.LONGITUDE);
+    search.append('lat', postal.LATITUDE);
+    search.append('distance', '5');
+    search.append('option', this.props.option);
+
     this.props.history.push({
       pathname: "/nearby",
-      search:
-        "?postal=" +
-        this.state.postal +
-        "&lng=" +
-        this.state.longitude +
-        "&lat=" +
-        this.state.latitude +
-        "&street=" +
-        this.state.street +
-        "&distance=5" +
-        "&option=" +
-        this.props.option,
-      // state: { detail: response.data }
+      search: search.toString(),
     });
   };
 
@@ -144,7 +105,20 @@ export class Search extends React.Component {
         <div class="row justify-content-center">
           <div class="col-xs-6 col-sm-8 col-md-8">
             <div class="shadow-lg" style={{ width: "100%" }}>
-              {this.searchBox()}
+              <input
+                onChange={this.handleChange}
+                value={this.state.postal}
+                type="text"
+                pattern="[0-9]{6}"
+                maxLength={6}
+                minLength={6}
+                class="form-control"
+                name="postal"
+                placeholder="Enter Your Postal Code"
+                autoComplete="postal-code"
+                autoFocus
+                required
+              />
             </div>
           </div>
         </div>
