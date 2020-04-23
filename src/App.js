@@ -9,24 +9,22 @@ import Components from "./Components";
 function App() {
   return (
     <Router>
-      <body>
-        <Components.Menu />
-        <div className="App">
+      <Components.Menu />
 
-          <Route exact path="/" component={Components.Home} />
-          {/* <Route exact path="/listing" component={Components.Listing} /> */}
-          <Route exact path="/create" component={Components.Create} />
-          <Route exact path="/nearby" component={Components.Nearby} />
-          <Route exact path="/info" component={Components.Info} />
-          {/* <Route exact path="/news" component={Components.News} /> */}
-          <Route exact path="/searchall" component={Components.SearchAll} />
-          <Route exact path="/about" component={Components.About} />
-          <script src="/__/firebase/7.14.1/firebase-app.js"></script>
-          <script src="/__/firebase/7.14.1/firebase-analytics.js"></script>
-          <script src="/__/firebase/init.js"></script>
+      <div className="App">
+        <Route exact path="/" component={Components.Home} />
+        {/* <Route exact path="/listing" component={Components.Listing} /> */}
+        <Route exact path="/create" component={Components.Create} />
+        <Route exact path="/nearby" component={Components.Nearby} />
+        <Route exact path="/info" component={Components.Info} />
+        {/* <Route exact path="/news" component={Components.News} /> */}
+        <Route exact path="/searchall" component={Components.SearchAll} />
+        <Route exact path="/about" component={Components.About} />
+        <script src="/__/firebase/7.14.1/firebase-app.js"></script>
+        <script src="/__/firebase/7.14.1/firebase-analytics.js"></script>
+        <script src="/__/firebase/init.js"></script>
 
-        </div>
-      </body>
+      </div>
     </Router>
   );
 }
