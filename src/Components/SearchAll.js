@@ -10,8 +10,8 @@ import firebase from "./Firestore";
 
 const analytics = firebase.analytics();
 
-function onLoad(name){
-  analytics.logEvent(name)
+function onLoad(name) {
+  analytics.logEvent(name);
 }
 
 const cuisines = [
@@ -45,7 +45,7 @@ const cuisines = [
   "Halal",
   "Pizza",
   "Mediterranean",
-  "Grocery Shopping"
+  "Grocery Shopping",
 ];
 
 function distance_calc(lat1, lon1, lat2, lon2) {
@@ -90,7 +90,7 @@ export class SearchAll extends React.Component {
   }
 
   componentWillMount() {
-    onLoad("searchall_load")
+    onLoad("searchall_load");
     this.retrieveData();
     console.log("run");
   }
@@ -282,7 +282,12 @@ export class SearchAll extends React.Component {
         });
       }
 
-      filtered = filtered.sort((a,b)=>b.claps-a.claps)
+        filtered = filtered.filter(
+          (d) => {
+            return !d.url.includes("thesmartlocal")}
+        );
+
+      filtered = filtered.sort((a, b) => b.lastmodified - a.lastmodified);
 
       // filtered.forEach((element) => {
       //   element.distance = distance_calc(
@@ -349,9 +354,7 @@ export class SearchAll extends React.Component {
               <div class="container" style={{ paddingTop: "27px" }}>
                 <div class="row">
                   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-left">
-                      <h3>
-                        All Listings
-                      </h3>
+                    <h3>All Listings</h3>
                   </div>
                 </div>
                 <div class="row">

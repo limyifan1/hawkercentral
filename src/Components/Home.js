@@ -128,8 +128,8 @@ export class Home extends React.Component {
       this.state.option === "delivery" ? "home-option-clicked" : "home-option";
 
     return (
-      <div class="container-fluid">
-        <div class="jumbotron row" style={{ "background-color": "white" }}>
+      <div class="container-fluid pt-4">
+        <div class="row pt-5" style={{ "background-color": "white" }}>
           <div class="container" style={{ "margin-top": "57px" }}>
             <div class="row">
               <div class="col">
@@ -206,10 +206,25 @@ export class Home extends React.Component {
                       </span>
                     </span>
                   )}
+                  <br />
+                  <br />
+                  <br />
+                  The Smart Local (TSL) has informed us that they disapprove of
+                  hawker listings we scraped from their website and that our
+                  images were being hosted on their end, incurring costs for
+                  them. We wish to apologise to their team that has put in so
+                  much work putting together hawker listings. We are
+                  unreservedly sorry to TSL.
+                  <br />
+                  <br />
+                  Hence, we have removed all of those listings. Here is a link
+                  to their food directory if you would like to access it!
+                  (<a href="https://thesmartlocal.com/delivery">TSL Directory</a>)We will work to restore
+                  more listings soon. <br />
                 </div>
               </div>
             </div>
-            {/* 
+            {/*
 
               <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"> </div>
               <div

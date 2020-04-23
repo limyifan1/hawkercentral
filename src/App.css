@@ -1,4 +1,4 @@
-/* 
+/*
 .menu-link{
   color: "grey" !important;
 } */
@@ -91,6 +91,8 @@
   color: #b48300;
 }
 
+
+
 @media (device-height: 568px) and (device-width: 320px) and (-webkit-min-device-pixel-ratio: 2) {
   .banner-img-top {
     width: 100%;
@@ -134,8 +136,52 @@
   .image-gallery.fullscreen-modal {
     z-index: 9999 !important;
   }
-
 }
+
+
+@media only screen and (max-width: 10000px) {
+  .banner-img-top {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  .home-jumbo {
+    height: 800px;
+  }
+  .home-banner {
+    width: 110%;
+  }
+  .home-iwant {
+    width: 20%;
+  }
+  .nearby-card {
+    padding: 6px;
+    width: 220px;
+  }
+  .item-card {
+    width: 180px !important;
+    height: 250px;
+  }
+  .right-items {
+    padding-top: 5%;
+  }
+  .hashtag {
+    width: 60%;
+  }
+  .image-gallery-content.fullscreen img {
+    width: 30% !important;
+    height: 100% !important;
+    z-index: 99999 !important;
+  }
+  .image-gallery.fullscreen-modal img {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .image-gallery.fullscreen-modal {
+    z-index: 9999 !important;
+  }
+}
+
 
 @media only screen and (max-width: 2000px) {
   .banner-img-top {
@@ -433,7 +479,7 @@
   width: 100%;
   height: 50px !important;
   object-fit: cover;
-} 
+}
 
 .image-gallery-slides{
   width: 100% !important;
@@ -652,6 +698,6 @@ figure.effect-bubba:hover p {
     transform: scale(1);
     opacity: 0;
     box-shadow: 0 0 50px rgba(20, 91, 50, 1),
-      inset 0 0 10px rgba(39, 174, 96, 1);
+    inset 0 0 10px rgba(39, 174, 96, 1);
   }
 }

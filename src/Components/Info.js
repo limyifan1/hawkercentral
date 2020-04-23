@@ -253,10 +253,7 @@ export class Nearby extends React.Component {
                   </svg>{" "}
                   <a
                     href={
-                      "https://maps.google.com/?ll=" +
-                      this.state.data.latitude +
-                      "," +
-                      this.state.data.longitude
+                      "https://maps.google.com/?q=" + this.state.data.street
                     }
                   >
                     {this.state.data.unit} {this.state.data.street}
@@ -468,7 +465,13 @@ export class Nearby extends React.Component {
                   </h6>
                   <p style={{ marginBottom: "20px" }}>
                     {this.state.data.website ? (
-                      <a href={this.state.data.website}>Website Link</a>
+                      this.state.data.website.slice(0, 4) === "http" ? (
+                        <a href={this.state.data.website}>Website Link</a>
+                      ) : (
+                        <a href={"https://" + this.state.data.website}>
+                          Website Link
+                        </a>
+                      )
                     ) : null}
                   </p>
                   <p style={{ color: "grey" }}>
