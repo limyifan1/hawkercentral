@@ -17,6 +17,7 @@
     "react-bootstrap-typeahead": "^4.2.2",
     "react-clap-button": "^1.2.8",
     "react-dom": "^16.13.1",
+    "react-ga": "^2.7.0",
     "react-image-gallery": "^1.0.7",
     "react-multi-carousel": "^2.5.5",
     "react-router-dom": "^5.1.2",

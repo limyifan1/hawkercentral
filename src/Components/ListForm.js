@@ -84,6 +84,7 @@ const addData = async ({
   menuprice,
   toggle,
   docid,
+  wechatid,
 }) => {
   let now = new Date();
   var field = {
@@ -122,6 +123,7 @@ const addData = async ({
     menuitem: menuitem,
     menuprice: menuprice,
     docid: docid,
+    wechatid: wechatid,
   };
   if (toggle === "create") {
     let id = await db
@@ -202,6 +204,7 @@ export class ListForm extends React.Component {
       menu: false,
       menuitem: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
       menuprice: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+      wechatid: "",
     };
     this.handleRegionChange = this.handleRegionChange.bind(this);
     this.handleMultiChange = this.handleMultiChange.bind(this);
@@ -246,6 +249,7 @@ export class ListForm extends React.Component {
         menu: this.props.data.menu,
         menuitem: this.props.data.menuitem,
         menuprice: this.props.data.menuprice,
+        wechatid: this.props.data.wechatid ? this.props.data.wechatid : "",
       });
     }
   }
@@ -337,14 +341,14 @@ export class ListForm extends React.Component {
       menuprice: this.state.menuprice,
       toggle: this.props.toggle,
       docid: this.state.docid,
+      wechatid: this.state.wechatid,
     }).then((id) => {
       if (this.props.toggle === "create") {
         this.props.history.push({
           pathname: "/info",
           search: "?id=" + id,
         });
-      }
-      else{
+      } else {
         window.location.reload();
       }
     });
@@ -397,7 +401,6 @@ export class ListForm extends React.Component {
     const name = event.target.name;
     this.setState({ [name]: image });
     console.log(name);
-    // this.setState({ imageName: image.name });
     this.handleFireBaseUpload(image, name);
   };
 
@@ -644,6 +647,19 @@ export class ListForm extends React.Component {
                                 alt=""
                               ></img>
                             </label>
+                          ) : this.state.imageFile1 ? (
+                            <span
+                              style={{
+                                alignContent: "center",
+                                position: "relative",
+                                top: "25px",
+                                left: "25px",
+                              }}
+                            >
+                              <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                              </div>
+                            </span>
                           ) : (
                             <label for="imageFile1">{icon}</label>
                           )}
@@ -680,6 +696,19 @@ export class ListForm extends React.Component {
                                 alt=""
                               ></img>
                             </label>
+                          ) : this.state.imageFile2 ? (
+                            <span
+                              style={{
+                                alignContent: "center",
+                                position: "relative",
+                                top: "25px",
+                                left: "25px",
+                              }}
+                            >
+                              <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                              </div>
+                            </span>
                           ) : (
                             <label for="imageFile2">{icon}</label>
                           )}
@@ -716,6 +745,19 @@ export class ListForm extends React.Component {
                                 alt=""
                               ></img>
                             </label>
+                          ) : this.state.imageFile3 ? (
+                            <span
+                              style={{
+                                alignContent: "center",
+                                position: "relative",
+                                top: "25px",
+                                left: "25px",
+                              }}
+                            >
+                              <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                              </div>
+                            </span>
                           ) : (
                             <label for="imageFile3">{icon}</label>
                           )}
@@ -754,6 +796,19 @@ export class ListForm extends React.Component {
                                 alt=""
                               ></img>
                             </label>
+                          ) : this.state.imageFile4 ? (
+                            <span
+                              style={{
+                                alignContent: "center",
+                                position: "relative",
+                                top: "25px",
+                                left: "25px",
+                              }}
+                            >
+                              <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                              </div>
+                            </span>
                           ) : (
                             <label for="imageFile4">{icon}</label>
                           )}
@@ -790,6 +845,19 @@ export class ListForm extends React.Component {
                                 alt=""
                               ></img>
                             </label>
+                          ) : this.state.imageFile5 ? (
+                            <span
+                              style={{
+                                alignContent: "center",
+                                position: "relative",
+                                top: "25px",
+                                left: "25px",
+                              }}
+                            >
+                              <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                              </div>
+                            </span>
                           ) : (
                             <label for="imageFile5">{icon}</label>
                           )}
@@ -826,6 +894,19 @@ export class ListForm extends React.Component {
                                 alt=""
                               ></img>
                             </label>
+                          ) : this.state.imageFile6 ? (
+                            <span
+                              style={{
+                                alignContent: "center",
+                                position: "relative",
+                                top: "25px",
+                                left: "25px",
+                              }}
+                            >
+                              <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                              </div>
+                            </span>
                           ) : (
                             <label for="imageFile6">{icon}</label>
                           )}
@@ -1016,12 +1097,15 @@ export class ListForm extends React.Component {
                       ></textarea>
                     </div>
                     <div class="form-group create-title">
-                      <label for="description">Self-Collection </label>
+                      <label for="description">
+                        Self-Collection or Delivery? <b>(Important)</b>
+                      </label>
                       <div class="form-check create-title">
                         <label class="checkbox-inline">
                           <input
                             onChange={this.handleChange}
                             type="checkbox"
+                            checked={this.state.pickup_option}
                             value={this.state.pickup_option}
                             name="pickup_option"
                             class="form-check-input"
@@ -1531,12 +1615,26 @@ export class ListForm extends React.Component {
                       </div>
                     </div>
                     <div class="form-group create-title">
+                      <label for="unit">WeChat ID(微信号): </label>
+                      <div class="input-group">
+                        <input
+                          onChange={this.handleChange}
+                          value={this.state.wechatid}
+                          type="text"
+                          class="form-control"
+                          name="wechatid"
+                          placeholder="e.g. abc123"
+                        ></input>
+                      </div>
+                    </div>
+                    <div class="form-group create-title">
                       <label for="unit">Contact Channels: </label>
                       <div class="form-check create-title">
                         <label class="checkbox-inline">
                           <input
                             onChange={this.handleChange}
                             type="checkbox"
+                            checked={this.state.call}
                             value={this.state.call}
                             name="call"
                             class="form-check-input"
@@ -1548,6 +1646,7 @@ export class ListForm extends React.Component {
                           <input
                             onChange={this.handleChange}
                             type="checkbox"
+                            checked={this.state.whatsapp}
                             value={this.state.whatsapp}
                             name="whatsapp"
                             class="form-check-input"
@@ -1559,6 +1658,7 @@ export class ListForm extends React.Component {
                           <input
                             onChange={this.handleChange}
                             type="checkbox"
+                            checked={this.state.sms}
                             value={this.state.sms}
                             name="sms"
                             class="form-check-input"
@@ -1570,6 +1670,7 @@ export class ListForm extends React.Component {
                           <input
                             onChange={this.handleChange}
                             type="checkbox"
+                            checked={this.state.inperson}
                             value={this.state.inperson}
                             name="inperson"
                             class="form-check-input"

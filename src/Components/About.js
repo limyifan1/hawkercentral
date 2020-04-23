@@ -6,6 +6,15 @@ import hashtag from "../hashtag.jpeg";
 import Clap from "./Clap";
 import { db } from "./Firestore";
 
+
+import firebase from "./Firestore";
+
+const analytics = firebase.analytics();
+
+function onLoad(name){
+  analytics.logEvent(name)
+}
+
 export class About extends React.Component {
   constructor(props) {
     super(props);
@@ -19,6 +28,7 @@ export class About extends React.Component {
   }
 
   componentWillMount() {
+    onLoad("about_load")
     this.getDoc();
   }
 

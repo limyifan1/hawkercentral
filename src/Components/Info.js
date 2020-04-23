@@ -11,6 +11,14 @@ import placeholder from "../placeholder.png";
 import ClapButton from "react-clap-button";
 import Clap from "./Clap";
 
+import firebase from "./Firestore";
+
+const analytics = firebase.analytics();
+
+function onLoad(name, item) {
+  analytics.logEvent(name, { name: item });
+}
+
 export class Nearby extends React.Component {
   constructor(props) {
     super(props);
@@ -38,6 +46,7 @@ export class Nearby extends React.Component {
         if (snapshot.exists) {
           this.setState({ data: snapshot.data(), retrieved: true });
         }
+        onLoad("info_load", snapshot.data().name);
         console.log("Fetched successfully!");
         return true;
       })
@@ -326,12 +335,16 @@ export class Nearby extends React.Component {
                   </svg>{" "}
                   {this.state.data.contact ? (
                     <span>
-                      {this.state.data.contact}
-                      {" ("}
+                      {this.state.data.contact} {" ("}
                       {this.state.data.whatsapp ? <span>WhatsApp </span> : null}
                       {this.state.data.sms ? <span>SMS </span> : null}
                       {this.state.data.call ? <span>Call </span> : null}
-                      {") "}{" "}
+                      {") "} <br />
+                      {this.state.data.wechatid ? (
+                        <span style={{ color: "green" }}>
+                          <b>WeChat ID: {this.state.data.wechatid}</b>
+                        </span>
+                      ) : null}
                       {this.state.data.whatsapp ? (
                         <a href={link}>
                           <span
@@ -382,10 +395,15 @@ export class Nearby extends React.Component {
                       <span class="card-body">
                         <div
                           class="card-title"
-                          style={{ position: "absolute", top: "6px", fontSize:"13px" }}
+                          style={{
+                            position: "absolute",
+                            top: "6px",
+                            fontSize: "13px",
+                          }}
                         >
-                          <b>{this.state.data.promo}</b>: {" "}
-                          { this.state.data.condition && this.state.data.condition.length > 40
+                          <b>{this.state.data.promo}</b>:{" "}
+                          {this.state.data.condition &&
+                          this.state.data.condition.length > 40
                             ? this.state.data.condition.slice(0, 40) + "..."
                             : this.state.data.condition}
                         </div>

@@ -3,7 +3,13 @@ import { Link } from "react-router-dom";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import logo from "../foodleh.png";
 import name from "../logo-brown.png";
+import firebase from "./Firestore";
 
+const analytics = firebase.analytics();
+
+function onClick(button){
+  analytics.logEvent(button)
+}
 
 export class Menu extends React.Component {
   render() {
@@ -33,20 +39,20 @@ export class Menu extends React.Component {
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-          <Nav.Link href="#" as={Link} to="/" id="menu-link" style={{"color":"grey"}}>
+          <Nav.Link href="#" as={Link} to="/" id="menu-link" style={{"color":"grey"}} onClick={onClick("home")}>
             Home
           </Nav.Link>
           {/* <Nav.Link href="#listing" as={Link} to="/listing" id="menu-link" style={{"color":"grey"}}>
             Listings
           </Nav.Link> */}
-          <Nav.Link href="#searchall" as={Link} to="/searchall" id="menu-link" style={{"color":"grey"}}>
+          <Nav.Link href="#searchall" as={Link} to="/searchall" id="menu-link" style={{"color":"grey"}} onClick={onClick("search")}>
             Search
           </Nav.Link>
-          <Nav.Link href="#create" as={Link} to="/create" id="menu-link" style={{"color":"grey"}}>
+          <Nav.Link href="#create" as={Link} to="/create" id="menu-link" style={{"color":"grey"}} onClick={onClick("create")}>
             Create
           </Nav.Link>
 
-          <Nav.Link href="#about" as={Link} to="/about" id="menu-link" style={{"color":"grey"}}>
+          <Nav.Link href="#about" as={Link} to="/about" id="menu-link" style={{"color":"grey"}} onClick={onClick("about")}>
             About
           </Nav.Link>
         </Navbar.Collapse>

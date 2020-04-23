@@ -7,6 +7,13 @@ import queryString from "query-string";
 import { Spinner } from "react-bootstrap";
 import { db } from "./Firestore";
 import Select from "react-select";
+import firebase from "./Firestore";
+
+const analytics = firebase.analytics();
+
+function onLoad(name){
+  analytics.logEvent(name)
+}
 
 const cuisines = [
   "American",
@@ -109,6 +116,7 @@ export class Nearby extends React.Component {
   }
 
   componentWillMount() {
+    onLoad("nearby_load")
     this.retrieveData();
     console.log("run");
   }

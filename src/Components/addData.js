@@ -4,6 +4,7 @@ const axios = require("axios");
 const firebase = require("firebase");
 require("firebase/firestore");
 const data = require("../mrt_stations.json");
+const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 
 firebase.initializeApp({
   apiKey: `${process.env.FIRESTORE_KEY}`,
@@ -375,7 +376,7 @@ const changeData = async () => {
         if (doc.exists) {
           let postal = await getPostal(doc.data().postal);
 
-          console.log(postal.latitude, postal.latitude)
+          console.log(postal.latitude, postal.latitude);
           if (postal !== undefined) {
             await db
               .collection("hawkers")
@@ -405,4 +406,81 @@ const test = async () => {
   console.log(await getPostal(730366));
 };
 
-changeData();
+// changeData();
+
+const retrieveData = async () => {
+  let data = [];
+  const csvWriter = createCsvWriter({
+    path: "out.csv",
+    header: [
+      { id: "sms", title: "sms" },
+      { id: "opening", title: "opening" },
+      { id: "lastmodified", title: "lastmodified" },
+      { id: "image3", title: "image3" },
+      { id: "postal", title: "postal" },
+      { id: "latitude", title: "latitude" },
+      { id: "image6", title: "image6" },
+      { id: "name", title: "name" },
+      { id: "whatsapp", title: "whatsapp" },
+      { id: "street", title: "street" },
+      { id: "cuisine", title: "cuisine" },
+      { id: "image4", title: "image4" },
+      { id: "image5", title: "image5" },
+      { id: "inperson", title: "inperson" },
+      { id: "menuitem", title: "menuitem" },
+      { id: "pickup_option", title: "pickup_option" },
+      { id: "website", title: "website" },
+      { id: "delivery_detail", title: "delivery_detail" },
+      { id: "unit", title: "unit" },
+      { id: "call", title: "call" },
+      { id: "longitude", title: "longitude" },
+      { id: "image2", title: "image2" },
+      { id: "description", title: "description" },
+      { id: "claps", title: "claps" },
+      { id: "condition", title: "condition" },
+      { id: "delivery", title: "delivery" },
+      { id: "url", title: "url" },
+      { id: "region", title: "region" },
+      { id: "description_detail", title: "description_detail" },
+      { id: "menuprice", title: "menuprice" },
+      { id: "promo", title: "promo" },
+      { id: "menu", title: "menu" },
+      { id: "delivery_option", title: "delivery_option" },
+      { id: "contact", title: "contact" },
+      { id: "price", title: "price" },
+    ],
+  });
+  await db
+    .collection("hawkers")
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        if (doc.exists) {
+          let temp = doc.data();
+          temp["lastmodified"] = "";
+          temp["cuisine"] = "";
+          temp["menuprice"] = "";
+          temp["menuitem"] = "";
+          temp["region"] = "";
+          temp["delivery"] = "";
+          data.push(temp);
+        }
+      });
+      console.log("Fetched successfully!");
+      return true;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  console.log(data);
+  csvWriter
+    .writeRecords(data) // returns a promise
+    .then(() => {
+      console.log("...Done");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+retrieveData();

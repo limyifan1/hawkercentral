@@ -11,7 +11,7 @@ firebase.initializeApp({
     appId: "1:596185831538:web:9cbfb234d1fff146cf8aeb",
     measurementId: "G-Z220VNJFT9"
   });
-
+firebase.analytics()
 
 const db = firebase.firestore();
 const storage = firebase.storage()

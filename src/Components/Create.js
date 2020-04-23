@@ -8,12 +8,24 @@ import Select from "react-select";
 import Item from "./Item";
 import placeholder from "../placeholder.png";
 import Component from "../Components";
-
 import { withRouter } from "react-router-dom";
+
+
 
 // const API_KEY = `${process.env.REACT_APP_GKEY}`
 
+import firebase from "./Firestore";
+
+const analytics = firebase.analytics();
+
+function onLoad(name){
+  analytics.logEvent(name)
+}
+
 export class Create extends React.Component {
+  componentWillMount(){
+    onLoad("create_load")
+  }
   render() {
     return (
       <div>
