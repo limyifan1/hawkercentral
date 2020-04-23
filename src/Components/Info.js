@@ -197,7 +197,7 @@ export class Nearby extends React.Component {
     return (
       <div>
         {this.state.retrieved ? (
-          <div style={{ paddingTop: "56px", width: "100%" }}>
+          <div class="container" style={{ paddingTop: "56px", width: "100%" }}>
             <div class="row">
               <div
                 class="jumbotron col-xs-6 col-sm-6 col-md-6 col-lg-6"

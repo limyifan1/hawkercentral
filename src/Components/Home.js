@@ -128,7 +128,7 @@ export class Home extends React.Component {
       this.state.option === "delivery" ? "home-option-clicked" : "home-option";
 
     return (
-      <div>
+      <div class="container-fluid">
         <div class="jumbotron row" style={{ "background-color": "white" }}>
           <div class="container" style={{ "margin-top": "57px" }}>
             <div class="row">
