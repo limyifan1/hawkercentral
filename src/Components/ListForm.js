@@ -8,6 +8,7 @@ import Select from "react-select";
 import Item from "./Item";
 import placeholder from "../placeholder.png";
 import Component from "../Components";
+import Jimp from "jimp";
 
 import { withRouter } from "react-router-dom";
 
@@ -186,7 +187,7 @@ export class ListForm extends React.Component {
       latitude: 1.3521,
       unit: "",
       delivery_option: false,
-      pickup_option: false,
+      pickup_option: true,
       delivery: [],
       cuisineValue: [],
       call: false,
@@ -209,6 +210,8 @@ export class ListForm extends React.Component {
     this.handleRegionChange = this.handleRegionChange.bind(this);
     this.handleMultiChange = this.handleMultiChange.bind(this);
     this.handleCuisineChange = this.handleCuisineChange.bind(this);
+    // this.handleImageAsFile = this.handleImageAsFile.bind(this);
+    this.handleFireBaseUpload = this.handleFireBaseUpload.bind(this);
   }
 
   componentWillMount() {
@@ -395,48 +398,100 @@ export class ListForm extends React.Component {
       this.setState({ menu: true });
     }
   };
+
   handleImageAsFile = (event) => {
     event.preventDefault();
     const image = event.target.files[0];
     const name = event.target.name;
     this.setState({ [name]: image });
-    console.log(name);
-    this.handleFireBaseUpload(image, name);
-  };
-
-  handleFireBaseUpload = (image, name) => {
-    // event.preventDefault()
-    // alert('start of upload')
+    console.log(name, image);
     if (image !== undefined) {
       var date = new Date();
       var timestamp = date.getTime();
       var newName = timestamp + "_" + image.name;
-      const uploadTask = storage.ref(`/images/${newName}`).put(image);
-      name = "image" + name.slice(-1);
-      console.log(name);
-      uploadTask.on(
-        "state_changed",
-        (snapShot) => {
-          //takes a snap shot of the process as it is happening
-          console.log(snapShot);
-        },
-        (err) => {
-          //catches the errors
-          console.log(err);
-        },
-        () => {
-          // gets the functions from storage refences the image storage in firebase by the children
-          // gets the download url then sets the image from firebase as the value for the imgUrl key:
-          storage
-            .ref("images")
-            .child(newName)
-            .getDownloadURL()
-            .then((fireBaseUrl) => {
-              this.setState({ [name]: fireBaseUrl });
-            });
-        }
-      );
+      var reader = new FileReader();
+      reader.readAsArrayBuffer(image);
+      reader.onload = (event) => {
+        var blob = new Blob([event.target.result]); // create blob...
+        window.URL = window.URL || window.webkitURL;
+        var blobURL = window.URL.createObjectURL(blob); // and get it's URL
+
+        // helper Image object
+        var image = new Image();
+        image.src = blobURL;
+        //preview.appendChild(image); // preview commented out, I am using the canvas instead
+        this.handleFireBaseUpload(image, newName, name);
+      };
     }
+  };
+
+  handleFireBaseUpload = (image, newName, name) => {
+    image.onload = () => {
+      // have to wait till it's loaded
+      Jimp.read(image.src).then((image) => {
+        image.quality(70);
+        console.log(image);
+        image.getBase64(Jimp.AUTO, (err, res) => {
+          // console.log(res);
+          const uploadTask = storage
+            .ref(`/images/${newName}`)
+            .putString(res, "data_url");
+          uploadTask.on(
+            "state_changed",
+            (snapShot) => {
+              //takes a snap shot of the process as it is happening
+              console.log(snapShot);
+            },
+            (err) => {
+              //catches the errors
+              console.log(err);
+            },
+            () => {
+              // gets the functions from storage refences the image storage in firebase by the children
+              // gets the download url then sets the image from firebase as the value for the imgUrl key:
+              name = "image" + name.slice(-1);
+              storage
+                .ref("images")
+                .child(newName)
+                .getDownloadURL()
+                .then((fireBaseUrl) => {
+                  // console.log(fireBaseUrl);
+                  this.setState({ [name]: fireBaseUrl });
+                });
+            }
+          );
+        });
+      });
+    };
+    // event.preventDefault()
+    // alert('start of upload')
+    // Jimp.read(url).then((image) => {
+    //     image.quality(80); // some value of 'quality'
+    //     const uploadTask = storage.ref(`/images/${newName}`).put(image);
+    //     name = "image" + name.slice(-1);
+    //     uploadTask.on(
+    //       "state_changed",
+    //       (snapShot) => {
+    //         //takes a snap shot of the process as it is happening
+    //         console.log(snapShot);
+    //       },
+    //       (err) => {
+    //         //catches the errors
+    //         console.log(err);
+    //       },
+    //       () => {
+    //         // gets the functions from storage refences the image storage in firebase by the children
+    //         // gets the download url then sets the image from firebase as the value for the imgUrl key:
+    //         storage
+    //           .ref("images")
+    //           .child(newName)
+    //           .getDownloadURL()
+    //           .then((fireBaseUrl) => {
+    //             this.setState({ [name]: fireBaseUrl });
+    //           });
+    //       }
+    //     );
+    // })
   };
 
   async getFirestoreData() {
@@ -631,7 +686,7 @@ export class ListForm extends React.Component {
                       >
                         <div
                           class="custom-file"
-                          onChange={this.handleImageAsFile}
+                          onChange={(event) => this.handleImageAsFile(event)}
                           style={{ "margin-top": "10px" }}
                         >
                           {this.state.image1 ? (
@@ -949,7 +1004,16 @@ export class ListForm extends React.Component {
               >
                 <form>
                   <div class="card-body">
-                    <h5 class="card-title create-title">Stall Details</h5>
+                    <hr
+                      style={{
+                        color: "black",
+                        backgroundColor: "black",
+                        height: 3,
+                      }}
+                    />{" "}
+                    <h5 class="card-title create-title">
+                      Step 1: Stall Details (Important)
+                    </h5>
                     <h6 class="card-subtitle mb-2 text-muted create-title">
                       Please enter more details regarding your stall listing.{" "}
                     </h6>
@@ -974,6 +1038,25 @@ export class ListForm extends React.Component {
                       {this.cuisineSearch()}
                     </div>
                     <div class="form-group create-title">
+                      <label for="unit">Contact Number: </label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="basic-addon1">
+                            +65
+                          </span>
+                        </div>
+                        <input
+                          onChange={this.handleChange}
+                          value={this.state.contact}
+                          type="number"
+                          class="form-control"
+                          name="contact"
+                          placeholder="9xxxxxxx"
+                          required
+                        ></input>
+                      </div>
+                    </div>
+                    <div class="form-group create-title">
                       <label for="postalcode">Postal Code</label>
                       <div class="input-group">
                         <input
@@ -984,6 +1067,7 @@ export class ListForm extends React.Component {
                           name="postal"
                           placeholder="Enter Postal Code"
                           min="0"
+                          required
                         ></input>
                       </div>
                     </div>
@@ -1024,6 +1108,46 @@ export class ListForm extends React.Component {
                         placeholder="E.g. Best Chicken Rice in town"
                       ></input>
                     </div>
+                    <div class="form-group create-title">
+                      <label for="description">
+                        Self-Collection and/or Delivery? <b>(Important)</b>
+                      </label>
+                      <div class="form-check create-title">
+                        <label class="checkbox-inline">
+                          <input
+                            onChange={this.handleChange}
+                            type="checkbox"
+                            checked={this.state.pickup_option}
+                            value={this.state.pickup_option}
+                            name="pickup_option"
+                            class="form-check-input"
+                          ></input>
+                          Self-Collection
+                        </label>
+                        <br />
+                        <label class="checkbox-inline">
+                          <input
+                            onChange={this.handleChange}
+                            type="checkbox"
+                            checked={this.state.delivery_option}
+                            name="delivery_option"
+                            class="form-check-input"
+                          ></input>
+                          Delivery
+                        </label>
+                        <br />
+                      </div>
+                    </div>
+                    <hr
+                      style={{
+                        color: "black",
+                        backgroundColor: "black",
+                        height: 3,
+                      }}
+                    />{" "}
+                    <h5 class="card-title create-title">
+                      Step 2: Additional Details (Optional)
+                    </h5>
                     <div class="form-group create-title">
                       <label for="description_detail">
                         Additional Details{" "}
@@ -1069,7 +1193,6 @@ export class ListForm extends React.Component {
                         </div>
                       </div>
                     </div>
-
                     <div class="form-group create-title">
                       <label for="website">
                         Website / Facebook/ Google Listing Link
@@ -1095,36 +1218,6 @@ export class ListForm extends React.Component {
                         placeholder="E.g. Monday: 7:00 to 20:00"
                         rows="3"
                       ></textarea>
-                    </div>
-                    <div class="form-group create-title">
-                      <label for="description">
-                        Self-Collection or Delivery? <b>(Important)</b>
-                      </label>
-                      <div class="form-check create-title">
-                        <label class="checkbox-inline">
-                          <input
-                            onChange={this.handleChange}
-                            type="checkbox"
-                            checked={this.state.pickup_option}
-                            value={this.state.pickup_option}
-                            name="pickup_option"
-                            class="form-check-input"
-                          ></input>
-                          Self-Collection
-                        </label>
-                        <br />
-                        <label class="checkbox-inline">
-                          <input
-                            onChange={this.handleChange}
-                            type="checkbox"
-                            checked={this.state.delivery_option}
-                            name="delivery_option"
-                            class="form-check-input"
-                          ></input>
-                          Delivery
-                        </label>
-                        <br />
-                      </div>
                     </div>
                     {this.state.delivery_option === false ? null : (
                       <div>
@@ -1236,7 +1329,6 @@ export class ListForm extends React.Component {
                         <br />
                       </div>
                     )}
-
                     <div class="create-title">
                       <Button
                         class="shadow-sm"
@@ -1594,26 +1686,6 @@ export class ListForm extends React.Component {
                       </div>
                     ) : null}
                     <br />
-
-                    <div class="form-group create-title">
-                      <label for="unit">Contact Number: </label>
-
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text" id="basic-addon1">
-                            +65
-                          </span>
-                        </div>
-                        <input
-                          onChange={this.handleChange}
-                          value={this.state.contact}
-                          type="number"
-                          class="form-control"
-                          name="contact"
-                          placeholder="9xxxxxxx"
-                        ></input>
-                      </div>
-                    </div>
                     <div class="form-group create-title">
                       <label for="unit">WeChat ID(微信号): </label>
                       <div class="input-group">

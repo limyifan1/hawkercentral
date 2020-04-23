@@ -209,6 +209,7 @@ export class Popup extends React.Component {
             width: "50px",
             alignText: "center",
             fontSize: "10px",
+            cursor: "pointer"
           }}
         >
           Edit
