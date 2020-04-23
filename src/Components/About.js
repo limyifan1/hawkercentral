@@ -53,7 +53,7 @@ export class About extends React.Component {
 
   render() {
     return (
-      <div>
+      <div class="container-fluid">
         <div class="jumbotron row" style={{ "background-color": "white" }}>
           <div class="row " style={{ "margin-top": "57px" }}>
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
