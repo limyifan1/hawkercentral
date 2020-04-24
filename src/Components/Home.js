@@ -1,4 +1,5 @@
 import React, { PropTypes } from "react";
+import classnames from "classnames";
 import Component from "../Components";
 import Carousel from "react-multi-carousel";
 import home from "../home (1).png";
@@ -6,6 +7,8 @@ import Item from "./Item";
 import i_want from "../i_want.jpeg";
 import delivery from "../delivery.jpeg";
 import self_collect from "../self_collect.jpeg";
+
+import "./Home.css";
 
 const responsive = {
   superLargeDesktop: {
@@ -30,19 +33,15 @@ const responsive = {
   },
 };
 
-export class Home extends React.Component {
-  constructor(props) {
-    super(props);
+const SELF_COLLECT_OPTION = "selfcollect";
+const HOME_DELIVERY_OPTION = "delivery";
 
-    this.state = {
-      data: [],
-      option: "",
-      retrieved: false,
-    };
-
-    this.handleCollect = this.handleCollect.bind(this);
-    this.handleDelivery = this.handleDelivery.bind(this);
-  }
+export class Home extends React.PureComponent {
+  state = {
+    data: [],
+    option: "",
+    retrieved: false,
+  };
 
   componentWillMount() {
     // this.retrieveData();
@@ -91,21 +90,21 @@ export class Home extends React.Component {
   //     return error;
   //   }
   // };
-  handleCollect() {
-    this.setState({ option: "selfcollect" });
-  }
-  handleDelivery() {
-    this.setState({ option: "delivery" });
-  }
+  handleCollect = () => {
+    this.setState({ option: SELF_COLLECT_OPTION });
+  };
+  handleDelivery = () => {
+    this.setState({ option: HOME_DELIVERY_OPTION });
+  };
 
   render() {
     let result = {
       all: [],
     };
     if (this.state.retrieved) {
-      this.state.all.forEach(function (data) {
-        result["all"].push(
-          <p style={{ padding: "10px", width: "200px" }}>
+      this.state.all.forEach((data) => {
+        result.all.push(
+          <p style={{ padding: "10px", width: "200px" }} key={data["id"]}>
             <Item
               promo={data["promo"]}
               id={data["id"]}
@@ -119,73 +118,57 @@ export class Home extends React.Component {
       });
     }
 
-    let selfcollect =
-      this.state.option === "selfcollect"
-        ? "home-option-clicked"
-        : "home-option";
-
-    let delivery_option =
-      this.state.option === "delivery" ? "home-option-clicked" : "home-option";
-
     return (
-      <div class="container-fluid pt-4">
-        <div class="row pt-5" style={{ "background-color": "white" }}>
-          <div class="container" style={{ "margin-top": "57px" }}>
+      <div class="container-fluid" className="home">
+        <div class="jumbotron row">
+          <div class="container">
+            {/* //       <div class="container-fluid pt-4">
+//         <div class="row pt-5" style={{ "background-color": "white" }}>
+//           <div class="container" style={{ "margin-top": "57px" }}> */}
             <div class="row">
               <div class="col">
-                <img alt="" class="home-banner" src={home} />
+                <img
+                  alt="Cut the middlemen - Save our local F&amp;B"
+                  class="home-banner"
+                  src={home}
+                />
               </div>
-              <div
-                class="col-xs-6 col-sm-6 col-md-6 col-lg-6 align-items-center right-items"
-                style={{ textAlign: "center" }}
-              >
+              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 align-items-center">
                 <br />
                 <br />
-                <img alt="" class="home-iwant" src={i_want} />
-                <br />
-                <br />
-                <span class="row d-none d-md-inline-block">
-                  <span class="col">
-                    <img
+                <img alt="I want..." class="home-iwant" src={i_want} />
+
+                <div class="row justify-content-center collect-options">
+                  <div className="col-sm-12 col-md-auto">
+                    <button
+                      type="button"
                       onClick={this.handleCollect}
-                      alt=""
-                      class={selfcollect}
-                      src={self_collect}
-                      style={{ width: "30%" }}
-                    />
-                  </span>
-                  <span class="col">
-                    <img
-                      alt=""
+                      className={classnames({
+                        clicked: this.state.option === SELF_COLLECT_OPTION,
+                      })}
+                    >
+                      <img alt="Self Collect" src={self_collect} />
+                    </button>
+                  </div>
+
+                  <div className="col-sm-12 col-md-auto">
+                    <button
+                      type="button"
                       onClick={this.handleDelivery}
-                      class={delivery_option}
-                      src={delivery}
-                      style={{ width: "30%" }}
-                    />
-                  </span>
-                </span>
-                <span class="row d-inline-block d-md-none">
-                  <span>
-                    <img
-                      alt=""
-                      onClick={this.handleCollect}
-                      class={selfcollect}
-                      src={self_collect}
-                    />
-                  </span>
-                  <span>
-                    <img
-                      alt=""
-                      onClick={this.handleDelivery}
-                      class={delivery_option}
-                      src={delivery}
-                    />
-                  </span>
-                </span>
+                      className={classnames({
+                        clicked: this.state.option === HOME_DELIVERY_OPTION,
+                      })}
+                    >
+                      <img alt="Home Delivery" src={delivery} />
+                    </button>
+                  </div>
+                </div>
                 <br />
                 <br />
+
                 <div>
-                  {this.state.option === "" ? (
+                  {renderPostalCodeForm(this.state.option)}
+                  {/* {this.state.option === "" ? (
                     <span class=" main-caption">
                       choose <b>da bao</b> or <b>delivery</b>
                     </span>
@@ -205,7 +188,25 @@ export class Home extends React.Component {
                         <Component.Search option={this.state.option} />
                       </span>
                     </span>
-                  )}
+                  )} */}
+                  <br />
+                  <br />
+                  <br />
+                  <div class="container-fluid">
+
+                  The Smart Local (TSL) has informed us that they disapprove of
+                  hawker listings we scraped from their website and that our
+                  images were being hosted on their end, incurring costs for
+                  them. We wish to apologise to their team that has put in so
+                  much work putting together hawker listings. We are
+                  unreservedly sorry to TSL.
+                  <br />
+                  <br />
+                  Hence, we have removed all of those listings. Here is a link
+                  to their food directory if you would like to access it! (
+                  <a href="https://thesmartlocal.com/delivery">TSL Directory</a>
+                  )We will work to restore more listings soon. <br />
+                  </div>
                 </div>
               </div>
             </div>
@@ -304,8 +305,34 @@ export class Home extends React.Component {
   }
 }
 
-export default Home;
+function renderPostalCodeForm(option) {
+  switch (option) {
+    case "":
+      return (
+        <span class=" main-caption">
+          choose <b>da bao</b> or <b>delivery</b>
+        </span>
+      );
 
+    case HOME_DELIVERY_OPTION:
+    case SELF_COLLECT_OPTION:
+      return (
+        <span class="label label-default main-caption">
+          <span class="main-caption">
+            now enter your <strong>postal code</strong>
+            <br />
+            <br />
+            <Component.Search option={option} />
+          </span>
+        </span>
+      );
+    default:
+  }
+}
+
+export default Home;
+{
+  /* 
 // <img src={require('../dinner.png')} class="card-img card-img-top" style={{"max-width":"100%", "height":"auto", "padding":"20px 10px 1px"}}/>
 //                   <div class="card-body">
 //                     <h3 class="card-title">Order food from your favorite local hawkers</h3>
@@ -326,4 +353,5 @@ export default Home;
 //                   <img src={require('../dinner.png')} class="card-img card-img-top" style={{"max-width":"100%", "height":"auto", "padding":"20px 10px 1px"}}/>
 //                   <div class="card-body">
 //                     <h3 class="card-title">Order food from your favorite local hawkers</h3>
-//                   </div>
+//                   </div> */
+}
