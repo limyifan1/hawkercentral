@@ -146,7 +146,7 @@ export class SearchAll extends React.Component {
     });
     const select = () => {
       return (
-        <span style={{ zIndex: "-1" }}>
+        <span>
           <Select
             isMulti
             name="name"
