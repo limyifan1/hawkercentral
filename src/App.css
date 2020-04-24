@@ -5,6 +5,7 @@
 
 #menu-link:hover {
   color: #b48300 !important;
+  cursor: pointer;
 }
 
 .center {
@@ -78,6 +79,7 @@
 
 .home-option:hover {
   filter: drop-shadow(1px 1px 7px grey);
+  cursor: pointer;
 }
 
 .home-option-clicked {
@@ -88,8 +90,6 @@
 .main-caption {
   color: #b48300;
 }
-
-
 
 @media (device-height: 568px) and (device-width: 320px) and (-webkit-min-device-pixel-ratio: 2) {
   .banner-img-top {
@@ -520,6 +520,7 @@
 
 figure.effect-bubba {
   background: white;
+  cursor: pointer;
 }
 
 figure.effect-bubba img {
@@ -626,6 +627,7 @@ figure.effect-bubba:hover p {
   cursor: pointer;
   /* border: 1px solid rgba(39, 174, 96, 1); */
   transition: border-color 0.3s ease-in;
+  cursor: pointer;
 }
 .clap:after {
   content: "";
