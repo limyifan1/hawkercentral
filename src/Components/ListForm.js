@@ -1142,89 +1142,7 @@ export class ListForm extends React.Component {
                         </label>
                         <br />
                       </div>
-                    </div>
-                    <hr
-                      style={{
-                        color: "black",
-                        backgroundColor: "black",
-                        height: 3,
-                      }}
-                    />{" "}
-                    <h5 class="card-title create-title">
-                      Step 2: Additional Details (Optional)
-                    </h5>
-                    <div class="form-group create-title">
-                      <label for="description_detail">
-                        Additional Details{" "}
-                      </label>
-                      <textarea
-                        onChange={this.handleChange}
-                        value={this.state.description_detail}
-                        type="text"
-                        class="form-control"
-                        name="description_detail"
-                        placeholder="e.g. For a limited time, buy 3 get 1 free and islandwide delivery"
-                        rows="3"
-                      ></textarea>
-                    </div>
-                    <div class="form-group create-title">
-                      <label for="website">General Promotion (if any) </label>
-                      <div class="form-row">
-                        <div class="col-5">
-                          <small>
-                            Discount <b>(8 chars)</b>
-                          </small>
-                          <input
-                            onChange={this.handleChange}
-                            value={this.state.promo}
-                            name="promo"
-                            type="text"
-                            class="form-control"
-                            placeholder="e.g. 10% or $5 off"
-                            maxlength="8"
-                          />
-                        </div>
-                        <div class="col-7">
-                          <small>Condition (max 40 chars)</small>
-                          <input
-                            onChange={this.handleChange}
-                            value={this.state.condition}
-                            name="condition"
-                            type="text"
-                            class="form-control"
-                            placeholder="e.g. any order / above $20 order size"
-                            maxlength="40"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group create-title">
-                      <label for="website">
-                        Website / Facebook/ Google Listing Link
-                      </label>
-                      <input
-                        onChange={this.handleChange}
-                        value={this.state.website}
-                        type="text"
-                        class="form-control"
-                        name="website"
-                        placeholder="www.example.com"
-                        rows="3"
-                      ></input>
-                    </div>
-                    <div class="form-group create-title">
-                      <label for="description">Opening Hours</label>
-                      <textarea
-                        onChange={this.handleChange}
-                        value={this.state.opening}
-                        type="text"
-                        class="form-control"
-                        name="opening"
-                        placeholder="E.g. Monday: 7:00 to 20:00"
-                        rows="3"
-                      ></textarea>
-                    </div>
-                    {this.state.delivery_option === false ? null : (
+                      {this.state.delivery_option === false ? null : (
                       <div>
                         <div class="card shadow">
                           <div class="card-body">
@@ -1334,6 +1252,88 @@ export class ListForm extends React.Component {
                         <br />
                       </div>
                     )}
+                    </div>
+                    <hr
+                      style={{
+                        color: "black",
+                        backgroundColor: "black",
+                        height: 3,
+                      }}
+                    />{" "}
+                    <h5 class="card-title create-title">
+                      Step 2: Additional Details (Optional)
+                    </h5>
+                    <div class="form-group create-title">
+                      <label for="description_detail">
+                        Additional Details{" "}
+                      </label>
+                      <textarea
+                        onChange={this.handleChange}
+                        value={this.state.description_detail}
+                        type="text"
+                        class="form-control"
+                        name="description_detail"
+                        placeholder="e.g. For a limited time, buy 3 get 1 free and islandwide delivery"
+                        rows="3"
+                      ></textarea>
+                    </div>
+                    <div class="form-group create-title">
+                      <label for="website">General Promotion (if any) </label>
+                      <div class="form-row">
+                        <div class="col-5">
+                          <small>
+                            Discount <b>(8 chars)</b>
+                          </small>
+                          <input
+                            onChange={this.handleChange}
+                            value={this.state.promo}
+                            name="promo"
+                            type="text"
+                            class="form-control"
+                            placeholder="e.g. 10% or $5 off"
+                            maxlength="8"
+                          />
+                        </div>
+                        <div class="col-7">
+                          <small>Condition (max 40 chars)</small>
+                          <input
+                            onChange={this.handleChange}
+                            value={this.state.condition}
+                            name="condition"
+                            type="text"
+                            class="form-control"
+                            placeholder="e.g. any order / above $20 order size"
+                            maxlength="40"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group create-title">
+                      <label for="website">
+                        Website / Facebook/ Google Listing Link
+                      </label>
+                      <input
+                        onChange={this.handleChange}
+                        value={this.state.website}
+                        type="text"
+                        class="form-control"
+                        name="website"
+                        placeholder="www.example.com"
+                        rows="3"
+                      ></input>
+                    </div>
+                    <div class="form-group create-title">
+                      <label for="description">Opening Hours</label>
+                      <textarea
+                        onChange={this.handleChange}
+                        value={this.state.opening}
+                        type="text"
+                        class="form-control"
+                        name="opening"
+                        placeholder="E.g. Monday: 7:00 to 20:00"
+                        rows="3"
+                      ></textarea>
+                    </div>
                     <div class="create-title">
                       <Button
                         class="shadow-sm"
