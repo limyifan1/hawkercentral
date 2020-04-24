@@ -235,7 +235,6 @@ export class Nearby extends React.Component {
                   <div class="">
                     <h2>{this.state.data.name}</h2>
                   </div>
-                  <Component.Popup data={this.state.data} id={this.state.id} />
                   <link rel="stylesheet" href="applause-button.css" />
                   <svg
                     class="bi bi-house-fill"
@@ -373,17 +372,11 @@ export class Nearby extends React.Component {
                           </span>
                         </a>
                       ) : null}
+                      <Component.Popup
+                        data={this.state.data}
+                        id={this.state.id}
+                      />
                     </span>
-                  ) : null}
-                  {this.state.data.lastmodified ? (
-                    <div style={{ color: "grey" }}>
-                      <small>
-                        Last Modified:{" "}
-                        {new Date(
-                          this.state.data.lastmodified.toDate()
-                        ).toDateString()}
-                      </small>
-                    </div>
                   ) : null}
                   {this.state.data.promo ? (
                     <div
