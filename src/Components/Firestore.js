@@ -1,3 +1,8 @@
+// Copyright limyifan1 <limyifan1@gmail.com> 2020. All Rights Reserved.
+// Node module: hawkercentral
+// This file is licensed under the MIT License.
+// License text available at https://opensource.org/licenses/MIT
+
 const firebase = require("firebase");
 require("firebase/firestore");
 

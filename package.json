@@ -51,5 +51,9 @@
   },
   "main": "index.js",
   "author": "limyifan1 <limyifan1@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@loopback/cli": "^2.4.4"
+  },
+  "copyright.owner": "limyifan1 <limyifan1@gmail.com>"
 }
