@@ -352,8 +352,8 @@ export class SearchAll extends React.Component {
               style={{ paddingTop: "56px", width: "100%" }}
             >
               <div class="container" style={{ paddingTop: "27px" }}>
-                <div class="row">
-                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-left">
+                <div class="row justify-content-center">
+                  <div class="col-12 col-sm-10 col-md-6">
                     <h3>All Listings</h3>
                   </div>
                 </div>
