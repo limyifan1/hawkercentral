@@ -1787,7 +1787,7 @@ export class ListForm extends React.Component {
                           backgroundColor: "#b48300",
                           borderColor: "#b48300",
                         }}
-                        type="Submi"
+                        type="Submit"
                         // onClick={this.handleSubmit}
                       >
                         Submit
