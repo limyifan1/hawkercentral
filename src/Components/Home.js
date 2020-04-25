@@ -101,7 +101,7 @@ export class Home extends React.PureComponent {
   handleDelivery = () => {
     this.setState({ option: HOME_DELIVERY_OPTION });
   };
-  
+
 
   render() {
     let result = {
@@ -139,7 +139,7 @@ export class Home extends React.PureComponent {
               <div class="col">
                 <img
                   alt="Cut the middlemen - Save our local F&amp;B"
-                  class="home-banner"
+                  class="img-fluid"
                   src={home}
                 />
               </div>
@@ -170,25 +170,25 @@ export class Home extends React.PureComponent {
                   </span>
                 </span>
                 <span class="row d-inline-block d-md-none">
-                  <span>
+                  <button>
                     <img
                       alt=""
                       onClick={this.handleCollect}
                       class={selfcollect}
                       src={self_collect}
                     />
-                  </span>
-                  <span>
+                  </button>
+                  <button>
                     <img
                       alt=""
                       onClick={this.handleDelivery}
                       class={delivery_option}
                       src={delivery}
                     />
-                  </span>
+                  </button>
                 </span>
 
-{/* 
+{/*
                 <div class="row justify-content-center collect-options">
                   <div className="col-sm-12 col-md-auto">
                     <button
@@ -391,7 +391,7 @@ function renderPostalCodeForm(option) {
 
 export default Home;
 {
-  /* 
+  /*
 // <img src={require('../dinner.png')} class="card-img card-img-top" style={{"max-width":"100%", "height":"auto", "padding":"20px 10px 1px"}}/>
 //                   <div class="card-body">
 //                     <h3 class="card-title">Order food from your favorite local hawkers</h3>

@@ -3,6 +3,13 @@
   color: "grey" !important;
 } */
 
+button {
+  border: none;
+}
+button:focus {
+  outline: none !important;
+}
+
 #menu-link:hover {
   color: #b48300 !important;
   cursor: pointer;
@@ -83,7 +90,7 @@
 }
 
 .home-option-clicked {
-  width: 170px;
+  width: 150px;
   filter: drop-shadow(0px 0px 7px #b48300);
 }
 
