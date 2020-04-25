@@ -13,6 +13,7 @@ import { Spinner } from "react-bootstrap";
 import { db } from "./Firestore";
 import Select from "react-select";
 import firebase from "./Firestore";
+import { h } from "../Helpers";
 
 const analytics = firebase.analytics();
 
@@ -284,14 +285,14 @@ export class Nearby extends React.Component {
       ) {
         // console.log(this.state.cuisineValue[0] === this.state.data[0].cuisine[0])
         var items = this.state.cuisineValue.map((x) => {
-          return x.value;
+          return h.general.ucFirstAllWords(x.value);
         });
 
         filtered = filtered.filter((d) => {
           let toggle = false;
           if (d.cuisine !== undefined) {
             let values = d.cuisine.map((x) => {
-              return x.value;
+              return h.general.ucFirstAllWords(x.value);
             });
             values.forEach((element) => {
               if (items.includes(element)) {
@@ -390,8 +391,8 @@ export class Nearby extends React.Component {
               style={{ paddingTop: "56px", width: "100%" }}
             >
               <div class="container" style={{ paddingTop: "27px" }}>
-                <div class="row">
-                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-left">
+                <div className="row justify-content-center">
+                  <div className="col-12 col-sm-10 col-md-6">
                     {this.state.pickup ? (
                       <h3>
                         Near You at{" "}
@@ -409,8 +410,8 @@ export class Nearby extends React.Component {
                     )}
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7 d-flex justify-content-left">
+                <div className="row justify-content-center mt-4">
+                  <div className="col-12 col-sm-10 col-md-6">
                     <input
                       class="form-control"
                       type="text"
@@ -425,19 +426,13 @@ export class Nearby extends React.Component {
                       onChange={this.handleChange}
                     ></input>
                   </div>
-                  <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                  <div className="col-12 col-sm-10 col-md-5">
                     {this.cuisineSearch()}
                   </div>
                 </div>
-                {result.nearby.length > 0 ? (
-                  <div class="row float-left d-flex justify-content-center justify-content-md-start justify-content-lg-start">
-                    {result.nearby}
-                  </div>
-                ) : (
-                  <div class="row float-left">
-                    <br /> No Results Found
-                  </div>
-                )}
+                <div className="row justify-content-center mt-4">
+                  {result.nearby.length > 0 ? result.nearby : <span className="mt-5">No Results Found</span>}
+                </div>
               </div>
               <div></div>
             </div>
