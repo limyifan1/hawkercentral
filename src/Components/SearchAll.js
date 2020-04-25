@@ -12,6 +12,7 @@ import { db } from "./Firestore";
 import Select from "react-select";
 
 import firebase from "./Firestore";
+import { h } from "../Helpers";
 
 const analytics = firebase.analytics();
 
@@ -254,14 +255,14 @@ export class SearchAll extends React.Component {
       ) {
         // console.log(this.state.cuisineValue[0] === this.state.data[0].cuisine[0])
         var items = this.state.cuisineValue.map((x) => {
-          return x.value;
+          return h.general.ucFirstAllWords(x.value);
         });
 
         filtered = filtered.filter((d) => {
           let toggle = false;
           if (d.cuisine !== undefined) {
             let values = d.cuisine.map((x) => {
-              return x.value;
+              return h.general.ucFirstAllWords(x.value);
             });
             values.forEach((element) => {
               if (items.includes(element)) {
