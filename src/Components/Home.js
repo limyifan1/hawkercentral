@@ -1,3 +1,8 @@
+// Copyright limyifan1 <limyifan1@gmail.com> 2020. All Rights Reserved.
+// Node module: hawkercentral
+// This file is licensed under the MIT License.
+// License text available at https://opensource.org/licenses/MIT
+
 import React, { PropTypes } from "react";
 import classnames from "classnames";
 import Component from "../Components";
@@ -96,6 +101,7 @@ export class Home extends React.PureComponent {
   handleDelivery = () => {
     this.setState({ option: HOME_DELIVERY_OPTION });
   };
+  
 
   render() {
     let result = {
@@ -117,6 +123,10 @@ export class Home extends React.PureComponent {
         );
       });
     }
+    let delivery_option =
+    this.state.option === "delivery" ? "home-option-clicked" : "home-option";
+    let selfcollect =
+    this.state.option === "selfcollect" ? "home-option-clicked" : "home-option";
 
     return (
       <div class="container-fluid" className="home">
@@ -137,7 +147,48 @@ export class Home extends React.PureComponent {
                 <br />
                 <br />
                 <img alt="I want..." class="home-iwant" src={i_want} />
+                <br/>
+                <br/>
+                <span class="row d-none d-md-inline-block">
+                  <span class="col">
+                    <img
+                      onClick={this.handleCollect}
+                      alt=""
+                      class={selfcollect}
+                      src={self_collect}
+                      style={{ width: "30%" }}
+                    />
+                  </span>
+                  <span class="col">
+                    <img
+                      alt=""
+                      onClick={this.handleDelivery}
+                      class={delivery_option}
+                      src={delivery}
+                      style={{ width: "30%" }}
+                    />
+                  </span>
+                </span>
+                <span class="row d-inline-block d-md-none">
+                  <span>
+                    <img
+                      alt=""
+                      onClick={this.handleCollect}
+                      class={selfcollect}
+                      src={self_collect}
+                    />
+                  </span>
+                  <span>
+                    <img
+                      alt=""
+                      onClick={this.handleDelivery}
+                      class={delivery_option}
+                      src={delivery}
+                    />
+                  </span>
+                </span>
 
+{/* 
                 <div class="row justify-content-center collect-options">
                   <div className="col-sm-12 col-md-auto">
                     <button
@@ -164,8 +215,9 @@ export class Home extends React.PureComponent {
                   </div>
                 </div>
                 <br />
+                <br /> */}
                 <br />
-
+                <br />
                 <div>
                   {renderPostalCodeForm(this.state.option)}
                   {/* {this.state.option === "" ? (
@@ -193,19 +245,26 @@ export class Home extends React.PureComponent {
                   <br />
                   <br />
                   <div class="container-fluid">
-
-                  The Smart Local (TSL) has informed us that they disapprove of
-                  hawker listings we scraped from their website and that our
-                  images were being hosted on their end, incurring costs for
-                  them. We wish to apologise to their team that has put in so
-                  much work putting together hawker listings. We are
-                  unreservedly sorry to TSL.
-                  <br />
-                  <br />
-                  Hence, we have removed all of those listings. Here is a link
-                  to their food directory if you would like to access it! (
-                  <a href="https://thesmartlocal.com/delivery">TSL Directory</a>
-                  )We will work to restore more listings soon. <br />
+                    <b>We Are Sorry: </b>
+                    <a href="https://thesmartlocal.com/delivery">
+                      The Smart Local (TSL)
+                    </a>{" "}
+                    has informed us that they disapprove of hawker listings we
+                    scraped from their website and that our images were being
+                    hosted on their end, incurring costs for them. We are very
+                    sorry. We wish to apologise to their team that has put in so
+                    much work putting together hawker listings. We fully
+                    acknowledge our mistake and are unreservedly and truly sorry
+                    to TSL.
+                    <br />
+                    <br />
+                    Hence, we have removed all of those listings. Here is a link
+                    to their amazing food directory if you would like to access
+                    it! (
+                    <a href="https://thesmartlocal.com/delivery">
+                      TSL Directory
+                    </a>
+                    ) We will work to restore more listings soon. <br />
                   </div>
                 </div>
               </div>

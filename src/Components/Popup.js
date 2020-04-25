@@ -1,3 +1,8 @@
+// Copyright limyifan1 <limyifan1@gmail.com> 2020. All Rights Reserved.
+// Node module: hawkercentral
+// This file is licensed under the MIT License.
+// License text available at https://opensource.org/licenses/MIT
+
 import React, { Fragment } from "react";
 import "../App.css";
 import { db, storage } from "./Firestore";
@@ -198,21 +203,58 @@ export class Popup extends React.Component {
 
   render() {
     return (
-      <div>
-        <div
+      <span>
+        {/* <div
           onClick={() => this.setShow()}
           class="d-flex justify-content-center"
           style={{
             border: "2px solid",
-            "border-color": "grey",
-            color: "black",
-            width: "50px",
+            "border-color": "blue",
+            color: "white",
+            backgroundColor: "blue",
+
+            width: "80px",
+            height: "30px",
             alignText: "center",
-            fontSize: "10px",
-            cursor: "pointer"
+            fontSize: "18px",
+            cursor: "pointer",
           }}
         >
           Edit
+        </div> */}
+        <div
+          class="row"
+          style={{ backgroundColor: "", position: "relative", left: "20px" }}
+        >
+          <div
+            onClick={() => this.setShow()}
+            class="d-flex justify-content-center"
+            style={{
+              border: "2px solid",
+              "border-color": "grey",
+              color: "black",
+              width: "60px",
+              alignText: "center",
+              fontSize: "12px",
+              cursor: "pointer",
+              marginTop: "12px",
+            }}
+          >
+            Edit
+          </div>
+
+          {this.props.data.lastmodified ? (
+            <span
+              class="align-items-center col"
+              style={{ postition: "absolute", marginTop: "10px" }}
+            >
+              <small style={{ color: "grey" }}>
+                {" "}
+                Last Modified:{" "}
+                {new Date(this.props.data.lastmodified.toDate()).toDateString()}
+              </small>
+            </span>
+          ) : null}
         </div>
 
         <Modal
@@ -235,7 +277,7 @@ export class Popup extends React.Component {
             />
           </Modal.Body>
         </Modal>
-      </div>
+      </span>
     );
   }
 }

@@ -1,3 +1,8 @@
+// Copyright limyifan1 <limyifan1@gmail.com> 2020. All Rights Reserved.
+// Node module: hawkercentral
+// This file is licensed under the MIT License.
+// License text available at https://opensource.org/licenses/MIT
+
 import React, { Fragment } from "react";
 import "../App.css";
 import Item from "./Item";
@@ -141,7 +146,7 @@ export class SearchAll extends React.Component {
     });
     const select = () => {
       return (
-        <span style={{ zIndex: "5" }}>
+        <span>
           <Select
             isMulti
             name="name"

@@ -1,3 +1,8 @@
+// Copyright limyifan1 <limyifan1@gmail.com> 2020. All Rights Reserved.
+// Node module: hawkercentral
+// This file is licensed under the MIT License.
+// License text available at https://opensource.org/licenses/MIT
+
 import React from "react";
 import "../App.css";
 import "react-multi-carousel/lib/styles.css";
@@ -230,7 +235,6 @@ export class Nearby extends React.Component {
                   <div class="">
                     <h2>{this.state.data.name}</h2>
                   </div>
-                  <Component.Popup data={this.state.data} id={this.state.id} />
                   <link rel="stylesheet" href="applause-button.css" />
                   <svg
                     class="bi bi-house-fill"
@@ -323,6 +327,33 @@ export class Nearby extends React.Component {
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="black"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="feather feather-globe"
+                    style={{marginRight:"5px"}}
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                  </svg>
+                  {this.state.data.website ? (
+                    this.state.data.website.slice(0, 4) === "http" ? (
+                      <a href={this.state.data.website}>Website Link</a>
+                    ) : (
+                      <a href={"https://" + this.state.data.website}>
+                        Website Link
+                      </a>
+                    )
+                  ) : null}
+                  <br />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="black"
                     stroke-width="3"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -368,18 +399,13 @@ export class Nearby extends React.Component {
                           </span>
                         </a>
                       ) : null}
+                      <Component.Popup
+                        data={this.state.data}
+                        id={this.state.id}
+                      />
                     </span>
                   ) : null}
-                  {this.state.data.lastmodified ? (
-                    <div style={{ color: "grey" }}>
-                      <small>
-                        Last Modified:{" "}
-                        {new Date(
-                          this.state.data.lastmodified.toDate()
-                        ).toDateString()}
-                      </small>
-                    </div>
-                  ) : null}
+                  <br/>
                   {this.state.data.promo ? (
                     <div
                       class="card shadow"
@@ -463,7 +489,7 @@ export class Nearby extends React.Component {
                   <h6 style={{ marginBottom: "0px" }}>
                     <b> Link </b>
                   </h6>
-                  <p style={{ marginBottom: "20px" }}>
+                  {/* <p style={{ marginBottom: "20px" }}>
                     {this.state.data.website ? (
                       this.state.data.website.slice(0, 4) === "http" ? (
                         <a href={this.state.data.website}>Website Link</a>
@@ -473,7 +499,7 @@ export class Nearby extends React.Component {
                         </a>
                       )
                     ) : null}
-                  </p>
+                  </p> */}
                   <p style={{ color: "grey" }}>
                     <small>
                       Are you the owner? Email foodleh@outlook.com for
