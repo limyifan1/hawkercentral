@@ -171,7 +171,7 @@ export class Home extends React.PureComponent {
                   </span>
                 </span>
                 <span class="row d-inline-block d-md-none">
-                  <button>
+                  <button style={{"backgroundColor":"white"}}>
                     <img
                       alt=""
                       onClick={this.handleCollect}
@@ -179,7 +179,7 @@ export class Home extends React.PureComponent {
                       src={self_collect}
                     />
                   </button>
-                  <button>
+                  <button style={{"backgroundColor":"white"}}>
                     <img
                       alt=""
                       onClick={this.handleDelivery}
@@ -189,7 +189,7 @@ export class Home extends React.PureComponent {
                   </button>
                 </span>
 
-                <div class="row justify-content-center collect-options">
+                {/* <div class="row justify-content-center collect-options">
                   <div className="col-sm-12 col-md-auto">
                     <button
                       type="button"
@@ -213,9 +213,7 @@ export class Home extends React.PureComponent {
                       <img alt="Home Delivery" src={delivery} />
                     </button>
                   </div>
-                </div>
-                <br />
-                <br /> */}
+                </div> */}
                 <br />
                 <br />
                 <div>
