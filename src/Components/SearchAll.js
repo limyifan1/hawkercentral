@@ -288,10 +288,9 @@ export class SearchAll extends React.Component {
         });
       }
 
-        filtered = filtered.filter(
-          (d) => {
-            return !d.url.includes("thesmartlocal")}
-        );
+      filtered = filtered.filter((d) => {
+        return !d.url.includes("thesmartlocal");
+      });
 
       filtered = filtered.sort((a, b) => b.lastmodified - a.lastmodified);
 
@@ -309,11 +308,7 @@ export class SearchAll extends React.Component {
       result.nearby = filtered.map((data) => {
         return (
           <span>
-            <div
-            // class="nearby-card col-md-4"
-            // class="d-inline-block d-md-none"
-            // style={{width:"100%"}}
-            >
+            <div>
               <Item
                 promo={data["promo"]}
                 id={data["id"]}
@@ -325,25 +320,6 @@ export class SearchAll extends React.Component {
                 // distance={data["distance"]}
               />
             </div>
-            {/* <div
-              class="d-none d-md-inline-block"
-              style={{ padding: "6px", width: "220px" }}
-            >
-              <Item
-                promo={data["promo"]}
-                id={data["id"]}
-                name={data["name"]}
-                street={data["street"]}
-                pic={data["url"]}
-                summary={data["description"]}
-                distance={distance_calc(
-                  data["latitude"],
-                  data["longitude"],
-                  latitude,
-                  longitude
-                ).toString()}
-              />
-            </div> */}
           </span>
         );
       });
@@ -384,7 +360,11 @@ export class SearchAll extends React.Component {
                   </div>
                 </div>
                 <div className="row justify-content-center mt-4">
-                  {result.nearby.length > 0 ? result.nearby : <span class="mt-5">No Results Found</span>}
+                  {result.nearby.length > 0 ? (
+                    result.nearby
+                  ) : (
+                    <span class="mt-5">No Results Found</span>
+                  )}
                 </div>
               </div>
               <div></div>
