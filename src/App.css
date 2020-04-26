@@ -68,17 +68,13 @@ button:focus {
 }
 
 .card-title {
-  line-height: 1em;
+  /* line-height: 3em; */
   /* height: 10em;  */
-  overflow: hidden; 
-  height: 50px;
+  /* overflow: hidden;  */
+  height: 38px;
   word-break:break-word !important;
-  /* overflow: hidden; */
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2; 
-  -webkit-box-orient: vertical;
 }
+
 .card-text {
   word-break:break-word !important;
 }
