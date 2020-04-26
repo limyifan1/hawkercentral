@@ -1043,7 +1043,7 @@ export class ListForm extends React.Component {
                       {this.cuisineSearch()}
                     </div>
                     <div class="form-group create-title">
-                      <label for="unit">Contact Number: </label>
+                      <label for="unit">Contact Number (Enter 0 if none): </label>
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text" id="basic-addon1">
