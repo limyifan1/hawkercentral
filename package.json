@@ -33,7 +33,13 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "lint:fix": "npm run lint:eslint:fix && npm run lint:prettier:fix",
+    "lint:eslint": "eslint src/**.js",
+    "lint:eslint:fix": "npm run lint:eslint -- --fix",
+    "lint:prettier": "prettier src/**.js --check",
+    "lint:prettier:fix": "npm run lint:prettier -- --write"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -54,7 +60,9 @@
   "author": "limyifan1 <limyifan1@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@loopback/cli": "^2.4.4"
+    "@loopback/cli": "^2.4.4",
+    "eslint": "^6.8.0",
+    "prettier": "^2.0.5"
   },
   "copyright.owner": "limyifan1 <limyifan1@gmail.com>"
 }
