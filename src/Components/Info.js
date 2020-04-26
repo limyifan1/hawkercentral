@@ -486,9 +486,6 @@ export class Nearby extends React.Component {
                   >
                     {this.state.data.opening}
                   </p>
-                  <h6 style={{ marginBottom: "0px" }}>
-                    <b> Link </b>
-                  </h6>
                   {/* <p style={{ marginBottom: "20px" }}>
                     {this.state.data.website ? (
                       this.state.data.website.slice(0, 4) === "http" ? (

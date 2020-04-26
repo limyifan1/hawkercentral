@@ -113,17 +113,17 @@ export class Item extends React.Component {
             <figcaption>
               <div class="card-body" style={{ width: "100%", height: "100%"}}>
                 {this.props.name ? (
-                  <h6 class="card-title d-flex justify-content-center" style={{ textAlign:"center", width: "100%"}}>
-                    {this.props.name.length > 28
-                      ? this.props.name.slice(0, 28) + "..."
+                  <h7 class="card-title d-flex justify-content-center" style={{ textAlign:"center", width: "100%"}}>
+                    {this.props.name.length > 25
+                      ? this.props.name.slice(0, 25) + "..."
                       : this.props.name}
-                  </h6>
+                  </h7>
                 ) : (
                   <h6 class="card-title">Sample Name</h6>
                 )}
 
                 {this.props.summary ? (
-                  <p class="card-text d-flex justify-content-center" style={{ lineHeight: "1.0" }}>
+                  <p class="card-text d-flex justify-content-center" style={{ lineHeight: "1.0"}}>
                     <small>
                       {this.props.summary.length > 35
                         ? this.props.summary.slice(0, 35) + "..."
