@@ -136,7 +136,7 @@ export class Nearby extends React.Component {
     let temp;
     await db
       .collection("hawkers")
-      .limit(100)
+      // .limit(100)
       .get()
       .then((snapshot) => {
         snapshot.forEach((doc) => {
