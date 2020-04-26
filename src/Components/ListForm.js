@@ -435,6 +435,7 @@ export class ListForm extends React.Component {
       // have to wait till it's loaded
       Jimp.read(image.src).then((image) => {
         image.quality(50);
+        image.resize(Jimp.AUTO, 256)
         console.log(image);
         image.getBase64(Jimp.AUTO, (err, res) => {
           // console.log(res);
