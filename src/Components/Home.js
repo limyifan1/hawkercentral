@@ -249,7 +249,7 @@ export class Home extends React.PureComponent {
                       The Smart Local (TSL)
                     </a>{" "}
                     which had images hosted on their end, incurring costs for
-                    them. We are very sorry for using their inital data and
+                    them. We are very sorry for using their initial data and
                     should have asked for permission before we did so. We wish
                     to apologise to their team that has put in so much work
                     putting together hawker listings. We fully acknowledge our
