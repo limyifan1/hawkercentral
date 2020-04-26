@@ -102,7 +102,6 @@ export class Home extends React.PureComponent {
     this.setState({ option: HOME_DELIVERY_OPTION });
   };
 
-
   render() {
     let result = {
       all: [],
@@ -124,9 +123,11 @@ export class Home extends React.PureComponent {
       });
     }
     let delivery_option =
-    this.state.option === "delivery" ? "home-option-clicked" : "home-option";
+      this.state.option === "delivery" ? "home-option-clicked" : "home-option";
     let selfcollect =
-    this.state.option === "selfcollect" ? "home-option-clicked" : "home-option";
+      this.state.option === "selfcollect"
+        ? "home-option-clicked"
+        : "home-option";
 
     return (
       <div class="container-fluid" className="home">
@@ -147,8 +148,8 @@ export class Home extends React.PureComponent {
                 <br />
                 <br />
                 <img alt="I want..." class="home-iwant" src={i_want} />
-                <br/>
-                <br/>
+                <br />
+                <br />
                 <span class="row d-none d-md-inline-block">
                   <span class="col">
                     <img
@@ -170,7 +171,7 @@ export class Home extends React.PureComponent {
                   </span>
                 </span>
                 <span class="row d-inline-block d-md-none">
-                  <button>
+                  <button style={{"backgroundColor":"white"}}>
                     <img
                       alt=""
                       onClick={this.handleCollect}
@@ -178,7 +179,7 @@ export class Home extends React.PureComponent {
                       src={self_collect}
                     />
                   </button>
-                  <button>
+                  <button style={{"backgroundColor":"white"}}>
                     <img
                       alt=""
                       onClick={this.handleDelivery}
@@ -188,8 +189,7 @@ export class Home extends React.PureComponent {
                   </button>
                 </span>
 
-{/*
-                <div class="row justify-content-center collect-options">
+                {/* <div class="row justify-content-center collect-options">
                   <div className="col-sm-12 col-md-auto">
                     <button
                       type="button"
@@ -213,9 +213,7 @@ export class Home extends React.PureComponent {
                       <img alt="Home Delivery" src={delivery} />
                     </button>
                   </div>
-                </div>
-                <br />
-                <br /> */}
+                </div> */}
                 <br />
                 <br />
                 <div>
@@ -246,21 +244,21 @@ export class Home extends React.PureComponent {
                   <br />
                   <div class="container-fluid">
                     <b>We Are Sorry: </b>
+                    In our initial launch, we scraped hawker listings from{" "}
                     <a href="https://thesmartlocal.com/delivery">
                       The Smart Local (TSL)
                     </a>{" "}
-                    has informed us that they disapprove of hawker listings we
-                    scraped from their website and that our images were being
-                    hosted on their end, incurring costs for them. We are very
-                    sorry. We wish to apologise to their team that has put in so
-                    much work putting together hawker listings. We fully
-                    acknowledge our mistake and are unreservedly and truly sorry
-                    to TSL.
+                    which had images hosted on their end, incurring costs for
+                    them. We are very sorry for using their data and
+                    should have asked for permission before we did so. We wish
+                    to apologise to their team that has put in so much work
+                    putting together hawker listings. We fully acknowledge our
+                    mistake and are unreservedly and truly sorry to TSL.
                     <br />
                     <br />
-                    Hence, we have removed all of those listings. Here is a link
-                    to their amazing food directory if you would like to access
-                    it! (
+                    We have removed those listings within a day of our launch.
+                    Please go and check out their amazing food directory which
+                    you can find here: (
                     <a href="https://thesmartlocal.com/delivery">
                       TSL Directory
                     </a>
