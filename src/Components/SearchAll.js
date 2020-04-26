@@ -75,6 +75,8 @@ function distance_calc(lat1, lon1, lat2, lon2) {
   }
 }
 
+let searchTimer = null
+
 export class SearchAll extends React.Component {
   constructor(props) {
     super(props);
@@ -175,8 +177,22 @@ export class SearchAll extends React.Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    this.setState({ [name]: value });
+    if (this.clearTimeout) clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      this.setState({ [name]: value });
+    }, 300);
   };
+
+  // handleChange = (event) => {
+  // 	const self = this;
+  // 	const target = event.target;
+  // 	const value = target.value;
+  // 	const name = target.name;
+  // 	clearTimeout(searchTimer);
+  // 	searchTimer = setTimeout(() => {
+  // 		self.setState({ [name]: value });
+  // 	}, 5000);
+  // }
 
   // retrieveData = async (query) => {
   //   let string = {
@@ -344,7 +360,7 @@ export class SearchAll extends React.Component {
                     <input
                       class="form-control"
                       type="text"
-                      value={this.state.search}
+                      // value={this.state.search}
                       name="search"
                       placeholder="   Search by Name, Category, Food, Items e.g. Chicken Rice"
                       style={{
