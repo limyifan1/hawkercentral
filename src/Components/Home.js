@@ -7,7 +7,7 @@ import React, { PropTypes } from "react";
 import classnames from "classnames";
 import Component from "../Components";
 import Carousel from "react-multi-carousel";
-import home from "../home (1).png";
+import home from "../home (2).png";
 import Item from "./Item";
 import i_want from "../i_want.jpeg";
 import delivery from "../delivery.jpeg";
@@ -249,7 +249,7 @@ export class Home extends React.PureComponent {
                       The Smart Local (TSL)
                     </a>{" "}
                     which had images hosted on their end, incurring costs for
-                    them. We are very sorry for using their data and
+                    them. We are very sorry for using their initial data and
                     should have asked for permission before we did so. We wish
                     to apologise to their team that has put in so much work
                     putting together hawker listings. We fully acknowledge our

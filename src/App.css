@@ -499,7 +499,7 @@ button:focus {
 }
 
 .basic-multi-select {
-  /* z-index: 99999; */
+  z-index: 999;
 }
 
 .App-header {

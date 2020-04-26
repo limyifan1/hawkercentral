@@ -7,7 +7,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import logo from "../foodleh.png";
-import name from "../logo-brown.png";
+import name from "../logo-header-nologo.png";
 import firebase from "./Firestore";
 
 const analytics = firebase.analytics();
@@ -28,16 +28,16 @@ export class Menu extends React.Component {
           <img
             alt=""
             src={logo}
-            width="15"
-            height="25"
+            width="20"
+            height="30"
             className="d-inline-block align-top"
           />{" "}
           <div class="d-none d-md-inline-block">
           <img
             alt=""
             src={name}
-            width="80"
-            height="25"
+            width="140"
+            height="30"
             className="d-inline-block align-top"
           />
           </div>
