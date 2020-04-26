@@ -174,9 +174,7 @@ export class SearchAll extends React.Component {
   }
 
   handleChange = (event) => {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+    const { target: { value, name } } = event;
     if (this.clearTimeout) clearTimeout(searchTimer);
     searchTimer = setTimeout(() => {
       this.setState({ [name]: value });
