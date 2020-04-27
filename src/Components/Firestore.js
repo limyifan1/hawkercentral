@@ -5,6 +5,8 @@
 
 const firebase = require("firebase");
 require("firebase/firestore");
+require('firebase/analytics');
+require('firebase/auth');
 
 firebase.initializeApp({
     apiKey: `${process.env.FIRESTORE_KEY}`,
