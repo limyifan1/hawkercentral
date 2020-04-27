@@ -74,7 +74,7 @@ export class About extends React.Component {
               </h3>
               <div>
                 <p
-                  class="row card-title justify-content-center"
+                  class="row justify-content-center"
                   style={{ textAlign: "center", padding: "30px 30px 30px" }}
                 >
                   <div>
@@ -139,9 +139,6 @@ export class About extends React.Component {
                     <br />
                     Please email foodleh@outlook.com for questions, enquiries,
                     or concerns.
-                    <br />
-                    <br />
-                    Credit: Initial listings from The Smart Local
                     <br />
                     <br />
                     <a href="https://github.com/limyifan1/hawkercentral">Github Link</a> 

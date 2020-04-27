@@ -242,34 +242,15 @@ export class Home extends React.PureComponent {
                   <br />
                   <br />
                   <div class="container-fluid">
-                    <p style={{fontSize:"14px"}}>
-                      {" "}
-                      <b>We Are Sorry: </b>
-                      In our initial launch, we scraped hawker listings from{" "}
+                    <p style={{ fontSize: "14px" }}>
+                      We would like to acknowledge the data and images we
+                      obtained from{" "}
                       <a href="https://thesmartlocal.com/delivery">
-                        The Smart Local (TSL)
-                      </a>{" "}
-                      which had images hosted on their end, incurring costs for
-                      them. We are very sorry for using their data and should
-                      have asked for permission before we did so. We wish to
-                      apologise to their team that has put in so much work
-                      putting together hawker listings. We fully acknowledge our
-                      mistake and are unreservedly and truly sorry to TSL.
-                      <br />
-                      <br />
-                      We have removed those listings within a day of our launch.
-                      Please go and check out their amazing food directory which
-                      you can find here: {' '}
-                      <a href="https://thesmartlocal.com/delivery">
-                        TSL Directory
+                        The Smart Local (TSL){" "}
                       </a>
-                      . We will work to restore more listings soon, and hope to
-                      eventually develop a stable website with open-source code
-                      to help hawkers, delivery riders and consumers. Currently,
-                      we do not have a delivery component as we are a tiny team,
-                      but with the support of the open-source community, we
-                      eventually hope to include delivery folks who are a very
-                      essential part of the F&B ecosystem.
+                      when building the initial version of our app and assure
+                      that all current data in the listing are obtained with the
+                      consent from the originators themselves.
                     </p>
                     <br />
                   </div>
