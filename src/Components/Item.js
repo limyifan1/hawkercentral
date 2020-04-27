@@ -115,7 +115,7 @@ export class Item extends React.Component {
             <figcaption>
               <div class="card-body" style={{ width: "100%", height: "100%"}}>
                 {this.props.name ? (
-                  <h7 class="card-title d-flex justify-content-center" style={{ textAlign:"center", width: "100%"}}>
+                  <h7 class="item-title card-title d-flex justify-content-center" style={{ textAlign:"center", width: "100%"}}>
                     {this.props.name.length > 25
                       ? this.props.name.slice(0, 25) + "..."
                       : this.props.name}

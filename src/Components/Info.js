@@ -12,8 +12,6 @@ import { db } from "./Firestore";
 import whatsapp from "../WhatsApp.svg";
 import ImageGallery from "react-image-gallery";
 import Component from "./index";
-import placeholder from "../placeholder.png";
-import ClapButton from "react-clap-button";
 import Clap from "./Clap";
 
 import firebase from "./Firestore";
@@ -196,8 +194,6 @@ export class Nearby extends React.Component {
         });
       }
     }
-
-    const onCountChange = ({ count, countTotal }) => {};
 
     return (
       <div>

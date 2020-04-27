@@ -70,10 +70,19 @@ button:focus {
 .card-title {
   line-height: 1em;
   /* height: 10em;  */
+  /* overflow: hidden;  */
+  /* height: 34px; */
+  word-break:break-word !important;
+}
+
+.item-title {
+  line-height: 1em;
+  /* height: 10em;  */
   overflow: hidden; 
   height: 34px;
   word-break:break-word !important;
 }
+
 
 .card-text {
   word-break:break-word !important;

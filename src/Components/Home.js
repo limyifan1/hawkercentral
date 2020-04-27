@@ -3,10 +3,8 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import React, { PropTypes } from "react";
-import classnames from "classnames";
+import React from "react";
 import Component from "../Components";
-import Carousel from "react-multi-carousel";
 import home from "../home (2).png";
 import Item from "./Item";
 import i_want from "../i_want.jpeg";
@@ -14,29 +12,6 @@ import delivery from "../delivery.jpeg";
 import self_collect from "../self_collect.jpeg";
 
 import "./Home.css";
-
-const responsive = {
-  superLargeDesktop: {
-    breakpoint: { max: 4000, min: 3000 },
-    items: 6,
-    partialVisibilityGutter: 30,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 5,
-    partialVisibilityGutter: 30,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-    partialVisibilityGutter: 30,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-    partialVisibilityGutter: 10,
-  },
-};
 
 const SELF_COLLECT_OPTION = "selfcollect";
 const HOME_DELIVERY_OPTION = "delivery";
@@ -378,27 +353,3 @@ function renderPostalCodeForm(option) {
 }
 
 export default Home;
-{
-  /*
-// <img src={require('../dinner.png')} class="card-img card-img-top" style={{"max-width":"100%", "height":"auto", "padding":"20px 10px 1px"}}/>
-//                   <div class="card-body">
-//                     <h3 class="card-title">Order food from your favorite local hawkers</h3>
-//                   </div>
-//                 </div>
-//               </div>
-//               <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-//               <div class="card shadow" style={{"width": "100%", "margin-top": "10px"}}>
-//                   <img src={require('../dinner.png')} class="card-img card-img-top" style={{"max-width":"100%", "height":"auto", "padding":"20px 10px 1px"}}/>
-//                   <div class="card-body">
-//                     <h3 class="card-title">Order food from your favorite local hawkers</h3>
-//                   </div>
-//                 </div>
-
-//               </div>
-//               <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-//                 <div class="card shadow" style={{"width": "100%", "margin-top": "10px"}}>
-//                   <img src={require('../dinner.png')} class="card-img card-img-top" style={{"max-width":"100%", "height":"auto", "padding":"20px 10px 1px"}}/>
-//                   <div class="card-body">
-//                     <h3 class="card-title">Order food from your favorite local hawkers</h3>
-//                   </div> */
-}

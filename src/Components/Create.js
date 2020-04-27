@@ -3,21 +3,10 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import React, { Fragment } from "react";
+import React from "react";
 import "../App.css";
-import { db, storage } from "./Firestore";
-import { Typeahead } from "react-bootstrap-typeahead";
-import { InputGroup, Button, Form } from "react-bootstrap";
-import logo from "../mrt_logo.png";
-import Select from "react-select";
-import Item from "./Item";
-import placeholder from "../placeholder.png";
 import Component from "../Components";
 import { withRouter } from "react-router-dom";
-
-
-
-// const API_KEY = `${process.env.REACT_APP_GKEY}`
 
 import firebase from "./Firestore";
 

@@ -5,7 +5,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { Navbar, Nav, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav } from "react-bootstrap";
 import logo from "../foodleh.png";
 import name from "../logo-header-nologo.png";
 import firebase from "./Firestore";

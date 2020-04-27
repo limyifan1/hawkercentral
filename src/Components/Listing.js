@@ -5,7 +5,6 @@
 
 import React from "react";
 import "../App.css";
-import Component from "../Components";
 import queryString from "query-string";
 import { Spinner } from "react-bootstrap";
 import Item from "./Item";

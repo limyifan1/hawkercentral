@@ -3,17 +3,10 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import React, { Fragment } from "react";
+import React from "react";
 import "../App.css";
-import { db, storage } from "./Firestore";
-import { Typeahead } from "react-bootstrap-typeahead";
-import { InputGroup, Button, FormControl, Modal } from "react-bootstrap";
-import logo from "../mrt_logo.png";
-import Select from "react-select";
-import Item from "./Item";
-import placeholder from "../placeholder.png";
+import { Modal } from "react-bootstrap";
 import Component from "../Components";
-import PopupComp from "reactjs-popup";
 
 import { withRouter } from "react-router-dom";
 

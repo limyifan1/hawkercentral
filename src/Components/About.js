@@ -6,7 +6,6 @@
 import React from "react";
 import "../App.css";
 import logo from "../logo-black.png";
-import invisible from "../invisible.jpeg";
 import hashtag from "../hashtag.jpeg";
 import Clap from "./Clap";
 import { db } from "./Firestore";
