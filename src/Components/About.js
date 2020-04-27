@@ -81,8 +81,7 @@ export class About extends React.Component {
                     <img src={logo} alt="" style={{ height: "20px" }} /> is an
                     easy-to-use web application designed to bridge hawker stalls
                     and restaurant owners in Singapore with all Singaporeans via
-                    a free online platform (orhhh… that means it’s like
-                    Carousell, but for food lah! wah so creative I like).
+                    a free online platform.
                     <br />
                     <br />
                     Sounds too good to be true? What's the catch? Boh leh...{" "}
