@@ -60,9 +60,17 @@
   "author": "limyifan1 <limyifan1@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
     "@loopback/cli": "^2.4.4",
     "eslint": "^6.8.0",
+    "husky": "^4.2.5",
     "prettier": "^2.0.5"
   },
-  "copyright.owner": "limyifan1 <limyifan1@gmail.com>"
+  "copyright.owner": "limyifan1 <limyifan1@gmail.com>",
+  "husky": {
+    "hooks": {
+      "prepare-commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
 }
