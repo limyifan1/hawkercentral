@@ -3,7 +3,7 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import React, { Fragment } from "react";
+import React from "react";
 import mojs from "@mojs/core";
 import { db } from "./Firestore";
 

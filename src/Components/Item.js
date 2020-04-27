@@ -3,15 +3,12 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import React, { PropTypes } from "react";
+import React from "react";
 import "../App.css";
 import placeholder from "../placeholder.png";
 import { withRouter } from "react-router-dom";
 
 export class Item extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   handleClick = async (event) => {
     event.preventDefault();

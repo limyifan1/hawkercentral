@@ -3,10 +3,9 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import React, { Fragment } from "react";
+import React from "react";
 import "../App.css";
 import Item from "./Item";
-import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import queryString from "query-string";
 import { Spinner } from "react-bootstrap";

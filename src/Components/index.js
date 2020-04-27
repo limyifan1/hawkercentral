@@ -14,7 +14,6 @@ import Nearby from "./Nearby";
 import Info from "./Info";
 import About from "./About";
 import Popup from "./Popup";
-import News from "./News";
 import SearchAll from "./SearchAll";
 import ListForm from "./ListForm";
 import ItemRendered from "./ItemRendered";
@@ -30,7 +29,6 @@ export default {
   Item,
   Results,
   Nearby,
-  News,
   Info,
   About,
   Popup,
