@@ -1,3 +1,8 @@
+// Copyright jacobtyq <jacobtyq@gmail.com> 2020. All Rights Reserved.
+// Node module: helpers
+// This file is licensed under the MIT License.
+// License text available at https://opensource.org/licenses/MIT
+
 import Helpers from "../src/Helpers/helpers";
 
 test('Comparing strings to check that they match', () => {
