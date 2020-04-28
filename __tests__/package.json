@@ -1,0 +1,8 @@
+{
+  "name": "helpers",
+  "description": "Helper functions for Hawkercentral",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "jacobtyq <jacobtyq@gmail.com>",
+  "copyright.owner": "jacobtyq <jacobtyq@gmail.com>"
+}
