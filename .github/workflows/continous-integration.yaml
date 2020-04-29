@@ -35,8 +35,8 @@ jobs:
         run: npm run build
       - name: Run tests
         run: npm run test
-  lint:
-    name: Lint
+  code-lint:
+    name: Code Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -54,3 +54,22 @@ jobs:
         run: npm run build
       - name: Check linting
         run: npm run lint
+  commit-lint:
+    name: Commit Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Un-shallow git tree
+        run:  git fetch --prune --unshallow
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Update NPM
+        run: npm i -g npm
+      - name: Bootstrap project
+        run: npm ci --ignore-scripts
+        env:
+          CI: true
+      - name: Check linting
+        run: npx commitlint --from origin/master --to HEAD --verbose
