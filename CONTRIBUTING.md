@@ -36,11 +36,7 @@ Use cookies eg js-cookies etc to have a language toggle button, add translation 
 
 ## Organisation tasks
 
-#### 1. Dependency auto-updater ([#21][i21])
-
-#### 2. Adopt and enforce DCO ([#20][i20])
-
-#### 3. Code refactoring ([#15][i15])
+#### 1. Code refactoring ([#15][i15])
 
 - Combine SearchAll and Nearby components into a common component
 - Set up assets folder for icons
@@ -52,8 +48,6 @@ Use cookies eg js-cookies etc to have a language toggle button, add translation 
 [i9]: https://github.com/limyifan1/hawkercentral/issues/9
 [i10]: https://github.com/limyifan1/hawkercentral/issues/10
 [i15]: https://github.com/limyifan1/hawkercentral/issues/15
-[i20]: https://github.com/limyifan1/hawkercentral/issues/20
-[i21]: https://github.com/limyifan1/hawkercentral/issues/21
 [i22]: https://github.com/limyifan1/hawkercentral/issues/22
 [i23]: https://github.com/limyifan1/hawkercentral/issues/23
 
