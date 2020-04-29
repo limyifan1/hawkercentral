@@ -8,6 +8,8 @@ We are a free, crowdsourced hawker platform in Singapore relying on Singaporeans
 ### How to contribute
 We have organised a list of features and fixes in the pipeline. If you are working on something, leave a comment on the related issue so nobody does duplicate work! (we will tag the issue)
 
+[DCO](https://developercertificate.org/): Please signoff in every commit using git commit --signoff (or git commit -s). To acknowledge the Developer Certificate of Origin (DCO), sign your commits by adding Signed-off-by: John Doe john.doe@email.com to the last line of each Git commit message. The e-mail address used to sign must match the e-mail address of the Git author. 
+
 ## Important tasks
 
 #### 1. Changing Edit, Create access, adding Delete, Report ([#8][i8])
