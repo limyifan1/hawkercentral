@@ -280,10 +280,6 @@ export class SearchAll extends React.Component {
         });
       }
 
-      filtered = filtered.filter((d) => {
-        return !d.url.includes("thesmartlocal");
-      });
-
       filtered = filtered.sort((a, b) => b.lastmodified - a.lastmodified);
 
       // filtered.forEach((element) => {

@@ -331,11 +331,6 @@ export class Nearby extends React.Component {
         console.log(element.distance)
       });
 
-      filtered = filtered.filter(
-        (d) => {
-          return !d.url.includes("thesmartlocal")}
-      );
-
       filtered = filtered.sort((a, b) => a.distance - b.distance);
 
       result.nearby = filtered.map((data) => {
