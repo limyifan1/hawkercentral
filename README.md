@@ -1,4 +1,9 @@
+# FoodLeh?
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+### About us
+We are a free, crowdsourced hawker platform in Singapore relying on Singaporeans to share information about our local F&B places. We love hawker food and hope you do too! If you want to contribute, hop over here: [contributing.md](https://github.com/limyifan1/hawkercentral/edit/master/CONTRIBUTING.md)
 
 ## Available Scripts
 
