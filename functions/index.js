@@ -75,7 +75,7 @@ exports.telegramSend = functions.https.onRequest(async (req, res) => {
       "<b>Estimated Fee: </b>" +
       cost +
       "\n" +
-      "<b>Click to Accept: </b>" +
+      "<b>Click to Accept (first come first serve): </b>" +
       url;
 
     let sent = await bot.telegram.sendMessage("@foodlehdelivery", message, {
