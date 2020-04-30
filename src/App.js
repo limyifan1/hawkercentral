@@ -10,8 +10,16 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Components from "./Components";
+import Cookies from 'universal-cookie';
+
 
 function App() {
+  const cookies = new Cookies();
+  if (cookies.get("language") === null || cookies.get("language") === undefined) {
+    cookies.set("language", "en", { path: "/" });
+  }
+
+
   return (
     <Router>
       <Components.Menu />

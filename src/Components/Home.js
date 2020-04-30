@@ -5,16 +5,29 @@
 
 import React from "react";
 import Component from "../Components";
+import Cookies from "universal-cookie";
 import home from "../home (2).png";
 import Item from "./Item";
 import i_want from "../i_want.jpeg";
 import delivery from "../delivery.jpeg";
 import self_collect from "../self_collect.jpeg";
+import chinese_i_want from "../chinese-iwant.png";
+import chinese_delivery from "../chinese-delivery.png";
+import chinese_self_collect from "../chinese-dabao.png";
+import en from "../assets/translations/en.json";
+import zh from "../assets/translations/zh.json";
 
 import "./Home.css";
 
+
+const cookies = new Cookies();
+cookies.addChangeListener(onCookieChange);
 const SELF_COLLECT_OPTION = "selfcollect";
 const HOME_DELIVERY_OPTION = "delivery";
+
+function onCookieChange(args) {
+  console.log(args)
+}
 
 export class Home extends React.PureComponent {
   state = {
@@ -122,7 +135,7 @@ export class Home extends React.PureComponent {
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 align-items-center">
                 <br />
                 <br />
-                <img alt="I want..." class="home-iwant" src={i_want} />
+                <img alt="I want..." class="home-iwant" src={(cookies.get('language') === 'en') ? i_want : chinese_i_want} />
                 <br />
                 <br />
                 <span class="row d-none d-md-inline-block">
@@ -332,7 +345,7 @@ function renderPostalCodeForm(option) {
     case "":
       return (
         <span class=" main-caption">
-          choose <b>da bao</b> or <b>delivery</b>
+          {(cookies.get('language') === 'en') ? <div>choose <b>da bao</b> or <b>delivery</b> </div>: <div>选 <b>打包</b> 或 <b>送餐</b></div>}
         </span>
       );
 
