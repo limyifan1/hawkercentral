@@ -132,10 +132,18 @@ export class Nearby extends React.Component {
   retrieveData = async () => {
     let data = [];
     let temp;
-    await db
-      .collection("hawkers")
-      // .limit(100)
-      .get()
+    const hawkers = db.collection("hawkers")
+
+    let queryHawkers
+    if (this.state.pickup) {
+      queryHawkers = hawkers.where("pickup_option", "==", true).get()
+    } else if (this.state.delivery) {
+      queryHawkers = hawkers.where("delivery_option", "==", true).get()
+    } else {
+      queryHawkers = hawkers.get()
+    }
+
+    await queryHawkers
       .then((snapshot) => {
         snapshot.forEach((doc) => {
           if (doc.exists) {
@@ -255,23 +263,18 @@ export class Nearby extends React.Component {
       let latitude = this.state.latitude;
 
       let filtered = [];
-      filtered = this.state.data.filter(
-        (d) =>
-          d["pickup_option"] === this.state.pickup ||
-          d["delivery_option"] === this.state.delivery
-      );
 
       if (this.state.pickup) {
         filtered = this.state.data.filter(
           (d) =>
             (distance_calc(parseFloat(d["latitude"]), parseFloat(d["longitude"]), parseFloat(latitude), parseFloat(longitude)) <
-            this.state.distance) && d.pickup_option
+            this.state.distance)
         );
       } else if (this.state.delivery) {
         filtered = this.state.data.filter(
           (d) =>
             (distance_calc(d["latitude"], d["longitude"], parseFloat(latitude), parseFloat(longitude)) <=
-              10 || (d.region? d.region.filter((f) => f.value === "islandwide").length >= 1:false)) && d.delivery_option
+              10 || (d.region? d.region.filter((f) => f.value === "islandwide").length >= 1:false))
         );
       }
 
