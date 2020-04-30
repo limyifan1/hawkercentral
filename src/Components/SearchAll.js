@@ -90,7 +90,6 @@ export class SearchAll extends React.Component {
     let temp;
     await db
       .collection("hawkers")
-      .limit(999)
       .get()
       .then((snapshot) => {
         snapshot.forEach((doc) => {
