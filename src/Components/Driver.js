@@ -96,6 +96,7 @@ export class Driver extends React.Component {
       contact: "",
       contact_to: "",
       pickup_option: false,
+      submitted: false,
     };
   }
 
@@ -198,12 +199,12 @@ export class Driver extends React.Component {
       longitude: this.state.latitude,
       latitude_to: this.state.latitude,
       longitude_to: this.state.latitude,
-      street: this.state.latitude,
-      street_to: this.state.latitude,
-      unit: this.state.latitude,
-      unit_to: this.state.latitude,
-      contact: this.state.latitude,
-      contact_to: this.state.latitude,
+      street: this.state.street,
+      street_to: this.state.street_to,
+      unit: this.state.unit,
+      unit_to: this.state.unit_to,
+      contact: this.state.contact,
+      contact_to: this.state.contact_to,
     }).then((id) => {
       this.sendData({
         origin: this.state.street,
@@ -213,6 +214,7 @@ export class Driver extends React.Component {
         id: id,
         url: "www.foodleh.app/delivery?id=" + id,
       });
+      this.setState({ submitted: true });
     });
   };
 
@@ -433,7 +435,6 @@ export class Driver extends React.Component {
                               class="form-control"
                               name="contact_to"
                               placeholder="9xxxxxxx"
-                              required
                             ></input>
                           </div>
                         </div>
@@ -491,19 +492,31 @@ export class Driver extends React.Component {
                         <br />
                         <br />
                       </div>
+                      {this.state.submitted ? (
+                        <div
+                          class="shadow-lg"
+                          style={{
+                            backgroundColor: "green",
+                            borderColor: "white",
+                            fontSize: "25px",
+                          }}
+                        >
+                          Submitted! If found, a driver will contact you directly. 
+                        </div>
+                      ) : (
+                        <Button
+                          class="shadow-lg"
+                          style={{
+                            backgroundColor: "blue",
+                            borderColor: "white",
+                            fontSize: "25px",
+                          }}
+                          type="Submit"
+                        >
+                          Find Delivery Now
+                        </Button>
+                      )}
 
-                      <Button
-                        class="shadow-lg"
-                        style={{
-                          backgroundColor: "blue",
-                          borderColor: "white",
-                          fontSize: "25px",
-                        }}
-                        type="Submit"
-                        // onClick={this.handleSubmit}
-                      >
-                        Find Delivery Now
-                      </Button>
                       <br />
                       <br />
                       <small>
