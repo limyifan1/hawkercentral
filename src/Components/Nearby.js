@@ -123,7 +123,6 @@ export class Nearby extends React.Component {
   componentWillMount() {
     onLoad("nearby_load")
     this.retrieveData();
-    console.log("run");
   }
 
   getData(val) {
@@ -145,7 +144,6 @@ export class Nearby extends React.Component {
             data.push(temp);
           }
         });
-        console.log("Fetched successfully!");
         return true;
       })
       .catch((error) => {
@@ -263,8 +261,6 @@ export class Nearby extends React.Component {
           d["delivery_option"] === this.state.delivery
       );
 
-      console.log(this.state.delivery)
-
       if (this.state.pickup) {
         filtered = this.state.data.filter(
           (d) =>
@@ -272,7 +268,6 @@ export class Nearby extends React.Component {
             this.state.distance) && d.pickup_option
         );
       } else if (this.state.delivery) {
-        console.log(filtered)
         filtered = this.state.data.filter(
           (d) =>
             (distance_calc(d["latitude"], d["longitude"], parseFloat(latitude), parseFloat(longitude)) <=
@@ -284,7 +279,6 @@ export class Nearby extends React.Component {
         this.state.cuisineValue !== null &&
         this.state.cuisineValue.length !== 0
       ) {
-        // console.log(this.state.cuisineValue[0] === this.state.data[0].cuisine[0])
         var items = this.state.cuisineValue.map((x) => {
           return Helpers.capitalizeFirstLetter(x.value);
         });
