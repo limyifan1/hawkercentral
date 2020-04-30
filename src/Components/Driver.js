@@ -187,18 +187,23 @@ export class Driver extends React.Component {
       this.state.longitude_to
     );
     let cost = 6 + distance * 0.5;
-    this.getPostal(this.state.postal, "to");
-    this.getPostal(this.state.postal, "from");
+    await this.getPostal(this.state.postal_to, "to");
+    await this.getPostal(this.state.postal, "from");
+    console.log({
+      origin: this.state.street,
+      destination: this.state.street_to,
+    });
     await addData({
       origin: this.state.street,
       destination: this.state.street_to,
       distance: distance.toString(),
       cost: cost.toString(),
       postal: this.state.postal,
+      postal_to: this.state.postal_to,
       latitude: this.state.latitude,
-      longitude: this.state.latitude,
-      latitude_to: this.state.latitude,
-      longitude_to: this.state.latitude,
+      longitude: this.state.longitude,
+      latitude_to: this.state.latitude_to,
+      longitude_to: this.state.longitude_to,
       street: this.state.street,
       street_to: this.state.street_to,
       unit: this.state.unit,
@@ -206,7 +211,7 @@ export class Driver extends React.Component {
       contact: this.state.contact,
       contact_to: this.state.contact_to,
     }).then((id) => {
-      this.sendData({
+      console.log({
         origin: this.state.street,
         destination: this.state.street_to,
         distance: distance.toString().slice(0, 4),
@@ -214,7 +219,15 @@ export class Driver extends React.Component {
         id: id,
         url: "www.foodleh.app/delivery?id=" + id,
       });
-      this.setState({ submitted: true });
+      //   this.sendData({
+      //     origin: this.state.street,
+      //     destination: this.state.street_to,
+      //     distance: distance.toString().slice(0, 4),
+      //     cost: "$" + cost.toString().slice(0, 4),
+      //     id: id,
+      //     url: "www.foodleh.app/delivery?id=" + id,
+      //   });
+      //   this.setState({ submitted: true });
     });
   };
 
@@ -227,12 +240,11 @@ export class Driver extends React.Component {
     const value = target.value;
     const name = target.name;
     if (name === "postal" && value.toString().length === 6) {
-      this.getPostal(value);
+      this.getPostal(value, "from");
     }
     if (name === "postal_to" && value.toString().length === 6) {
       this.getPostal(value, "to");
     }
-
     this.setState({ [name]: value });
   };
 
@@ -385,7 +397,7 @@ export class Driver extends React.Component {
                       <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                         {" "}
                         <div class="form-group create-title">
-                          <label for="street" style={{ color: "white" }}>
+                          <label for="street_to" style={{ color: "white" }}>
                             Street Name<b> (Auto-Filled)</b>
                           </label>
                           <input
@@ -501,7 +513,8 @@ export class Driver extends React.Component {
                             fontSize: "25px",
                           }}
                         >
-                          Submitted! If found, a driver will contact you directly. 
+                          Submitted! If found, a driver will contact you
+                          directly.
                         </div>
                       ) : (
                         <Button
