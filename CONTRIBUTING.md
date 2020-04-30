@@ -34,6 +34,14 @@ Run migration script from LoneRifle (for us to do on backend) to update database
 
 Use cookies eg js-cookies etc to have a language toggle button, add translation asset files. We're planning to start with Chinese translation and ask around for demand for other languages.
 
+#### 3. Users return to same scrolling point when they click back from a listing
+
+In the listings page, when users click into a listing, then go back to the listings page again, they are reloaded and must start from the top of the page. We want to let them go back to the point where the clicked the listing, so they don't need to scroll down all the way again. No issue made yet.
+
+#### 4. Let users open individual listings in a new window
+
+Current listings won't let you open in a new window, weird for users who usually want to see many at once. No issue made yet.
+
 ## Organisation tasks
 
 #### 1. Code refactoring ([#15][i15])
