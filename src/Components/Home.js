@@ -31,45 +31,6 @@ export class Home extends React.PureComponent {
     this.setState({ data: val });
   }
 
-  // retrieveData = async (query) => {
-  //   let string = {
-  //     longitude: this.state.longitude,
-  //     latitude: this.state.latitude,
-  //     cuisine: "Local",
-  //     limit: 15,
-  //   };
-  //   let urls = ["https://us-central1-hawkercentral.cloudfunctions.net/all"];
-  //   try {
-  //     Promise.all(
-  //       urls.map((url) =>
-  //         fetch(url, {
-  //           method: "POST",
-  //           mode: "cors",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify(string),
-  //         })
-  //           .then((response) => {
-  //             return response.json();
-  //           })
-  //           .then((data) => {
-  //             return data;
-  //           })
-  //           .catch((error) => {
-  //             return error;
-  //           })
-  //       )
-  //     ).then((data) => {
-  //       this.setState({
-  //         all: data[0],
-  //         retrieved: true,
-  //       });
-  //     });
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
   handleCollect = () => {
     this.setState({ option: SELF_COLLECT_OPTION });
   };
@@ -164,56 +125,10 @@ export class Home extends React.PureComponent {
                   </button>
                 </span>
 
-                {/* <div class="row justify-content-center collect-options">
-                  <div className="col-sm-12 col-md-auto">
-                    <button
-                      type="button"
-                      onClick={this.handleCollect}
-                      className={classnames({
-                        clicked: this.state.option === SELF_COLLECT_OPTION,
-                      })}
-                    >
-                      <img alt="Self Collect" src={self_collect} />
-                    </button>
-                  </div>
-
-                  <div className="col-sm-12 col-md-auto">
-                    <button
-                      type="button"
-                      onClick={this.handleDelivery}
-                      className={classnames({
-                        clicked: this.state.option === HOME_DELIVERY_OPTION,
-                      })}
-                    >
-                      <img alt="Home Delivery" src={delivery} />
-                    </button>
-                  </div>
-                </div> */}
                 <br />
                 <br />
                 <div>
                   {renderPostalCodeForm(this.state.option)}
-                  {/* {this.state.option === "" ? (
-                    <span class=" main-caption">
-                      choose <b>da bao</b> or <b>delivery</b>
-                    </span>
-                  ) : this.state.option === "delivery" ? (
-                    <span class=" main-caption">
-                      now enter your <b>postal code</b>
-                      <br />
-                      <br />
-                      <Component.Search option={this.state.option} />
-                    </span>
-                  ) : (
-                    <span class="label label-default main-caption">
-                      <span class=" main-caption">
-                        now enter your <b>postal code</b>
-                        <br />
-                        <br />
-                        <Component.Search option={this.state.option} />
-                      </span>
-                    </span>
-                  )} */}
                   <br />
                   <br />
                   <div class="container-fluid">
@@ -232,96 +147,9 @@ export class Home extends React.PureComponent {
                 </div>
               </div>
             </div>
-            {/*
-
-              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"> </div>
-              <div
-                class="col-xs-10 col-sm-10 col-md-10 col-lg-10"
-                style={{ textAlign: "center" }}
-              >
-                <div class="col-6">
-                  <img alt="" class="home-banner" src={home} />
-                </div>
-                <br />
-                <br />
-                <img alt="" class="home-iwant" src={i_want} />
-                <br />
-                <br />
-                <span class="row d-none d-md-inline-block">
-                  <span class="col-sm-2 col-md-2 col-lg-2"></span>
-                  <span class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                    <img
-                      onClick={this.handleCollect}
-                      alt=""
-                      class={selfcollect}
-                      src={self_collect}
-                    />
-                  </span>
-                  <span class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                    <img
-                      alt=""
-                      onClick={this.handleDelivery}
-                      class={delivery_option}
-                      src={delivery}
-                    />
-                  </span>
-                  <span class="col-sm-2 col-md-2 col-lg-2"></span>
-                </span>
-                <span class="row d-inline-block d-md-none">
-                  <span>
-                    <img
-                      alt=""
-                      onClick={this.handleCollect}
-                      class={selfcollect}
-                      src={self_collect}
-                    />
-                  </span>
-                  <span>
-                    <img
-                      alt=""
-                      onClick={this.handleDelivery}
-                      class={delivery_option}
-                      src={delivery}
-                    />
-                  </span>
-                </span>
-                <br />
-                <br />
-                <div>
-                  {this.state.option === "" ? (
-                    <span class=" main-caption">Choose Da Bao Or Delivery</span>
-                  ) : this.state.option === "delivery" ? (
-                    <span class=" main-caption">Living the lazy life?</span>
-                  ) : (
-                    <span class="label label-default main-caption">
-                      Living the hardworking life?
-                    </span>
-                  )}
-                </div>
-                <br />
-                <Component.Search option={this.state.option} />
-              </div>
-              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div> */}
           </div>
           <br />
         </div>
-        {/* <Carousel
-          responsive={responsive}
-          ssr={true}
-          infinite={true}
-          // partialVisible={true}
-          swipeable={true}
-          draggable={true}
-          minimumTouchDrag={0}
-          transitionDuration={0}
-          slidesToSlide={1}
-          arrows={false}
-          autoPlay={true}
-          centerMode={true}
-          autoPlaySpeed={2000}
-        >
-          {result.all}
-        </Carousel> */}
       </div>
     );
   }

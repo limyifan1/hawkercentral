@@ -8,7 +8,7 @@ import "../App.css";
 import Component from "../Components";
 import { withRouter } from "react-router-dom";
 
-import firebase from "./Firestore";
+import firebase from "./Firebase";
 
 const analytics = firebase.analytics();
 

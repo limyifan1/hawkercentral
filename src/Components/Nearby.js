@@ -9,9 +9,8 @@ import Item from "./Item";
 import "react-multi-carousel/lib/styles.css";
 import queryString from "query-string";
 import { Spinner } from "react-bootstrap";
-import { db } from "./Firestore";
 import Select from "react-select";
-import firebase from "./Firestore";
+import firebase from "./Firebase";
 import Helpers from "../Helpers/helpers";
 
 const analytics = firebase.analytics();

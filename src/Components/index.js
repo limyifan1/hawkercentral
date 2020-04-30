@@ -5,36 +5,35 @@
 
 import Home from "./Home";
 import Menu from "./Menu";
-import Create from "./Create";
-import Search from "./Search";
-import Listing from "./Listing";
-import Item from "./Item";
-import Results from "./Results";
-import Nearby from "./Nearby";
-import Info from "./Info";
-import About from "./About";
-import Popup from "./Popup";
-import SearchAll from "./SearchAll";
-import ListForm from "./ListForm";
-import ItemRendered from "./ItemRendered";
+import SignUpPage from "./SignUp";
 
-import { db, storage } from "./Firestore";
+// import Create from "./Create";
+// import Search from "./Search";
+// import Listing from "./Listing";
+// import Item from "./Item";
+// import Results from "./Results";
+// import Nearby from "./Nearby";
+// import Info from "./Info";
+// import About from "./About";
+// import Popup from "./Popup";
+// import SearchAll from "./SearchAll";
+// import ListForm from "./ListForm";
+// import ItemRendered from "./ItemRendered";
 
 export default {
   Home,
   Menu,
-  Create,
-  Search,
-  Listing,
-  Item,
-  Results,
-  Nearby,
-  Info,
-  About,
-  Popup,
-  SearchAll,
-  ListForm,
-  ItemRendered,
-  db,
-  storage,
+  SignUpPage
+  // Create,
+  // Search,
+  // Listing,
+  // Item,
+  // Results,
+  // Nearby,
+  // Info,
+  // About,
+  // Popup,
+  // SearchAll,
+  // ListForm,
+  // ItemRendered,
 };

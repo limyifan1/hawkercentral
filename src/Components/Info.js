@@ -8,13 +8,12 @@ import "../App.css";
 import "react-multi-carousel/lib/styles.css";
 import queryString from "query-string";
 import { Spinner } from "react-bootstrap";
-import { db } from "./Firestore";
 import whatsapp from "../WhatsApp.svg";
 import ImageGallery from "react-image-gallery";
 import Component from "./index";
 import Clap from "./Clap";
 
-import firebase from "./Firestore";
+import firebase from "./Firebase";
 
 const analytics = firebase.analytics();
 

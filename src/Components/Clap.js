@@ -5,7 +5,6 @@
 
 import React from "react";
 import mojs from "@mojs/core";
-import { db } from "./Firestore";
 
 class Clap extends React.Component {
   constructor(props) {

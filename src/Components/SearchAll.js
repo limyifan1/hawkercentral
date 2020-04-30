@@ -7,10 +7,9 @@ import React from "react";
 import "../App.css";
 import Item from "./Item";
 import { Spinner } from "react-bootstrap";
-import { db } from "./Firestore";
 import Select from "react-select";
 
-import firebase from "./Firestore";
+import firebase from "./Firebase";
 import Helpers from "../Helpers/helpers";
 
 const analytics = firebase.analytics();

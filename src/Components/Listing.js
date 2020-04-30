@@ -10,7 +10,6 @@ import { Spinner } from "react-bootstrap";
 import Item from "./Item";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { db } from "./Firestore";
 
 const responsive = {
   superLargeDesktop: {

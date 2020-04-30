@@ -8,12 +8,11 @@ import { Link } from "react-router-dom";
 import { Navbar, Nav } from "react-bootstrap";
 import logo from "../foodleh.png";
 import name from "../logo-header-nologo.png";
-import firebase from "./Firestore";
 
-const analytics = firebase.analytics();
+// const analytics = firebase.analytics();
 
 function onClick(button){
-  analytics.logEvent(button)
+  // analytics.logEvent(button)
 }
 
 export class Menu extends React.Component {

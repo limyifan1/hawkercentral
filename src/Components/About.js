@@ -8,10 +8,8 @@ import "../App.css";
 import logo from "../logo-black.png";
 import hashtag from "../hashtag.jpeg";
 import Clap from "./Clap";
-import { db } from "./Firestore";
 
-
-import firebase from "./Firestore";
+import firebase from "./Firebase";
 
 const analytics = firebase.analytics();
 
