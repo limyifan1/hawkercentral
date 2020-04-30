@@ -263,18 +263,20 @@ export class Nearby extends React.Component {
           d["delivery_option"] === this.state.delivery
       );
 
+      console.log(this.state.delivery)
+
       if (this.state.pickup) {
         filtered = this.state.data.filter(
           (d) =>
-            distance_calc(parseFloat(d["latitude"]), parseFloat(d["longitude"]), parseFloat(latitude), parseFloat(longitude)) <
-            this.state.distance
+            (distance_calc(parseFloat(d["latitude"]), parseFloat(d["longitude"]), parseFloat(latitude), parseFloat(longitude)) <
+            this.state.distance) && d.pickup_option
         );
       } else if (this.state.delivery) {
-        console.log(this.state.data)
+        console.log(filtered)
         filtered = this.state.data.filter(
           (d) =>
-            distance_calc(d["latitude"], d["longitude"], parseFloat(latitude), parseFloat(longitude)) <=
-              10 || (d.region? d.region.filter((f) => f.value === "islandwide").length >= 1:false)
+            (distance_calc(d["latitude"], d["longitude"], parseFloat(latitude), parseFloat(longitude)) <=
+              10 || (d.region? d.region.filter((f) => f.value === "islandwide").length >= 1:false)) && d.delivery_option
         );
       }
 
@@ -318,17 +320,12 @@ export class Nearby extends React.Component {
       }
 
       filtered.forEach((element) => {
-        console.log(parseFloat(element["latitude"]),
-        parseFloat(element["longitude"]),
-        parseFloat(latitude),
-        parseFloat(longitude))
         element.distance = distance_calc(
           parseFloat(element["latitude"]),
           parseFloat(element["longitude"]),
           parseFloat(latitude),
           parseFloat(longitude)
         ).toString();
-        console.log(element.distance)
       });
 
       filtered = filtered.sort((a, b) => a.distance - b.distance);
