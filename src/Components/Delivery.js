@@ -127,9 +127,41 @@ export class Driver extends React.Component {
       );
   };
 
+  componentWillMount() {
+    onLoad("find_driver");
+    this.getDoc();
+  }
+
+  getDoc = async () => {
+    await db
+      .collection("deliveries")
+      .doc(this.state.id)
+      .get()
+      .then(async (snapshot) => {
+        if (snapshot.exists) {
+          this.setState({ data: snapshot.data(), retrieved: true });
+        }
+        onLoad("info_load", snapshot.data().name);
+        if (!snapshot.data().viewed) {
+          await db
+            .collection("deliveries")
+            .doc(this.state.id)
+            .update({ viewed: true })
+            .then((d) => {});
+          await this.sendData({
+            message_id: snapshot.data().message_id,
+          });
+        }
+        return true;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   sendData = async (query) => {
     let urls = [
-      "https://us-central1-hawkercentral.cloudfunctions.net/telegramSend",
+      "https://us-central1-hawkercentral.cloudfunctions.net/telegramEdit",
     ];
     try {
       Promise.all(
@@ -161,117 +193,7 @@ export class Driver extends React.Component {
     }
   };
 
-  async getPostal(postal, direction) {
-    // event.preventDefault();
-    let data = await this.callPostal(postal);
-    if (data !== undefined) {
-      if (direction === "to") {
-        this.setState({
-          street_to: data["ADDRESS"],
-          longitude_to: data["LONGITUDE"],
-          latitude_to: data["LATITUDE"],
-        });
-      } else {
-        this.setState({
-          street: data["ADDRESS"],
-          longitude: data["LONGITUDE"],
-          latitude: data["LATITUDE"],
-        });
-      }
-    }
-  }
-
-  handleSubmit = async (event) => {
-    event.preventDefault();
-    let distance = distance_calc(
-      this.state.latitude,
-      this.state.longitude,
-      this.state.latitude_to,
-      this.state.longitude_to
-    );
-    let cost = 6 + distance * 0.5;
-    this.getPostal(this.state.postal, "to");
-    this.getPostal(this.state.postal, "from");
-    await addData({
-      origin: this.state.street,
-      destination: this.state.street_to,
-      distance: distance.toString(),
-      cost: cost.toString(),
-      postal: this.state.postal,
-      latitude: this.state.latitude,
-      longitude: this.state.latitude,
-      latitude_to: this.state.latitude,
-      longitude_to: this.state.latitude,
-      street: this.state.latitude,
-      street_to: this.state.latitude,
-      unit: this.state.latitude,
-      unit_to: this.state.latitude,
-      contact: this.state.latitude,
-      contact_to: this.state.latitude,
-    }).then((id) => {
-      this.sendData({
-        origin: this.state.street,
-        destination: this.state.street_to,
-        distance: distance.toString().slice(0, 4),
-        cost: "$" + cost.toString().slice(0, 4),
-        url: "www.foodleh.app/delivery?id=" + id,
-      });
-    });
-  };
-
-  componentWillMount() {
-    onLoad("find_driver");
-    this.getDoc();
-  }
-
-  getDoc = async () => {
-    await db
-      .collection("deliveries")
-      .doc(this.state.id)
-      .get()
-      .then(async (snapshot) => {
-        if (snapshot.exists) {
-          this.setState({ data: snapshot.data(), retrieved: true });
-        }
-        onLoad("info_load", snapshot.data().name);
-        if (!snapshot.data().viewed) {
-          await db
-            .collection("deliveries")
-            .doc(this.state.id)
-            .update({ viewed: true })
-            .then((d) => {});
-          console.log("Fetched successfully!");
-        }
-        return true;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  handleChange = (event) => {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-    if (name === "postal" && value.toString().length === 6) {
-      this.getPostal(value);
-    }
-    if (name === "postal_to" && value.toString().length === 6) {
-      this.getPostal(value, "to");
-    }
-
-    this.setState({ [name]: value });
-  };
-
   render() {
-    var distance = distance_calc(
-      this.state.latitude,
-      this.state.longitude,
-      this.state.latitude_to,
-      this.state.longitude_to
-    );
-    var cost = 6 + distance * 0.5;
-
     return (
       <div>
         <div
@@ -283,29 +205,20 @@ export class Driver extends React.Component {
             "background-color": "white",
           }}
         >
-          <Form onSubmit={this.handleSubmit.bind(this)}>
-            <div class="container-fluid col-md-10 content col-xs-offset-2">
-              <div class="row justify-content-center">
-                <div
-                  class="card shadow row"
-                  style={{ width: "100%", padding: "20px" }}
-                >
-                  {this.state.retrieved ? (
-                    <div>
-                      {!this.state.data.viewed ? (
+          <div class="container-fluid col-md-10 content col-xs-offset-2">
+            <div class="row justify-content-center">
+              <div
+                class="card shadow row"
+                style={{ width: "100%", padding: "20px" }}
+              >
+                {this.state.retrieved ? (
+                  <div>
+                    {!this.state.data.viewed ? (
+                      <div>
+                        {" "}
                         <h3>
                           {" "}
                           Congratulations, you got the order!
-                          <small style={{ color: "grey" }}>
-                            {" "}
-                            Delivery by{" "}
-                          </small>{" "}
-                          <img src={name} alt="" style={{ width: "80px" }} />
-                        </h3>
-                      ) : (
-                        <h3>
-                          {" "}
-                          Sorry, someone has already taken the order
                           <br />
                           <small style={{ color: "grey" }}>
                             {" "}
@@ -313,19 +226,76 @@ export class Driver extends React.Component {
                           </small>{" "}
                           <img src={name} alt="" style={{ width: "80px" }} />
                         </h3>
-                      )}
-                    </div>
-                  ) : (
-                    <div>
-                      {" "}
-                      <h3>Loading</h3>
-                      <Spinner class="" animation="grow" />
-                    </div>
-                  )}
-                </div>
+                        <br />
+                        <h5>
+                          Please take a screenshot of this page as the following
+                          information will be deleted after refresh.{" "}
+                        </h5>
+                        <br />
+                        <b>Delivery From:</b> {this.state.data.unit}{" "}
+                        <a
+                          href={
+                            "https://maps.google.com/?q=" +
+                            this.state.data.street
+                          }
+                        >
+                          {this.state.data.street}
+                        </a>
+                        <br />
+                        <b>Delivery To:</b> {this.state.data.unit_to}{" "}
+                        <a
+                          href={
+                            "https://maps.google.com/?q=" +
+                            this.state.data.street_to
+                          }
+                        >
+                          {this.state.data.street_to}
+                        </a>
+                        <br />
+                        <b>Hawker Contact:</b> {this.state.data.contact}
+                        <br />
+                        <b>Customer Contact:</b> {this.state.data.contact_to}
+                        <br />
+                        <b>Distance:</b> {this.state.data.distance.slice(0, 4)}
+                        km
+                        <br />
+                        <b>Estimated Fee:</b> $
+                        {this.state.data.cost.slice(0, 4)}
+                        <br /> <br />
+                        <b>
+                          <h4>
+                            Contact the hawker directly to arrange delivery
+                          </h4>
+                        </b>
+                        <br /> <br />
+                        <small>
+                          For technical problems, please email us at
+                          foodleh@outlook.com
+                        </small>
+                      </div>
+                    ) : (
+                      <h3>
+                        {" "}
+                        Sorry, someone has already taken the order
+                        <br />
+                        <small style={{ color: "grey" }}>
+                          {" "}
+                          Delivery by{" "}
+                        </small>{" "}
+                        <img src={name} alt="" style={{ width: "80px" }} />
+                      </h3>
+                    )}
+                  </div>
+                ) : (
+                  <div>
+                    {" "}
+                    <h3>Loading</h3>
+                    <Spinner class="" animation="grow" />
+                  </div>
+                )}
               </div>
             </div>
-          </Form>
+          </div>
         </div>
       </div>
     );
