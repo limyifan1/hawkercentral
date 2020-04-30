@@ -17,6 +17,8 @@ import Popup from "./Popup";
 import SearchAll from "./SearchAll";
 import ListForm from "./ListForm";
 import ItemRendered from "./ItemRendered";
+import Driver from "./Driver";
+import Delivery from "./Delivery";
 
 import { db, storage } from "./Firestore";
 
@@ -35,6 +37,8 @@ export default {
   SearchAll,
   ListForm,
   ItemRendered,
+  Driver,
+  Delivery,
   db,
   storage,
 };

@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "firebase-admin": "8.11.0",
-    "firebase-functions": "3.6.1"
+    "firebase-functions": "3.6.1",
+    "telegraf": "^3.38.0"
   },
   "devDependencies": {
     "eslint": "6.8.0",
