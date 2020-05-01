@@ -3,10 +3,11 @@ import "../App.css";
 import { withRouter } from "react-router-dom";
 import name from "../logo-brown.png";
 import firebase from "./Firestore";
-// import { Form } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { db } from "./Firestore";
 import queryString from "query-string";
 import { Spinner } from "react-bootstrap";
+import driver from "../driver.png";
 
 const analytics = firebase.analytics();
 
@@ -14,71 +15,23 @@ function onLoad(name) {
   analytics.logEvent(name);
 }
 
-// function distance_calc(lat1, lon1, lat2, lon2) {
-//   if (lat1 === lat2 && lon1 === lon2) {
-//     return 0;
-//   } else {
-//     var radlat1 = (Math.PI * lat1) / 180;
-//     var radlat2 = (Math.PI * lat2) / 180;
-//     var theta = lon1 - lon2;
-//     var radtheta = (Math.PI * theta) / 180;
-//     var dist =
-//       Math.sin(radlat1) * Math.sin(radlat2) +
-//       Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-//     if (dist > 1) {
-//       dist = 1;
-//     }
-//     dist = Math.acos(dist);
-//     dist = (dist * 180) / Math.PI;
-//     dist = dist * 60 * 1.1515;
-//     return dist * 1.609344;
-//   }
-// }
-
-// const addData = async ({
-//   postal,
-//   latitude,
-//   longitude,
-//   latitude_to,
-//   longitude_to,
-//   street,
-//   street_to,
-//   cost,
-//   distance,
-//   unit,
-//   unit_to,
-//   contact,
-//   contact_to,
-// }) => {
-//   let now = new Date();
-//   var field = {
-//     postal: postal,
-//     latitude: latitude,
-//     longitude: longitude,
-//     latitude_to: latitude_to,
-//     longitude_to: longitude_to,
-//     street: street,
-//     street_to: street_to,
-//     cost: cost,
-//     distance: distance,
-//     unit: unit,
-//     unit_to: unit_to,
-//     contact: contact,
-//     contact_to: contact_to,
-//     lastmodified: now,
-//     viewed: false,
-//   };
-//   let id = await db
-//     .collection("deliveries")
-//     .add(field)
-//     .then(function (docRef) {
-//       return docRef.id;
-//     })
-//     .catch(function (error) {
-//       console.error("Error adding document: ", error);
-//     });
-//   return id;
-// };
+const addData = async ({ driver_contact }) => {
+  let now = new Date();
+  var field = {
+    driver_contact: driver_contact,
+    timeaccepted: now,
+  };
+  let id = await db
+    .collection("deliveries")
+    .add(field)
+    .then(function (docRef) {
+      return docRef.id;
+    })
+    .catch(function (error) {
+      console.error("Error adding document: ", error);
+    });
+  return id;
+};
 
 export class Driver extends React.Component {
   constructor(props) {
@@ -100,6 +53,8 @@ export class Driver extends React.Component {
       retrieved: false,
       id: queryString.parse(this.props.location.search).id,
       pickup_option: false,
+      submitted: false,
+      driver_contact: "",
     };
   }
 
@@ -129,7 +84,6 @@ export class Driver extends React.Component {
 
   componentWillMount() {
     onLoad("find_driver");
-    this.getDoc();
   }
 
   getDoc = async () => {
@@ -150,6 +104,8 @@ export class Driver extends React.Component {
             .then((d) => {});
           await this.sendData({
             message_id: snapshot.data().message_id,
+            driver_mobile: this.state.driver_contact,
+            requester_mobile: snapshot.data().contact,
           });
         }
         return true;
@@ -193,6 +149,25 @@ export class Driver extends React.Component {
     }
   };
 
+  handleSubmit = async (event) => {
+    event.preventDefault();
+    this.setState({ submitted: true });
+    await this.getDoc().then(async () => {
+      if (!this.state.data.viewed) {
+        await addData({
+          driver_contact: this.state.driver_contact,
+        });
+      }
+    });
+  };
+
+  handleChange = (event) => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState({ [name]: value });
+  };
+
   render() {
     return (
       <div>
@@ -211,20 +186,49 @@ export class Driver extends React.Component {
                 class="card shadow row"
                 style={{ width: "100%", padding: "20px" }}
               >
-                {this.state.retrieved ? (
+                <img src={driver} alt="" style={{ width: "100%" }} />
+
+                {!this.state.submitted ? (
+                  <Form onSubmit={this.handleSubmit.bind(this)}>
+                    <br />
+                    <label for="unit">Mobile Number:</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">
+                          +65
+                        </span>
+                      </div>
+                      <input
+                        onChange={this.handleChange}
+                        value={this.state.driver_contact}
+                        type="number"
+                        class="form-control"
+                        name="driver_contact"
+                        placeholder="9xxxxxxx"
+                        required
+                      ></input>
+                    </div>
+                    <br />
+                    <Button
+                      class="shadow-lg"
+                      style={{
+                        backgroundColor: "green",
+                        borderColor: "green",
+                        fontSize: "25px",
+                      }}
+                      type="Submit"
+                    >
+                      Accept Order
+                    </Button>
+                  </Form>
+                ) : this.state.retrieved ? (
                   <div>
                     {!this.state.data.viewed ? (
                       <div>
-                        {" "}
+                        <br />
                         <h3>
-                          {" "}
                           Congratulations, you got the order!
                           <br />
-                          <small style={{ color: "grey" }}>
-                            {" "}
-                            Delivery by{" "}
-                          </small>{" "}
-                          <img src={name} alt="" style={{ width: "80px" }} />
                         </h3>
                         <br />
                         <h5>
@@ -274,21 +278,23 @@ export class Driver extends React.Component {
                         </small>
                       </div>
                     ) : (
-                      <h3>
-                        {" "}
-                        Sorry, someone has already taken the order
-                        <br />
-                        <small style={{ color: "grey" }}>
-                          {" "}
-                          Delivery by{" "}
-                        </small>{" "}
-                        <img src={name} alt="" style={{ width: "80px" }} />
-                      </h3>
+                      <div>
+                        {
+                          <h3>
+                            {" "}
+                            <br />
+                            <br />
+                            Sorry, someone has already taken the order
+                            <br />
+                          </h3>
+                        }
+                      </div>
                     )}
                   </div>
                 ) : (
                   <div>
-                    {" "}
+                    <br />
+                    <br />
                     <h3>Loading</h3>
                     <Spinner class="" animation="grow" />
                   </div>
