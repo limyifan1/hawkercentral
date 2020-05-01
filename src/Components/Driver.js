@@ -1,7 +1,6 @@
 import React from "react";
 import "../App.css";
 import { withRouter } from "react-router-dom";
-import name from "../logo-brown.png";
 import firebase from "./Firestore";
 import { Form, Button, Modal } from "react-bootstrap";
 import { db } from "./Firestore";
