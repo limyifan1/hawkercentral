@@ -107,17 +107,54 @@ exports.telegramEdit = functions.https.onRequest(async (req, res) => {
     var message_id = req.body.message_id;
     var driver_mobile = req.body.driver_mobile;
     var requester_mobile = req.body.requester_mobile;
+    var origin = req.body.origin;
+    var destination = req.body.destination;
+    var time = req.body.time;
+    var customer_mobile = req.body.customer_mobile;
+    var note = req.body.note;
 
     twilio.messages
       .create({
-        body: "Your driver's mobile is" + driver_mobile,
+        body:
+          "Your order has been picked up by a driver. The contact number is: +65" +
+          driver_mobile,
         from: "+12015847715",
-        to: requester_mobile,
+        to: "+65" + requester_mobile,
       })
       .then((message) => console.log(message.sid))
-      .catch((e)=>{
-        console.log(e)
+      .catch((e) => {
+        console.log(e);
+      });
+
+    twilio.messages
+      .create({
+        body:
+          "Your order has been confirmed. \n " +
+          "Stall Contact: " +
+          requester_mobile +
+          "\n" +
+          "Customer Mobile: " +
+          customer_mobile +
+          "\n" +
+          "From: " +
+          origin +
+          "\n" +
+          "To: " +
+          destination +
+          "\n" +
+          "Pickup Time: " +
+          time +
+          "\n" +
+          "Note: " +
+          note +
+          "\n",
+        from: "+12015847715",
+        to: "+65" + driver_mobile,
       })
+      .then((message) => console.log(message.sid))
+      .catch((e) => {
+        console.log(e);
+      });
 
     var message = "<b>A driver has picked up this order! </b>";
     await bot.telegram
