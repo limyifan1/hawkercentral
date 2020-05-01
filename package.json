@@ -28,7 +28,8 @@
     "react-window": "1.8.5",
     "reactjs-popup": "1.5.0",
     "reactstrap": "8.4.1",
-    "ua-parser-js": "0.7.21"
+    "ua-parser-js": "0.7.21",
+    "universal-cookie": "^4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
