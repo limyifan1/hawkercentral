@@ -1,7 +1,6 @@
 import React from "react";
 import "../App.css";
 import { withRouter } from "react-router-dom";
-import name from "../logo-brown.png";
 import firebase from "./Firestore";
 import { Form, Button } from "react-bootstrap";
 import { db } from "./Firestore";
@@ -15,15 +14,16 @@ function onLoad(name) {
   analytics.logEvent(name);
 }
 
-const addData = async ({ driver_contact }) => {
+const updateData = async ({ driver_contact, id }) => {
   let now = new Date();
   var field = {
     driver_contact: driver_contact,
     timeaccepted: now,
   };
-  let id = await db
+  await db
     .collection("deliveries")
-    .add(field)
+    .doc(id)
+    .update(field)
     .then(function (docRef) {
       return docRef.id;
     })
@@ -58,30 +58,6 @@ export class Driver extends React.Component {
     };
   }
 
-  callPostal = (postal) => {
-    return fetch(
-      "https://developers.onemap.sg/commonapi/search?searchVal=" +
-        postal +
-        "&returnGeom=Y&getAddrDetails=Y"
-    )
-      .then(function (response) {
-        return response.json();
-      })
-      .then(
-        function (jsonResponse) {
-          if (
-            jsonResponse !== undefined &&
-            jsonResponse["results"] !== undefined
-          ) {
-            return jsonResponse["results"][0];
-          }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-  };
-
   componentWillMount() {
     onLoad("find_driver");
   }
@@ -106,6 +82,12 @@ export class Driver extends React.Component {
             message_id: snapshot.data().message_id,
             driver_mobile: this.state.driver_contact,
             requester_mobile: snapshot.data().contact,
+            customer_mobile: snapshot.data().contact_to,
+            origin: snapshot.data().unit + " " + snapshot.data().street,
+            destination:
+              snapshot.data().unit_to + " " + snapshot.data().street_to,
+            time: snapshot.data().time,
+            note: snapshot.data().note,
           });
         }
         return true;
@@ -154,7 +136,8 @@ export class Driver extends React.Component {
     this.setState({ submitted: true });
     await this.getDoc().then(async () => {
       if (!this.state.data.viewed) {
-        await addData({
+        await updateData({
+          id: this.state.id,
           driver_contact: this.state.driver_contact,
         });
       }
@@ -259,6 +242,10 @@ export class Driver extends React.Component {
                         <b>Hawker Contact:</b> {this.state.data.contact}
                         <br />
                         <b>Customer Contact:</b> {this.state.data.contact_to}
+                        <br />
+                        <b>Pickup Time:</b> {this.state.data.time}
+                        <br />
+                        <b>Note from Requester:</b> {this.state.data.note}
                         <br />
                         <b>Distance:</b> {this.state.data.distance.slice(0, 4)}
                         km
