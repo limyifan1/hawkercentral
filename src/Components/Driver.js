@@ -82,6 +82,14 @@ const addData = async ({
   return id;
 };
 
+const time_now = new Date();
+time_now.setMinutes(time_now.getMinutes() + 10);
+const time_now_plus = time_now.toLocaleTimeString("en-US", {
+  hour12: false,
+  hour: "numeric",
+  minute: "numeric",
+});
+
 export class Driver extends React.Component {
   constructor(props) {
     super(props);
@@ -99,6 +107,7 @@ export class Driver extends React.Component {
       unit_to: "",
       contact: "",
       contact_to: "",
+      time: time_now_plus,
       pickup_option: false,
       submitted: false,
       show: false,
@@ -286,7 +295,7 @@ export class Driver extends React.Component {
                     </Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <img src={instructions} alt="" style={{width:"100%"}}/>
+                    <img src={instructions} alt="" style={{ width: "100%" }} />
                   </Modal.Body>
                 </Modal>
 
@@ -315,7 +324,7 @@ export class Driver extends React.Component {
                       viewBox="0 0 16 16"
                       fill="currentColor"
                       xmlns="http://www.w3.org/2000/svg"
-                      style={{paddingLeft:"7px"}}
+                      style={{ paddingLeft: "7px" }}
                     >
                       <path
                         fill-rule="evenodd"
@@ -349,7 +358,7 @@ export class Driver extends React.Component {
                       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         {" "}
                         <div class="form-group create-title">
-                          <label for="postalcode">Postal Code</label>
+                          <label for="postalcode">Postal Code 邮区编号</label>
                           <div class="input-group">
                             <input
                               onChange={this.handleChange.bind(this)}
@@ -357,7 +366,7 @@ export class Driver extends React.Component {
                               type="number"
                               class="form-control"
                               name="postal"
-                              placeholder="Enter Postal Code"
+                              placeholder="Enter Postal Code 邮区编号"
                               min="0"
                               required
                             ></input>
@@ -368,7 +377,7 @@ export class Driver extends React.Component {
                         {" "}
                         <div class="form-group create-title">
                           <label for="street">
-                            Street Name<b> (Auto-Filled)</b>
+                            Street Name 街道<b> (Auto-Filled)</b>
                           </label>
                           <input
                             onChange={this.handleChange}
@@ -376,7 +385,7 @@ export class Driver extends React.Component {
                             type="text"
                             class="form-control"
                             name="street"
-                            placeholder="Enter Street Name"
+                            placeholder="Enter Street Name 街道"
                           ></input>
                         </div>
                       </div>
@@ -384,7 +393,7 @@ export class Driver extends React.Component {
                     <div class="row">
                       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <div class="form-group create-title">
-                          <label for="unit">Unit # (Optional)</label>
+                          <label for="unit">Unit # 门牌 (Optional)</label>
                           <input
                             onChange={this.handleChange}
                             value={this.state.unit}
@@ -395,9 +404,9 @@ export class Driver extends React.Component {
                           ></input>
                         </div>
                       </div>
-                      <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <div class="form-group create-title">
-                          <label for="unit">Contact Number (Mobile only): </label>
+                          <label for="unit">Mobile Number 手机号: </label>
                           <div class="input-group">
                             <div class="input-group-prepend">
                               <span class="input-group-text" id="basic-addon1">
@@ -416,9 +425,23 @@ export class Driver extends React.Component {
                           </div>
                         </div>
                       </div>
+                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <div class="form-group create-title">
+                          <label for="time">
+                            Pickup Time 取食物时间 (Optional)
+                          </label>
+                          <input
+                            onChange={this.handleChange}
+                            value={this.state.time}
+                            type="time"
+                            class="form-control"
+                            name="time"
+                            placeholder="E.g. #01-01"
+                          ></input>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <br />
                   <img
                     class="d-none d-md-inline-block"
                     src={delivery_address}
@@ -435,7 +458,7 @@ export class Driver extends React.Component {
                     <div class="row">
                       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <div class="form-group create-title">
-                          <label for="postalcode">Postal Code </label>
+                          <label for="postalcode">Postal Code 邮区编号 </label>
                           <div class="input-group">
                             <input
                               onChange={this.handleChange.bind(this)}
@@ -443,7 +466,7 @@ export class Driver extends React.Component {
                               type="number"
                               class="form-control"
                               name="postal_to"
-                              placeholder="Enter Postal Code"
+                              placeholder="Enter Postal Code 邮区编号"
                               min="0"
                               required
                             ></input>
@@ -454,7 +477,7 @@ export class Driver extends React.Component {
                         {" "}
                         <div class="form-group create-title">
                           <label for="street_to">
-                            Street Name<b> (Auto-Filled)</b>
+                            Street Name 街道<b> (Auto-Filled)</b>
                           </label>
                           <input
                             onChange={this.handleChange}
@@ -462,7 +485,7 @@ export class Driver extends React.Component {
                             type="text"
                             class="form-control"
                             name="street_to"
-                            placeholder="Enter Street Name"
+                            placeholder="Enter Street Name 街道"
                           ></input>
                         </div>
                       </div>
@@ -472,7 +495,7 @@ export class Driver extends React.Component {
                       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         {" "}
                         <div class="form-group create-title">
-                          <label for="unit">Unit # (Optional)</label>
+                          <label for="unit">Unit # 门牌 (Optional)</label>
                           <input
                             onChange={this.handleChange}
                             value={this.state.unit_to}
@@ -485,7 +508,9 @@ export class Driver extends React.Component {
                       </div>
                       <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                         <div class="form-group create-title">
-                          <label for="unit">Contact Number: (Optional)</label>
+                          <label for="unit">
+                            Mobile Number 手机号: (Optional)
+                          </label>
                           <div class="input-group">
                             <div class="input-group-prepend">
                               <span class="input-group-text" id="basic-addon1">
@@ -577,6 +602,7 @@ export class Driver extends React.Component {
                             backgroundColor: "green",
                             borderColor: "white",
                             fontSize: "25px",
+                            color: "white",
                           }}
                         >
                           Submitted! If found, a driver will contact you
