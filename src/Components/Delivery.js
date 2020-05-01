@@ -3,7 +3,7 @@ import "../App.css";
 import { withRouter } from "react-router-dom";
 import name from "../logo-brown.png";
 import firebase from "./Firestore";
-import { Form } from "react-bootstrap";
+// import { Form } from "react-bootstrap";
 import { db } from "./Firestore";
 import queryString from "query-string";
 import { Spinner } from "react-bootstrap";
@@ -14,71 +14,71 @@ function onLoad(name) {
   analytics.logEvent(name);
 }
 
-function distance_calc(lat1, lon1, lat2, lon2) {
-  if (lat1 === lat2 && lon1 === lon2) {
-    return 0;
-  } else {
-    var radlat1 = (Math.PI * lat1) / 180;
-    var radlat2 = (Math.PI * lat2) / 180;
-    var theta = lon1 - lon2;
-    var radtheta = (Math.PI * theta) / 180;
-    var dist =
-      Math.sin(radlat1) * Math.sin(radlat2) +
-      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-    if (dist > 1) {
-      dist = 1;
-    }
-    dist = Math.acos(dist);
-    dist = (dist * 180) / Math.PI;
-    dist = dist * 60 * 1.1515;
-    return dist * 1.609344;
-  }
-}
+// function distance_calc(lat1, lon1, lat2, lon2) {
+//   if (lat1 === lat2 && lon1 === lon2) {
+//     return 0;
+//   } else {
+//     var radlat1 = (Math.PI * lat1) / 180;
+//     var radlat2 = (Math.PI * lat2) / 180;
+//     var theta = lon1 - lon2;
+//     var radtheta = (Math.PI * theta) / 180;
+//     var dist =
+//       Math.sin(radlat1) * Math.sin(radlat2) +
+//       Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+//     if (dist > 1) {
+//       dist = 1;
+//     }
+//     dist = Math.acos(dist);
+//     dist = (dist * 180) / Math.PI;
+//     dist = dist * 60 * 1.1515;
+//     return dist * 1.609344;
+//   }
+// }
 
-const addData = async ({
-  postal,
-  latitude,
-  longitude,
-  latitude_to,
-  longitude_to,
-  street,
-  street_to,
-  cost,
-  distance,
-  unit,
-  unit_to,
-  contact,
-  contact_to,
-}) => {
-  let now = new Date();
-  var field = {
-    postal: postal,
-    latitude: latitude,
-    longitude: longitude,
-    latitude_to: latitude_to,
-    longitude_to: longitude_to,
-    street: street,
-    street_to: street_to,
-    cost: cost,
-    distance: distance,
-    unit: unit,
-    unit_to: unit_to,
-    contact: contact,
-    contact_to: contact_to,
-    lastmodified: now,
-    viewed: false,
-  };
-  let id = await db
-    .collection("deliveries")
-    .add(field)
-    .then(function (docRef) {
-      return docRef.id;
-    })
-    .catch(function (error) {
-      console.error("Error adding document: ", error);
-    });
-  return id;
-};
+// const addData = async ({
+//   postal,
+//   latitude,
+//   longitude,
+//   latitude_to,
+//   longitude_to,
+//   street,
+//   street_to,
+//   cost,
+//   distance,
+//   unit,
+//   unit_to,
+//   contact,
+//   contact_to,
+// }) => {
+//   let now = new Date();
+//   var field = {
+//     postal: postal,
+//     latitude: latitude,
+//     longitude: longitude,
+//     latitude_to: latitude_to,
+//     longitude_to: longitude_to,
+//     street: street,
+//     street_to: street_to,
+//     cost: cost,
+//     distance: distance,
+//     unit: unit,
+//     unit_to: unit_to,
+//     contact: contact,
+//     contact_to: contact_to,
+//     lastmodified: now,
+//     viewed: false,
+//   };
+//   let id = await db
+//     .collection("deliveries")
+//     .add(field)
+//     .then(function (docRef) {
+//       return docRef.id;
+//     })
+//     .catch(function (error) {
+//       console.error("Error adding document: ", error);
+//     });
+//   return id;
+// };
 
 export class Driver extends React.Component {
   constructor(props) {

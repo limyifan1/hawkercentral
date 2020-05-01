@@ -189,10 +189,6 @@ export class Driver extends React.Component {
     let cost = 6 + distance * 0.5;
     await this.getPostal(this.state.postal_to, "to");
     await this.getPostal(this.state.postal, "from");
-    console.log({
-      origin: this.state.street,
-      destination: this.state.street_to,
-    });
     await addData({
       origin: this.state.street,
       destination: this.state.street_to,
@@ -211,7 +207,7 @@ export class Driver extends React.Component {
       contact: this.state.contact,
       contact_to: this.state.contact_to,
     }).then((id) => {
-      console.log({
+      this.sendData({
         origin: this.state.street,
         destination: this.state.street_to,
         distance: distance.toString().slice(0, 4),
@@ -219,15 +215,7 @@ export class Driver extends React.Component {
         id: id,
         url: "www.foodleh.app/delivery?id=" + id,
       });
-      //   this.sendData({
-      //     origin: this.state.street,
-      //     destination: this.state.street_to,
-      //     distance: distance.toString().slice(0, 4),
-      //     cost: "$" + cost.toString().slice(0, 4),
-      //     id: id,
-      //     url: "www.foodleh.app/delivery?id=" + id,
-      //   });
-      //   this.setState({ submitted: true });
+      this.setState({ submitted: true });
     });
   };
 
@@ -331,7 +319,7 @@ export class Driver extends React.Component {
                       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         {" "}
                         <div class="form-group create-title">
-                          <label for="unit">Unit #</label>
+                          <label for="unit">Unit # (Optional)</label>
                           <input
                             onChange={this.handleChange}
                             value={this.state.unit}
@@ -417,7 +405,7 @@ export class Driver extends React.Component {
                         {" "}
                         <div class="form-group create-title">
                           <label for="unit" style={{ color: "white" }}>
-                            Unit #
+                            Unit # (Optional)
                           </label>
                           <input
                             onChange={this.handleChange}
@@ -432,7 +420,7 @@ export class Driver extends React.Component {
                       <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                         <div class="form-group create-title">
                           <label for="unit" style={{ color: "white" }}>
-                            Contact Number:{" "}
+                            Contact Number: (Optional)
                           </label>
                           <div class="input-group">
                             <div class="input-group-prepend">
