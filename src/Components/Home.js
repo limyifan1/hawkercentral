@@ -5,12 +5,14 @@
 
 import React from "react";
 import Component from "../Components";
-import home from "../home (2).png";
+import home from "../home-bs.png";
 import Item from "./Item";
 import i_want from "../i_want.jpeg";
 import delivery from "../delivery.jpeg";
 import self_collect from "../self_collect.jpeg";
-
+import fb from "../fb.png";
+import insta from "../insta.png";
+import email from "../email.png";
 import "./Home.css";
 
 const SELF_COLLECT_OPTION = "selfcollect";
@@ -108,19 +110,46 @@ export class Home extends React.PureComponent {
       <div class="container-fluid" className="home">
         <div class="jumbotron row">
           <div class="container">
-            {/* //       <div class="container-fluid pt-4">
-//         <div class="row pt-5" style={{ "background-color": "white" }}>
-//           <div class="container" style={{ "margin-top": "57px" }}> */}
             <div class="row">
               <div class="col">
                 <img
                   alt="Cut the middlemen - Save our local F&amp;B"
                   class="img-fluid"
                   src={home}
+                  style={{ width: "80%" }}
                 />
+                <br />
+                <br />
+                <div class="d-none d-md-inline-block">
+                  <span style={{ fontSize: "10px" }}>Connect with us:</span>
+                  <br />
+                  <a href="https://www.facebook.com/foodlehsg/" target="blank">
+                    <img
+                      class="img-fluid"
+                      style={{ width: "30px", margin: "10px" }}
+                      alt="fb"
+                      src={fb}
+                    />
+                  </a>
+                  <a href="https://instagram.com/foodleh.sg" target="blank">
+                    <img
+                      class="img-fluid"
+                      style={{ width: "30px", margin: "10px" }}
+                      alt="insta"
+                      src={insta}
+                    />
+                  </a>
+                  <a href="mailto:foodleh@outlook.com" target="blank">
+                    <img
+                      class="img-fluid"
+                      style={{ width: "30px", margin: "10px" }}
+                      alt="email"
+                      src={email}
+                    />
+                  </a>
+                </div>
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 align-items-center">
-                <br />
                 <br />
                 <img alt="I want..." class="home-iwant" src={i_want} />
                 <br />
@@ -216,6 +245,39 @@ export class Home extends React.PureComponent {
                   )} */}
                   <br />
                   <br />
+                  <div class="d-inline-block d-md-none">
+                    <span style={{ fontSize: "10px" }}>Connect with us:</span>
+                    <br />
+                    <a
+                      href="https://www.facebook.com/foodlehsg/"
+                      target="blank"
+                    >
+                      <img
+                        class="img-fluid"
+                        style={{ width: "30px", margin: "10px" }}
+                        alt="fb"
+                        src={fb}
+                      />
+                    </a>
+                    <a href="https://instagram.com/foodleh.sg" target="blank">
+                      <img
+                        class="img-fluid"
+                        style={{ width: "30px", margin: "10px" }}
+                        alt="insta"
+                        src={insta}
+                      />
+                    </a>
+                    <a href="mailto:foodleh@outlook.com" target="blank">
+                      <img
+                        class="img-fluid"
+                        style={{ width: "30px", margin: "10px" }}
+                        alt="email"
+                        src={email}
+                      />
+                    </a>
+                    <br />
+                    <br />
+                  </div>
                   <div class="container-fluid">
                     <p style={{ fontSize: "14px" }}>
                       We would like to acknowledge the data and images we
