@@ -3,8 +3,13 @@ import "../App.css";
 import { withRouter } from "react-router-dom";
 import name from "../logo-brown.png";
 import firebase from "./Firestore";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Modal } from "react-bootstrap";
 import { db } from "./Firestore";
+import driver from "../driver.png";
+import store_address from "../store_address.png";
+import delivery_address from "../delivery_address.png";
+import summary from "../summary.png";
+import instructions from "../instructions.jpeg";
 
 const analytics = firebase.analytics();
 
@@ -97,6 +102,7 @@ export class Driver extends React.Component {
       contact_to: "",
       pickup_option: false,
       submitted: false,
+      show: false,
     };
   }
 
@@ -236,6 +242,14 @@ export class Driver extends React.Component {
     this.setState({ [name]: value });
   };
 
+  setShow = () => {
+    this.setState({ show: true });
+  };
+
+  setHide = () => {
+    this.setState({ show: false });
+  };
+
   render() {
     var distance = distance_calc(
       this.state.latitude,
@@ -259,24 +273,78 @@ export class Driver extends React.Component {
           <Form onSubmit={this.handleSubmit.bind(this)}>
             <div class="container-fluid col-md-10 content col-xs-offset-2">
               <div class="row justify-content-center">
+                <img src={driver} alt="" style={{ width: "100%" }} />
+                <Modal
+                  onHide={this.setHide}
+                  show={this.state.show}
+                  dialogClassName="modal-90w"
+                  aria-labelledby="example-custom-modal-styling-title"
+                  style={{ "margin-top": "50px" }}
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title id="example-custom-modal-styling-title">
+                      How DriverLeh? Works
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <img src={instructions} alt="" style={{width:"100%"}}/>
+                  </Modal.Body>
+                </Modal>
+
+                <div
+                  onClick={() => this.setShow()}
+                  class="d-flex justify-content-center align-items-center"
+                  style={{
+                    border: "2px solid",
+                    color: "white",
+                    width: "130px",
+                    height: "40px",
+                    alignText: "center",
+                    alignItems: "center",
+                    fontSize: "12px",
+                    cursor: "pointer",
+                    marginTop: "12px",
+                    backgroundColor: "#b48300",
+                    borderColor: "black",
+                  }}
+                >
+                  {
+                    <svg
+                      class="bi bi-question-circle"
+                      width="3em"
+                      height="3em"
+                      viewBox="0 0 16 16"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                      style={{paddingLeft:"7px"}}
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z"
+                        clip-rule="evenodd"
+                      />
+                      <path d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z" />
+                    </svg>
+                  }{" "}
+                  <div style={{ padding: "10px" }}>What is DriverLeh?</div>
+                </div>
                 <div
                   class="card shadow row"
-                  style={{ width: "100%", padding: "20px" }}
+                  style={{ width: "100%", padding: "", marginTop: "10px" }}
                 >
-                  <h3>
-                    {" "}
-                    Find A Driver 找司机
-                    <br />
-                    <small style={{ color: "grey" }}> by </small>{" "}
-                    <img src={name} alt="" style={{ width: "80px" }} />
-                  </h3>
-                  <br />
-                  <div
-                    class="shadow"
-                    style={{ backgroundColor: "#f2f2f2", padding: "20px" }}
-                  >
-                    <h4>Deliver From (我的地址): </h4>
-                    <br />
+                  <img
+                    class="d-none d-md-inline-block"
+                    src={store_address}
+                    alt=""
+                    style={{ width: "40%" }}
+                  />
+                  <img
+                    class="d-inline-block d-md-none"
+                    src={store_address}
+                    alt=""
+                    style={{ width: "80%" }}
+                  />
+                  <div style={{ padding: "20px" }}>
                     <div class="row">
                       {" "}
                       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
@@ -315,9 +383,7 @@ export class Driver extends React.Component {
                       </div>
                     </div>
                     <div class="row">
-                      {" "}
                       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                        {" "}
                         <div class="form-group create-title">
                           <label for="unit">Unit # (Optional)</label>
                           <input
@@ -332,7 +398,7 @@ export class Driver extends React.Component {
                       </div>
                       <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                         <div class="form-group create-title">
-                          <label for="unit">Contact Number: </label>
+                          <label for="unit">Contact Number (Mobile only): </label>
                           <div class="input-group">
                             <div class="input-group-prepend">
                               <span class="input-group-text" id="basic-addon1">
@@ -354,20 +420,23 @@ export class Driver extends React.Component {
                     </div>
                   </div>
                   <br />
-                  <div
-                    class="shadow-lg"
-                    style={{ backgroundColor: "#b48300", padding: "20px" }}
-                  >
-                    <h4 style={{ color: "white" }}>Deliver To (顾客地址): </h4>
-                    <br />
+                  <img
+                    class="d-none d-md-inline-block"
+                    src={delivery_address}
+                    alt=""
+                    style={{ width: "40%" }}
+                  />
+                  <img
+                    class="d-inline-block d-md-none"
+                    src={delivery_address}
+                    alt=""
+                    style={{ width: "80%" }}
+                  />
+                  <div style={{ padding: "20px" }}>
                     <div class="row">
-                      {" "}
                       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                        {" "}
                         <div class="form-group create-title">
-                          <label for="postalcode" style={{ color: "white" }}>
-                            Postal Code
-                          </label>
+                          <label for="postalcode">Postal Code </label>
                           <div class="input-group">
                             <input
                               onChange={this.handleChange.bind(this)}
@@ -385,7 +454,7 @@ export class Driver extends React.Component {
                       <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                         {" "}
                         <div class="form-group create-title">
-                          <label for="street_to" style={{ color: "white" }}>
+                          <label for="street_to">
                             Street Name<b> (Auto-Filled)</b>
                           </label>
                           <input
@@ -404,9 +473,7 @@ export class Driver extends React.Component {
                       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         {" "}
                         <div class="form-group create-title">
-                          <label for="unit" style={{ color: "white" }}>
-                            Unit # (Optional)
-                          </label>
+                          <label for="unit">Unit # (Optional)</label>
                           <input
                             onChange={this.handleChange}
                             value={this.state.unit_to}
@@ -419,9 +486,7 @@ export class Driver extends React.Component {
                       </div>
                       <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                         <div class="form-group create-title">
-                          <label for="unit" style={{ color: "white" }}>
-                            Contact Number: (Optional)
-                          </label>
+                          <label for="unit">Contact Number: (Optional)</label>
                           <div class="input-group">
                             <div class="input-group-prepend">
                               <span class="input-group-text" id="basic-addon1">
@@ -446,12 +511,23 @@ export class Driver extends React.Component {
                     <div
                       class="shadow-lg"
                       style={{
-                        backgroundColor: "#000080",
+                        backgroundColor: "white",
                         padding: "20px",
-                        color: "white",
                       }}
                     >
-                      <h4 style={{ color: "white" }}> Summary </h4>
+                      <img
+                        class="d-none d-md-inline-block"
+                        src={summary}
+                        alt=""
+                        style={{ width: "20%" }}
+                      />
+                      <img
+                        class="d-inline-block d-md-none"
+                        src={summary}
+                        alt=""
+                        style={{ width: "40%" }}
+                      />
+
                       {this.state.latitude &&
                       this.state.longitude &&
                       this.state.latitude_to &&
@@ -464,7 +540,10 @@ export class Driver extends React.Component {
                             <b>Estimated Cost: </b>
                             {"$" + cost.toString().slice(0, 4)}
                             <br />
-                            <small>(Start at $6, $0.5 per km)</small>
+                            <small>
+                              (Start at $6, $0.5 per km. Please confirm with
+                              driver. )
+                            </small>
                           </p>
                         </span>
                       ) : (
@@ -508,13 +587,13 @@ export class Driver extends React.Component {
                         <Button
                           class="shadow-lg"
                           style={{
-                            backgroundColor: "blue",
-                            borderColor: "white",
+                            backgroundColor: "#b48300",
+                            borderColor: "#b48300",
                             fontSize: "25px",
                           }}
                           type="Submit"
                         >
-                          Find Delivery Now
+                          Search (搜索)
                         </Button>
                       )}
 
