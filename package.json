@@ -12,7 +12,7 @@
     "cheerio": "1.0.0-rc.3",
     "csv-writer": "1.6.0",
     "firebase": "7.14.2",
-    "geofirex": "^0.1.0",
+    "geofirex": "0.1.0",
     "jimp": "0.10.3",
     "react": "16.13.1",
     "react-bootstrap": "1.0.1",
@@ -28,7 +28,7 @@
     "react-window": "1.8.5",
     "reactjs-popup": "1.5.0",
     "reactstrap": "8.4.1",
-    "rxjs": "^6.5.5",
+    "rxjs": "6.5.5",
     "ua-parser-js": "0.7.21"
   },
   "scripts": {
