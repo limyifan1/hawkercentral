@@ -11,6 +11,10 @@ var admin = require("firebase-admin");
 const express = require("express");
 admin.initializeApp(functions.config().firebase);
 
+const accountSid = functions.config().twilio.sid;
+const authToken = functions.config().twilio.token;
+const twilio = require("twilio")(accountSid, authToken);
+
 // give us the possibility of manage request properly
 const app = express();
 // Replace BUCKET_NAME
@@ -78,7 +82,7 @@ exports.telegramSend = functions.https.onRequest(async (req, res) => {
       "<b>Click to Accept (first come first serve): </b>" +
       url;
 
-    let sent = await bot.telegram.sendMessage("@foodlehdelivery", message, {
+    let sent = await bot.telegram.sendMessage("@foodlehdev", message, {
       parse_mode: "HTML",
     });
     let message_id = sent.message_id;
@@ -101,10 +105,23 @@ exports.telegramSend = functions.https.onRequest(async (req, res) => {
 exports.telegramEdit = functions.https.onRequest(async (req, res) => {
   return cors(req, res, async () => {
     var message_id = req.body.message_id;
+    var driver_mobile = req.body.driver_mobile;
+    var requester_mobile = req.body.requester_mobile;
+
+    twilio.messages
+      .create({
+        body: "Your driver's mobile is" + driver_mobile,
+        from: "+12015847715",
+        to: requester_mobile,
+      })
+      .then((message) => console.log(message.sid))
+      .catch((e)=>{
+        console.log(e)
+      })
 
     var message = "<b>A driver has picked up this order! </b>";
     await bot.telegram
-      .editMessageText("@foodlehdelivery", message_id, "", message, {
+      .editMessageText("@foodlehdev", message_id, "", message, {
         parse_mode: "HTML",
       })
       .then(() => {
