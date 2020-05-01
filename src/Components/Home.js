@@ -16,18 +16,14 @@ import chinese_delivery from "../chinese-delivery.png";
 import chinese_self_collect from "../chinese-dabao.png";
 import en from "../assets/translations/en.json";
 import zh from "../assets/translations/zh.json";
+import { LanguageContext } from "./themeContext";
 
 import "./Home.css";
 
 
 const cookies = new Cookies();
-cookies.addChangeListener(onCookieChange);
 const SELF_COLLECT_OPTION = "selfcollect";
 const HOME_DELIVERY_OPTION = "delivery";
-
-function onCookieChange(args) {
-  console.log(args)
-}
 
 export class Home extends React.PureComponent {
   state = {
@@ -91,6 +87,9 @@ export class Home extends React.PureComponent {
   };
 
   render() {
+    let languageContext = this.context;
+    console.log("home is rendering");
+    console.log(languageContext.language);
     let result = {
       all: [],
     };
@@ -205,7 +204,11 @@ export class Home extends React.PureComponent {
                 <br />
                 <br />
                 <div>
-                  {renderPostalCodeForm(this.state.option)}
+                  <LanguageContext.Consumer>
+                    {context => (
+                      renderPostalCodeForm(this.state.option, context)
+                    )}
+                  </LanguageContext.Consumer>
                   {/* {this.state.option === "" ? (
                     <span class=" main-caption">
                       choose <b>da bao</b> or <b>delivery</b>
@@ -340,12 +343,13 @@ export class Home extends React.PureComponent {
   }
 }
 
-function renderPostalCodeForm(option) {
+function renderPostalCodeForm(option, context) {
+  console.log("renderpostalcodeform", context)
   switch (option) {
     case "":
       return (
         <span class=" main-caption">
-          {(cookies.get('language') === 'en') ? <div>choose <b>da bao</b> or <b>delivery</b> </div>: <div>选 <b>打包</b> 或 <b>送餐</b></div>}
+          {(context.language === 'en') ? <div>choose <b>da bao</b> or <b>delivery</b> </div> : <div>选 <b>打包</b> 或 <b>送餐</b></div>}
         </span>
       );
 
