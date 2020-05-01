@@ -9,6 +9,8 @@ require('firebase/analytics');
 require('firebase/auth');
 require('firebase/storage');
 
+const geofirex = require("geofirex");
+
 firebase.initializeApp({
     apiKey: `${process.env.FIRESTORE_KEY}`,
     authDomain: "hawkercentral.firebaseapp.com",
@@ -19,11 +21,15 @@ firebase.initializeApp({
     appId: "1:596185831538:web:9cbfb234d1fff146cf8aeb",
     measurementId: "G-Z220VNJFT9"
   });
-firebase.analytics()
+firebase.analytics();
 
 const db = firebase.firestore();
-const storage = firebase.storage()
+const storage = firebase.storage();
+
+const geo = geofirex.init(firebase);
+const geoToPromise = geofirex.get;
 
 export  {
+    geo, geoToPromise,
     db, storage, firebase as default
 }
