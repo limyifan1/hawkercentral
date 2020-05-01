@@ -9,6 +9,9 @@ import store_address from "../store_address.png";
 import delivery_address from "../delivery_address.png";
 import summary from "../summary.png";
 import instructions from "../instructions.jpeg";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
 
 const analytics = firebase.analytics();
 
@@ -51,6 +54,7 @@ const addData = async ({
   unit_to,
   contact,
   contact_to,
+  time,
 }) => {
   let now = new Date();
   var field = {
@@ -69,6 +73,7 @@ const addData = async ({
     contact_to: contact_to,
     lastmodified: now,
     viewed: false,
+    time: time,
   };
   let id = await db
     .collection("deliveries")
@@ -83,7 +88,7 @@ const addData = async ({
 };
 
 const time_now = new Date();
-time_now.setMinutes(time_now.getMinutes() + 10);
+time_now.setMinutes(time_now.getMinutes() + 30);
 const time_now_plus = time_now.toLocaleTimeString("en-US", {
   hour12: false,
   hour: "numeric",
@@ -94,20 +99,21 @@ export class Driver extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      postal: "",
+      postal: cookies.get('postal'),
       latitude: "",
       longitude: "",
       latitude_to: "",
       longitude_to: "",
-      street: "",
+      street: cookies.get('street'),
       street_to: "",
       cost: "",
       distance: "",
-      unit: "",
+      unit: cookies.get('unit'),
       unit_to: "",
-      contact: "",
+      contact: cookies.get('contact'),
       contact_to: "",
       time: time_now_plus,
+      note: cookies.get('note'),
       pickup_option: false,
       submitted: false,
       show: false,
@@ -203,6 +209,11 @@ export class Driver extends React.Component {
     let cost = 6 + distance * 0.5;
     await this.getPostal(this.state.postal_to, "to");
     await this.getPostal(this.state.postal, "from");
+    cookies.set("postal", this.state.postal, { path: '/' });
+    cookies.set("street", this.state.street, { path: '/' });
+    cookies.set("unit", this.state.unit, { path: '/' });
+    cookies.set("contact", this.state.contact, { path: '/' });
+    cookies.set("note", this.state.note, { path: '/' });
     await addData({
       origin: this.state.street,
       destination: this.state.street_to,
@@ -220,6 +231,8 @@ export class Driver extends React.Component {
       unit_to: this.state.unit_to,
       contact: this.state.contact,
       contact_to: this.state.contact_to,
+      time: this.state.time,
+      note: this.state.note
     }).then((id) => {
       this.sendData({
         origin: this.state.street,
@@ -427,9 +440,7 @@ export class Driver extends React.Component {
                       </div>
                       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <div class="form-group create-title">
-                          <label for="time">
-                            Pickup Time 取食物时间 (Optional)
-                          </label>
+                          <label for="time">Pickup Time 取食物时间</label>
                           <input
                             onChange={this.handleChange}
                             value={this.state.time}
@@ -437,6 +448,22 @@ export class Driver extends React.Component {
                             class="form-control"
                             name="time"
                             placeholder="E.g. #01-01"
+                          ></input>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group create-title">
+                          <label for="note">Note To Driver 司机启示 (Optional, max 40 char)</label>
+                          <input
+                            onChange={this.handleChange}
+                            value={this.state.note}
+                            type="text"
+                            class="form-control"
+                            name="note"
+                            placeholder="E.g. Collect order number 3"
+                            maxLength="40"
                           ></input>
                         </div>
                       </div>
