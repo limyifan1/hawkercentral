@@ -136,8 +136,7 @@ export class About extends React.Component {
                     </b>
                     <br />
                     <br />
-                    Please email foodleh@outlook.com for questions, enquiries,
-                    or concerns.
+                    Disclaimer: FoodLeh? is a crowdsourced hawker directory relying on Singaporeans to share information about our local F&B places. While we hope to keep the information on this platform as accurate as possible, there might be inaccuracies due to user entries from time to time. FoodLeh? will not be held liable for any inaccuracies or misrepresentation here, but we continue striving to improve this platform. Contact us at foodleh@outlook.com if you have any suggestions or notice anything we could improve!
                     <br />
                     <br />
                     <a href="https://github.com/limyifan1/hawkercentral">Github Link</a> 
