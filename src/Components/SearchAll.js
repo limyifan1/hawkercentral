@@ -113,6 +113,8 @@ export class SearchAll extends React.Component {
         <span>
           <Select
             isMulti
+            closeMenuOnSelect={false}
+            isDisabled={!this.state.retrieved}
             name="name"
             options={cuisine_format}
             className="basic-multi-select"
@@ -297,58 +299,54 @@ export class SearchAll extends React.Component {
     }
 
     return (
-      <div>
-        {this.state.retrieved ? (
-          <div>
-            <div
-              class="container"
-              style={{ paddingTop: "56px", width: "100%" }}
-            >
-              <div class="container" style={{ paddingTop: "27px" }}>
-                <div class="row justify-content-center">
-                  <div class="col-12 col-sm-10 col-md-6">
-                    <h3>All Listings</h3>
-                  </div>
-                </div>
-                <div class="row justify-content-center mt-4">
-                  <div class="col-12 col-sm-10 col-md-6">
-                    <input
-                      class="form-control"
-                      type="text"
-                      // value={this.state.search}
-                      name="search"
-                      placeholder="   Search by Name, Category, Food, Items e.g. Chicken Rice"
-                      style={{
-                        width: "100%",
-                        height: "38px",
-                        "border-radius": "1rem",
-                      }}
-                      onChange={this.handleChange}
-                    ></input>
-                  </div>
-                  <div class="col-12 col-sm-10 col-md-5">
-                    {this.cuisineSearch()}
-                  </div>
-                </div>
-                <div className="row justify-content-center mt-4">
-                  {result.nearby.length > 0 ? (
-                    result.nearby
-                  ) : (
-                    <span class="mt-5">No Results Found</span>
-                  )}
+      <div
+        class="container"
+        style={{ paddingTop: "56px", width: "100%" }}
+      >
+        <div class="container" style={{ paddingTop: "27px" }}>
+          <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-6">
+              <h3>All Listings</h3>
+            </div>
+          </div>
+          <div class="row justify-content-center mt-4">
+            <div class="col-12 col-sm-10 col-md-6">
+              <input
+                disabled={!this.state.retrieved}
+                class="form-control"
+                type="text"
+                // value={this.state.search}
+                name="search"
+                placeholder="   Search by Name, Category, Food, Items e.g. Chicken Rice"
+                style={{
+                  width: "100%",
+                  height: "38px",
+                  "border-radius": "1rem",
+                }}
+                onChange={this.handleChange}
+              ></input>
+            </div>
+            <div class="col-12 col-sm-10 col-md-5">
+              {this.cuisineSearch()}
+            </div>
+          </div>
+          <div className="row justify-content-center mt-4">
+            {this.state.retrieved ? (
+              result.nearby.length > 0 ? (
+                result.nearby
+              ) : (
+                <span class="mt-5">No Results Found</span>
+              )
+            ) : (
+              <div class="row h-100 page-container">
+                <div class="col-sm-12 my-auto">
+                  <h3>Loading</h3>
+                  <Spinner class="" animation="grow" />
                 </div>
               </div>
-              <div></div>
-            </div>
+            )}
           </div>
-        ) : (
-          <div class="row h-100 page-container">
-            <div class="col-sm-12 my-auto">
-              <h3>Loading</h3>
-              <Spinner class="" animation="grow" />
-            </div>
-          </div>
-        )}
+        </div>
       </div>
     );
   }
