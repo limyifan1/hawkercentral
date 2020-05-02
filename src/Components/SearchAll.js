@@ -12,6 +12,7 @@ import Select from "react-select";
 
 import firebase from "./Firestore";
 import Helpers from "../Helpers/helpers";
+import { LanguageContext } from "./themeContext";
 
 const analytics = firebase.analytics();
 
@@ -126,18 +127,22 @@ export class SearchAll extends React.Component {
     });
     const select = () => {
       return (
-        <span>
-          <Select
-            isMulti
-            name="name"
-            options={cuisine_format}
-            className="basic-multi-select"
-            classNamePrefix="select"
-            value={this.state.cuisineValue}
-            onChange={this.handleCuisineChange}
-            placeholder="Filter By Cuisine"
-          />
-        </span>
+        <LanguageContext.Consumer>
+          {context => (
+            <span>
+              <Select
+                isMulti
+                name="name"
+                options={cuisine_format}
+                className="basic-multi-select"
+                classNamePrefix="select"
+                value={this.state.cuisineValue}
+                onChange={this.handleCuisineChange}
+                placeholder={context.data.search.filterby}
+              />
+            </span>
+          )}
+        </LanguageContext.Consumer>
       );
     };
     return (
@@ -304,7 +309,7 @@ export class SearchAll extends React.Component {
                 pic={data["url"]}
                 summary={data["description"]}
                 claps={data["claps"]}
-                // distance={data["distance"]}
+              // distance={data["distance"]}
               />
             </div>
           </span>
@@ -322,26 +327,34 @@ export class SearchAll extends React.Component {
             >
               <div class="container" style={{ paddingTop: "27px" }}>
                 <div class="row justify-content-center">
-                  <div class="col-12 col-sm-10 col-md-6">
-                    <h3>All Listings</h3>
-                  </div>
+                  <LanguageContext.Consumer>
+                    {context => (
+                      <div class="col-12 col-sm-10 col-md-6">
+                        <h3>{context.data.search.alllistings}</h3>
+                      </div>
+                    )}
+                  </LanguageContext.Consumer>
                 </div>
                 <div class="row justify-content-center mt-4">
-                  <div class="col-12 col-sm-10 col-md-6">
-                    <input
-                      class="form-control"
-                      type="text"
-                      // value={this.state.search}
-                      name="search"
-                      placeholder="   Search by Name, Category, Food, Items e.g. Chicken Rice"
-                      style={{
-                        width: "100%",
-                        height: "38px",
-                        "border-radius": "1rem",
-                      }}
-                      onChange={this.handleChange}
-                    ></input>
-                  </div>
+                  {<LanguageContext.Consumer>
+                    {context => (
+                      <div class="col-12 col-sm-10 col-md-6">
+                        <input
+                          class="form-control"
+                          type="text"
+                          // value={this.state.search}
+                          name="search"
+                          placeholder={context.data.search.prompt}
+                          style={{
+                            width: "100%",
+                            height: "38px",
+                            "border-radius": "1rem",
+                          }}
+                          onChange={this.handleChange}
+                        ></input>
+                      </div>
+                    )}
+                  </LanguageContext.Consumer>}
                   <div class="col-12 col-sm-10 col-md-5">
                     {this.cuisineSearch()}
                   </div>
@@ -350,21 +363,21 @@ export class SearchAll extends React.Component {
                   {result.nearby.length > 0 ? (
                     result.nearby
                   ) : (
-                    <span class="mt-5">No Results Found</span>
-                  )}
+                      <span class="mt-5">No Results Found</span>
+                    )}
                 </div>
               </div>
               <div></div>
             </div>
           </div>
         ) : (
-          <div class="row h-100 page-container">
-            <div class="col-sm-12 my-auto">
-              <h3>Loading</h3>
-              <Spinner class="" animation="grow" />
+            <div class="row h-100 page-container">
+              <div class="col-sm-12 my-auto">
+                <h3>Loading</h3>
+                <Spinner class="" animation="grow" />
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </div>
     );
   }

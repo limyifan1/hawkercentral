@@ -77,5 +77,10 @@
   },
   "about": {
     "para_one": " is an easy-to-use web application designed to bridge hawker stalls and restaurant owners in Singapore with all Singaporeans via a free online platform."
+  },
+  "search": {
+    "alllistings" : "All Listings",
+    "prompt": "   Search by Name, Category, Food, Items e.g. Chicken Rice",
+    "filterby": "Filter By Cuisine"
   }
 }
