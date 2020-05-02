@@ -101,17 +101,17 @@ export class Menu extends React.Component {
         <Navbar.Toggle />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <LanguageContext.Consumer>
-            {({ language, toggleLanguage }) => (
+            {({ data, language, toggleLanguage }) => (
               <Button
                 class="shadow-sm"
                 style={{
-                  backgroundColor: "blue",
-                  borderColor: "blue",
+                  backgroundColor: "#B48300",
+                  borderColor: "#B48300",
                 }}
                 onClick={toggleLanguage}
                 name="Language"
               >
-                {language}
+                {data.menu.language_button}
 
               </Button>
             )}
@@ -119,7 +119,7 @@ export class Menu extends React.Component {
           <Nav.Link href="#" as={Link} to="/" id="menu-link" style={{ "color": "grey" }} onClick={onClick("home")}>
             <LanguageContext.Consumer>
               {({ data }) => (
-                 data.homelabel
+                 data.menu.homelabel
               )}
             </LanguageContext.Consumer>
           </Nav.Link>
@@ -129,14 +129,14 @@ export class Menu extends React.Component {
           <Nav.Link href="#searchall" as={Link} to="/searchall" id="menu-link" style={{ "color": "grey" }} onClick={onClick("search")}>
           <LanguageContext.Consumer>
               {({ data }) => (
-                 data.searchlabel
+                 data.menu.searchlabel
               )}
             </LanguageContext.Consumer>
           </Nav.Link>
           <Nav.Link href="#create" as={Link} to="/create" id="menu-link" style={{ "color": "grey" }} onClick={onClick("create")}>
           <LanguageContext.Consumer>
               {({ data }) => (
-                 data.createlabel
+                 data.menu.createlabel
               )}
             </LanguageContext.Consumer>
           </Nav.Link>
@@ -144,7 +144,7 @@ export class Menu extends React.Component {
           <Nav.Link href="#about" as={Link} to="/about" id="menu-link" style={{ "color": "grey" }} onClick={onClick("about")}>
           <LanguageContext.Consumer>
               {({ data }) => (
-                 data.aboutlabel
+                 data.menu.aboutlabel
               )}
             </LanguageContext.Consumer>
           </Nav.Link>

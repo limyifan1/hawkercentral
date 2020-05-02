@@ -1,6 +1,21 @@
 {
-  "homelabel": "首页",
-  "searchlabel": "搜索",
-  "createlabel": "新页",
-  "aboutlabel": "简介"
+  "menu": {
+    "homelabel": "首页",
+    "searchlabel": "搜索",
+    "createlabel": "新页",
+    "aboutlabel": "简介",
+    "language_button": "English"
+  },
+  "home": {
+    "i_want": "chinese_i_want",
+    "delivery": "delivery",
+    "self_collect": "self_collect",
+    "acknowledgement": "We would like to acknowledge the data and images we obtained from The Smart Local (TSL) when building the initial version of our app and assure that all current data in the listing are obtained with the consent from the originators themselves.",
+    "choose": "选",
+    "dabao": "打包",
+    "or": "或",
+    "delivery_word": "送餐"
+  }
+
+
 }

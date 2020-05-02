@@ -1,6 +1,21 @@
 {
-  "homelabel": "Home",
-  "searchlabel": "Search",
-  "createlabel": "Create",
-  "aboutlabel": "About"
+  "menu": {
+    "homelabel": "Home",
+    "searchlabel": "Search",
+    "createlabel": "Create",
+    "aboutlabel": "About",
+    "language_button": "中文"
+  },
+  "home": {
+    "i_want": "i_want",
+    "delivery": "delivery",
+    "self_collect": "self_collect",
+    "acknowledgement": "We would like to acknowledge the data and images we obtained from The Smart Local (TSL) when building the initial version of our app and assure that all current data in the listing are obtained with the consent from the originators themselves.",
+    "choose": "choose",
+    "dabao": "dabao",
+    "or": "or",
+    "delivery_word": "delivery"
+  }
+
+
 }

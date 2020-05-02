@@ -134,7 +134,16 @@ export class Home extends React.PureComponent {
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 align-items-center">
                 <br />
                 <br />
-                <img alt="I want..." class="home-iwant" src={(cookies.get('language') === 'en') ? i_want : chinese_i_want} />
+                <img alt="I want..." class="home-iwant"
+                  src={(cookies.get('language') === 'en') ? i_want : chinese_i_want}
+                />
+                
+                {/* TODO: detect context to display chi/eng pics instead of using cookies
+                <LanguageContext.Consumer>
+                { context  => (
+                  <img alt="I want..." class="home-iwant" src={context.data.home.i_want} />
+                    )}
+                </LanguageContext.Consumer> */}
                 <br />
                 <br />
                 <span class="row d-none d-md-inline-block">
@@ -143,7 +152,7 @@ export class Home extends React.PureComponent {
                       onClick={this.handleCollect}
                       alt=""
                       class={selfcollect}
-                      src={self_collect}
+                      src={(cookies.get('language') === 'en') ? self_collect : chinese_self_collect}
                       style={{ width: "30%" }}
                     />
                   </span>
@@ -152,7 +161,7 @@ export class Home extends React.PureComponent {
                       alt=""
                       onClick={this.handleDelivery}
                       class={delivery_option}
-                      src={delivery}
+                      src={(cookies.get('language') === 'en') ? delivery : chinese_delivery}
                       style={{ width: "30%" }}
                     />
                   </span>
@@ -234,14 +243,19 @@ export class Home extends React.PureComponent {
                   <br />
                   <div class="container-fluid">
                     <p style={{ fontSize: "14px" }}>
-                      We would like to acknowledge the data and images we
-                      obtained from{" "}
+                    <LanguageContext.Consumer>
+                    {context => (
+                      context.data.home.acknowledgement
+                    )} 
+                  </LanguageContext.Consumer>
+                      {/* TODO: Figure out how to insert links with context/json loading
+                      We would like to acknowledge the data and images we obtained from {" "}
                       <a href="https://thesmartlocal.com/delivery">
                         The Smart Local (TSL){" "}
                       </a>
                       when building the initial version of our app and assure
                       that all current data in the listing are obtained with the
-                      consent from the originators themselves.
+                      consent from the originators themselves. */}
                     </p>
                     <br />
                   </div>
@@ -349,7 +363,9 @@ function renderPostalCodeForm(option, context) {
     case "":
       return (
         <span class=" main-caption">
-          {(context.language === 'en') ? <div>choose <b>da bao</b> or <b>delivery</b> </div> : <div>选 <b>打包</b> 或 <b>送餐</b></div>}
+          <div> {context.data.home.choose} <b>{context.data.home.delivery_word} </b> {context.data.home.or} <b> {context.data.home.dabao}</b>
+          </div>
+          {/*(context.language === 'en') ? <div>choose <b>da bao</b> or <b>delivery</b> </div> : <div>选 <b>打包</b> 或 <b>送餐</b></div>*/}
         </span>
       );
 
