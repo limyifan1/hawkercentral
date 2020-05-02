@@ -12,8 +12,8 @@
     "cheerio": "1.0.0-rc.3",
     "csv-writer": "1.6.0",
     "firebase": "7.14.2",
-    "google-map-react": "^1.1.7",
     "geofirex": "0.1.0",
+    "google-map-react": "^1.1.7",
     "jimp": "0.10.3",
     "rc-progress": "^2.5.2",
     "react": "16.13.1",
@@ -30,9 +30,9 @@
     "react-window": "1.8.5",
     "reactjs-popup": "1.5.0",
     "reactstrap": "8.4.1",
+    "rxjs": "6.5.5",
     "ua-parser-js": "0.7.21",
     "universal-cookie": "^4.0.3"
-    "rxjs": "6.5.5",
   },
   "scripts": {
     "start": "react-scripts start",
