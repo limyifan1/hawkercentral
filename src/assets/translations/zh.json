@@ -14,7 +14,16 @@
     "choose": "选",
     "dabao": "打包",
     "or": "或",
-    "delivery_word": "送餐"
+    "delivery_word": "送餐",
+    "now_enter": "请输入",
+    "postalcode": "邮政编码"
+  },
+  "create": {
+    "step1": "第一： 摊位资料 （重要）",
+    "pleaseenter": "请输入以下资料"
+  },
+  "about": {
+    "para_one": " 是个免费并易用的网站，目的在于帮助饮食业摊主联系到更多顾客，帮助新加坡人找到更多美食。"
   }
 
 

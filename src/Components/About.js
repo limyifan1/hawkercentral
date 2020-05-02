@@ -12,6 +12,7 @@ import { db } from "./Firestore";
 
 
 import firebase from "./Firestore";
+import { LanguageContext } from "./themeContext";
 
 const analytics = firebase.analytics();
 
@@ -76,11 +77,13 @@ export class About extends React.Component {
                   class="row justify-content-center"
                   style={{ textAlign: "center", padding: "30px 30px 30px" }}
                 >
-                  <div>
-                    <img src={logo} alt="" style={{ height: "20px" }} /> is an
-                    easy-to-use web application designed to bridge hawker stalls
-                    and restaurant owners in Singapore with all Singaporeans via
-                    a free online platform.
+                  <LanguageContext.Consumer>
+                    {context => (
+                    <div>
+                    <img src={logo} alt="" style={{ height: "20px" }} /> 
+
+                      {context.data.about.para_one}
+
                     <br />
                     <br />
                     Sounds too good to be true? What's the catch? Boh leh...{" "}
@@ -150,6 +153,8 @@ export class About extends React.Component {
                     <br />
                     <br />
                   </div>
+                                      )}
+                                      </LanguageContext.Consumer>
                 </p>
               </div>
             </div>

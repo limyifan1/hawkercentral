@@ -9,13 +9,11 @@ import Cookies from "universal-cookie";
 import home from "../home (2).png";
 import Item from "./Item";
 import i_want from "../i_want.jpeg";
-import delivery from "../delivery.jpeg";
-import self_collect from "../self_collect.jpeg";
+import delivery from "../delivery_2.png";
+import self_collect from "../dabao_2.png";
 import chinese_i_want from "../chinese-iwant.png";
-import chinese_delivery from "../chinese-delivery.png";
-import chinese_self_collect from "../chinese-dabao.png";
-import en from "../assets/translations/en.json";
-import zh from "../assets/translations/zh.json";
+import chinese_delivery from "../chinese_delivery_2.png";
+import chinese_self_collect from "../chinese_dabao_2.png";
 import { LanguageContext } from "./themeContext";
 
 import "./Home.css";
@@ -137,7 +135,7 @@ export class Home extends React.PureComponent {
                 <img alt="I want..." class="home-iwant"
                   src={(cookies.get('language') === 'en') ? i_want : chinese_i_want}
                 />
-                
+
                 {/* TODO: detect context to display chi/eng pics instead of using cookies
                 <LanguageContext.Consumer>
                 { context  => (
@@ -243,11 +241,11 @@ export class Home extends React.PureComponent {
                   <br />
                   <div class="container-fluid">
                     <p style={{ fontSize: "14px" }}>
-                    <LanguageContext.Consumer>
-                    {context => (
-                      context.data.home.acknowledgement
-                    )} 
-                  </LanguageContext.Consumer>
+                      <LanguageContext.Consumer>
+                        {context => (
+                          context.data.home.acknowledgement
+                        )}
+                      </LanguageContext.Consumer>
                       {/* TODO: Figure out how to insert links with context/json loading
                       We would like to acknowledge the data and images we obtained from {" "}
                       <a href="https://thesmartlocal.com/delivery">
@@ -374,12 +372,18 @@ function renderPostalCodeForm(option, context) {
       return (
         <span class="label label-default main-caption">
           <span class="main-caption">
-            now enter your <strong>postal code</strong>
+            {<LanguageContext.Consumer>
+              {context => (
+                <div>
+                  {context.data.home.now_enter} <strong>{context.data.home.postalcode}</strong>
+                </div>
+              )}
+            </LanguageContext.Consumer>}
             <br />
             <br />
             <Component.Search option={option} />
           </span>
-        </span>
+        </span >
       );
     default:
   }
