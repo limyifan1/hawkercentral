@@ -55,6 +55,7 @@ const addData = async ({
   contact,
   contact_to,
   time,
+  note,
 }) => {
   let now = new Date();
   var field = {
@@ -74,6 +75,7 @@ const addData = async ({
     lastmodified: now,
     viewed: false,
     time: time,
+    note: note,
   };
   let id = await db
     .collection("deliveries")
@@ -150,7 +152,26 @@ export class Driver extends React.Component {
         return response.json();
       })
       .then((contents) => {
-        this.setState({ directions: contents });
+        console.log(contents);
+        var cost;
+        var distance =
+          contents && contents.routes.length > 0
+            ? contents.routes[0].legs[0].distance.value
+            : 0;
+        if (distance < 5000) {
+          cost = 6;
+        } else if (distance < 10000) {
+          cost = 8;
+        } else if (distance < 15000) {
+          cost = 10;
+        } else if (distance < 20000) {
+          cost = 12;
+        } else if (distance < 25000) {
+          cost = 15;
+        } else {
+          cost = 18;
+        }
+        this.setState({ directions: contents, cost: cost, distance: distance });
       })
       .catch((error) => {
         console.log("Error:" + error.toString());
@@ -255,8 +276,8 @@ export class Driver extends React.Component {
     await addData({
       origin: this.state.street,
       destination: this.state.street_to,
-      distance: distance.toString(),
-      cost: cost.toString(),
+      distance: this.state.directions.routes[0].legs[0].distance.text,
+      cost: this.state.cost,
       postal: this.state.postal,
       postal_to: this.state.postal_to,
       latitude: this.state.latitude,
@@ -275,8 +296,8 @@ export class Driver extends React.Component {
       this.sendData({
         origin: this.state.street,
         destination: this.state.street_to,
-        distance: distance.toString().slice(0, 4),
-        cost: "$" + cost.toString().slice(0, 4),
+        distance: this.state.directions.routes[0].legs[0].distance.text,
+        cost: "$" + this.state.cost,
         id: id,
         url: "www.foodleh.app/delivery?id=" + id,
       });
@@ -313,28 +334,50 @@ export class Driver extends React.Component {
   };
 
   render() {
-    var cost;
-    var distance =
-      this.state.directions && this.state.directions.routes.length > 0
-        ? this.state.directions.routes[0].legs[0].distance.value
-        : 0;
+    // var cost;
+    // var distance =
+    //   this.state.directions && this.state.directions.routes.length > 0
+    //     ? this.state.directions.routes[0].legs[0].distance.value
+    //     : 0;
 
-    if (distance < 5) {
-      cost = 6;
-    } else if (distance < 10) {
-      cost = 8;
-    } else if (distance < 15) {
-      cost = 10;
-    } else if (distance < 20) {
-      cost = 12;
-    } else if (distance < 25) {
-      cost = 15;
-    } else {
-      cost = 18;
-    }
+    // if (distance < 5000) {
+    //   cost = 6;
+    // } else if (distance < 10000) {
+    //   cost = 8;
+    // } else if (distance < 15000) {
+    //   cost = 10;
+    // } else if (distance < 20000) {
+    //   cost = 12;
+    // } else if (distance < 25000) {
+    //   cost = 15;
+    // } else {
+    //   cost = 18;
+    // }
 
     return (
       <div>
+          <Modal
+            size="xl"
+            onHide={this.setHide}
+            show={this.state.show}
+            className="modal"
+            dialogClassName="modal-dialog modal-100w modal-dialog-centered"
+            style={{"marginTop":"30px"}}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title id="example-custom-modal-styling-title">
+                How DriverLeh? Works
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <img
+                src={instructions}
+                alt=""
+                style={{ width: "100%", height: "100%" }}
+              />
+            </Modal.Body>
+          </Modal>
+
         <div
           class="jumbotron"
           style={{
@@ -344,6 +387,8 @@ export class Driver extends React.Component {
             "background-color": "white",
           }}
         >
+          <div class="align-items-center" style={{ width: "100%" }}></div>
+
           <Form onSubmit={this.handleSubmit.bind(this)}>
             <div class="container-fluid col-md-10 content col-xs-offset-2">
               <div class="d-flex row justify-content-center">
@@ -352,22 +397,6 @@ export class Driver extends React.Component {
                   alt=""
                   style={{ width: "100%", height: "100%" }}
                 />
-                <Modal
-                  onHide={this.setHide}
-                  show={this.state.show}
-                  dialogClassName="modal-90w"
-                  aria-labelledby="example-custom-modal-styling-title"
-                  style={{ "margin-top": "50px" }}
-                >
-                  <Modal.Header closeButton>
-                    <Modal.Title id="example-custom-modal-styling-title">
-                      How DriverLeh? Works
-                    </Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <img src={instructions} alt="" style={{ width: "100%" }} />
-                  </Modal.Body>
-                </Modal>
 
                 <div
                   onClick={() => this.setShow()}
@@ -680,20 +709,22 @@ export class Driver extends React.Component {
                         <span>
                           <p style={{ textAlign: "center", fontSize: "20px" }}>
                             <b>Distance (Google Maps): </b>
+                            <br />
                             {this.state.directions.routes.length > 0
                               ? this.state.directions.routes[0].legs[0].distance
                                   .text
                               : null}
                             <br />
                             <b>Estimated Duration: </b>
+                            <br />
                             {this.state.directions.routes.length > 0
                               ? this.state.directions.routes[0].legs[0].duration
                                   .text
                               : null}
                             <br />
                             <b>Delivery Cost: </b>
-                            {"$" + cost.toString()}
                             <br />
+                            {"$" + this.state.cost.toString()}
                           </p>
                         </span>
                       ) : (
