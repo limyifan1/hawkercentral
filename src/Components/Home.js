@@ -361,7 +361,7 @@ function renderPostalCodeForm(option, context) {
     case "":
       return (
         <span class=" main-caption">
-          <div> {context.data.home.choose} <b>{context.data.home.delivery_word} </b> {context.data.home.or} <b> {context.data.home.dabao}</b>
+          <div> {context.data.home.choose} <b>{context.data.home.dabao} </b> {context.data.home.or} <b> {context.data.home.delivery_word}</b>
           </div>
           {/*(context.language === 'en') ? <div>choose <b>da bao</b> or <b>delivery</b> </div> : <div>选 <b>打包</b> 或 <b>送餐</b></div>*/}
         </span>
