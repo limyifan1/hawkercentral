@@ -252,7 +252,7 @@ export class Home extends React.PureComponent {
                     <br />
                   </div>
                   <div class="container-fluid">
-                    <p style={{ fontSize: "14px" }}>
+                    <p style={{ fontSize: "12px" }}>
                       We would like to acknowledge the data and images we
                       obtained from{" "}
                       <a href="https://thesmartlocal.com/delivery">
