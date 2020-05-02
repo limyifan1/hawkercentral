@@ -10,10 +10,8 @@ import delivery_address from "../delivery_address.png";
 import summary from "../summary.png";
 import instructions from "../instructions.jpeg";
 import Cookies from "universal-cookie";
-// import GoogleMap from 'google-map-react';
-
 const cookies = new Cookies();
-// const API_KEY = `${process.env.REACT_APP_GKEY}`
+const API_KEY = `${process.env.REACT_APP_GKEY}`;
 
 const analytics = firebase.analytics();
 
@@ -102,6 +100,7 @@ export class Driver extends React.Component {
     super(props);
     this.state = {
       postal: cookies.get("postal"),
+      postal_to: "",
       latitude: "",
       longitude: "",
       latitude_to: "",
@@ -119,8 +118,46 @@ export class Driver extends React.Component {
       pickup_option: false,
       submitted: false,
       show: false,
+      directions: "",
     };
   }
+
+  getDirections = () => {
+    const query =
+      "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?" +
+      "mode=driving" +
+      "&" +
+      "region=sg" +
+      "&" +
+      "units=metric" +
+      "&" +
+      "origin=" +
+      this.state.street +
+      "&" +
+      "&destination=" +
+      this.state.street_to +
+      "&" +
+      "&key=" +
+      API_KEY;
+    console.log(query);
+    return fetch(query, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      referrerPolicy: "no-referrer",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((contents) => {
+        console.log(contents);
+        this.setState({ directions: contents });
+      })
+      .catch((error) => {
+        console.log("Error:" + error.toString());
+      });
+  };
 
   callPostal = (postal) => {
     return fetch(
@@ -249,49 +286,22 @@ export class Driver extends React.Component {
     });
   };
 
-
-  // mapRender(result) {
-  //   let latitude = 1.2830
-  //   let longitude = 103.8579
-  //   let zoom = 12
-  //   if (this.props.data.data.length > 0){      
-  //     return (
-  //       <GoogleMap
-  //       bootstrapURLKeys={{ key: API_KEY}}
-  //       defaultCenter={[latitude,longitude]}
-  //       defaultZoom={zoom}
-  //       yesIWantToUseGoogleMapApiInternals
-  //       // onGoogleApiLoaded={({ map, maps }) => apiIsLoaded(map, maps, this.state)}
-  //       >
-  //         {result}
-  //       </GoogleMap>
-  //       )
-  //   }
-  //   else{
-  //     return(
-  //       <GoogleMap
-  //       bootstrapURLKeys={{ key: API_KEY}}
-  //       defaultCenter={[latitude,longitude]}
-  //       defaultZoom={zoom}
-  //       >
-  //       </GoogleMap>
-  //     )
-  //   }
-  // }
-
   componentWillMount() {
     onLoad("find_driver");
   }
 
-  handleChange = (event) => {
+  handleChange = async (event) => {
     const target = event.target;
     const value = target.value;
     const name = target.name;
     if (name === "postal" && value.toString().length === 6) {
-      this.getPostal(value, "from");
+      await this.getPostal(value, "from");
     }
     if (name === "postal_to" && value.toString().length === 6) {
-      this.getPostal(value, "to");
+      await this.getPostal(value, "to");
+    }
+    if (this.state.street !== "" && this.state.street_to !== "") {
+      this.getDirections();
     }
     this.setState({ [name]: value });
   };
@@ -305,13 +315,24 @@ export class Driver extends React.Component {
   };
 
   render() {
-    var distance = distance_calc(
-      this.state.latitude,
-      this.state.longitude,
-      this.state.latitude_to,
-      this.state.longitude_to
-    );
-    var cost = 6 + distance * 0.5;
+    var cost;
+    var distance = this.state.directions
+      ? this.state.directions.routes[0].legs[0].distance.value
+      : 0;
+
+    if (distance < 5) {
+      cost = 6;
+    } else if (distance < 10) {
+      cost = 8;
+    } else if (distance < 15) {
+      cost = 10;
+    } else if (distance < 20) {
+      cost = 12;
+    } else if (distance < 25) {
+      cost = 15;
+    } else {
+      cost = 18;
+    }
 
     return (
       <div>
@@ -584,7 +605,7 @@ export class Driver extends React.Component {
                                 ? "form-control is-invalid"
                                 : "form-control"
                             }
-                          name="street_to"
+                            name="street_to"
                             placeholder="Enter Street Name 街道"
                           ></input>
                         </div>
@@ -655,22 +676,24 @@ export class Driver extends React.Component {
                         style={{ width: "40%" }}
                       />
 
-                      {this.state.latitude &&
-                      this.state.longitude &&
-                      this.state.latitude_to &&
-                      this.state.longitude_to ? (
+                      {this.state.directions ? (
                         <span>
                           <p style={{ textAlign: "center", fontSize: "20px" }}>
                             <b>Distance: </b>
-                            {distance.toString().slice(0, 4) + " km away"}
+                            {this.state.directions
+                              ? this.state.directions.routes[0].legs[0].distance
+                                  .text
+                              : null}
                             <br />
-                            <b>Estimated Cost: </b>
-                            {"$" + cost.toString().slice(0, 4)}
+                            <b>Duration: </b>
+                            {this.state.directions
+                              ? this.state.directions.routes[0].legs[0].duration
+                                  .text
+                              : null}
                             <br />
-                            <small>
-                              (Start at $6, $0.5 per km. Please confirm with
-                              driver. )
-                            </small>
+                            <b>Delivery Cost: </b>
+                            {"$" + cost.toString()}
+                            <br />
                           </p>
                         </span>
                       ) : (
@@ -693,7 +716,10 @@ export class Driver extends React.Component {
                           ></input>
                           I agree that I am a local F&B looking for a delivery
                           and FoodLeh is not liable for any event not limited to
-                          inaccuracies, delays, costs, spillage, etc.
+                          inaccuracies, delays, costs, spillage, accidents,
+                          injuries, food poisoning, etc. FoodLeh is only
+                          responsible for matching the two sides who will assume
+                          all responsibilities.
                         </label>
                         <br />
                         <br />
@@ -737,7 +763,6 @@ export class Driver extends React.Component {
                         improve!
                       </small>
                     </div>
-                    {this.mapRender}
                   </div>
                 </div>
               </div>
