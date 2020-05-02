@@ -15,8 +15,8 @@ import Helpers from "../Helpers/helpers";
 
 const analytics = firebase.analytics();
 
-function onLoad(name){
-  analytics.logEvent(name)
+function onLoad(name) {
+  analytics.logEvent(name);
 }
 
 const cuisines = [
@@ -50,7 +50,7 @@ const cuisines = [
   "Halal",
   "Pizza",
   "Mediterranean",
-  "Grocery Shopping"
+  "Grocery Shopping",
 ];
 
 // const responsive = {
@@ -120,7 +120,7 @@ export class Nearby extends React.Component {
   }
 
   componentWillMount() {
-    onLoad("nearby_load")
+    onLoad("nearby_load");
     this.retrieveData();
   }
 
@@ -129,37 +129,43 @@ export class Nearby extends React.Component {
   }
 
   retrieveData = async () => {
-    const centre = geo.point(Number(this.state.latitude), Number(this.state.longitude));
+    const centre = geo.point(
+      Number(this.state.latitude),
+      Number(this.state.longitude)
+    );
 
     let data;
     if (this.state.pickup) {
       data = await geoToPromise(
-        geo.query("hawkers")
+        geo
+          .query("hawkers")
           .within(centre, Number(this.state.distance), "location")
       );
     } else if (this.state.delivery) {
       // Find both places within a radius and places that
-      // do islandwide delivery, populate an Object keying 
-      // by doc id to avoid duplicates, then set data to 
+      // do islandwide delivery, populate an Object keying
+      // by doc id to avoid duplicates, then set data to
       // Object's valuess
-      const placesById = {}
+      const placesById = {};
 
       const placesWithinReach = await geoToPromise(
-        geo.query("hawkers")
-          .within(centre, 10, "location")
+        geo.query("hawkers").within(centre, 10, "location")
       );
-      placesWithinReach.forEach(d => placesById[d.id] = d);
+      placesWithinReach.forEach((d) => (placesById[d.id] = d));
 
-      const islandwide = await db.collection("hawkers")
+      const islandwide = await db
+        .collection("hawkers")
         .where("regions", "array-contains", "Islandwide")
         .get()
         .then(Helpers.mapSnapshotToDocs);
-      islandwide.forEach(d => placesById[d.id] = d);
+      islandwide.forEach((d) => (placesById[d.id] = d));
 
       data = Object.values(placesById);
     } else {
-      data = await db.collection("hawkers").get()
-        .then(Helpers.mapSnapshotToDocs)
+      data = await db
+        .collection("hawkers")
+        .get()
+        .then(Helpers.mapSnapshotToDocs);
     }
 
     this.setState({ data, retrieved: true });
@@ -186,6 +192,8 @@ export class Nearby extends React.Component {
         <span>
           <Select
             isMulti
+            closeMenuOnSelect={false}
+            isDisabled={!this.state.retrieved}
             name="name"
             options={cuisine_format}
             className="basic-multi-select"
@@ -213,51 +221,6 @@ export class Nearby extends React.Component {
     const name = target.name;
     this.setState({ [name]: value });
   };
-
-  // retrieveData = async (query) => {
-  //   let string = {
-  //     longitude: this.state.longitude,
-  //     latitude: this.state.latitude,
-  //     query: this.state.query,
-  //     distance: this.state.distance,
-  //     limit: 10
-  //   };
-  //   let urls = [
-  //     "https://us-central1-hawkercentral.cloudfunctions.net/islandwide",
-  //     "https://us-central1-hawkercentral.cloudfunctions.net/nearby",
-  //   ];
-  //   try {
-  //     Promise.all(
-  //       urls.map((url) =>
-  //         fetch(url, {
-  //           method: "POST",
-  //           mode: "cors",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify(string),
-  //         })
-  //           .then((response) => {
-  //             return response.json();
-  //           })
-  //           .then((data) => {
-  //             return data;
-  //           })
-  //           .catch((error) => {
-  //             return error;
-  //           })
-  //       )
-  //     ).then((data) => {
-  //       this.setState({
-  //         islandwide: data[0],
-  //         nearby: data[1],
-  //         retrieved: true,
-  //       });
-  //     });
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
 
   render() {
     let result = {
@@ -373,68 +336,52 @@ export class Nearby extends React.Component {
     }
 
     return (
-      <div>
-        {this.state.retrieved ? (
-          <div>
-            <div
-              class="container"
-              style={{ paddingTop: "56px", width: "100%" }}
-            >
-              <div class="container" style={{ paddingTop: "27px" }}>
-                <div className="row justify-content-center">
-                  <div className="col-12 col-sm-10 col-md-6">
-                    {this.state.pickup ? (
-                      <h3>
-                        Near You at{" "}
-                        <span style={{ color: "#b48300" }}>
-                          {this.state.query}
-                        </span>
-                      </h3>
-                    ) : (
-                      <h3>
-                        Delivers to You at{" "}
-                        <span style={{ color: "#b48300" }}>
-                          {this.state.query}
-                        </span>
-                      </h3>
-                    )}
-                  </div>
-                </div>
-                <div className="row justify-content-center mt-4">
-                  <div className="col-12 col-sm-10 col-md-6">
-                    <input
-                      class="form-control"
-                      type="text"
-                      value={this.state.search}
-                      name="search"
-                      placeholder="   Search by Name, Category, Food, Items e.g. Chicken Rice"
-                      style={{
-                        width: "100%",
-                        height: "38px",
-                        "border-radius": "1rem",
-                      }}
-                      onChange={this.handleChange}
-                    ></input>
-                  </div>
-                  <div className="col-12 col-sm-10 col-md-5">
-                    {this.cuisineSearch()}
-                  </div>
-                </div>
-                <div className="row justify-content-center mt-4">
-                  {result.nearby.length > 0 ? result.nearby : <span className="mt-5">No Results Found</span>}
+      <div class="container" style={{ paddingTop: "56px", width: "100%" }}>
+        <div class="container" style={{ paddingTop: "27px" }}>
+          <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-6">
+              <h3>
+                Near You at{" "}
+                <span style={{ color: "#b48300" }}>{this.state.query}</span>
+              </h3>
+            </div>
+          </div>
+          <div class="row justify-content-center mt-4">
+            <div class="col-12 col-sm-10 col-md-6">
+              <input
+                disabled={!this.state.retrieved}
+                class="form-control"
+                type="text"
+                // value={this.state.search}
+                name="search"
+                placeholder="   Search by Name, Category, Food, Items e.g. Chicken Rice"
+                style={{
+                  width: "100%",
+                  height: "38px",
+                  "border-radius": "1rem",
+                }}
+                onChange={this.handleChange}
+              ></input>
+            </div>
+            <div class="col-12 col-sm-10 col-md-5">{this.cuisineSearch()}</div>
+          </div>
+          <div className="row justify-content-center mt-4">
+            {this.state.retrieved ? (
+              result.nearby.length > 0 ? (
+                result.nearby
+              ) : (
+                <span class="mt-5">No Results Found</span>
+              )
+            ) : (
+              <div class="row h-100 page-container">
+                <div class="col-sm-12 my-auto">
+                  <h3>Loading</h3>
+                  <Spinner class="" animation="grow" />
                 </div>
               </div>
-              <div></div>
-            </div>
+            )}
           </div>
-        ) : (
-          <div class="row h-100 page-container">
-            <div class="col-sm-12 my-auto">
-              <h3>Loading</h3>
-              <Spinner class="" animation="grow" />
-            </div>
-          </div>
-        )}
+        </div>
       </div>
     );
   }
