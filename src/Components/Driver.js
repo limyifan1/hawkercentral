@@ -10,8 +10,10 @@ import delivery_address from "../delivery_address.png";
 import summary from "../summary.png";
 import instructions from "../instructions.jpeg";
 import Cookies from "universal-cookie";
+import GoogleMap from 'google-map-react';
 
 const cookies = new Cookies();
+const API_KEY = `${process.env.REACT_APP_GKEY}`
 
 const analytics = firebase.analytics();
 
@@ -99,21 +101,21 @@ export class Driver extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      postal: cookies.get('postal'),
+      postal: cookies.get("postal"),
       latitude: "",
       longitude: "",
       latitude_to: "",
       longitude_to: "",
-      street: cookies.get('street'),
+      street: cookies.get("street"),
       street_to: "",
       cost: "",
       distance: "",
-      unit: cookies.get('unit'),
+      unit: cookies.get("unit"),
       unit_to: "",
-      contact: cookies.get('contact'),
+      contact: cookies.get("contact"),
       contact_to: "",
       time: time_now_plus,
-      note: cookies.get('note'),
+      note: cookies.get("note"),
       pickup_option: false,
       submitted: false,
       show: false,
@@ -200,6 +202,7 @@ export class Driver extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
+    this.setState({ submitting: true });
     let distance = distance_calc(
       this.state.latitude,
       this.state.longitude,
@@ -209,11 +212,11 @@ export class Driver extends React.Component {
     let cost = 6 + distance * 0.5;
     await this.getPostal(this.state.postal_to, "to");
     await this.getPostal(this.state.postal, "from");
-    cookies.set("postal", this.state.postal, { path: '/' });
-    cookies.set("street", this.state.street, { path: '/' });
-    cookies.set("unit", this.state.unit, { path: '/' });
-    cookies.set("contact", this.state.contact, { path: '/' });
-    cookies.set("note", this.state.note, { path: '/' });
+    cookies.set("postal", this.state.postal, { path: "/" });
+    cookies.set("street", this.state.street, { path: "/" });
+    cookies.set("unit", this.state.unit, { path: "/" });
+    cookies.set("contact", this.state.contact, { path: "/" });
+    cookies.set("note", this.state.note, { path: "/" });
     await addData({
       origin: this.state.street,
       destination: this.state.street_to,
@@ -232,7 +235,7 @@ export class Driver extends React.Component {
       contact: this.state.contact,
       contact_to: this.state.contact_to,
       time: this.state.time,
-      note: this.state.note
+      note: this.state.note,
     }).then((id) => {
       this.sendData({
         origin: this.state.street,
@@ -245,6 +248,35 @@ export class Driver extends React.Component {
       this.setState({ submitted: true });
     });
   };
+
+
+  mapRender(result) {
+    let latitude = 1.2830
+    let longitude = 103.8579
+    let zoom = 12
+    if (this.props.data.data.length > 0){      
+      return (
+        <GoogleMap
+        bootstrapURLKeys={{ key: API_KEY}}
+        defaultCenter={[latitude,longitude]}
+        defaultZoom={zoom}
+        yesIWantToUseGoogleMapApiInternals
+        // onGoogleApiLoaded={({ map, maps }) => apiIsLoaded(map, maps, this.state)}
+        >
+          {result}
+        </GoogleMap>)
+    }
+    else{
+      return(
+        <GoogleMap
+        bootstrapURLKeys={{ key: API_KEY}}
+        defaultCenter={[latitude,longitude]}
+        defaultZoom={zoom}
+        >
+        </GoogleMap>
+      )
+    }
+  }
 
   componentWillMount() {
     onLoad("find_driver");
@@ -293,8 +325,12 @@ export class Driver extends React.Component {
         >
           <Form onSubmit={this.handleSubmit.bind(this)}>
             <div class="container-fluid col-md-10 content col-xs-offset-2">
-              <div class="row justify-content-center">
-                <img src={driver} alt="" style={{ width: "100%" }} />
+              <div class="d-flex row justify-content-center">
+                <img
+                  src={driver}
+                  alt=""
+                  style={{ width: "100%", height: "100%" }}
+                />
                 <Modal
                   onHide={this.setHide}
                   show={this.state.show}
@@ -377,7 +413,11 @@ export class Driver extends React.Component {
                               onChange={this.handleChange.bind(this)}
                               value={this.state.postal}
                               type="number"
-                              class="form-control"
+                              class={
+                                !this.state.postal
+                                  ? "form-control is-invalid"
+                                  : "form-control"
+                              }
                               name="postal"
                               placeholder="Enter Postal Code 邮区编号"
                               min="0"
@@ -396,7 +436,11 @@ export class Driver extends React.Component {
                             onChange={this.handleChange}
                             value={this.state.street}
                             type="text"
-                            class="form-control"
+                            class={
+                              !this.state.street
+                                ? "form-control is-invalid"
+                                : "form-control"
+                            }
                             name="street"
                             placeholder="Enter Street Name 街道"
                           ></input>
@@ -429,10 +473,17 @@ export class Driver extends React.Component {
                             <input
                               onChange={this.handleChange}
                               value={this.state.contact}
-                              type="number"
-                              class="form-control"
+                              type="tel"
+                              class={
+                                !this.state.contact
+                                  ? "form-control is-invalid"
+                                  : "form-control"
+                              }
                               name="contact"
                               placeholder="9xxxxxxx"
+                              maxLength="8"
+                              minlength="8"
+                              pattern="[8-9]{1}[0-9]{7}"
                               required
                             ></input>
                           </div>
@@ -445,17 +496,30 @@ export class Driver extends React.Component {
                             onChange={this.handleChange}
                             value={this.state.time}
                             type="time"
-                            class="form-control"
+                            class={
+                              time_now_plus > this.state.time
+                                ? "form-control is-invalid"
+                                : "form-control"
+                            }
                             name="time"
                             placeholder="E.g. #01-01"
                           ></input>
+                          {time_now_plus > this.state.time ? (
+                            <span class="invalid-tooltip">
+                              Time cannot be less than 30 minutes from now
+                              <br />
+                              取食物时间必须至少在30分钟后
+                            </span>
+                          ) : null}
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group create-title">
-                          <label for="note">Note To Driver 司机启示 (Optional, max 40 char)</label>
+                          <label for="note">
+                            Note To Driver 司机启示 (Optional, max 40 char)
+                          </label>
                           <input
                             onChange={this.handleChange}
                             value={this.state.note}
@@ -491,7 +555,11 @@ export class Driver extends React.Component {
                               onChange={this.handleChange.bind(this)}
                               value={this.state.postal_to}
                               type="number"
-                              class="form-control"
+                              class={
+                                !this.state.postal_to
+                                  ? "form-control is-invalid"
+                                  : "form-control"
+                              }
                               name="postal_to"
                               placeholder="Enter Postal Code 邮区编号"
                               min="0"
@@ -510,8 +578,12 @@ export class Driver extends React.Component {
                             onChange={this.handleChange}
                             value={this.state.street_to}
                             type="text"
-                            class="form-control"
-                            name="street_to"
+                            class={
+                              !this.state.street_to
+                                ? "form-control is-invalid"
+                                : "form-control"
+                            }
+                          name="street_to"
                             placeholder="Enter Street Name 街道"
                           ></input>
                         </div>
@@ -547,10 +619,13 @@ export class Driver extends React.Component {
                             <input
                               onChange={this.handleChange}
                               value={this.state.contact_to}
-                              type="number"
+                              type="tel"
                               class="form-control"
                               name="contact_to"
                               placeholder="9xxxxxxx"
+                              maxLength="8"
+                              pattern="[8-9]{1}[0-9]{7}"
+                              minlength="8"
                             ></input>
                           </div>
                         </div>
@@ -661,6 +736,7 @@ export class Driver extends React.Component {
                         improve!
                       </small>
                     </div>
+                    {this.mapRender}
                   </div>
                 </div>
               </div>
