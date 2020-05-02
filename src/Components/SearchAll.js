@@ -70,9 +70,8 @@ export class SearchAll extends React.Component {
       retrieved: false,
       search: "",
       cuisineValue: [],
+      isCuisineMenuOpen: false,
     };
-
-    this.handleCuisineChange = this.handleCuisineChange.bind(this);
   }
 
   componentWillMount() {
@@ -86,18 +85,33 @@ export class SearchAll extends React.Component {
   }
 
   retrieveData = async () => {
+    this.setState({ retrieved: false });
     let query = db.collection("hawkers");
+    if (this.state.cuisineValue && this.state.cuisineValue.length > 0) {
+      const categories = this.state.cuisineValue.map(c => c.label);
+      query = query.where("categories", "array-contains-any", categories);
+    }
     const data = await query.get()
       .then(Helpers.mapSnapshotToDocs);
     this.setState({ data, retrieved: true });
   };
 
-  handleCuisineChange(option) {
-    this.setState((state) => {
-      return {
-        cuisineValue: option,
-      };
-    });
+  handleCuisineChange = async (cuisineValue) => {
+    await this.setState({ cuisineValue });
+    if (!this.state.isCuisineMenuOpen) {
+      this.retrieveData()
+    }
+  }
+
+  handleCuisineMenuOpen = () => {
+    this.setState({ isCuisineMenuOpen: true })
+  }
+
+  handleCuisineMenuClose = () => {
+    if (this.state.isCuisineMenuOpen) {
+      this.setState({ isCuisineMenuOpen: false })
+      this.retrieveData()
+    }
   }
 
   cuisineSearch() {
@@ -121,6 +135,8 @@ export class SearchAll extends React.Component {
             classNamePrefix="select"
             value={this.state.cuisineValue}
             onChange={this.handleCuisineChange}
+            onMenuOpen={this.handleCuisineMenuOpen}
+            onMenuClose={this.handleCuisineMenuClose}
             placeholder="Filter By Cuisine"
           />
         </span>
@@ -225,31 +241,6 @@ export class SearchAll extends React.Component {
       //         10 || d.region.filter((f) => f.value === "islandwide").length >= 1
       //   );
       // }
-
-      if (
-        this.state.cuisineValue !== null &&
-        this.state.cuisineValue.length !== 0
-      ) {
-        // console.log(this.state.cuisineValue[0] === this.state.data[0].cuisine[0])
-        var items = this.state.cuisineValue.map((x) => {
-          return Helpers.capitalizeFirstLetter(x.value);
-        });
-
-        filtered = filtered.filter((d) => {
-          let toggle = false;
-          if (d.cuisine !== undefined) {
-            let values = d.cuisine.map((x) => {
-              return Helpers.capitalizeFirstLetter(x.value);
-            });
-            values.forEach((element) => {
-              if (items.includes(element)) {
-                toggle = true;
-              }
-            });
-          }
-          return toggle;
-        });
-      }
 
       if (this.state.search.length !== 0) {
         filtered = filtered.filter((d) => {
