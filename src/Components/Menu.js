@@ -12,8 +12,8 @@ import firebase from "./Firestore";
 
 const analytics = firebase.analytics();
 
-function onClick(button){
-  analytics.logEvent(button)
+function onClick(button) {
+  analytics.logEvent(button);
 }
 
 export class Menu extends React.Component {
@@ -33,31 +33,58 @@ export class Menu extends React.Component {
             className="d-inline-block align-top"
           />{" "}
           <div class="d-none d-md-inline-block">
-          <img
-            alt=""
-            src={name}
-            width="140"
-            height="30"
-            className="d-inline-block align-top"
-          />
+            <img
+              alt=""
+              src={name}
+              width="140"
+              height="30"
+              className="d-inline-block align-top"
+            />
           </div>
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-          <Nav.Link href="#" as={Link} to="/" id="menu-link" style={{"color":"grey"}} onClick={onClick("home")}>
+          <Nav.Link
+            href="#"
+            as={Link}
+            to="/"
+            id="menu-link"
+            style={{ color: "grey" }}
+            onClick={onClick("home")}
+          >
             Home
           </Nav.Link>
           {/* <Nav.Link href="#listing" as={Link} to="/listing" id="menu-link" style={{"color":"grey"}}>
             Listings
           </Nav.Link> */}
-          <Nav.Link href="#searchall" as={Link} to="/searchall" id="menu-link" style={{"color":"grey"}} onClick={onClick("search")}>
+          <Nav.Link
+            href="#searchall"
+            as={Link}
+            to="/searchall"
+            id="menu-link"
+            style={{ color: "grey" }}
+            onClick={onClick("search")}
+          >
             Search
           </Nav.Link>
-          <Nav.Link href="#create" as={Link} to="/create" id="menu-link" style={{"color":"grey"}} onClick={onClick("create")}>
+          <Nav.Link
+            href="#create"
+            as={Link}
+            to="/create"
+            id="menu-link"
+            style={{ color: "grey" }}
+            onClick={onClick("create")}
+          >
             Create
           </Nav.Link>
-
-          <Nav.Link href="#about" as={Link} to="/about" id="menu-link" style={{"color":"grey"}} onClick={onClick("about")}>
+          <Nav.Link
+            href="#about"
+            as={Link}
+            to="/about"
+            id="menu-link"
+            style={{ color: "grey" }}
+            onClick={onClick("about")}
+          >
             About
           </Nav.Link>
         </Navbar.Collapse>

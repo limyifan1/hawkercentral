@@ -6,7 +6,17 @@
 const functions = require("firebase-functions");
 const firestore = require("@google-cloud/firestore");
 const client = new firestore.v1.FirestoreAdminClient();
+const { Telegraf } = require("telegraf");
+var admin = require("firebase-admin");
+const express = require("express");
+admin.initializeApp(functions.config().firebase);
 
+const accountSid = functions.config().twilio.sid;
+const authToken = functions.config().twilio.token;
+const twilio = require("twilio")(accountSid, authToken);
+
+// give us the possibility of manage request properly
+const app = express();
 // Replace BUCKET_NAME
 const bucket = "gs://backup-bucket-hawkercentral";
 
@@ -35,6 +45,129 @@ exports.scheduledFirestoreExport = functions.pubsub
         throw new Error("Export operation failed");
       });
   });
+
+const bot = new Telegraf(functions.config().telegrambot.key);
+
+const cors = require("cors")({
+  origin: true,
+});
+
+exports.telegramSend = functions.https.onRequest(async (req, res) => {
+  return cors(req, res, async () => {
+    var origin = req.body.origin;
+    var destination = req.body.destination;
+    var cost = req.body.cost;
+    var distance = req.body.distance;
+    var url = req.body.url;
+    var id = req.body.id;
+
+    var message =
+      "<b>New Order Received</b> \n" +
+      "<b>From: </b> <a href='https://maps.google.com/?q=" +
+      origin +
+      "'>" +
+      origin +
+      "</a>\n" +
+      "<b>To: </b><a href='https://maps.google.com/?q=" +
+      destination +
+      "'>" +
+      destination +
+      "</a>\n" +
+      "<b>Distance: </b>" +
+      distance +
+      "km\n" +
+      "<b>Estimated Fee: </b>" +
+      cost +
+      "\n" +
+      "<b>Click to Accept (first come first serve): </b>" +
+      url;
+
+    let sent = await bot.telegram.sendMessage("@foodlehdev", message, {
+      parse_mode: "HTML",
+    });
+    let message_id = sent.message_id;
+    await admin
+      .app()
+      .firestore()
+      .collection("deliveries")
+      .doc(id)
+      .update({
+        message_id: message_id,
+      })
+      .then(() => {
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.status(200).send(message);
+        return true;
+      });
+  });
+});
+
+exports.telegramEdit = functions.https.onRequest(async (req, res) => {
+  return cors(req, res, async () => {
+    var message_id = req.body.message_id;
+    var driver_mobile = req.body.driver_mobile;
+    var requester_mobile = req.body.requester_mobile;
+    var origin = req.body.origin;
+    var destination = req.body.destination;
+    var time = req.body.time;
+    var customer_mobile = req.body.customer_mobile;
+    var note = req.body.note;
+
+    twilio.messages
+      .create({
+        body:
+          "Your order has been picked up by a driver. The contact number is: +65" +
+          driver_mobile,
+        from: "+12015847715",
+        to: "+65" + requester_mobile,
+      })
+      .then((message) => console.log(message.sid))
+      .catch((e) => {
+        console.log(e);
+      });
+
+    twilio.messages
+      .create({
+        body:
+          "Your order has been confirmed. \n " +
+          "Stall Contact: " +
+          requester_mobile +
+          "\n" +
+          "Customer Mobile: " +
+          customer_mobile +
+          "\n" +
+          "From: " +
+          origin +
+          "\n" +
+          "To: " +
+          destination +
+          "\n" +
+          "Pickup Time: " +
+          time +
+          "\n" +
+          "Note: " +
+          note +
+          "\n",
+        from: "+12015847715",
+        to: "+65" + driver_mobile,
+      })
+      .then((message) => console.log(message.sid))
+      .catch((e) => {
+        console.log(e);
+      });
+
+    var message = "<b>A driver has picked up this order! </b>";
+    await bot.telegram
+      .editMessageText("@foodlehdev", message_id, "", message, {
+        parse_mode: "HTML",
+      })
+      .then(() => {
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.status(200).send(message);
+        return true;
+      });
+  });
+});
 
 // var admin = require("firebase-admin");
 // var functions = require("firebase-functions");

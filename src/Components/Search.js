@@ -8,10 +8,13 @@ import "../App.css";
 // import {Typeahead} from 'react-bootstrap-typeahead';
 import {  Button } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
 
 export class Search extends React.Component {
   state = {
-    postal: '',
+    postal: cookies.get('postal_search'),
     loading: false,
   };
 
@@ -65,6 +68,7 @@ export class Search extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
+    cookies.set("postal_search", this.state.postal, { path: '/' });
 
     if (this.props.option === "") {
       alert("Please choose either da bao or delivery thank you :)");

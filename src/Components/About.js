@@ -77,7 +77,7 @@ export class About extends React.Component {
                   style={{ textAlign: "center", padding: "30px 30px 30px" }}
                 >
                   <div>
-                    <img src={logo} alt="" style={{ height: "20px" }} /> is an
+                    <img src={logo} alt="FoodLeh?" style={{ height: "20px" }} /> is an
                     easy-to-use web application designed to bridge hawker stalls
                     and restaurant owners in Singapore with all Singaporeans via
                     a free online platform.

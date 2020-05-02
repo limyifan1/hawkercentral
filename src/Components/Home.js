@@ -5,13 +5,16 @@
 
 import React from "react";
 import Component from "../Components";
-import home from "../home (2).png";
-import Item from "./Item";
+import home from "../home-bs.png";
 import i_want from "../i_want.jpeg";
 import delivery from "../delivery.jpeg";
 import self_collect from "../self_collect.jpeg";
-
+import fb from "../fb.png";
+import insta from "../insta.png";
+import email from "../email.png";
 import "./Home.css";
+import { Line } from "rc-progress";
+import { db } from "./Firestore";
 
 const SELF_COLLECT_OPTION = "selfcollect";
 const HOME_DELIVERY_OPTION = "delivery";
@@ -24,52 +27,28 @@ export class Home extends React.PureComponent {
   };
 
   componentWillMount() {
-    // this.retrieveData();
+    this.retrieveData();
   }
 
   getData(val) {
     this.setState({ data: val });
   }
 
-  // retrieveData = async (query) => {
-  //   let string = {
-  //     longitude: this.state.longitude,
-  //     latitude: this.state.latitude,
-  //     cuisine: "Local",
-  //     limit: 15,
-  //   };
-  //   let urls = ["https://us-central1-hawkercentral.cloudfunctions.net/all"];
-  //   try {
-  //     Promise.all(
-  //       urls.map((url) =>
-  //         fetch(url, {
-  //           method: "POST",
-  //           mode: "cors",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify(string),
-  //         })
-  //           .then((response) => {
-  //             return response.json();
-  //           })
-  //           .then((data) => {
-  //             return data;
-  //           })
-  //           .catch((error) => {
-  //             return error;
-  //           })
-  //       )
-  //     ).then((data) => {
-  //       this.setState({
-  //         all: data[0],
-  //         retrieved: true,
-  //       });
-  //     });
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
+  retrieveData = async () => {
+    let data = [];
+    await db
+      .collection("hawkers")
+      .get()
+      .then((snapshot) => {
+        this.setState({ count: snapshot.docs.length });
+        return true;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    this.setState({ data: data, retrieved: true });
+  };
+
   handleCollect = () => {
     this.setState({ option: SELF_COLLECT_OPTION });
   };
@@ -78,25 +57,6 @@ export class Home extends React.PureComponent {
   };
 
   render() {
-    let result = {
-      all: [],
-    };
-    if (this.state.retrieved) {
-      this.state.all.forEach((data) => {
-        result.all.push(
-          <p style={{ padding: "10px", width: "200px" }} key={data["id"]}>
-            <Item
-              promo={data["promo"]}
-              id={data["id"]}
-              name={data["name"]}
-              street={data["street"]}
-              pic={data["url"]}
-              summary={data["description"]}
-            />
-          </p>
-        );
-      });
-    }
     let delivery_option =
       this.state.option === "delivery" ? "home-option-clicked" : "home-option";
     let selfcollect =
@@ -108,19 +68,46 @@ export class Home extends React.PureComponent {
       <div class="container-fluid" className="home">
         <div class="jumbotron row">
           <div class="container">
-            {/* //       <div class="container-fluid pt-4">
-//         <div class="row pt-5" style={{ "background-color": "white" }}>
-//           <div class="container" style={{ "margin-top": "57px" }}> */}
             <div class="row">
               <div class="col">
                 <img
                   alt="Cut the middlemen - Save our local F&amp;B"
                   class="img-fluid"
                   src={home}
+                  style={{ width: "80%" }}
                 />
-              </div>
-              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 align-items-center">
                 <br />
+                <br />
+                <div class="d-none d-md-inline-block">
+                  <span style={{ fontSize: "10px" }}>Connect with us:</span>
+                  <br />
+                  <a href="https://www.facebook.com/foodlehsg/" target="blank">
+                    <img
+                      class="img-fluid"
+                      style={{ width: "30px", margin: "10px" }}
+                      alt="fb"
+                      src={fb}
+                    />
+                  </a>
+                  <a href="https://instagram.com/foodleh.sg" target="blank">
+                    <img
+                      class="img-fluid"
+                      style={{ width: "30px", margin: "10px" }}
+                      alt="insta"
+                      src={insta}
+                    />
+                  </a>
+                  <a href="mailto:foodleh@outlook.com" target="blank">
+                    <img
+                      class="img-fluid"
+                      style={{ width: "30px", margin: "10px" }}
+                      alt="email"
+                      src={email}
+                    />
+                  </a>
+                </div>
+              </div>
+              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 align-items-center justify-content-center">
                 <br />
                 <img alt="I want..." class="home-iwant" src={i_want} />
                 <br />
@@ -216,6 +203,54 @@ export class Home extends React.PureComponent {
                   )} */}
                   <br />
                   <br />
+                  <br />
+                  <div style={{ fontSize: "12px" }}>
+                    We have <b>{this.state.count}</b> listings. Help us reach
+                    500! <br/> Go to <a href="/create">Create</a> now to add a listing! 
+                  </div>
+                  <span style={{ fontSize: "12px" }}>0 </span>
+                  <Line
+                    percent={this.state.count / 5}
+                    strokeWidth="2"
+                    strokeColor="#b48300"
+                    style={{ width: "50%" }}
+                  />
+                  <span style={{ fontSize: "12px" }}> 500</span>
+                  <br />
+                  <br />
+                  <div class="d-inline-block d-md-none">
+                    <span style={{ fontSize: "10px" }}>Connect with us:</span>
+                    <br />
+                    <a
+                      href="https://www.facebook.com/foodlehsg/"
+                      target="blank"
+                    >
+                      <img
+                        class="img-fluid"
+                        style={{ width: "30px", margin: "10px" }}
+                        alt="fb"
+                        src={fb}
+                      />
+                    </a>
+                    <a href="https://instagram.com/foodleh.sg" target="blank">
+                      <img
+                        class="img-fluid"
+                        style={{ width: "30px", margin: "10px" }}
+                        alt="insta"
+                        src={insta}
+                      />
+                    </a>
+                    <a href="mailto:foodleh@outlook.com" target="blank">
+                      <img
+                        class="img-fluid"
+                        style={{ width: "30px", margin: "10px" }}
+                        alt="email"
+                        src={email}
+                      />
+                    </a>
+                    <br />
+                    <br />
+                  </div>
                   <div class="container-fluid">
                     <p style={{ fontSize: "14px" }}>
                       We would like to acknowledge the data and images we
