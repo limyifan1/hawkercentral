@@ -164,13 +164,16 @@ export class Driver extends React.Component {
           }}
         >
           <div class="container-fluid col-md-10 content col-xs-offset-2">
-            <div class="row justify-content-center">
+            <div class="d-flex row justify-content-center">
+              <img
+                src={driver}
+                alt=""
+                style={{ width: "100%", height: "100%" }}
+              />
               <div
                 class="card shadow row"
-                style={{ width: "100%", padding: "20px" }}
+                style={{ width: "100%", padding: "20px", margin:"20px" }}
               >
-                <img src={driver} alt="" style={{ width: "100%" }} />
-
                 {!this.state.submitted ? (
                   <Form onSubmit={this.handleSubmit.bind(this)}>
                     <br />
@@ -247,11 +250,9 @@ export class Driver extends React.Component {
                         <br />
                         <b>Note from Requester:</b> {this.state.data.note}
                         <br />
-                        <b>Distance:</b> {this.state.data.distance.slice(0, 4)}
-                        km
+                        <b>Distance:</b> {this.state.data.distance}
                         <br />
-                        <b>Estimated Fee:</b> $
-                        {this.state.data.cost.slice(0, 4)}
+                        <b>Estimated Fee:</b> ${this.state.data.cost}
                         <br /> <br />
                         <b>
                           <h4>
