@@ -9,9 +9,8 @@ import Item from "./Item";
 import "react-multi-carousel/lib/styles.css";
 import queryString from "query-string";
 import { Spinner } from "react-bootstrap";
-import { db } from "./Firestore";
 import Select from "react-select";
-import firebase from "./Firestore";
+import firebase, { db, geo, geoToPromise } from "./Firestore";
 import Helpers from "../Helpers/helpers";
 
 const analytics = firebase.analytics();
@@ -130,26 +129,40 @@ export class Nearby extends React.Component {
   }
 
   retrieveData = async () => {
-    let data = [];
-    let temp;
-    await db
-      .collection("hawkers")
-      // .limit(100)
-      .get()
-      .then((snapshot) => {
-        snapshot.forEach((doc) => {
-          if (doc.exists) {
-            temp = doc.data();
-            temp.id = doc.id;
-            data.push(temp);
-          }
-        });
-        return true;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    this.setState({ data: data, retrieved: true });
+    const centre = geo.point(Number(this.state.latitude), Number(this.state.longitude));
+
+    let data;
+    if (this.state.pickup) {
+      data = await geoToPromise(
+        geo.query("hawkers")
+          .within(centre, Number(this.state.distance), "location")
+      );
+    } else if (this.state.delivery) {
+      // Find both places within a radius and places that
+      // do islandwide delivery, populate an Object keying 
+      // by doc id to avoid duplicates, then set data to 
+      // Object's valuess
+      const placesById = {}
+
+      const placesWithinReach = await geoToPromise(
+        geo.query("hawkers")
+          .within(centre, 10, "location")
+      );
+      placesWithinReach.forEach(d => placesById[d.id] = d);
+
+      const islandwide = await db.collection("hawkers")
+        .where("regions", "array-contains", "Islandwide")
+        .get()
+        .then(Helpers.mapSnapshotToDocs);
+      islandwide.forEach(d => placesById[d.id] = d);
+
+      data = Object.values(placesById);
+    } else {
+      data = await db.collection("hawkers").get()
+        .then(Helpers.mapSnapshotToDocs)
+    }
+
+    this.setState({ data, retrieved: true });
   };
 
   handleCuisineChange(option) {
@@ -262,17 +275,9 @@ export class Nearby extends React.Component {
       );
 
       if (this.state.pickup) {
-        filtered = this.state.data.filter(
-          (d) =>
-            (distance_calc(parseFloat(d["latitude"]), parseFloat(d["longitude"]), parseFloat(latitude), parseFloat(longitude)) <
-            this.state.distance) && d.pickup_option
-        );
+        filtered = this.state.data.filter((d) => d.pickup_option);
       } else if (this.state.delivery) {
-        filtered = this.state.data.filter(
-          (d) =>
-            (distance_calc(d["latitude"], d["longitude"], parseFloat(latitude), parseFloat(longitude)) <=
-              10 || (d.region? d.region.filter((f) => f.value === "islandwide").length >= 1:false)) && d.delivery_option
-        );
+        filtered = this.state.data.filter((d) => d.delivery_option);
       }
 
       if (
