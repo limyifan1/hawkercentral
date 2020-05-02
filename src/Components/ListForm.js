@@ -5,7 +5,7 @@
 
 import React, { Fragment } from "react";
 import "../App.css";
-import { db, storage } from "./Firestore";
+import { db, storage, geo } from "./Firestore";
 import { Button, Form } from "react-bootstrap";
 import logo from "../mrt_logo.png";
 import Select from "react-select";
@@ -318,18 +318,21 @@ export class ListForm extends React.Component {
       image6: this.state.image6,
       name: this.state.name,
       cuisine: this.state.cuisineValue,
+      categories: this.state.cuisineValue.map(v => v.label.trim()),
       postal: this.state.postal,
       street: this.state.street,
       unit: this.state.unit,
       description: this.state.description,
       description_detail: this.state.description_detail,
       region: this.state.region,
+      regions: this.state.region.map(v => v.label.trim()),
       islandwide: this.state.islandwide,
       delivery: this.state.delivery,
       price: this.state.price,
       contact: this.state.contact,
       latitude: this.state.latitude,
       longitude: this.state.longitude,
+      location: geo.point(Number(this.state.latitude), Number(this.state.longitude)),
       call: this.state.call,
       whatsapp: this.state.whatsapp,
       sms: this.state.sms,
