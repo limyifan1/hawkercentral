@@ -74,8 +74,7 @@ exports.telegramSend = functions.https.onRequest(async (req, res) => {
       destination +
       "</a>\n" +
       "<b>Distance: </b>" +
-      distance +
-      "km\n" +
+      distance + "\n"+
       "<b>Estimated Fee: </b>" +
       cost +
       "\n" +
