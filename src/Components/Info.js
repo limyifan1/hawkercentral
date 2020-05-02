@@ -13,6 +13,7 @@ import whatsapp from "../WhatsApp.svg";
 import ImageGallery from "react-image-gallery";
 import Component from "./index";
 import Clap from "./Clap";
+import Linkify from "react-linkify";
 
 import firebase from "./Firestore";
 
@@ -327,7 +328,7 @@ export class Nearby extends React.Component {
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     class="feather feather-globe"
-                    style={{marginRight:"5px"}}
+                    style={{ marginRight: "5px" }}
                   >
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="2" y1="12" x2="22" y2="12"></line>
@@ -401,7 +402,7 @@ export class Nearby extends React.Component {
                       />
                     </span>
                   ) : null}
-                  <br/>
+                  <br />
                   {this.state.data.promo ? (
                     <div
                       class="card shadow"
@@ -439,17 +440,22 @@ export class Nearby extends React.Component {
                   <h6 style={{ marginBottom: "0px" }}>
                     <b>Brief Description</b>
                   </h6>
-                  <p style={{ marginBottom: "20px" }}>
-                    {this.state.data.description}
-                  </p>
-                  <h6 style={{ marginBottom: "0px" }}>
-                    <b>Detailed Description</b>
-                  </h6>
-                  <p
-                    style={{ "white-space": "pre-line", marginBottom: "20px" }}
-                  >
-                    {this.state.data.description_detail}
-                  </p>
+                  <Linkify>
+                    <p style={{ marginBottom: "20px" }}>
+                      {this.state.data.description}
+                    </p>
+                    <h6 style={{ marginBottom: "0px" }}>
+                      <b>Detailed Description</b>
+                    </h6>
+                    <p
+                      style={{
+                        "white-space": "pre-line",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      {this.state.data.description_detail}
+                    </p>
+                  </Linkify>
                   {this.state.data.menu ? (
                     <div>
                       <h6 style={{ marginBottom: "0px" }}>
@@ -461,11 +467,16 @@ export class Nearby extends React.Component {
                   <h6 style={{ marginBottom: "0px" }}>
                     <b>Details Regarding Delivery</b>
                   </h6>
-                  <p
-                    style={{ "white-space": "pre-line", marginBottom: "20px" }}
-                  >
-                    {this.state.data.delivery_detail}
-                  </p>
+                  <Linkify>
+                    <p
+                      style={{
+                        "white-space": "pre-line",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      {this.state.data.delivery_detail}
+                    </p>
+                  </Linkify>
                   <h6 style={{ marginBottom: "0px" }}>
                     <b>Delivery Fees</b>
                   </h6>
