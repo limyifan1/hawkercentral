@@ -118,7 +118,7 @@ export class Driver extends React.Component {
       pickup_option: false,
       submitted: false,
       show: false,
-      directions: "",
+      directions: false,
     };
   }
 
@@ -139,7 +139,6 @@ export class Driver extends React.Component {
       "&" +
       "&key=" +
       API_KEY;
-    console.log(query);
     return fetch(query, {
       method: "GET",
       headers: {
@@ -151,7 +150,6 @@ export class Driver extends React.Component {
         return response.json();
       })
       .then((contents) => {
-        console.log(contents);
         this.setState({ directions: contents });
       })
       .catch((error) => {
@@ -316,9 +314,10 @@ export class Driver extends React.Component {
 
   render() {
     var cost;
-    var distance = this.state.directions
-      ? this.state.directions.routes[0].legs[0].distance.value
-      : 0;
+    var distance =
+      this.state.directions && this.state.directions.routes.length > 0
+        ? this.state.directions.routes[0].legs[0].distance.value
+        : 0;
 
     if (distance < 5) {
       cost = 6;
@@ -676,17 +675,18 @@ export class Driver extends React.Component {
                         style={{ width: "40%" }}
                       />
 
-                      {this.state.directions ? (
+                      {this.state.directions &&
+                      this.state.directions.routes.length > 0 ? (
                         <span>
                           <p style={{ textAlign: "center", fontSize: "20px" }}>
-                            <b>Distance: </b>
-                            {this.state.directions
+                            <b>Distance (Google Maps): </b>
+                            {this.state.directions.routes.length > 0
                               ? this.state.directions.routes[0].legs[0].distance
                                   .text
                               : null}
                             <br />
-                            <b>Duration: </b>
-                            {this.state.directions
+                            <b>Estimated Duration: </b>
+                            {this.state.directions.routes.length > 0
                               ? this.state.directions.routes[0].legs[0].duration
                                   .text
                               : null}
