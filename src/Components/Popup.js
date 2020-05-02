@@ -69,7 +69,7 @@ export class Popup extends React.Component {
         <Modal
           onHide={this.setHide}
           show={this.state.show}
-          dialogClassName="modal-90w"
+          dialogClassName="modal-dialog modal-90w"
           aria-labelledby="example-custom-modal-styling-title"
           style={{ "margin-top": "50px" }}
         >
