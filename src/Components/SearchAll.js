@@ -86,26 +86,10 @@ export class SearchAll extends React.Component {
   }
 
   retrieveData = async () => {
-    let data = [];
-    let temp;
-    await db
-      .collection("hawkers")
-      .get()
-      .then((snapshot) => {
-        snapshot.forEach((doc) => {
-          if (doc.exists) {
-            temp = doc.data();
-            temp.id = doc.id;
-            data.push(temp);
-          }
-        });
-        console.log("Fetched successfully!");
-        return true;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    this.setState({ data: data, retrieved: true });
+    let query = db.collection("hawkers");
+    const data = await query.get()
+      .then(Helpers.mapSnapshotToDocs);
+    this.setState({ data, retrieved: true });
   };
 
   handleCuisineChange(option) {

@@ -26,8 +26,26 @@ function capitalizeFirstLetter (sentence) {
 	return words.join(" ");
 }
 
+/**
+ * Unpack a Firebase QuerySnapshot and extract its documents
+ * @param {firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>} snapshot - the query result
+ * @returns {firebase.firestore.DocumentData[]} an array of Firestore documents, 
+ * each injected with the field `id`, equivalent to `docid`
+ */
+function mapSnapshotToDocs (snapshot) {
+	const data = [];
+	snapshot.forEach((doc) => {
+		if (doc.exists) {
+			const temp = doc.data();
+			temp.id = doc.id;
+			data.push(temp);
+		}
+	});
+	return data;
+}
 
 export default {
 	compareString,
-	capitalizeFirstLetter
+	capitalizeFirstLetter,
+	mapSnapshotToDocs
 }

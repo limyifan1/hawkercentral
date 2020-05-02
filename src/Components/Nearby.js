@@ -128,18 +128,6 @@ export class Nearby extends React.Component {
     this.setState({ data: val });
   }
 
-  mapSnapshotToDocs = (snapshot) => {
-    const data = [];
-    snapshot.forEach((doc) => {
-      if (doc.exists) {
-        const temp = doc.data();
-        temp.id = doc.id;
-        data.push(temp);
-      }
-    });
-    return data;
-  }
-
   retrieveData = async () => {
     const centre = geo.point(Number(this.state.latitude), Number(this.state.longitude));
 
@@ -165,13 +153,13 @@ export class Nearby extends React.Component {
       const islandwide = await db.collection("hawkers")
         .where("regions", "array-contains", "Islandwide")
         .get()
-        .then(this.mapSnapshotToDocs);
+        .then(Helpers.mapSnapshotToDocs);
       islandwide.forEach(d => placesById[d.id] = d);
 
       data = Object.values(placesById);
     } else {
       data = await db.collection("hawkers").get()
-        .then(this.mapSnapshotToDocs)
+        .then(Helpers.mapSnapshotToDocs)
     }
 
     this.setState({ data, retrieved: true });
