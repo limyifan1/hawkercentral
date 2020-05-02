@@ -10,7 +10,7 @@ import delivery_address from "../delivery_address.png";
 import summary from "../summary.png";
 import instructions from "../instructions.jpeg";
 import Cookies from "universal-cookie";
-import GoogleMap from 'google-map-react';
+// import GoogleMap from 'google-map-react';
 
 const cookies = new Cookies();
 const API_KEY = `${process.env.REACT_APP_GKEY}`
@@ -250,33 +250,34 @@ export class Driver extends React.Component {
   };
 
 
-  mapRender(result) {
-    let latitude = 1.2830
-    let longitude = 103.8579
-    let zoom = 12
-    if (this.props.data.data.length > 0){      
-      return (
-        <GoogleMap
-        bootstrapURLKeys={{ key: API_KEY}}
-        defaultCenter={[latitude,longitude]}
-        defaultZoom={zoom}
-        yesIWantToUseGoogleMapApiInternals
-        // onGoogleApiLoaded={({ map, maps }) => apiIsLoaded(map, maps, this.state)}
-        >
-          {result}
-        </GoogleMap>)
-    }
-    else{
-      return(
-        <GoogleMap
-        bootstrapURLKeys={{ key: API_KEY}}
-        defaultCenter={[latitude,longitude]}
-        defaultZoom={zoom}
-        >
-        </GoogleMap>
-      )
-    }
-  }
+  // mapRender(result) {
+  //   let latitude = 1.2830
+  //   let longitude = 103.8579
+  //   let zoom = 12
+  //   if (this.props.data.data.length > 0){      
+  //     return (
+  //       <GoogleMap
+  //       bootstrapURLKeys={{ key: API_KEY}}
+  //       defaultCenter={[latitude,longitude]}
+  //       defaultZoom={zoom}
+  //       yesIWantToUseGoogleMapApiInternals
+  //       // onGoogleApiLoaded={({ map, maps }) => apiIsLoaded(map, maps, this.state)}
+  //       >
+  //         {result}
+  //       </GoogleMap>
+  //       )
+  //   }
+  //   else{
+  //     return(
+  //       <GoogleMap
+  //       bootstrapURLKeys={{ key: API_KEY}}
+  //       defaultCenter={[latitude,longitude]}
+  //       defaultZoom={zoom}
+  //       >
+  //       </GoogleMap>
+  //     )
+  //   }
+  // }
 
   componentWillMount() {
     onLoad("find_driver");
