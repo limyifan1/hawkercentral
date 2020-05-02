@@ -13,7 +13,7 @@ import Cookies from "universal-cookie";
 // import GoogleMap from 'google-map-react';
 
 const cookies = new Cookies();
-const API_KEY = `${process.env.REACT_APP_GKEY}`
+// const API_KEY = `${process.env.REACT_APP_GKEY}`
 
 const analytics = firebase.analytics();
 
