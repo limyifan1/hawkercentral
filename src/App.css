@@ -72,20 +72,19 @@ button:focus {
   /* height: 10em;  */
   /* overflow: hidden;  */
   /* height: 34px; */
-  word-break:break-word !important;
+  word-break: break-word !important;
 }
 
 .item-title {
   line-height: 1em;
   /* height: 10em;  */
-  overflow: hidden; 
+  overflow: hidden;
   height: 34px;
-  word-break:break-word !important;
+  word-break: break-word !important;
 }
 
-
 .card-text {
-  word-break:break-word !important;
+  word-break: break-word !important;
 }
 
 .home-option {
@@ -151,8 +150,11 @@ button:focus {
   .image-gallery.fullscreen-modal {
     z-index: 9999 !important;
   }
+  .modal-dialog {
+    max-width: unset !important;
+    right: calc(100% - 105%) !important;
+  }  
 }
-
 
 @media only screen and (max-width: 10000px) {
   .banner-img-top {
@@ -196,7 +198,6 @@ button:focus {
     z-index: 9999 !important;
   }
 }
-
 
 @media only screen and (max-width: 2000px) {
   .banner-img-top {
@@ -325,6 +326,7 @@ button:focus {
   .image-gallery.fullscreen-modal {
     z-index: 9999 !important;
   }
+  
 }
 
 @media screen and (min-device-width: 480px) and (max-device-width: 1200px) and (-webkit-min-device-pixel-ratio: 1) {
@@ -370,6 +372,10 @@ button:focus {
   .image-gallery.fullscreen-modal {
     z-index: 9999 !important;
   }
+  .modal-dialog {
+    max-width: unset !important;
+    right: calc(100% - 105%) !important;
+  }  
 
 }
 
@@ -416,6 +422,11 @@ button:focus {
   .image-gallery.fullscreen-modal {
     z-index: 9999 !important;
   }
+  .modal-dialog {
+    max-width: unset !important;
+    right: calc(100% - 105%) !important;
+  }  
+
 }
 
 .pinDefault {
@@ -471,17 +482,16 @@ button:focus {
   width: 100% !important;
 } */
 
-.image-gallery-content{
+.image-gallery-content {
   max-width: 100% !important;
   height: auto !important;
 }
 
-.image-gallery-slide{
+.image-gallery-slide {
   width: 100% !important;
   height: 100% !important;
   object-fit: overflow !important;
 }
-
 
 .image-gallery-content img {
   width: 100% !important;
@@ -489,18 +499,16 @@ button:focus {
   object-fit: overflow !important;
 }
 
-
 .image-gallery-thumbnails img {
   width: 100%;
   height: 50px !important;
   object-fit: cover;
 }
 
-.image-gallery-slides{
+.image-gallery-slides {
   width: 100% !important;
   height: 100% !important;
   object-fit: overflow;
-
 }
 
 .basic-multi-select {
@@ -713,6 +721,6 @@ figure.effect-bubba:hover p {
     transform: scale(1);
     opacity: 0;
     box-shadow: 0 0 50px rgba(20, 91, 50, 1),
-    inset 0 0 10px rgba(39, 174, 96, 1);
+      inset 0 0 10px rgba(39, 174, 96, 1);
   }
 }
