@@ -49,12 +49,21 @@ class App extends React.Component {
       }
     };
 
+    this.setScrollPosition = (pos) => {
+      console.log("setScrollPosition")
+      this.setState({
+        scrollPosition: pos,
+      })
+    };
+
     // State also contains the updater function so it will
     // be passed down into the context provider
     this.state = {
       language: cookies.get('language'), // TODO: check why this is hardcoded
       toggleLanguage: this.toggleLanguage,
       data: (cookies.get('language') === 'en') ? en : zh,
+      scrollPosition: 0, // tracks scroll position of Search page
+      setScrollPosition: this.setScrollPosition,
     };
   }
 

@@ -7,11 +7,14 @@ import React from "react";
 import "../App.css";
 import placeholder from "../placeholder.png";
 import { withRouter } from "react-router-dom";
+import { LanguageContext } from "./themeContext";
 
 export class Item extends React.Component {
 
   handleClick = async (event) => {
     event.preventDefault();
+    console.log(window.pageYOffset);
+    this.context.setScrollPosition(window.pageYOffset);
     if (this.props.name) {
       this.props.history.push({
         pathname: "/info",
@@ -142,5 +145,5 @@ export class Item extends React.Component {
     );
   }
 }
-
+Item.contextType = LanguageContext;
 export default withRouter(Item);

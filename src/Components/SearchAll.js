@@ -94,6 +94,7 @@ export class SearchAll extends React.Component {
     }
     const data = await query.get().then(Helpers.mapSnapshotToDocs);
     this.setState({ data, retrieved: true });
+    window.scrollTo(0, this.context.scrollPosition);
   };
 
   handleCuisineChange = async (cuisineValue) => {
@@ -197,7 +198,7 @@ export class SearchAll extends React.Component {
                 pic={data["url"]}
                 summary={data["description"]}
                 claps={data["claps"]}
-                // distance={data["distance"]}
+              // distance={data["distance"]}
               />
             </div>
           </span>
@@ -248,21 +249,21 @@ export class SearchAll extends React.Component {
               result.nearby.length > 0 ? (
                 result.nearby
               ) : (
-                <span class="mt-5">No Results Found</span>
-              )
+                  <span class="mt-5">No Results Found</span>
+                )
             ) : (
-              <div class="row h-100 page-container">
-                <div class="col-sm-12 my-auto">
-                  <h3>Loading</h3>
-                  <Spinner class="" animation="grow" />
+                <div class="row h-100 page-container">
+                  <div class="col-sm-12 my-auto">
+                    <h3>Loading</h3>
+                    <Spinner class="" animation="grow" />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         </div>
       </div>
     );
   }
 }
-
+SearchAll.contextType = LanguageContext;
 export default SearchAll;
