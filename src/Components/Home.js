@@ -11,7 +11,6 @@ import fb from "../fb.png";
 import insta from "../insta.png";
 import email from "../email.png";
 import Cookies from "universal-cookie";
-import Item from "./Item";
 import delivery from "../delivery_2.png";
 import self_collect from "../dabao_2.png";
 import chinese_i_want from "../chinese-iwant.png";
