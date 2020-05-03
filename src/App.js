@@ -76,8 +76,6 @@ class App extends React.Component {
             {/* <Route exact path="/news" component={Components.News} /> */}
             <Route exact path="/searchall" component={Components.SearchAll} />
             <Route exact path="/about" component={Components.About} />
-            <Route exact path="/driver" component={Components.Driver} />
-            <Route exact path="/delivery" component={Components.Delivery} />
             <script src="/__/firebase/7.14.1/firebase-app.js"></script>
             <script src="/__/firebase/7.14.1/firebase-analytics.js"></script>
             <script src="/__/firebase/init.js"></script>
