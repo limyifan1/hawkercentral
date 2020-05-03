@@ -2,7 +2,7 @@ import React from "react";
 import "../App.css";
 import { withRouter } from "react-router-dom";
 import firebase from "./Firestore";
-import { Form, Button, Modal } from "react-bootstrap";
+import { Form, Button, Modal, Spinner } from "react-bootstrap";
 import { db } from "./Firestore";
 import driver from "../driver.png";
 import store_address from "../store_address.png";
@@ -294,7 +294,7 @@ export class Driver extends React.Component {
         id: id,
         url: "www.foodleh.app/delivery?id=" + id,
       });
-      this.setState({ submitted: true });
+      this.setState({ submitted: true, submitting: false });
     });
   };
 
@@ -748,31 +748,37 @@ export class Driver extends React.Component {
                         <br />
                         <br />
                       </div>
-                      {this.state.submitted ? (
-                        <div
-                          class="shadow-lg"
-                          style={{
-                            backgroundColor: "green",
-                            borderColor: "white",
-                            fontSize: "25px",
-                            color: "white",
-                          }}
-                        >
-                          Submitted! If found, a driver will contact you
-                          directly.
-                        </div>
+                      {this.state.submitting ? (
+                        <Spinner class="" animation="grow" />
                       ) : (
-                        <Button
-                          class="shadow-lg"
-                          style={{
-                            backgroundColor: "#b48300",
-                            borderColor: "#b48300",
-                            fontSize: "25px",
-                          }}
-                          type="Submit"
-                        >
-                          Search (搜索)
-                        </Button>
+                        <div>
+                          {this.state.submitted ? (
+                            <div
+                              class="shadow-lg"
+                              style={{
+                                backgroundColor: "green",
+                                borderColor: "white",
+                                fontSize: "25px",
+                                color: "white",
+                              }}
+                            >
+                              Submitted! If found, a driver will contact you
+                              directly.
+                            </div>
+                          ) : (
+                            <Button
+                              class="shadow-lg"
+                              style={{
+                                backgroundColor: "#b48300",
+                                borderColor: "#b48300",
+                                fontSize: "25px",
+                              }}
+                              type="Submit"
+                            >
+                              Search (搜索)
+                            </Button>
+                          )}
+                        </div>
                       )}
 
                       <br />
