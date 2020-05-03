@@ -95,6 +95,7 @@ export class SearchAll extends React.Component {
     const data = await query.get().then(Helpers.mapSnapshotToDocs);
     this.setState({ data, retrieved: true });
     window.scrollTo(0, this.context.scrollPosition);
+    this.context.setScrollPosition(0); // reset scrollPosition
   };
 
   handleCuisineChange = async (cuisineValue) => {
