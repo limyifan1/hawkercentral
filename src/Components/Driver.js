@@ -19,26 +19,26 @@ function onLoad(name) {
   analytics.logEvent(name);
 }
 
-function distance_calc(lat1, lon1, lat2, lon2) {
-  if (lat1 === lat2 && lon1 === lon2) {
-    return 0;
-  } else {
-    var radlat1 = (Math.PI * lat1) / 180;
-    var radlat2 = (Math.PI * lat2) / 180;
-    var theta = lon1 - lon2;
-    var radtheta = (Math.PI * theta) / 180;
-    var dist =
-      Math.sin(radlat1) * Math.sin(radlat2) +
-      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-    if (dist > 1) {
-      dist = 1;
-    }
-    dist = Math.acos(dist);
-    dist = (dist * 180) / Math.PI;
-    dist = dist * 60 * 1.1515;
-    return dist * 1.609344;
-  }
-}
+// function distance_calc(lat1, lon1, lat2, lon2) {
+//   if (lat1 === lat2 && lon1 === lon2) {
+//     return 0;
+//   } else {
+//     var radlat1 = (Math.PI * lat1) / 180;
+//     var radlat2 = (Math.PI * lat2) / 180;
+//     var theta = lon1 - lon2;
+//     var radtheta = (Math.PI * theta) / 180;
+//     var dist =
+//       Math.sin(radlat1) * Math.sin(radlat2) +
+//       Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+//     if (dist > 1) {
+//       dist = 1;
+//     }
+//     dist = Math.acos(dist);
+//     dist = (dist * 180) / Math.PI;
+//     dist = dist * 60 * 1.1515;
+//     return dist * 1.609344;
+//   }
+// }
 
 const addData = async ({
   postal,
@@ -259,13 +259,6 @@ export class Driver extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     this.setState({ submitting: true });
-    let distance = distance_calc(
-      this.state.latitude,
-      this.state.longitude,
-      this.state.latitude_to,
-      this.state.longitude_to
-    );
-    let cost = 6 + distance * 0.5;
     await this.getPostal(this.state.postal_to, "to");
     await this.getPostal(this.state.postal, "from");
     cookies.set("postal", this.state.postal, { path: "/" });
@@ -356,27 +349,27 @@ export class Driver extends React.Component {
 
     return (
       <div>
-          <Modal
-            size="xl"
-            onHide={this.setHide}
-            show={this.state.show}
-            className="modal"
-            dialogClassName="modal-dialog modal-100w modal-dialog-centered"
-            style={{"marginTop":"30px"}}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title id="example-custom-modal-styling-title">
-                How DriverLeh? Works
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <img
-                src={instructions}
-                alt=""
-                style={{ width: "100%", height: "100%" }}
-              />
-            </Modal.Body>
-          </Modal>
+        <Modal
+          size="xl"
+          onHide={this.setHide}
+          show={this.state.show}
+          className="modal"
+          dialogClassName="modal-dialog modal-100w modal-dialog-centered"
+          style={{ marginTop: "30px" }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="example-custom-modal-styling-title">
+              How DriverLeh? Works
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <img
+              src={instructions}
+              alt=""
+              style={{ width: "100%", height: "100%" }}
+            />
+          </Modal.Body>
+        </Modal>
 
         <div
           class="jumbotron"
