@@ -10,11 +10,10 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Components from "./Components";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 import en from "./assets/translations/en.json";
 import zh from "./assets/translations/zh.json";
 import { LanguageContext } from "./Components/themeContext";
-
 
 const cookies = new Cookies();
 if (cookies.get("language") === null || cookies.get("language") === undefined) {
@@ -22,16 +21,14 @@ if (cookies.get("language") === null || cookies.get("language") === undefined) {
 }
 
 class App extends React.Component {
-
-
   constructor(props) {
     super(props);
 
     this.toggleLanguage = () => {
-      console.log("toggleLanguage")
-      console.log(this.state.language)
+      console.log("toggleLanguage");
+      console.log(this.state.language);
       if (this.state.language === "en") {
-        cookies.set("language", "zh", { path: '/' });
+        cookies.set("language", "zh", { path: "/" });
         // update data for itself and state so other components know as well
         this.setState({
           data: zh,
@@ -39,7 +36,7 @@ class App extends React.Component {
           toggleLanguage: this.toggleLanguage,
         });
       } else {
-        cookies.set("language", "en", { path: '/' });
+        cookies.set("language", "en", { path: "/" });
         // update data for itself and state so other components know as well
         this.setState({
           data: en,
@@ -50,18 +47,18 @@ class App extends React.Component {
     };
 
     this.setScrollPosition = (pos) => {
-      console.log("setScrollPosition")
+      console.log("setScrollPosition");
       this.setState({
         scrollPosition: pos,
-      })
+      });
     };
 
     // State also contains the updater function so it will
     // be passed down into the context provider
     this.state = {
-      language: cookies.get('language'), // TODO: check why this is hardcoded
+      language: cookies.get("language"), // TODO: check why this is hardcoded
       toggleLanguage: this.toggleLanguage,
-      data: (cookies.get('language') === 'en') ? en : zh,
+      data: cookies.get("language") === "en" ? en : zh,
       scrollPosition: 0, // tracks scroll position of Search page
       setScrollPosition: this.setScrollPosition,
     };
@@ -93,7 +90,6 @@ class App extends React.Component {
           </div>
         </LanguageContext.Provider>
       </Router>
-
     );
   }
 }

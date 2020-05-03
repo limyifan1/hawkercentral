@@ -546,6 +546,7 @@ export class ListForm extends React.Component {
       <Fragment>
         <Select
           isMulti
+          closeMenuOnSelect={false}
           name="name"
           options={this.state.cuisineOptions}
           className="basic-multi-select"
