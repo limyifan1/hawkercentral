@@ -12,6 +12,7 @@ import Select from "react-select";
 
 import firebase from "./Firestore";
 import Helpers from "../Helpers/helpers";
+import { LanguageContext } from "./themeContext";
 
 const analytics = firebase.analytics();
 
@@ -53,7 +54,7 @@ const cuisines = [
   "Grocery Shopping",
 ];
 
-let searchTimer = null
+let searchTimer = null;
 
 export class SearchAll extends React.Component {
   constructor(props) {
@@ -88,31 +89,30 @@ export class SearchAll extends React.Component {
     this.setState({ retrieved: false });
     let query = db.collection("hawkers");
     if (this.state.cuisineValue && this.state.cuisineValue.length > 0) {
-      const categories = this.state.cuisineValue.map(c => c.label);
+      const categories = this.state.cuisineValue.map((c) => c.label);
       query = query.where("categories", "array-contains-any", categories);
     }
-    const data = await query.get()
-      .then(Helpers.mapSnapshotToDocs);
+    const data = await query.get().then(Helpers.mapSnapshotToDocs);
     this.setState({ data, retrieved: true });
   };
 
   handleCuisineChange = async (cuisineValue) => {
     await this.setState({ cuisineValue });
     if (!this.state.isCuisineMenuOpen) {
-      this.retrieveData()
+      this.retrieveData();
     }
-  }
+  };
 
   handleCuisineMenuOpen = () => {
-    this.setState({ isCuisineMenuOpen: true })
-  }
+    this.setState({ isCuisineMenuOpen: true });
+  };
 
   handleCuisineMenuClose = () => {
     if (this.state.isCuisineMenuOpen) {
-      this.setState({ isCuisineMenuOpen: false })
-      this.retrieveData()
+      this.setState({ isCuisineMenuOpen: false });
+      this.retrieveData();
     }
-  }
+  };
 
   cuisineSearch() {
     let cuisine_format = [];
@@ -124,22 +124,22 @@ export class SearchAll extends React.Component {
     });
     const select = () => {
       return (
-        <span>
-          <Select
-            isMulti
-            closeMenuOnSelect={false}
-            isDisabled={!this.state.retrieved}
-            name="name"
-            options={cuisine_format}
-            className="basic-multi-select"
-            classNamePrefix="select"
-            value={this.state.cuisineValue}
-            onChange={this.handleCuisineChange}
-            onMenuOpen={this.handleCuisineMenuOpen}
-            onMenuClose={this.handleCuisineMenuClose}
-            placeholder="Filter By Cuisine"
-          />
-        </span>
+        <LanguageContext.Consumer>
+          {(context) => (
+            <span>
+              <Select
+                isMulti
+                name="name"
+                options={cuisine_format}
+                className="basic-multi-select"
+                classNamePrefix="select"
+                value={this.state.cuisineValue}
+                onChange={this.handleCuisineChange}
+                placeholder={context.data.search.filterby}
+              />
+            </span>
+          )}
+        </LanguageContext.Consumer>
       );
     };
     return (
@@ -153,68 +153,14 @@ export class SearchAll extends React.Component {
   }
 
   handleChange = (event) => {
-    const { target: { value, name } } = event;
+    const {
+      target: { value, name },
+    } = event;
     if (this.clearTimeout) clearTimeout(searchTimer);
     searchTimer = setTimeout(() => {
       this.setState({ [name]: value });
     }, 300);
   };
-
-  // handleChange = (event) => {
-  // 	const self = this;
-  // 	const target = event.target;
-  // 	const value = target.value;
-  // 	const name = target.name;
-  // 	clearTimeout(searchTimer);
-  // 	searchTimer = setTimeout(() => {
-  // 		self.setState({ [name]: value });
-  // 	}, 5000);
-  // }
-
-  // retrieveData = async (query) => {
-  //   let string = {
-  //     longitude: this.state.longitude,
-  //     latitude: this.state.latitude,
-  //     query: this.state.query,
-  //     distance: this.state.distance,
-  //     limit: 10
-  //   };
-  //   let urls = [
-  //     "https://us-central1-hawkercentral.cloudfunctions.net/islandwide",
-  //     "https://us-central1-hawkercentral.cloudfunctions.net/nearby",
-  //   ];
-  //   try {
-  //     Promise.all(
-  //       urls.map((url) =>
-  //         fetch(url, {
-  //           method: "POST",
-  //           mode: "cors",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify(string),
-  //         })
-  //           .then((response) => {
-  //             return response.json();
-  //           })
-  //           .then((data) => {
-  //             return data;
-  //           })
-  //           .catch((error) => {
-  //             return error;
-  //           })
-  //       )
-  //     ).then((data) => {
-  //       this.setState({
-  //         islandwide: data[0],
-  //         nearby: data[1],
-  //         retrieved: true,
-  //       });
-  //     });
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
 
   render() {
     let result = {
@@ -222,25 +168,6 @@ export class SearchAll extends React.Component {
     };
     if (this.state.data !== undefined && this.state.retrieved) {
       let filtered = this.state.data;
-      // filtered = this.state.data.filter(
-      //   (d) =>
-      //     d["pickup_option"] === this.state.pickup ||
-      //     d["delivery_option"] === this.state.delivery
-      // );
-
-      // if (this.state.pickup) {
-      //   filtered = this.state.data.filter(
-      //     (d) =>
-      //       distance_calc(d["latitude"], d["longitude"], latitude, longitude) <
-      //       this.state.distance
-      //   );
-      // } else if (this.state.delivery) {
-      //   filtered = this.state.data.filter(
-      //     (d) =>
-      //       distance_calc(d["latitude"], d["longitude"], latitude, longitude) <=
-      //         10 || d.region.filter((f) => f.value === "islandwide").length >= 1
-      //   );
-      // }
 
       if (this.state.search.length !== 0) {
         filtered = filtered.filter((d) => {
@@ -257,17 +184,6 @@ export class SearchAll extends React.Component {
       }
 
       filtered = filtered.sort((a, b) => b.lastmodified - a.lastmodified);
-
-      // filtered.forEach((element) => {
-      //   element.distance = distance_calc(
-      //     element["latitude"],
-      //     element["longitude"],
-      //     latitude,
-      //     longitude
-      //   ).toString();
-      // });
-
-      // filtered = filtered.sort((a, b) => a.distance - b.distance);
 
       result.nearby = filtered.map((data) => {
         return (
@@ -290,36 +206,42 @@ export class SearchAll extends React.Component {
     }
 
     return (
-      <div
-        class="container"
-        style={{ paddingTop: "56px", width: "100%" }}
-      >
+      <div class="container" style={{ paddingTop: "56px", width: "100%" }}>
         <div class="container" style={{ paddingTop: "27px" }}>
           <div class="row justify-content-center">
-            <div class="col-12 col-sm-10 col-md-6">
-              <h3>All Listings</h3>
-            </div>
+            <LanguageContext.Consumer>
+              {(context) => (
+                <div class="col-12 col-sm-10 col-md-6">
+                  <h3>{context.data.search.alllistings}</h3>
+                </div>
+              )}
+            </LanguageContext.Consumer>
           </div>
           <div class="row justify-content-center mt-4">
-            <div class="col-12 col-sm-10 col-md-6">
-              <input
-                disabled={!this.state.retrieved}
-                class="form-control"
-                type="text"
-                // value={this.state.search}
-                name="search"
-                placeholder="   Search by Name, Category, Food, Items e.g. Chicken Rice"
-                style={{
-                  width: "100%",
-                  height: "38px",
-                  "border-radius": "1rem",
-                }}
-                onChange={this.handleChange}
-              ></input>
-            </div>
-            <div class="col-12 col-sm-10 col-md-5">
-              {this.cuisineSearch()}
-            </div>
+            {
+              <LanguageContext.Consumer>
+                {(context) => (
+                  <div class="col-12 col-sm-10 col-md-6">
+                    <input
+                      disabled={!this.state.retrieved}
+                      class="form-control"
+                      type="text"
+                      // value={this.state.search}
+                      name="search"
+                      placeholder={context.data.search.prompt}
+                      style={{
+                        width: "100%",
+                        height: "38px",
+                        "border-radius": "1rem",
+                      }}
+                      onChange={this.handleChange}
+                    ></input>
+                  </div>
+                )}
+              </LanguageContext.Consumer>
+            }
+
+            <div class="col-12 col-sm-10 col-md-5">{this.cuisineSearch()}</div>
           </div>
           <div className="row justify-content-center mt-4">
             {this.state.retrieved ? (

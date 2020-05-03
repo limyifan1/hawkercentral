@@ -9,7 +9,13 @@ import { Navbar, Nav } from "react-bootstrap";
 import logo from "../foodleh.png";
 import name from "../logo-header-nologo.png";
 import firebase from "./Firestore";
+import Cookies from "universal-cookie";
+import { Button } from "react-bootstrap";
+import en from "../assets/translations/en.json";
+import zh from "../assets/translations/zh.json";
+import { LanguageContext } from "./themeContext";
 
+const cookies = new Cookies();
 const analytics = firebase.analytics();
 
 function onClick(button) {
@@ -17,6 +23,18 @@ function onClick(button) {
 }
 
 export class Menu extends React.Component {
+  constructor(props) {
+    super(props);
+
+    // State also contains the updater function so it will
+    // be passed down into the context provider
+    this.state = {
+      language: cookies.get("language"),
+      toggleLanguage: this.toggleLanguage,
+      data: cookies.get("language") === "en" ? en : zh,
+    };
+  }
+
   render() {
     return (
       <Navbar
@@ -44,16 +62,36 @@ export class Menu extends React.Component {
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-          <Nav.Link
-            href="#"
-            as={Link}
-            to="/"
-            id="menu-link"
-            style={{ color: "grey" }}
-            onClick={onClick("home")}
-          >
-            Home
-          </Nav.Link>
+          <LanguageContext.Consumer>
+            {({ data, language, toggleLanguage }) => (
+              <Button
+                class="shadow-sm"
+                style={{
+                  backgroundColor: "#B48300",
+                  borderColor: "#B48300",
+                }}
+                onClick={toggleLanguage}
+                name="Language"
+              >
+                {data.menu.language_button}
+              </Button>
+            )}
+          </LanguageContext.Consumer>
+          <div class="d-none d-md-inline-block">
+            <Nav.Link
+              href="#"
+              as={Link}
+              to="/"
+              id="menu-link"
+              style={{ color: "grey" }}
+              onClick={onClick("home")}
+            >
+              <LanguageContext.Consumer>
+                {({ data }) => data.menu.homelabel}
+              </LanguageContext.Consumer>
+            </Nav.Link>
+          </div>
+
           {/* <Nav.Link href="#listing" as={Link} to="/listing" id="menu-link" style={{"color":"grey"}}>
             Listings
           </Nav.Link> */}
@@ -65,7 +103,9 @@ export class Menu extends React.Component {
             style={{ color: "grey" }}
             onClick={onClick("search")}
           >
-            Search
+            <LanguageContext.Consumer>
+              {({ data }) => data.menu.searchlabel}
+            </LanguageContext.Consumer>
           </Nav.Link>
           <Nav.Link
             href="#create"
@@ -75,8 +115,11 @@ export class Menu extends React.Component {
             style={{ color: "grey" }}
             onClick={onClick("create")}
           >
-            Create
+            <LanguageContext.Consumer>
+              {({ data }) => data.menu.createlabel}
+            </LanguageContext.Consumer>
           </Nav.Link>
+
           <Nav.Link
             href="#about"
             as={Link}
@@ -85,40 +128,12 @@ export class Menu extends React.Component {
             style={{ color: "grey" }}
             onClick={onClick("about")}
           >
-            About
+            <LanguageContext.Consumer>
+              {({ data }) => data.menu.aboutlabel}
+            </LanguageContext.Consumer>
           </Nav.Link>
         </Navbar.Collapse>
       </Navbar>
-      // <Navbar
-      //   bg="light"
-      //   variant="light"
-      //   style={{ position: "fixed", width: "100%", zIndex: "9999" }}
-      // >
-      // <Navbar.Brand as={Link} to="/" style={{ color: "#B48300" }}>
-      //   <img
-      //     alt=""
-      //     src={logo}
-      //     width="20"
-      //     height="30"
-      //     className="d-inline-block align-top"
-      //   />{' '}
-      //    Foodleh
-      //  </Navbar.Brand>
-      //   <Navbar.Toggle />
-      //   <Navbar.Collapse id="basic-navbar-nav justify-content-end">
-      //     <Nav className="mr-auto">
-      // <Nav.Link href="#" as={Link} to="/">
-      //   Home
-      // </Nav.Link>
-      // <Nav.Link href="#listing" as={Link} to="/listing">
-      //   Listings
-      // </Nav.Link>
-      // <Nav.Link href="#create" as={Link} to="/create">
-      //   Create
-      // </Nav.Link>
-      //     </Nav>
-      //    </Navbar.Collapse>
-      // </Navbar>
     );
   }
 }

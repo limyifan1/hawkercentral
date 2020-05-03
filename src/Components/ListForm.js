@@ -13,7 +13,7 @@ import Item from "./Item";
 import Jimp from "jimp";
 
 import { withRouter } from "react-router-dom";
-
+import { LanguageContext } from "./themeContext";
 // const API_KEY = `${process.env.REACT_APP_GKEY}`
 
 const icon = (
@@ -284,8 +284,8 @@ export class ListForm extends React.Component {
   callPostal = (postal) => {
     return fetch(
       "https://developers.onemap.sg/commonapi/search?searchVal=" +
-        postal +
-        "&returnGeom=Y&getAddrDetails=Y"
+      postal +
+      "&returnGeom=Y&getAddrDetails=Y"
     )
       .then(function (response) {
         return response.json();
@@ -469,35 +469,6 @@ export class ListForm extends React.Component {
         });
       });
     };
-    // event.preventDefault()
-    // alert('start of upload')
-    // Jimp.read(url).then((image) => {
-    //     image.quality(80); // some value of 'quality'
-    //     const uploadTask = storage.ref(`/images/${newName}`).put(image);
-    //     name = "image" + name.slice(-1);
-    //     uploadTask.on(
-    //       "state_changed",
-    //       (snapShot) => {
-    //         //takes a snap shot of the process as it is happening
-    //         console.log(snapShot);
-    //       },
-    //       (err) => {
-    //         //catches the errors
-    //         console.log(err);
-    //       },
-    //       () => {
-    //         // gets the functions from storage refences the image storage in firebase by the children
-    //         // gets the download url then sets the image from firebase as the value for the imgUrl key:
-    //         storage
-    //           .ref("images")
-    //           .child(newName)
-    //           .getDownloadURL()
-    //           .then((fireBaseUrl) => {
-    //             this.setState({ [name]: fireBaseUrl });
-    //           });
-    //       }
-    //     );
-    // })
   };
 
   async getFirestoreData() {
@@ -570,7 +541,7 @@ export class ListForm extends React.Component {
     });
   }
 
-  cuisineSearch() {
+  cuisineSearch(context) {
     return (
       <Fragment>
         <Select
@@ -581,7 +552,7 @@ export class ListForm extends React.Component {
           classNamePrefix="select"
           value={this.state.cuisineValue}
           onChange={this.handleCuisineChange}
-          placeholder="E.g. Asian, Local, Beverages"
+          placeholder={context.data.create.placeholdercuisine}
         />
       </Fragment>
     );
@@ -674,15 +645,22 @@ export class ListForm extends React.Component {
                 style={{ width: "100%", "margin-top": "10px" }}
               >
                 <div class="card-body">
-                  <h5 class="card-title create-title create-title">
-                    Upload Images{" "}
-                  </h5>
-                  <h6 class="card-subtitle mb-2 text-muted create-title">
-                    Upload images of your listed hawker stall below
-                  </h6>
-                  <p class="card-text create-title">
-                    <b>If available, please upload your menu</b>
-                  </p>
+                  {<LanguageContext.Consumer>
+                    {context => (
+                      <div>
+                        <h5 class="card-title create-title create-title">
+                          {context.data.create.uploadimages}{" "}
+                        </h5>
+                        <h6 class="card-subtitle mb-2 text-muted create-title">
+                          {context.data.create.uploadimagedescription}
+                        </h6>
+                        <p class="card-text create-title">
+                          <b>{context.data.create.uploadmenu}</b>
+                        </p>
+                      </div>
+                    )}
+
+                  </LanguageContext.Consumer>}
                   <div class="row">
                     <div class="col-4">
                       <form
@@ -722,8 +700,8 @@ export class ListForm extends React.Component {
                               </div>
                             </span>
                           ) : (
-                            <label for="imageFile1">{icon}</label>
-                          )}
+                                <label for="imageFile1">{icon}</label>
+                              )}
                           <input
                             type="file"
                             class="custom-file-input"
@@ -771,8 +749,8 @@ export class ListForm extends React.Component {
                               </div>
                             </span>
                           ) : (
-                            <label for="imageFile2">{icon}</label>
-                          )}
+                                <label for="imageFile2">{icon}</label>
+                              )}
                           <input
                             type="file"
                             class="custom-file-input"
@@ -820,8 +798,8 @@ export class ListForm extends React.Component {
                               </div>
                             </span>
                           ) : (
-                            <label for="imageFile3">{icon}</label>
-                          )}
+                                <label for="imageFile3">{icon}</label>
+                              )}
                           <input
                             type="file"
                             class="custom-file-input"
@@ -871,8 +849,8 @@ export class ListForm extends React.Component {
                               </div>
                             </span>
                           ) : (
-                            <label for="imageFile4">{icon}</label>
-                          )}
+                                <label for="imageFile4">{icon}</label>
+                              )}
                           <input
                             type="file"
                             class="custom-file-input"
@@ -920,8 +898,8 @@ export class ListForm extends React.Component {
                               </div>
                             </span>
                           ) : (
-                            <label for="imageFile5">{icon}</label>
-                          )}
+                                <label for="imageFile5">{icon}</label>
+                              )}
                           <input
                             type="file"
                             class="custom-file-input"
@@ -969,8 +947,8 @@ export class ListForm extends React.Component {
                               </div>
                             </span>
                           ) : (
-                            <label for="imageFile6">{icon}</label>
-                          )}
+                                <label for="imageFile6">{icon}</label>
+                              )}
                           <input
                             type="file"
                             class="custom-file-input"
@@ -988,176 +966,187 @@ export class ListForm extends React.Component {
                 style={{ width: "100%", "margin-top": "10px" }}
               >
                 <div class="card-body">
-                  <h5 class="card-title create-title"> Live Preview</h5>
-                  <p class="card-text create-title">
-                    This is how your listing will look like to users:{" "}
-                  </p>
-                  <p class="d-flex justify-content-center">
-                    <Item
-                      promo={this.state.promo}
-                      name={this.state.name}
-                      pic={this.state.image1}
-                      summary={this.state.description}
-                    />
-                  </p>
+                  {<LanguageContext.Consumer>
+                    {context => (
+                      <div>
+                        <h5 class="card-title create-title"> {context.data.create.preview}</h5>
+                        <p class="card-text create-title">
+                          {context.data.create.previewdescription}{" "}
+                        </p>
+                        <p class="d-flex justify-content-center">
+                          <Item
+                            promo={this.state.promo}
+                            name={this.state.name}
+                            pic={this.state.image1}
+                            summary={this.state.description}
+                          />
+                        </p>
+                      </div>
+                    )}
+                  </LanguageContext.Consumer>}
                 </div>
+
               </div>
+
             </div>
             <div class="col-sm-12 col-xs-4 col-md-6 col-lg-8">
-              <div
-                class="card shadow"
-                style={{ width: "100%", "margin-top": "10px" }}
-              >
-                <form>
-                  <div class="card-body">
-                    <hr
-                      style={{
-                        color: "black",
-                        backgroundColor: "black",
-                        height: 3,
-                      }}
-                    />{" "}
-                    <h5 class="card-title create-title">
-                      Step 1: Stall Details (Important)
-                    </h5>
-                    <h6 class="card-subtitle mb-2 text-muted create-title">
-                      Please enter more details regarding your stall listing.{" "}
-                    </h6>
-                    <div class="form-group create-title">
-                      <label for="name">Stall Name</label>
-                      <div class="input-group">
-                        <input
-                          onChange={this.handleChange}
-                          value={this.state.name}
-                          type="text"
-                          class="form-control"
-                          name="name"
-                          placeholder="Enter Stall Name"
-                          required
-                        ></input>
-                      </div>
-                    </div>
-                    <div class="form-group create-title">
-                      <label for="street">
-                        Cuisine Category <b>(select multiple if applicable)</b>
-                      </label>
-                      {this.cuisineSearch()}
-                    </div>
-                    <div class="form-group create-title">
-                      <label for="unit">Contact Number (Enter 0 if none): </label>
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text" id="basic-addon1">
-                            +65
-                          </span>
+              {<LanguageContext.Consumer>
+                {context => (
+                  <div
+                    class="card shadow"
+                    style={{ width: "100%", "margin-top": "10px" }}
+                  >
+                    <form>
+                      <div class="card-body">
+
+                        <hr
+                          style={{
+                            color: "black",
+                            backgroundColor: "black",
+                            height: 3,
+                          }}
+                        />{" "}
+                        <h5 class="card-title create-title">
+                          {context.data.create.step1}
+                        </h5>
+                        <h6 class="card-subtitle mb-2 text-muted create-title">
+                          {context.data.create.pleaseenter}
+                          {" "}
+                        </h6>
+                        <div class="form-group create-title">
+                          <label for="name">{context.data.create.stallname}</label>
+                          <div class="input-group">
+                            <input
+                              onChange={this.handleChange}
+                              value={this.state.name}
+                              type="text"
+                              class="form-control"
+                              name="name"
+                              placeholder={context.data.create.placeholderstallname}
+                              required
+                            ></input>
+                          </div>
                         </div>
-                        <input
-                          onChange={this.handleChange}
-                          value={this.state.contact}
-                          type="number"
-                          class="form-control"
-                          name="contact"
-                          placeholder="9xxxxxxx"
-                          required
-                        ></input>
-                      </div>
-                    </div>
-                    <div class="form-group create-title">
-                      <label for="postalcode">Postal Code</label>
-                      <div class="input-group">
-                        <input
-                          onChange={this.handleChange.bind(this)}
-                          value={this.state.postal}
-                          type="number"
-                          class="form-control"
-                          name="postal"
-                          placeholder="Enter Postal Code"
-                          min="0"
-                          required
-                        ></input>
-                      </div>
-                    </div>
-                    <div class="form-group create-title">
-                      <label for="street">
-                        Street Name<b> (Auto-Filled)</b>
-                      </label>
-                      <input
-                        onChange={this.handleChange}
-                        value={this.state.street}
-                        type="text"
-                        class="form-control"
-                        name="street"
-                        placeholder="Enter Street Name"
-                      ></input>
-                    </div>
-                    <div class="form-group create-title">
-                      <label for="unit">Unit #</label>
-                      <input
-                        onChange={this.handleChange}
-                        value={this.state.unit}
-                        type="text"
-                        class="form-control"
-                        name="unit"
-                        placeholder="E.g. #01-01"
-                      ></input>
-                    </div>
-                    <div class="form-group create-title">
-                      <label for="description">
-                        Brief Description <b>(max 45 characters)</b>
-                      </label>
-                      <input
-                        onChange={this.handleChange}
-                        value={this.state.description}
-                        type="text"
-                        class="form-control"
-                        name="description"
-                        placeholder="E.g. Best Chicken Rice in town"
-                      ></input>
-                    </div>
-                    <div class="form-group create-title">
-                      <label for="description">
-                        Self-Collection and/or Delivery? <b>(Important)</b>
-                      </label>
-                      <div class="form-check create-title">
-                        <label class="checkbox-inline">
+                        <div class="form-group create-title">
+                          <label for="street">
+                            {context.data.create.cuisinecategory} <b>{context.data.create.selectmultiple}</b>
+                          </label>
+                          {this.cuisineSearch(context)}
+                        </div>
+                        <div class="form-group create-title">
+                          <label for="unit">{context.data.create.contactnumber}</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="basic-addon1">
+                                +65
+                          </span>
+                            </div>
+                            <input
+                              onChange={this.handleChange}
+                              value={this.state.contact}
+                              type="number"
+                              class="form-control"
+                              name="contact"
+                              placeholder="9xxxxxxx"
+                              required
+                            ></input>
+                          </div>
+                        </div>
+                        <div class="form-group create-title">
+                          <label for="postalcode">{context.data.create.postalcode}</label>
+                          <div class="input-group">
+                            <input
+                              onChange={this.handleChange.bind(this)}
+                              value={this.state.postal}
+                              type="number"
+                              class="form-control"
+                              name="postal"
+                              placeholder={context.data.create.placeholderpostalcode}
+                              min="0"
+                              required
+                            ></input>
+                          </div>
+                        </div>
+                        <div class="form-group create-title">
+                          <label for="street">
+                            {context.data.create.streetname}<b> {context.data.create.autofill}</b>
+                          </label>
                           <input
                             onChange={this.handleChange}
-                            type="checkbox"
-                            checked={this.state.pickup_option}
-                            value={this.state.pickup_option}
-                            name="pickup_option"
-                            class="form-check-input"
+                            value={this.state.street}
+                            type="text"
+                            class="form-control"
+                            name="street"
+                            placeholder={context.data.create.placeholderstreetname}
                           ></input>
-                          Self-Collection
-                        </label>
-                        <br />
-                        <label class="checkbox-inline">
+                        </div>
+                        <div class="form-group create-title">
+                          <label for="unit">{context.data.create.unit}</label>
                           <input
                             onChange={this.handleChange}
-                            type="checkbox"
-                            checked={this.state.delivery_option}
-                            name="delivery_option"
-                            class="form-check-input"
+                            value={this.state.unit}
+                            type="text"
+                            class="form-control"
+                            name="unit"
+                            placeholder={context.data.create.placeholderunit}
                           ></input>
-                          Delivery
-                        </label>
-                        <br />
-                      </div>
-                      {this.state.delivery_option === false ? null : (
-                      <div>
-                        <div class="card shadow">
-                          <div class="card-body">
-                            <h5 class="card-title create-title">
-                              {" "}
-                              Delivery Options
-                            </h5>
-                            <div class=" form-group create-title">
-                              <label for="description">
-                                Which regions do you deliver to? (Select
-                                Island-wide Delivery or NSEWC)
+                        </div>
+                        <div class="form-group create-title">
+                          <label for="description">
+                            {context.data.create.briefdescription} <b>{context.data.create.max45chars}</b>
+                          </label>
+                          <input
+                            onChange={this.handleChange}
+                            value={this.state.description}
+                            type="text"
+                            class="form-control"
+                            name="description"
+                            placeholder={context.data.create.placeholderbriefdescription}
+                          ></input>
+                        </div>
+                        <div class="form-group create-title">
+                          <label for="description">
+                            {context.data.create.selfcollectordelivery} <b>{context.data.create.important}</b>
+                          </label>
+                          <div class="form-check create-title">
+                            <label class="checkbox-inline">
+                              <input
+                                onChange={this.handleChange}
+                                type="checkbox"
+                                checked={this.state.pickup_option}
+                                value={this.state.pickup_option}
+                                name="pickup_option"
+                                class="form-check-input"
+                              ></input>
+                              {context.data.create.selfcollection}
+                            </label>
+                            <br />
+                            <label class="checkbox-inline">
+                              <input
+                                onChange={this.handleChange}
+                                type="checkbox"
+                                checked={this.state.delivery_option}
+                                name="delivery_option"
+                                class="form-check-input"
+                              ></input>
+                              {context.data.create.delivery}
+                            </label>
+                            <br />
+                          </div>
+                          {this.state.delivery_option === false ? null : (
+                            <div>
+                              <div class="card shadow">
+                                <div class="card-body">
+                                  <h5 class="card-title create-title">
+                                    {" "}
+                                    {context.data.create.deliveryoptions}
+                                  </h5>
+                                  <div class=" form-group create-title">
+                                    <label for="description">
+                                      {context.data.create.whichregion}
                               </label>
-                              {this.regionSearch()}
-                              {/* <div class="form-check create-title">
+                                    {this.regionSearch()}
+                                    {/* <div class="form-check create-title">
                           <label class="checkbox-inline">
                             <input
                               onChange={this.handleChange}
@@ -1213,590 +1202,592 @@ export class ListForm extends React.Component {
                             Island-wide
                           </label>
                         </div> */}
-                            </div>
-                            {/* <div class="form-group create-title ">
+                                  </div>
+                                  {/* <div class="form-group create-title ">
                             <label for="street">
                               Which nearest MRT do you deliver to? (Can select
                               multiple)
                             </label>
                             {this.deliverySearch()}
                           </div> */}
-                            <div class="form-group create-title ">
-                              <label for="price">Delivery Fees: </label>
-                              <div class="input-group">
-                                <input
-                                  onChange={this.handleChange}
-                                  value={this.state.price}
-                                  type="text"
-                                  class="form-control"
-                                  name="price"
-                                  placeholder="e.g. $2.99 for below $30"
-                                ></input>
+                                  <div class="form-group create-title ">
+                        <label for="price">{context.data.create.deliveryfees}</label>
+                                    <div class="input-group">
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.price}
+                                        type="text"
+                                        class="form-control"
+                                        name="price"
+                                        placeholder={context.data.create.placeholderfees}
+                                      ></input>
+                                    </div>
+                                  </div>
+                                  <div class="form-group create-title">
+                                    <label for="delivery_detail">
+                                      {context.data.create.deliverydetails}{" "}
+                                    </label>
+                                    <textarea
+                                      onChange={this.handleChange}
+                                      value={this.state.deliverydetails}
+                                      type="text"
+                                      class="form-control"
+                                      name="delivery_detail"
+                                      placeholder={context.data.create.placeholderdeliverydetails}
+                                      rows="3"
+                                    ></textarea>
+                                  </div>
+                                </div>
                               </div>
+                              <br />
                             </div>
-                            <div class="form-group create-title">
-                              <label for="delivery_detail">
-                                Details regarding delivery:{" "}
-                              </label>
-                              <textarea
+                          )}
+                        </div>
+                        <hr
+                          style={{
+                            color: "black",
+                            backgroundColor: "black",
+                            height: 3,
+                          }}
+                        />{" "}
+                        <h5 class="card-title create-title">
+                          {context.data.create.step2}
+                        </h5>
+                        <div class="form-group create-title">
+                          <label for="description_detail">
+                            {context.data.create.additional}{" "}
+                          </label>
+                          <textarea
+                            onChange={this.handleChange}
+                            value={this.state.description_detail}
+                            type="text"
+                            class="form-control"
+                            name="description_detail"
+                            placeholder={context.data.create.placeholderadditional}
+                            rows="3"
+                          ></textarea>
+                        </div>
+                        <div class="form-group create-title">
+                          <label for="website">{context.data.create.generalpromo} </label>
+                          <div class="form-row">
+                            <div class="col-5">
+                              <small>
+                                {context.data.create.discount} <b>{context.data.create.eightchars}</b>
+                              </small>
+                              <input
                                 onChange={this.handleChange}
-                                value={this.state.delivery_detail}
+                                value={this.state.promo}
+                                name="promo"
                                 type="text"
                                 class="form-control"
-                                name="delivery_detail"
-                                placeholder="E.g. Only deliver to Bukit Batok for orders above $30"
-                                rows="3"
-                              ></textarea>
+                                placeholder={context.data.create.placeholderdiscount}
+                                maxlength="8"
+                              />
+                            </div>
+                            <div class="col-7">
+                              <small>{context.data.create.condition}</small>
+                              <input
+                                onChange={this.handleChange}
+                                value={this.state.condition}
+                                name="condition"
+                                type="text"
+                                class="form-control"
+                                placeholder={context.data.create.placeholdercondition}
+                                maxlength="40"
+                              />
                             </div>
                           </div>
                         </div>
-                        <br />
-                      </div>
-                    )}
-                    </div>
-                    <hr
-                      style={{
-                        color: "black",
-                        backgroundColor: "black",
-                        height: 3,
-                      }}
-                    />{" "}
-                    <h5 class="card-title create-title">
-                      Step 2: Additional Details (Optional)
-                    </h5>
-                    <div class="form-group create-title">
-                      <label for="description_detail">
-                        Additional Details{" "}
-                      </label>
-                      <textarea
-                        onChange={this.handleChange}
-                        value={this.state.description_detail}
-                        type="text"
-                        class="form-control"
-                        name="description_detail"
-                        placeholder="e.g. For a limited time, buy 3 get 1 free and islandwide delivery"
-                        rows="3"
-                      ></textarea>
-                    </div>
-                    <div class="form-group create-title">
-                      <label for="website">General Promotion (if any) </label>
-                      <div class="form-row">
-                        <div class="col-5">
-                          <small>
-                            Discount <b>(8 chars)</b>
-                          </small>
+                        <div class="form-group create-title">
+                          <label for="website">
+                            {context.data.create.website}
+                          </label>
                           <input
                             onChange={this.handleChange}
-                            value={this.state.promo}
-                            name="promo"
+                            value={this.state.website}
                             type="text"
                             class="form-control"
-                            placeholder="e.g. 10% or $5 off"
-                            maxlength="8"
-                          />
+                            name="website"
+                            placeholder="www.example.com"
+                            rows="3"
+                          ></input>
                         </div>
-                        <div class="col-7">
-                          <small>Condition (max 40 chars)</small>
-                          <input
+                        <div class="form-group create-title">
+                          <label for="description">{context.data.create.hours}</label>
+                          <textarea
                             onChange={this.handleChange}
-                            value={this.state.condition}
-                            name="condition"
+                            value={this.state.opening}
                             type="text"
                             class="form-control"
-                            placeholder="e.g. any order / above $20 order size"
-                            maxlength="40"
-                          />
+                            name="opening"
+                            placeholder={context.data.create.placeholderhours}
+                            rows="3"
+                          ></textarea>
                         </div>
-                      </div>
-                    </div>
-                    <div class="form-group create-title">
-                      <label for="website">
-                        Website / Facebook/ Google Listing Link
-                      </label>
-                      <input
-                        onChange={this.handleChange}
-                        value={this.state.website}
-                        type="text"
-                        class="form-control"
-                        name="website"
-                        placeholder="www.example.com"
-                        rows="3"
-                      ></input>
-                    </div>
-                    <div class="form-group create-title">
-                      <label for="description">Opening Hours</label>
-                      <textarea
-                        onChange={this.handleChange}
-                        value={this.state.opening}
-                        type="text"
-                        class="form-control"
-                        name="opening"
-                        placeholder="E.g. Monday: 7:00 to 20:00"
-                        rows="3"
-                      ></textarea>
-                    </div>
-                    <div class="create-title">
-                      <Button
-                        class="shadow-sm"
-                        style={{
-                          backgroundColor: "blue",
-                          borderColor: "blue",
-                        }}
-                        onClick={this.handleMenu}
-                        name="menu"
-                      >
-                        Add Menu Items
-                      </Button>
-                      <br />
-                    </div>
-                    {this.state.menu ? (
-                      <div>
-                        <br />
-                        <div class="card shadow">
-                          <div class="card-body">
-                            <h5 class="card-title create-title"> Menu Items</h5>
-                            <div class="form-row">
-                              <div class="col-7">
-                                <small>Menu Item</small>
-                                <input
-                                  onChange={this.handleChange}
-                                  value={this.state.menuitem[0]}
-                                  name="menuitem0"
-                                  type="text"
-                                  class="form-control"
-                                  placeholder="E.g. Chicken Rice"
-                                  maxlength="60"
-                                />
-                              </div>
-                              <div class="col-5">
-                                <small>Price</small>
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span
-                                      class="input-group-text"
-                                      id="basic-addon1"
-                                    >
-                                      $
-                                    </span>
+                        <div class="create-title">
+                          <Button
+                            class="shadow-sm"
+                            style={{
+                              backgroundColor: "blue",
+                              borderColor: "blue",
+                            }}
+                            onClick={this.handleMenu}
+                            name="menu"
+                          >
+                            {context.data.create.additem}
+                          </Button>
+                          <br />
+                        </div>
+                        {this.state.menu ? (
+                          <div>
+                            <br />
+                            <div class="card shadow">
+                              <div class="card-body">
+                                <h5 class="card-title create-title"> {context.data.create.menuitems}</h5>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <small>{context.data.create.menuitem}</small>
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[0]}
+                                      name="menuitem0"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder="E.g. Chicken Rice"
+                                      maxlength="60"
+                                    />
                                   </div>
-                                  <input
-                                    onChange={this.handleChange}
-                                    value={this.state.menuprice[0]}
-                                    name="menuprice0"
-                                    type="number"
-                                    class="form-control"
-                                    placeholder="e.g. 4.00"
-                                  />
+                                  <div class="col-5">
+                                    <small>{context.data.create.price}</small>
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                    </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[0]}
+                                        name="menuprice0"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                            <div class="form-row">
-                              <div class="col-7">
-                                <input
-                                  onChange={this.handleChange}
-                                  value={this.state.menuitem[1]}
-                                  name="menuitem1"
-                                  type="text"
-                                  class="form-control"
-                                  placeholder="E.g. Chicken Rice"
-                                  maxlength="60"
-                                />
-                              </div>
-                              <div class="col-5">
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span
-                                      class="input-group-text"
-                                      id="basic-addon1"
-                                    >
-                                      $
-                                    </span>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[1]}
+                                      name="menuitem1"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder={context.data.create.placeholdermenuitem}
+                                      maxlength="60"
+                                    />
                                   </div>
-                                  <input
-                                    onChange={this.handleChange}
-                                    value={this.state.menuprice[1]}
-                                    name="menuprice1"
-                                    type="number"
-                                    class="form-control"
-                                    placeholder="e.g. 4.00"
-                                  />
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                    </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[1]}
+                                        name="menuprice1"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                            <div class="form-row">
-                              <div class="col-7">
-                                <input
-                                  onChange={this.handleChange}
-                                  value={this.state.menuitem[2]}
-                                  name="menuitem2"
-                                  type="text"
-                                  class="form-control"
-                                  placeholder="E.g. Chicken Rice"
-                                  maxlength="60"
-                                />
-                              </div>
-                              <div class="col-5">
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span
-                                      class="input-group-text"
-                                      id="basic-addon1"
-                                    >
-                                      $
-                                    </span>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[2]}
+                                      name="menuitem2"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder={context.data.create.placeholdermenuitem}
+                                      maxlength="60"
+                                    />
                                   </div>
-                                  <input
-                                    onChange={this.handleChange}
-                                    value={this.state.menuprice[2]}
-                                    name="menuprice2"
-                                    type="number"
-                                    class="form-control"
-                                    placeholder="e.g. 4.00"
-                                  />
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                    </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[2]}
+                                        name="menuprice2"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                            <div class="form-row">
-                              <div class="col-7">
-                                <input
-                                  onChange={this.handleChange}
-                                  value={this.state.menuitem[3]}
-                                  name="menuitem3"
-                                  type="text"
-                                  class="form-control"
-                                  placeholder="E.g. Chicken Rice"
-                                  maxlength="60"
-                                />
-                              </div>
-                              <div class="col-5">
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span
-                                      class="input-group-text"
-                                      id="basic-addon1"
-                                    >
-                                      $
-                                    </span>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[3]}
+                                      name="menuitem3"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder={context.data.create.placeholdermenuitem}
+                                      maxlength="60"
+                                    />
                                   </div>
-                                  <input
-                                    onChange={this.handleChange}
-                                    value={this.state.menuprice[3]}
-                                    name="menuprice3"
-                                    type="number"
-                                    class="form-control"
-                                    placeholder="e.g. 4.00"
-                                  />
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                    </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[3]}
+                                        name="menuprice3"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                            <div class="form-row">
-                              <div class="col-7">
-                                <input
-                                  onChange={this.handleChange}
-                                  value={this.state.menuitem[4]}
-                                  name="menuitem4"
-                                  type="text"
-                                  class="form-control"
-                                  placeholder="E.g. Chicken Rice"
-                                  maxlength="60"
-                                />
-                              </div>
-                              <div class="col-5">
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span
-                                      class="input-group-text"
-                                      id="basic-addon1"
-                                    >
-                                      $
-                                    </span>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[4]}
+                                      name="menuitem4"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder={context.data.create.placeholdermenuitem}
+                                      maxlength="60"
+                                    />
                                   </div>
-                                  <input
-                                    onChange={this.handleChange}
-                                    value={this.state.menuprice[4]}
-                                    name="menuprice4"
-                                    type="number"
-                                    class="form-control"
-                                    placeholder="e.g. 4.00"
-                                  />
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                    </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[4]}
+                                        name="menuprice4"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                            <div class="form-row">
-                              <div class="col-7">
-                                <input
-                                  onChange={this.handleChange}
-                                  value={this.state.menuitem[5]}
-                                  name="menuitem5"
-                                  type="text"
-                                  class="form-control"
-                                  placeholder="E.g. Chicken Rice"
-                                  maxlength="60"
-                                />
-                              </div>
-                              <div class="col-5">
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span
-                                      class="input-group-text"
-                                      id="basic-addon1"
-                                    >
-                                      $
-                                    </span>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[5]}
+                                      name="menuitem5"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder={context.data.create.placeholdermenuitem}
+                                      maxlength="60"
+                                    />
                                   </div>
-                                  <input
-                                    onChange={this.handleChange}
-                                    value={this.state.menuprice[5]}
-                                    name="menuprice5"
-                                    type="number"
-                                    class="form-control"
-                                    placeholder="e.g. 4.00"
-                                  />
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                    </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[5]}
+                                        name="menuprice5"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                            <div class="form-row">
-                              <div class="col-7">
-                                <input
-                                  onChange={this.handleChange}
-                                  value={this.state.menuitem[6]}
-                                  name="menuitem6"
-                                  type="text"
-                                  class="form-control"
-                                  placeholder="E.g. Chicken Rice"
-                                  maxlength="60"
-                                />
-                              </div>
-                              <div class="col-5">
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span
-                                      class="input-group-text"
-                                      id="basic-addon1"
-                                    >
-                                      $
-                                    </span>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[6]}
+                                      name="menuitem6"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder={context.data.create.placeholdermenuitem}
+                                      maxlength="60"
+                                    />
                                   </div>
-                                  <input
-                                    onChange={this.handleChange}
-                                    value={this.state.menuprice[6]}
-                                    name="menuprice6"
-                                    type="number"
-                                    class="form-control"
-                                    placeholder="e.g. 4.00"
-                                  />
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                    </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[6]}
+                                        name="menuprice6"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                            <div class="form-row">
-                              <div class="col-7">
-                                <input
-                                  onChange={this.handleChange}
-                                  value={this.state.menuitem[7]}
-                                  name="menuitem7"
-                                  type="text"
-                                  class="form-control"
-                                  placeholder="E.g. Chicken Rice"
-                                  maxlength="60"
-                                />
-                              </div>
-                              <div class="col-5">
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span
-                                      class="input-group-text"
-                                      id="basic-addon1"
-                                    >
-                                      $
-                                    </span>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[7]}
+                                      name="menuitem7"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder={context.data.create.placeholdermenuitem}
+                                      maxlength="60"
+                                    />
                                   </div>
-                                  <input
-                                    onChange={this.handleChange}
-                                    value={this.state.menuprice[7]}
-                                    name="menuprice7"
-                                    type="number"
-                                    class="form-control"
-                                    placeholder="e.g. 4.00"
-                                  />
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                    </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[7]}
+                                        name="menuprice7"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                            <div class="form-row">
-                              <div class="col-7">
-                                <input
-                                  onChange={this.handleChange}
-                                  value={this.state.menuitem[8]}
-                                  name="menuitem8"
-                                  type="text"
-                                  class="form-control"
-                                  placeholder="E.g. Chicken Rice"
-                                  maxlength="60"
-                                />
-                              </div>
-                              <div class="col-5">
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span
-                                      class="input-group-text"
-                                      id="basic-addon1"
-                                    >
-                                      $
-                                    </span>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[8]}
+                                      name="menuitem8"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder={context.data.create.placeholdermenuitem}
+                                      maxlength="60"
+                                    />
                                   </div>
-                                  <input
-                                    onChange={this.handleChange}
-                                    value={this.state.menuprice[8]}
-                                    name="menuprice8"
-                                    type="number"
-                                    class="form-control"
-                                    placeholder="e.g. 4.00"
-                                  />
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                    </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[8]}
+                                        name="menuprice8"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                            <div class="form-row">
-                              <div class="col-7">
-                                <input
-                                  onChange={this.handleChange}
-                                  value={this.state.menuitem[9]}
-                                  name="menuitem9"
-                                  type="text"
-                                  class="form-control"
-                                  placeholder="E.g. Chicken Rice"
-                                  maxlength="60"
-                                />
-                              </div>
-                              <div class="col-5">
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span
-                                      class="input-group-text"
-                                      id="basic-addon1"
-                                    >
-                                      $
-                                    </span>
+                                <div class="form-row">
+                                  <div class="col-7">
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.menuitem[9]}
+                                      name="menuitem9"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder={context.data.create.placeholdermenuitem}
+                                      maxlength="60"
+                                    />
                                   </div>
-                                  <input
-                                    onChange={this.handleChange}
-                                    value={this.state.menuprice[9]}
-                                    name="menuprice9"
-                                    type="number"
-                                    class="form-control"
-                                    placeholder="e.g. 4.00"
-                                  />
+                                  <div class="col-5">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span
+                                          class="input-group-text"
+                                          id="basic-addon1"
+                                        >
+                                          $
+                                    </span>
+                                      </div>
+                                      <input
+                                        onChange={this.handleChange}
+                                        value={this.state.menuprice[9]}
+                                        name="menuprice9"
+                                        type="number"
+                                        class="form-control"
+                                        placeholder="e.g. 4.00"
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    ) : null}
-                    <br />
-                    <div class="form-group create-title">
-                      <label for="unit">WeChat ID(微信号): </label>
-                      <div class="input-group">
-                        <input
-                          onChange={this.handleChange}
-                          value={this.state.wechatid}
-                          type="text"
-                          class="form-control"
-                          name="wechatid"
-                          placeholder="e.g. abc123"
-                        ></input>
-                      </div>
-                    </div>
-                    <div class="form-group create-title">
-                      <label for="unit">Contact Channels: </label>
-                      <div class="form-check create-title">
-                        <label class="checkbox-inline">
-                          <input
-                            onChange={this.handleChange}
-                            type="checkbox"
-                            checked={this.state.call}
-                            value={this.state.call}
-                            name="call"
-                            class="form-check-input"
-                          ></input>
-                          Call
-                        </label>
+                        ) : null}
                         <br />
-                        <label class="checkbox-inline">
-                          <input
-                            onChange={this.handleChange}
-                            type="checkbox"
-                            checked={this.state.whatsapp}
-                            value={this.state.whatsapp}
-                            name="whatsapp"
-                            class="form-check-input"
-                          ></input>
+                        <div class="form-group create-title">
+                          <label for="unit">WeChat ID(微信号): </label>
+                          <div class="input-group">
+                            <input
+                              onChange={this.handleChange}
+                              value={this.state.wechatid}
+                              type="text"
+                              class="form-control"
+                              name="wechatid"
+                              placeholder="e.g. abc123"
+                            ></input>
+                          </div>
+                        </div>
+                        <div class="form-group create-title">
+                          <label for="unit">{context.data.create.contact}</label>
+                          <div class="form-check create-title">
+                            <label class="checkbox-inline">
+                              <input
+                                onChange={this.handleChange}
+                                type="checkbox"
+                                checked={this.state.call}
+                                value={this.state.call}
+                                name="call"
+                                class="form-check-input"
+                              ></input>
+                              {context.data.create.call}
+                            </label>
+                            <br />
+                            <label class="checkbox-inline">
+                              <input
+                                onChange={this.handleChange}
+                                type="checkbox"
+                                checked={this.state.whatsapp}
+                                value={this.state.whatsapp}
+                                name="whatsapp"
+                                class="form-check-input"
+                              ></input>
                           WhatsApp
                         </label>
-                        <br />
-                        <label class="checkbox-inline">
-                          <input
-                            onChange={this.handleChange}
-                            type="checkbox"
-                            checked={this.state.sms}
-                            value={this.state.sms}
-                            name="sms"
-                            class="form-check-input"
-                          ></input>
+                            <br />
+                            <label class="checkbox-inline">
+                              <input
+                                onChange={this.handleChange}
+                                type="checkbox"
+                                checked={this.state.sms}
+                                value={this.state.sms}
+                                name="sms"
+                                class="form-check-input"
+                              ></input>
                           SMS
                         </label>
+                            <br />
+                            <label class="checkbox-inline">
+                              <input
+                                onChange={this.handleChange}
+                                type="checkbox"
+                                checked={this.state.inperson}
+                                value={this.state.inperson}
+                                name="inperson"
+                                class="form-check-input"
+                              ></input>
+                              {context.data.create.inperson}
+                            </label>
+                            <br />
+                          </div>
+                        </div>
+                        <div
+                          class="card shadow d-block d-md-none"
+                          style={{ width: "100%", "margin-top": "10px" }}
+                        >
+                          <div class="card-body">
+                            <h5 class="card-title create-title"> {context.data.create.preview}</h5>
+                            <p class="card-text create-title">
+                              {context.data.create.previewdescription}{" "}
+                            </p>
+                            <p class="d-flex justify-content-center">
+                              <Item
+                                promo={this.state.promo}
+                                name={this.state.name}
+                                pic={this.state.image1}
+                                summary={this.state.description}
+                              />
+                            </p>
+                            <p class="card-text create-title">
+                              {context.data.create.notsatisfied}{" "}
+                            </p>
+                          </div>
+                        </div>
                         <br />
-                        <label class="checkbox-inline">
-                          <input
-                            onChange={this.handleChange}
-                            type="checkbox"
-                            checked={this.state.inperson}
-                            value={this.state.inperson}
-                            name="inperson"
-                            class="form-check-input"
-                          ></input>
-                          In-Person
-                        </label>
-                        <br />
+                        <div class="create-title">
+                          <Button
+                            class="shadow-sm"
+                            style={{
+                              backgroundColor: "#b48300",
+                              borderColor: "#b48300",
+                            }}
+                            type="Submit"
+                          // onClick={this.handleSubmit}
+                          >
+                            {context.data.create.submit}
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                    <div
-                      class="card shadow d-block d-md-none"
-                      style={{ width: "100%", "margin-top": "10px" }}
-                    >
-                      <div class="card-body">
-                        <h5 class="card-title create-title"> Live Preview</h5>
-                        <p class="card-text create-title">
-                          This is how your listing will look like to users:{" "}
-                        </p>
-                        <p class="d-flex justify-content-center">
-                          <Item
-                            promo={this.state.promo}
-                            name={this.state.name}
-                            pic={this.state.image1}
-                            summary={this.state.description}
-                          />
-                        </p>
-                        <p class="card-text create-title">
-                          Not satisfied? Just change the fields!{" "}
-                        </p>
-                      </div>
-                    </div>
-                    <br />
-                    <div class="create-title">
-                      <Button
-                        class="shadow-sm"
-                        style={{
-                          backgroundColor: "#b48300",
-                          borderColor: "#b48300",
-                        }}
-                        type="Submit"
-                        // onClick={this.handleSubmit}
-                      >
-                        Submit
-                      </Button>
-                    </div>
+                    </form>
                   </div>
-                </form>
-              </div>
+                )}
+              </LanguageContext.Consumer>}
             </div>
           </div>
         </Form>

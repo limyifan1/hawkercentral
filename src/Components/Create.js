@@ -9,15 +9,16 @@ import Component from "../Components";
 import { withRouter } from "react-router-dom";
 
 import firebase from "./Firestore";
+import { LanguageContext } from "./themeContext";
 
 const analytics = firebase.analytics();
 
-function onLoad(name){
+function onLoad(name) {
   analytics.logEvent(name)
 }
 
 export class Create extends React.Component {
-  componentWillMount(){
+  componentWillMount() {
     onLoad("create_load")
   }
   render() {
@@ -25,17 +26,25 @@ export class Create extends React.Component {
       <div>
         {" "}
         <div
-        class="jumbotron"
-        style={{
-          "padding-top": "70px",
-          "padding-bottom": "240px",
-          height: "100%",
-          "background-color": "white",
-        }}
-      >
+          class="jumbotron"
+          style={{
+            "padding-top": "110px",
+            "padding-bottom": "240px",
+            height: "100%",
+            "background-color": "white",
+          }}
+        >
 
-        <h3>Create Listing</h3>
-        <Component.ListForm toggle={"create"} />
+          <h3>
+            <LanguageContext.Consumer>
+              {context => (
+                <div>
+                { context.data.create.createlisting }
+                </div>
+              )}
+            </LanguageContext.Consumer>
+          </h3>
+          <Component.ListForm toggle={"create"} />
         </div>
       </div>
     );

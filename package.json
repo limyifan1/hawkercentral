@@ -22,6 +22,7 @@
     "react-clap-button": "1.2.8",
     "react-dom": "16.13.1",
     "react-ga": "2.7.0",
+    "react-i18next": "^11.4.0",
     "react-image-gallery": "1.0.7",
     "react-linkify": "1.0.0-alpha",
     "react-multi-carousel": "2.5.5",
@@ -33,7 +34,7 @@
     "reactstrap": "8.4.1",
     "rxjs": "6.5.5",
     "ua-parser-js": "0.7.21",
-    "universal-cookie": "4.0.3"
+    "universal-cookie": "^4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
