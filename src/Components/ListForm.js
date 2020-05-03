@@ -1369,7 +1369,7 @@ export class ListForm extends React.Component {
                             <br />
                             <div class="card shadow">
                               <div class="card-body">
-                                <h5 class="card-title create-title"> {context.data.create.menuitem}s</h5>
+                                <h5 class="card-title create-title"> {context.data.create.menuitems}</h5>
                                 <div class="form-row">
                                   <div class="col-7">
                                     <small>{context.data.create.menuitem}</small>
