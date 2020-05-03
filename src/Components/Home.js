@@ -22,7 +22,6 @@ import "./Home.css";
 import { Line } from "rc-progress";
 import { db } from "./Firestore";
 
-
 const cookies = new Cookies();
 const SELF_COLLECT_OPTION = "selfcollect";
 const HOME_DELIVERY_OPTION = "delivery";
@@ -120,8 +119,12 @@ export class Home extends React.PureComponent {
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 align-items-center justify-content-center">
                 <br />
-                <img alt="I want..." class="home-iwant"
-                  src={(cookies.get('language') === 'en') ? i_want : chinese_i_want}
+                <img
+                  alt="I want..."
+                  class="home-iwant"
+                  src={
+                    cookies.get("language") === "en" ? i_want : chinese_i_want
+                  }
                 />
                 <br />
                 <br />
@@ -131,7 +134,11 @@ export class Home extends React.PureComponent {
                       onClick={this.handleCollect}
                       alt=""
                       class={selfcollect}
-                      src={(cookies.get('language') === 'en') ? self_collect : chinese_self_collect}
+                      src={
+                        cookies.get("language") === "en"
+                          ? self_collect
+                          : chinese_self_collect
+                      }
                       style={{ width: "30%" }}
                     />
                   </span>
@@ -140,7 +147,11 @@ export class Home extends React.PureComponent {
                       alt=""
                       onClick={this.handleDelivery}
                       class={delivery_option}
-                      src={(cookies.get('language') === 'en') ? delivery : chinese_delivery}
+                      src={
+                        cookies.get("language") === "en"
+                          ? delivery
+                          : chinese_delivery
+                      }
                       style={{ width: "30%" }}
                     />
                   </span>
@@ -193,18 +204,24 @@ export class Home extends React.PureComponent {
                 <br />
                 <div>
                   <LanguageContext.Consumer>
-                    {context => (
+                    {(context) =>
                       renderPostalCodeForm(this.state.option, context)
-                    )}
+                    }
                   </LanguageContext.Consumer>
                   <br />
                   <br />
                   <br />
+                  <br />
+                  <br />
                   <LanguageContext.Consumer>
-                    {context => (
+                    {(context) => (
                       <div style={{ fontSize: "12px" }}>
-                        {context.data.home.wehave}<b>{this.state.count}</b>{context.data.home.listings}
-                        <br />{context.data.home.goto}<a href="/create">{context.data.home.createlink}</a>
+                        {context.data.home.wehave}
+                        <b>{this.state.count}</b>
+                        {context.data.home.listings}
+                        <br />
+                        {context.data.home.goto}
+                        <a href="/create">{context.data.home.createlink}</a>
                         {context.data.home.nowtoadd}
                       </div>
                     )}
@@ -255,9 +272,7 @@ export class Home extends React.PureComponent {
                   <div class="container-fluid">
                     <p style={{ fontSize: "12px" }}>
                       <LanguageContext.Consumer>
-                        {context => (
-                          context.data.home.acknowledgement
-                        )}
+                        {(context) => context.data.home.acknowledgement}
                       </LanguageContext.Consumer>
                     </p>
                     <br />
@@ -361,12 +376,15 @@ export class Home extends React.PureComponent {
 }
 
 function renderPostalCodeForm(option, context) {
-  console.log("renderpostalcodeform", context)
+  console.log("renderpostalcodeform", context);
   switch (option) {
     case "":
       return (
         <span class=" main-caption">
-          <div> {context.data.home.choose} <b>{context.data.home.dabao} </b> {context.data.home.or} <b> {context.data.home.delivery_word}</b>
+          <div>
+            {" "}
+            {context.data.home.choose} <b>{context.data.home.dabao} </b>{" "}
+            {context.data.home.or} <b> {context.data.home.delivery_word}</b>
           </div>
           {/*(context.language === 'en') ? <div>choose <b>da bao</b> or <b>delivery</b> </div> : <div>选 <b>打包</b> 或 <b>送餐</b></div>*/}
         </span>
@@ -377,18 +395,21 @@ function renderPostalCodeForm(option, context) {
       return (
         <span class="label label-default main-caption">
           <span class="main-caption">
-            {<LanguageContext.Consumer>
-              {context => (
-                <div>
-                  {context.data.home.now_enter} <strong>{context.data.home.postalcode}</strong>
-                </div>
-              )}
-            </LanguageContext.Consumer>}
+            {
+              <LanguageContext.Consumer>
+                {(context) => (
+                  <div>
+                    {context.data.home.now_enter}{" "}
+                    <strong>{context.data.home.postalcode}</strong>
+                  </div>
+                )}
+              </LanguageContext.Consumer>
+            }
             <br />
             <br />
             <Component.Search option={option} />
           </span>
-        </span >
+        </span>
       );
     default:
   }
