@@ -201,10 +201,15 @@ export class Home extends React.PureComponent {
                   <br />
                   <br />
                   <br />
-                  <div style={{ fontSize: "12px" }}>
-                    We have <b>{this.state.count}</b> listings. Help us reach
-                    500! <br/> Go to <a href="/create">Create</a> now to add a listing! 
-                  </div>
+                  <LanguageContext.Consumer>
+                    {context => (
+                      <div style={{ fontSize: "12px" }}>
+                        {context.data.home.wehave}<b>{this.state.count}</b>{context.data.home.listings}
+                        <br />{context.data.home.goto}<a href="/create">{context.data.home.createlink}</a>
+                        {context.data.home.nowtoadd}
+                      </div>
+                    )}
+                  </LanguageContext.Consumer>
                   <span style={{ fontSize: "12px" }}>0 </span>
                   <Line
                     percent={this.state.count / 5}

@@ -16,7 +16,12 @@
     "or": "或",
     "delivery_word": "点外卖",
     "now_enter": "请输入",
-    "postalcode": "邮政编码"
+    "postalcode": "邮政编码",
+    "wehave": "如今已有 ",
+    "listings": " 家饮食业者注册了。帮我们达到 500 摊位的目标！",
+    "goto": " 请到 ",
+    "createlink": "这里",
+    "nowtoadd": " 去注册吧！"
   },
   "create": {
     "createlisting": "入驻平台",
@@ -36,7 +41,7 @@
     "unit": "门牌 #",
     "placeholderunit": "例如： #01-01",
     "briefdescription": "简介",
-    "max45chars": "字数限于45字",
+    "max45chars": "（字数限于45字）",
     "placeholderbriefdescription": "例如：本地最好吃的鸡饭",
     "selfcollectordelivery": "打包/外卖",
     "important": "(必填)",
