@@ -982,6 +982,9 @@ export class ListForm extends React.Component {
                             summary={this.state.description}
                           />
                         </p>
+                        <p class="card-text create-title">
+                          {context.data.create.notsatisfied}{" "}
+                        </p>
                       </div>
                     )}
                   </LanguageContext.Consumer>}
@@ -1145,7 +1148,7 @@ export class ListForm extends React.Component {
                                   <div class=" form-group create-title">
                                     <label for="description">
                                       {context.data.create.whichregion}
-                              </label>
+                                    </label>
                                     {this.regionSearch()}
                                     {/* <div class="form-check create-title">
                           <label class="checkbox-inline">
@@ -1212,7 +1215,7 @@ export class ListForm extends React.Component {
                             {this.deliverySearch()}
                           </div> */}
                                   <div class="form-group create-title ">
-                        <label for="price">{context.data.create.deliveryfees}</label>
+                                    <label for="price">{context.data.create.deliveryfees}</label>
                                     <div class="input-group">
                                       <input
                                         onChange={this.handleChange}
