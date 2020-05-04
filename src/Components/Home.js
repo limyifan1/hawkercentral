@@ -162,7 +162,11 @@ export class Home extends React.PureComponent {
                       alt=""
                       onClick={this.handleCollect}
                       class={selfcollect}
-                      src={self_collect}
+                      src={
+                        cookies.get("language") === "en"
+                          ? self_collect
+                          : chinese_self_collect
+                      }
                     />
                   </button>
                   <button style={{ backgroundColor: "white" }}>
@@ -170,36 +174,14 @@ export class Home extends React.PureComponent {
                       alt=""
                       onClick={this.handleDelivery}
                       class={delivery_option}
-                      src={delivery}
+                      src={
+                        cookies.get("language") === "en"
+                          ? delivery
+                          : chinese_delivery
+                      }
                     />
                   </button>
                 </span>
-
-                {/* <div class="row justify-content-center collect-options">
-                  <div className="col-sm-12 col-md-auto">
-                    <button
-                      type="button"
-                      onClick={this.handleCollect}
-                      className={classnames({
-                        clicked: this.state.option === SELF_COLLECT_OPTION,
-                      })}
-                    >
-                      <img alt="Self Collect" src={self_collect} />
-                    </button>
-                  </div>
-
-                  <div className="col-sm-12 col-md-auto">
-                    <button
-                      type="button"
-                      onClick={this.handleDelivery}
-                      className={classnames({
-                        clicked: this.state.option === HOME_DELIVERY_OPTION,
-                      })}
-                    >
-                      <img alt="Home Delivery" src={delivery} />
-                    </button>
-                  </div>
-                </div> */}
                 <br />
                 <br />
                 <div>
@@ -405,7 +387,6 @@ function renderPostalCodeForm(option, context) {
                 )}
               </LanguageContext.Consumer>
             }
-            <br />
             <br />
             <Component.Search option={option} />
           </span>
