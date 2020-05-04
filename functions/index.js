@@ -74,14 +74,15 @@ exports.telegramSend = functions.https.onRequest(async (req, res) => {
       destination +
       "</a>\n" +
       "<b>Distance: </b>" +
-      distance + "\n"+
+      distance +
+      "\n" +
       "<b>Estimated Fee: </b>" +
       cost +
       "\n" +
       "<b>Click to Accept (first come first serve): </b>" +
       url;
 
-    let sent = await bot.telegram.sendMessage("@foodlehdev", message, {
+    let sent = await bot.telegram.sendMessage("@foodlehdelivery", message, {
       parse_mode: "HTML",
     });
     let message_id = sent.message_id;
@@ -117,7 +118,9 @@ exports.telegramEdit = functions.https.onRequest(async (req, res) => {
       .create({
         body:
           "Your order has been picked up by a driver. \n Driver Mobile: +65" +
-          driver_mobile + "\n Fee: " + cost,
+          driver_mobile +
+          "\n Delivery Fee: $" +
+          cost,
         from: "+12015847715",
         to: "+65" + requester_mobile,
       })
@@ -145,6 +148,9 @@ exports.telegramEdit = functions.https.onRequest(async (req, res) => {
           "Pickup Time: " +
           time +
           "\n" +
+          "Delivery Fee: $" +
+          cost +
+          "\n" +
           "Note: " +
           note +
           "\n",
@@ -158,7 +164,7 @@ exports.telegramEdit = functions.https.onRequest(async (req, res) => {
 
     var message = "<b>A driver has picked up this order! </b>";
     await bot.telegram
-      .editMessageText("@foodlehdev", message_id, "", message, {
+      .editMessageText("@foodlehdelivery", message_id, "", message, {
         parse_mode: "HTML",
       })
       .then(() => {
