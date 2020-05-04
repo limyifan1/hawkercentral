@@ -57,9 +57,9 @@ export class Delivery extends React.Component {
       id: queryString.parse(this.props.location.search).id,
       pickup_option: false,
       submitted: false,
-      driver_contact: cookies.get("driver_contact"),
-      payment: false,
-      paynow_alternate: cookies.get("paynow_alternate"),
+      driver_contact: cookies.get("driver_contact")?cookies.get("driver_contact"):'',
+      payment: cookies.get("payment")?cookies.get("payment"):'',
+      paynow_alternate: cookies.get("paynow_alternate")?cookies.get("paynow_alternate"):'',
     };
   }
 
@@ -142,6 +142,7 @@ export class Delivery extends React.Component {
     this.setState({ submitted: true });
     cookies.set("driver_contact", this.state.driver_contact, { path: "/" });
     cookies.set("paynow_alternate", this.state.paynow_alternate, { path: "/" });
+    cookies.set("payment", this.state.payment, { path: "/" });
     await this.getDoc().then(async () => {
       if (!this.state.data.viewed) {
         await updateData({
