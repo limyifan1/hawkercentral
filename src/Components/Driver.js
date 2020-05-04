@@ -327,26 +327,6 @@ export class Driver extends React.Component {
   };
 
   render() {
-    // var cost;
-    // var distance =
-    //   this.state.directions && this.state.directions.routes.length > 0
-    //     ? this.state.directions.routes[0].legs[0].distance.value
-    //     : 0;
-
-    // if (distance < 5000) {
-    //   cost = 6;
-    // } else if (distance < 10000) {
-    //   cost = 8;
-    // } else if (distance < 15000) {
-    //   cost = 10;
-    // } else if (distance < 20000) {
-    //   cost = 12;
-    // } else if (distance < 25000) {
-    //   cost = 15;
-    // } else {
-    //   cost = 18;
-    // }
-
     return (
       <div>
         <Modal
