@@ -12,6 +12,7 @@ import { Spinner } from "react-bootstrap";
 import Select from "react-select";
 import firebase, { db, geo, geoToPromise } from "./Firestore";
 import Helpers from "../Helpers/helpers";
+import { LanguageContext } from "./themeContext";
 
 const analytics = firebase.analytics();
 
@@ -169,6 +170,8 @@ export class Nearby extends React.Component {
     }
 
     this.setState({ data, retrieved: true });
+    window.scrollTo(0, this.context.scrollPosition);
+    this.context.setScrollPosition(0); // reset scrollPosition
   };
 
   handleCuisineChange(option) {
@@ -189,20 +192,24 @@ export class Nearby extends React.Component {
     });
     const select = () => {
       return (
-        <span>
-          <Select
-            isMulti
-            closeMenuOnSelect={false}
-            isDisabled={!this.state.retrieved}
-            name="name"
-            options={cuisine_format}
-            className="basic-multi-select"
-            classNamePrefix="select"
-            value={this.state.cuisineValue}
-            onChange={this.handleCuisineChange}
-            placeholder="Filter By Cuisine"
-          />
-        </span>
+        <LanguageContext.Consumer>
+          {(context) => (
+            <span>
+              <Select
+                isMulti
+                closeMenuOnSelect={false}
+                isDisabled={!this.state.retrieved}
+                name="name"
+                options={cuisine_format}
+                className="basic-multi-select"
+                classNamePrefix="select"
+                value={this.state.cuisineValue}
+                onChange={this.handleCuisineChange}
+                placeholder={context.data.search.filterby}
+              />
+            </span>
+          )}
+        </LanguageContext.Consumer>
       );
     };
     return (
@@ -339,30 +346,47 @@ export class Nearby extends React.Component {
       <div class="container" style={{ paddingTop: "56px", width: "100%" }}>
         <div class="container" style={{ paddingTop: "27px" }}>
           <div class="row justify-content-center">
+            <LanguageContext.Consumer>
+              {(context) => (
+                <div class="col-12 col-sm-10 col-md-6">
+                  <h3>
+                    {context.data.search.nearyouat}{" "}
+                    <span style={{ color: "#b48300" }}>{this.state.query}</span>
+                  </h3>
+                </div>
+              )}
+            </LanguageContext.Consumer>
+            {/* 
             <div class="col-12 col-sm-10 col-md-6">
               <h3>
                 Near You at{" "}
                 <span style={{ color: "#b48300" }}>{this.state.query}</span>
               </h3>
-            </div>
+            </div> */}
           </div>
           <div class="row justify-content-center mt-4">
-            <div class="col-12 col-sm-10 col-md-6">
-              <input
-                disabled={!this.state.retrieved}
-                class="form-control"
-                type="text"
-                // value={this.state.search}
-                name="search"
-                placeholder="   Search by Name, Category, Food, Items e.g. Chicken Rice"
-                style={{
-                  width: "100%",
-                  height: "38px",
-                  "border-radius": "1rem",
-                }}
-                onChange={this.handleChange}
-              ></input>
-            </div>
+            {
+              <LanguageContext.Consumer>
+                {(context) => (
+                  <div class="col-12 col-sm-10 col-md-6">
+                    <input
+                      disabled={!this.state.retrieved}
+                      class="form-control"
+                      type="text"
+                      // value={this.state.search}
+                      name="search"
+                      placeholder={context.data.search.prompt}
+                      style={{
+                        width: "100%",
+                        height: "38px",
+                        "border-radius": "1rem",
+                      }}
+                      onChange={this.handleChange}
+                    ></input>
+                  </div>
+                )}
+              </LanguageContext.Consumer>
+            }
             <div class="col-12 col-sm-10 col-md-5">{this.cuisineSearch()}</div>
           </div>
           <div className="row justify-content-center mt-4">
@@ -370,16 +394,16 @@ export class Nearby extends React.Component {
               result.nearby.length > 0 ? (
                 result.nearby
               ) : (
-                <span class="mt-5">No Results Found</span>
-              )
+                  <span class="mt-5">No Results Found</span>
+                )
             ) : (
-              <div class="row h-100 page-container">
-                <div class="col-sm-12 my-auto">
-                  <h3>Loading</h3>
-                  <Spinner class="" animation="grow" />
+                <div class="row h-100 page-container">
+                  <div class="col-sm-12 my-auto">
+                    <h3>Loading</h3>
+                    <Spinner class="" animation="grow" />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         </div>
       </div>
@@ -387,4 +411,5 @@ export class Nearby extends React.Component {
   }
 }
 
+Nearby.contextType = LanguageContext;
 export default Nearby;

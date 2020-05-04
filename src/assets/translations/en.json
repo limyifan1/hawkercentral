@@ -87,6 +87,7 @@
   "search": {
     "alllistings" : "All Listings",
     "prompt": "   Search by Name, Category, Food, Items e.g. Chicken Rice",
-    "filterby": "Filter By Cuisine"
+    "filterby": "Filter By Cuisine",
+    "nearyouat": "Near You At "
   }
 }

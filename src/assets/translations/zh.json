@@ -87,6 +87,7 @@
   "search": {
     "alllistings" : "美食目录",
     "prompt": "   输入摊名 / 菜式 / 食物名称 （英文）",
-    "filterby": "选择菜式"
+    "filterby": "选择菜式",
+    "nearyouat": "附近 "
   }
 }
