@@ -79,12 +79,12 @@ export class About extends React.Component {
                   <LanguageContext.Consumer>
                     {(context) => (
                       <div>
-                        <img src={logo} alt="" style={{ height: "20px" }} />
+                        <img src={logo} alt="FoodLeh?" style={{ height: "20px" }} />
                         {context.data.about.para_one}
                         <br />
                         <br />
                         Sounds too good to be true? What's the catch? Boh leh...{" "}
-                        <img src={logo} alt="" style={{ height: "20px" }} /> is
+                        <img src={logo} alt="FoodLeh?" style={{ height: "20px" }} /> is
                         a purely non-profit initiative devised to help local F&B
                         stall owners to be seen online. It’s also a
                         community-based platform where listings can be created
@@ -96,7 +96,7 @@ export class About extends React.Component {
                         applications,{" "}
                         <img
                           src={logo}
-                          alt=""
+                          alt="FoodLeh?"
                           style={{ height: "20px" }}
                         />{" "}
                         doesn't discriminates, with each listing given an equal
