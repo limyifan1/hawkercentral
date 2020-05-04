@@ -75,14 +75,14 @@
     "inperson": "当面",
     "preview": "预览",
     "previewdescription": "预先检查您的页面:",
-    "notsatisfied": "如果不满意，请随意更改",
+    "notsatisfied": "如有不满意，可以随时更改！",
     "submit": "完成",
     "uploadimages": "上载图片",
     "uploadimagedescription": "请上载摊位照片",
     "uploadmenu": "若有菜单，请上载菜单图片"
   },
   "about": {
-    "para_one": " 是个免费并易用的网站，有助于饮食业摊主接触到更多顾客，同时善于扩展国民美食选择。"
+    "para_one": " 是个免费并且容易使用的网站，在帮助饮食业者吸引更多顾客的同时，也让国人有更多的美食选择。"
   },
   "search": {
     "alllistings" : "美食目录",
