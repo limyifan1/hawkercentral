@@ -7,6 +7,8 @@ import { db } from "./Firestore";
 import queryString from "query-string";
 import { Spinner } from "react-bootstrap";
 import driver from "../driver.png";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
 const analytics = firebase.analytics();
 
@@ -14,11 +16,12 @@ function onLoad(name) {
   analytics.logEvent(name);
 }
 
-const updateData = async ({ driver_contact, id }) => {
+const updateData = async ({ driver_contact, id, paynow_alternate }) => {
   let now = new Date();
   var field = {
     driver_contact: driver_contact,
     timeaccepted: now,
+    paynow_alternate: paynow_alternate
   };
   await db
     .collection("deliveries")
@@ -33,7 +36,7 @@ const updateData = async ({ driver_contact, id }) => {
   return id;
 };
 
-export class Driver extends React.Component {
+export class Delivery extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -54,7 +57,9 @@ export class Driver extends React.Component {
       id: queryString.parse(this.props.location.search).id,
       pickup_option: false,
       submitted: false,
-      driver_contact: "",
+      driver_contact: cookies.get("driver_contact"),
+      payment: false,
+      paynow_alternate: cookies.get("paynow_alternate"),
     };
   }
 
@@ -88,6 +93,7 @@ export class Driver extends React.Component {
               snapshot.data().unit_to + " " + snapshot.data().street_to,
             time: snapshot.data().time,
             note: snapshot.data().note,
+            cost: snapshot.data().cost
           });
         }
         return true;
@@ -134,11 +140,14 @@ export class Driver extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     this.setState({ submitted: true });
+    cookies.set("driver_contact", this.state.driver_contact, { path: "/" });
+    cookies.set("paynow_alternate", this.state.paynow_alternate, { path: "/" });
     await this.getDoc().then(async () => {
       if (!this.state.data.viewed) {
         await updateData({
           id: this.state.id,
           driver_contact: this.state.driver_contact,
+          paynow_alternate: this.paynow_alternate
         });
       }
     });
@@ -148,7 +157,12 @@ export class Driver extends React.Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    this.setState({ [name]: value });
+    if (name === "payment") {
+      const checked = target.checked;
+      this.setState({ [name]: checked });
+    } else {
+      this.setState({ [name]: value });
+    }
   };
 
   render() {
@@ -172,7 +186,7 @@ export class Driver extends React.Component {
               />
               <div
                 class="card shadow row"
-                style={{ width: "100%", padding: "20px", margin:"20px" }}
+                style={{ width: "100%", padding: "20px", margin: "20px" }}
               >
                 {!this.state.submitted ? (
                   <Form onSubmit={this.handleSubmit.bind(this)}>
@@ -194,6 +208,33 @@ export class Driver extends React.Component {
                         required
                       ></input>
                     </div>
+                    <br />
+                    <div class="form-check create-title">
+                      <label class="checkbox-inline">
+                        <input
+                          onChange={this.handleChange}
+                          type="checkbox"
+                          checked={this.state.payment}
+                          value={this.state.payment}
+                          name="payment"
+                          class="form-check-input"
+                        ></input>
+                        Prefer a different PayNow number/UEN?
+                      </label>
+                      <br />
+                    </div>
+                    {this.state.payment ? (
+                      <div class="input-group">
+                        <input
+                          onChange={this.handleChange}
+                          value={this.state.paynow_alternate}
+                          type="number"
+                          class="form-control"
+                          name="paynow_alternate"
+                          placeholder="UEN/PayNow Number"
+                        ></input>
+                      </div>
+                    ) : null}
                     <br />
                     <Button
                       class="shadow-lg"
@@ -296,4 +337,4 @@ export class Driver extends React.Component {
   }
 }
 
-export default withRouter(Driver);
+export default withRouter(Delivery);
