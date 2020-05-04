@@ -111,12 +111,13 @@ exports.telegramEdit = functions.https.onRequest(async (req, res) => {
     var time = req.body.time;
     var customer_mobile = req.body.customer_mobile;
     var note = req.body.note;
+    var cost = req.body.cost;
 
     twilio.messages
       .create({
         body:
-          "Your order has been picked up by a driver. The contact number is: +65" +
-          driver_mobile,
+          "Your order has been picked up by a driver. \n Driver Mobile: +65" +
+          driver_mobile + "\n Fee: " + cost,
         from: "+12015847715",
         to: "+65" + requester_mobile,
       })
