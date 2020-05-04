@@ -13,7 +13,6 @@ import Select from "react-select";
 import firebase from "./Firestore";
 import Helpers from "../Helpers/helpers";
 import { LanguageContext } from "./themeContext";
-require("firebase/firestore");
 
 const analytics = firebase.analytics();
 

@@ -14,6 +14,7 @@ import ImageGallery from "react-image-gallery";
 import Component from "./index";
 import Clap from "./Clap";
 import Linkify from "react-linkify";
+import { withRouter } from "react-router-dom";
 
 import firebase from "./Firestore";
 
@@ -23,7 +24,7 @@ function onLoad(name, item) {
   analytics.logEvent(name, { name: item });
 }
 
-export class Nearby extends React.Component {
+export class Info extends React.Component {
   constructor(props) {
     super(props);
 
@@ -41,11 +42,6 @@ export class Nearby extends React.Component {
     console.log("run");
   }
 
-  componentDidMount() {
-    // this.getDoc();
-  }
-
-
   getDoc = async () => {
     await db
       .collection("hawkers")
@@ -60,6 +56,7 @@ export class Nearby extends React.Component {
         return true;
       })
       .catch((error) => {
+        window.location.reload(true)
         console.log(error);
       });
   };
@@ -532,4 +529,4 @@ export class Nearby extends React.Component {
   }
 }
 
-export default Nearby;
+export default withRouter(Info);
