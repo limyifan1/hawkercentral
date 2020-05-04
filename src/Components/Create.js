@@ -28,7 +28,7 @@ export class Create extends React.Component {
         <div
           class="jumbotron"
           style={{
-            "padding-top": "110px",
+            "padding-top": "80px",
             "padding-bottom": "240px",
             height: "100%",
             "background-color": "white",
