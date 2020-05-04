@@ -41,6 +41,11 @@ export class Nearby extends React.Component {
     console.log("run");
   }
 
+  componentDidMount() {
+    // this.getDoc();
+  }
+
+
   getDoc = async () => {
     await db
       .collection("hawkers")
