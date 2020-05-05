@@ -16,12 +16,48 @@ function onLoad(name) {
   analytics.logEvent(name);
 }
 
+function formatAMPM(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  var strTime = hours + ":" + minutes + " " + ampm;
+  return strTime;
+}
+
+const dayName = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
+
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 const updateData = async ({ driver_contact, id, paynow_alternate }) => {
   let now = new Date();
   var field = {
-    driver_contact: driver_contact,
+    driver_contact: driver_contact ? driver_contact : "",
     timeaccepted: now,
-    paynow_alternate: paynow_alternate
+    paynow_alternate: paynow_alternate ? paynow_alternate : "",
   };
   await db
     .collection("deliveries")
@@ -57,9 +93,13 @@ export class Delivery extends React.Component {
       id: queryString.parse(this.props.location.search).id,
       pickup_option: false,
       submitted: false,
-      driver_contact: cookies.get("driver_contact")?cookies.get("driver_contact"):'',
-      payment: cookies.get("payment")?cookies.get("payment"):'',
-      paynow_alternate: cookies.get("paynow_alternate")?cookies.get("paynow_alternate"):'',
+      driver_contact: cookies.get("driver_contact")
+        ? cookies.get("driver_contact")
+        : "",
+      payment: cookies.get("payment") ? cookies.get("payment") : "",
+      paynow_alternate: cookies.get("paynow_alternate")
+        ? cookies.get("paynow_alternate")
+        : "",
     };
   }
 
@@ -91,9 +131,17 @@ export class Delivery extends React.Component {
             origin: snapshot.data().unit + " " + snapshot.data().street,
             destination:
               snapshot.data().unit_to + " " + snapshot.data().street_to,
-            time: snapshot.data().time,
+            time: snapshot.data().time
+              ? dayName[snapshot.data().time.toDate().getDay()] +
+                " " +
+                snapshot.data().time.toDate().getDate() +
+                " " +
+                monthNames[snapshot.data().time.toDate().getMonth()] +
+                " " +
+                formatAMPM(snapshot.data().time.toDate())
+              : null,
             note: snapshot.data().note,
-            cost: snapshot.data().cost
+            cost: snapshot.data().cost,
           });
         }
         return true;
@@ -148,7 +196,7 @@ export class Delivery extends React.Component {
         await updateData({
           id: this.state.id,
           driver_contact: this.state.driver_contact,
-          paynow_alternate: this.paynow_alternate
+          paynow_alternate: this.state.paynow_alternate,
         });
       }
     });
@@ -288,8 +336,21 @@ export class Delivery extends React.Component {
                         <br />
                         <b>Customer Contact:</b> {this.state.data.contact_to}
                         <br />
-                        <b>Pickup Time:</b> {this.state.data.time}
-                        <br />
+                        {this.state.data.time ? (
+                          <div>
+                            {" "}
+                            {dayName[this.state.data.time.toDate().getDay()] +
+                              " " +
+                              this.state.data.time.toDate().getDate() +
+                              " " +
+                              monthNames[
+                                this.state.data.time.toDate().getMonth()
+                              ] +
+                              " " +
+                              formatAMPM(this.state.data.time.toDate())}
+                          </div>
+                        ) : null}
+                        <b>Pickup Time:</b> <br />
                         <b>Note from Requester:</b> {this.state.data.note}
                         <br />
                         <b>Distance:</b> {this.state.data.distance}
