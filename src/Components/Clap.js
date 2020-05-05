@@ -6,6 +6,9 @@
 import React from "react";
 import mojs from "@mojs/core";
 import { db } from "./Firestore";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
 
 class Clap extends React.Component {
   constructor(props) {
@@ -157,7 +160,10 @@ class Clap extends React.Component {
           class="d-flex align-items-center justify-content-center"
         >
           {this.props.toggle === "about" ? (
-            <span>Clap to support this initiative!</span>
+            <span>{cookies.get("language") === "en" ? 
+            "Clap to support this initiative!" : 
+            "鼓掌支持我们！"} 
+            </span>
           ) : (
             <span>
               Clap to support <br /> your hawker! (max 5){" "}

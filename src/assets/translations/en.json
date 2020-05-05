@@ -82,7 +82,15 @@
     "uploadmenu": "If available, please upload your menu"
   },
   "about": {
-    "para_one": " is an easy-to-use web application designed to bridge hawker stalls and restaurant owners in Singapore with all Singaporeans via a free online platform."
+    "para_one": " is an easy-to-use web application designed to bridge hawker stalls and restaurant owners in Singapore with all Singaporeans via a free online platform.",
+    "para_two": "Sounds too good to be true? What's the catch? Boh leh... FoodLeh? is a purely non-profit initiative devised to help local F&B stall owners to be seen online. It’s also a community-based platform where listings can be created and edited by members of the public.",
+    "para_three": "\"If we don't give discounts, we're pretty much invisible on the delivery platform\" While that is true of other applications, FoodLeh? doesn't discriminates, with each listing given an equal opportunity to shine based on their proximity to each User. There's no need to eat into profit margins, and best of all, no more steep commissions!",
+    "para_four": "Steady lah, time to dabao and save our local F&B stall owners!",
+    "howtouse" : "How to Use",
+    "forappusers" : "(for App Users)",
+    "appusers": "At the “Home” page, select either \"dabao\" or \"delivery\", and key in your postal code. Start browsing listings! Encourage your favourite businesses during this tough period by giving them a virtual “clap” too!",
+    "forfnb": "(for Local F&B businesses)",
+    "fnb": "Go to the “Create” page and fill in the form. Voila! All done in a matter of minutes!"
   },
   "search": {
     "alllistings" : "All Listings",

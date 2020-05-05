@@ -83,42 +83,19 @@ export class About extends React.Component {
                         {context.data.about.para_one}
                         <br />
                         <br />
-                        Sounds too good to be true? What's the catch? Boh leh...{" "}
-                        <img src={logo} alt="FoodLeh?" style={{ height: "20px" }} /> is
-                        a purely non-profit initiative devised to help local F&B
-                        stall owners to be seen online. It’s also a
-                        community-based platform where listings can be created
-                        and edited by members of the public.
+                        {context.data.about.para_two}
                         <br />
                         <br />
-                        "If we don't give discounts, we're pretty much invisible
-                        on the delivery platform" While that is true of other
-                        applications,{" "}
-                        <img
-                          src={logo}
-                          alt="FoodLeh?"
-                          style={{ height: "20px" }}
-                        />{" "}
-                        doesn't discriminates, with each listing given an equal
-                        opportunity to shine based on their proximity to each
-                        User. There's no need to eat into profit margins, and
-                        best of all, no more steep commissions!
+                        {context.data.about.para_three}
                         <br />
                         <br />
-                        Steady lah, time to dabao and save our local F&B stall
-                        owners!
+                        {context.data.about.para_four}
                         <hr />
-                        <b>How to Use</b>
+                    <b>{context.data.about.howtouse}</b>
                         <br />
-                        <b>(for App Users)</b> At the “Home” page, select either
-                        "dabao" or "delivery", and key in your postal code.
-                        Start browsing listings! Encourage your favourite
-                        businesses during this tough period by giving them a
-                        virtual “clap” too! <br />
+                    <b>{context.data.about.forappusers}</b> {context.data.about.appusers}<br />
                         <br />
-                        <b>(for Local F&B businesses)</b> Go to the “Create”
-                        page and fill in the form. Voila! All done in a matter
-                        of minutes!
+                    <b>{context.data.about.forfnb}</b> {context.data.about.fnb}
                         <br />
                         <br />
                         <div class="row d-flex justify-content-center">
