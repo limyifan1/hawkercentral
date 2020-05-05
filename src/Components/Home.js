@@ -31,6 +31,7 @@ export class Home extends React.PureComponent {
     data: [],
     option: "",
     retrieved: false,
+    count: 500,
   };
 
   componentWillMount() {
@@ -195,27 +196,32 @@ export class Home extends React.PureComponent {
                   <br />
                   <br />
                   <br />
-                  <LanguageContext.Consumer>
-                    {(context) => (
-                      <div style={{ fontSize: "12px" }}>
-                        {context.data.home.wehave}
-                        <b>{this.state.count}</b>
-                        {context.data.home.listings}
-                        <br />
-                        {context.data.home.goto}
-                        <a href="/create">{context.data.home.createlink}</a>
-                        {context.data.home.nowtoadd}
-                      </div>
-                    )}
-                  </LanguageContext.Consumer>
-                  <span style={{ fontSize: "12px" }}>0 </span>
-                  <Line
-                    percent={this.state.count / 5}
-                    strokeWidth="2"
-                    strokeColor="#b48300"
-                    style={{ width: "50%" }}
-                  />
-                  <span style={{ fontSize: "12px" }}> 500</span>
+                  {this.state.retrieved ? (
+                    <div>
+                      <LanguageContext.Consumer>
+                        {(context) => (
+                          <div style={{ fontSize: "12px" }}>
+                            {context.data.home.wehave}
+                            <b>{this.state.count}</b>
+                            {context.data.home.listings}
+                            <br />
+                            {context.data.home.goto}
+                            <a href="/create">{context.data.home.createlink}</a>
+                            {context.data.home.nowtoadd}
+                          </div>
+                        )}
+                      </LanguageContext.Consumer>
+                      <span style={{ fontSize: "12px" }}>0 </span>
+                      <Line
+                        percent={this.state.count / 5}
+                        strokeWidth="2"
+                        strokeColor="#b48300"
+                        style={{ width: "50%" }}
+                      />
+                      <span style={{ fontSize: "12px" }}> 500</span>
+                    </div>
+                  ) : null}
+
                   <br />
                   <br />
                   <div class="d-inline-block d-md-none">
