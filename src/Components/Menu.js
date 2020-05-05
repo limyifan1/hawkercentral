@@ -69,6 +69,8 @@ export class Menu extends React.Component {
                 style={{
                   backgroundColor: "#B48300",
                   borderColor: "#B48300",
+                  fontSize: "10px",
+                  width: "50px"
                 }}
                 onClick={toggleLanguage}
                 name="Language"
