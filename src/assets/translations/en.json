@@ -90,7 +90,8 @@
     "forappusers" : "(for App Users)",
     "appusers": "At the “Home” page, select either \"dabao\" or \"delivery\", and key in your postal code. Start browsing listings! Encourage your favourite businesses during this tough period by giving them a virtual “clap” too!",
     "forfnb": "(for Local F&B businesses)",
-    "fnb": "Go to the “Create” page and fill in the form. Voila! All done in a matter of minutes!"
+    "fnb": "Go to the “Create” page and fill in the form. Voila! All done in a matter of minutes!",
+    "aboutus": "About Us"
   },
   "search": {
     "alllistings" : "All Listings",

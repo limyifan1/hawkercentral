@@ -69,7 +69,13 @@ export class About extends React.Component {
                 class="row card-title justify-content-center"
                 style={{ textAlign: "center", padding: "10px 10px 10px" }}
               >
-                About Us
+                <LanguageContext.Consumer>
+                  {(context) => (
+                    <div>
+                    { context.data.about.aboutus }
+                    </div>
+                  )}
+                </LanguageContext.Consumer>
               </h3>
               <div>
                 <p
@@ -91,11 +97,11 @@ export class About extends React.Component {
                         <br />
                         {context.data.about.para_four}
                         <hr />
-                    <b>{context.data.about.howtouse}</b>
+                        <b>{context.data.about.howtouse}</b>
                         <br />
-                    <b>{context.data.about.forappusers}</b> {context.data.about.appusers}<br />
+                        <b>{context.data.about.forappusers}</b> {context.data.about.appusers}<br />
                         <br />
-                    <b>{context.data.about.forfnb}</b> {context.data.about.fnb}
+                        <b>{context.data.about.forfnb}</b> {context.data.about.fnb}
                         <br />
                         <br />
                         <div class="row d-flex justify-content-center">
