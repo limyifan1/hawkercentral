@@ -130,13 +130,18 @@ export class About extends React.Component {
                         inaccuracies due to user entries from time to time.
                         FoodLeh? will not be held liable for any inaccuracies or
                         misrepresentation here, but we continue striving to
-                        improve this platform. Contact us at foodleh@outlook.com
-                        if you have any suggestions or notice anything we could
-                        improve!
+                        improve this platform. Our data is licensed under the Creative Commons License - 
+                        tldr: Non-commercial use only!
+                        Contact us at foodleh@outlook.com
+                        if you have any suggestions or notice anything we could improve.
                         <br />
                         <br />
                         <a href="https://github.com/limyifan1/hawkercentral">
-                          Github Link
+                          Github Link 
+                        </a>
+                         {" | "}
+                         <a href="https://creativecommons.org/licenses/by-nc/4.0/">
+                          CC BY-NC 4.0
                         </a>
                         <br />
                         (Feel free to send pull requests)
