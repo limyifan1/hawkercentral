@@ -7,7 +7,7 @@ import React from "react";
 import "../App.css";
 import "react-multi-carousel/lib/styles.css";
 import queryString from "query-string";
-import { Spinner } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { db } from "./Firestore";
 import whatsapp from "../WhatsApp.svg";
 import ImageGallery from "react-image-gallery";
@@ -15,6 +15,7 @@ import Component from "./index";
 import Clap from "./Clap";
 import Linkify from "react-linkify";
 import { withRouter } from "react-router-dom";
+import update from 'immutability-helper';
 
 import firebase from "./Firestore";
 
@@ -30,11 +31,20 @@ export class Info extends React.Component {
 
     this.state = {
       data: [],
+      orderData: [],
+      totalPrice: 0.0,
+      wantToOrder: false,
+      name: "",
+      address: "",
+      notes: "",
       id: queryString.parse(this.props.location.search).id,
       galleryOpened: false,
       retrieved: false,
       activePhoto: 1,
     };
+    this.enterDetails = this.enterDetails.bind(this);
+    this.handleCustomerDetails = this.handleCustomerDetails.bind(this);
+    this.setOrderText = this.setOrderText.bind(this);
   }
 
   componentWillMount() {
@@ -49,7 +59,8 @@ export class Info extends React.Component {
       .get()
       .then((snapshot) => {
         if (snapshot.exists) {
-          this.setState({ data: snapshot.data(), retrieved: true });
+          // After querying db for data, initialize orderData if menu info is available
+          this.setState({ data: snapshot.data(), retrieved: true, orderData: new Array(snapshot.data().menuitem.length).fill(0) });
         }
         onLoad("info_load", snapshot.data().name);
         console.log("Fetched successfully!");
@@ -59,6 +70,77 @@ export class Info extends React.Component {
         window.location.reload(true)
         console.log(error);
       });
+  };
+
+  handleCustomerDetails = (event) => {
+    const inputValue = event.target.value;
+    const inputField = event.target.name;
+    if (inputField === "name") {
+      this.setState({
+        name: inputValue,
+      })
+    } else if (inputField === "address") {
+      this.setState({
+        address: inputValue,
+      })
+    } else if (inputField === "notes") {
+      this.setState({
+        notes: inputValue,
+      })
+    }
+  }
+
+  setOrderText() {
+    let text = "";
+    text = text + "New order from " + this.state.name + "\n";
+    for (let i = 0; i < this.state.data.menuitem.length; i = i + 1) {
+      if (
+        this.state.data.menuitem[i] !== "" &&
+        this.state.data.menuitem !== undefined &&
+        this.state.orderData[i] !== 0
+      ) {
+        // customer ordered this item
+        const numItems = parseInt(this.state.orderData[i]);
+        const thisPrice = parseFloat(this.state.data.menuprice[i]);
+        text = text + "*" + numItems + "x* _" + this.state.data.menuitem[i] + "_: $" + numItems*thisPrice + "\n";
+      }
+    }
+    text = text + "\n\nTotal Price (not including delivery): *$" + this.state.totalPrice + "*"
+    text = text + "\nDelivery address: *" + this.state.address + "*";
+    if (this.state.notes !== "") {
+      // only display notes if customer added
+      text = text + "\nAdditional notes: _" + this.state.notes + "_";
+    }
+    text = text + "\nOrdering from: www.foodleh.app/info?id=" + this.state.id;
+    console.log(text);
+    console.log(encodeURIComponent(text))
+    return encodeURIComponent(text);
+  }
+
+  enterDetails() {
+    if (this.state.wantToOrder) {
+      this.setState({ wantToOrder: false });
+    } else {
+      this.setState({ wantToOrder: true });
+    }
+  }
+
+
+  addItem = async (event) => {
+    const idx = event.target.name;
+    this.setState({
+      totalPrice: parseFloat(this.state.totalPrice) + parseFloat(this.state.data.menuprice[idx]),
+      orderData: update(this.state.orderData, { [idx]: { $set: parseInt(this.state.orderData[idx]) + 1 } }),
+    });
+  };
+
+  minusItem = async (event) => {
+    const idx = event.target.name;
+    this.setState({
+      // if customer did not order this item previously, do not change total price, keep # item at 0
+      totalPrice: this.state.orderData[idx] === 0.0 ? this.state.totalPrice : (parseFloat(this.state.totalPrice) - parseFloat(this.state.data.menuprice[idx])),
+      orderData: update(this.state.orderData, { [idx]: { $set: this.state.orderData[idx] === 0 ? 0 : parseInt(this.state.orderData[idx]) - 1 } }),
+    });
   };
 
   getMenu = () => {
@@ -73,10 +155,42 @@ export class Info extends React.Component {
             <div>
               {this.state.data.menuitem ? this.state.data.menuitem[i] : null} -
               ${this.state.data.menuprice ? this.state.data.menuprice[i] : null}
+              {" "}
+              <button
+                onClick={this.addItem}
+                name={i}
+                class="shadow-lg"
+                style={{
+                  backgroundColor: "#b48300",
+                  color: "white",
+                }}
+              >
+                +
+              </button>
+              {" "}
+              {this.state.orderData[i] !== undefined ? this.state.orderData[JSON.parse(JSON.stringify(i))] : 0}
+              {" "}
+              <button
+                onClick={this.minusItem}
+                name={i}
+                class="shadow-lg"
+                style={{
+                  backgroundColor: "#b48300",
+                  color: "white",
+                }}
+              >
+                -
+              </button>
             </div>
           );
         }
+
       }
+      data.push(
+        <div>
+          Total Price: ${this.state.totalPrice}
+        </div>
+      )
       return data;
     }
   };
@@ -96,7 +210,7 @@ export class Info extends React.Component {
           value="click"
           className={`image-gallery-fullscreen-button${
             isFullscreen ? " active" : ""
-          }`}
+            }`}
           onClick={onClick}
         />
       );
@@ -340,10 +454,10 @@ export class Info extends React.Component {
                     this.state.data.website.slice(0, 4) === "http" ? (
                       <a href={this.state.data.website}>Website Link</a>
                     ) : (
-                      <a href={"https://" + this.state.data.website}>
-                        Website Link
-                      </a>
-                    )
+                        <a href={"https://" + this.state.data.website}>
+                          Website Link
+                        </a>
+                      )
                   ) : null}
                   <br />
                   <svg
@@ -425,7 +539,7 @@ export class Info extends React.Component {
                         >
                           <b>{this.state.data.promo}</b>:{" "}
                           {this.state.data.condition &&
-                          this.state.data.condition.length > 40
+                            this.state.data.condition.length > 40
                             ? this.state.data.condition.slice(0, 40) + "..."
                             : this.state.data.condition}
                         </div>
@@ -458,14 +572,87 @@ export class Info extends React.Component {
                       {this.state.data.description_detail}
                     </p>
                   </Linkify>
+                  {/* {Ordering system appears if menu is present} */}
                   {this.state.data.menu ? (
                     <div>
                       <h6 style={{ marginBottom: "0px" }}>
                         <b>Menu Items</b>
                       </h6>
                       <p>{this.getMenu()} </p>
+                      <Button
+                        class="shadow-sm"
+                        style={{
+                          backgroundColor: "#B48300",
+                          borderColor: "#B48300",
+                          fontSize: "20px",
+                          width: "200px"
+                        }}
+                        onClick={this.enterDetails}
+                        name="details"
+                      >
+                        I want to order!
+                          </Button>
+
+                      <br></br>
+                      <br></br>
+
+                      {/* {Only display details, Whatsapp button if customer clicks I want to order} */}
+                      {this.state.wantToOrder ?
+
+                        <div>
+                          <div class="form-group create-title">
+                            <label for="name">Your Name</label>
+                            <input
+                              onChange={this.handleCustomerDetails}
+                              value={this.state.name}
+                              type="text"
+                              class="form-control"
+                              name="name"
+                              placeholder="We don't store your info!"
+                            ></input>
+                          </div>
+                          <div class="form-group create-title">
+                            <label for="address">Your Address</label>
+                            <input
+                              onChange={this.handleCustomerDetails}
+                              value={this.state.address}
+                              type="text"
+                              class="form-control"
+                              name="address"
+                              placeholder="We don't store your info!"
+                            ></input>
+                          </div>
+                          <div class="form-group create-title">
+                            <label for="address">Additional Notes</label>
+                            <input
+                              onChange={this.handleCustomerDetails}
+                              value={this.state.notes}
+                              type="text"
+                              class="form-control"
+                              name="notes"
+                              placeholder="Eg no chili, no hum. Leave blank if nil"
+                            ></input>
+                          </div>
+                          <Button
+                            class="shadow-sm"
+                            href={
+                              "https://api.whatsapp.com/send?phone=65" + this.state.data.contact + "&text=" + this.setOrderText()
+                            }
+                            style={{
+                              backgroundColor: "#B48300",
+                              borderColor: "#B48300",
+                              fontSize: "20px",
+                              width: "200px"
+                            }}
+                            name="Language"
+                          >
+                            Place order
+                      </Button>
+                        </div>
+                        : null}
                     </div>
                   ) : null}
+                  <br></br>
                   <h6 style={{ marginBottom: "0px" }}>
                     <b>Details Regarding Delivery</b>
                   </h6>
@@ -517,13 +704,13 @@ export class Info extends React.Component {
             </div>
           </div>
         ) : (
-          <div class="row h-100 page-container">
-            <div class="col-sm-12 my-auto">
-              <h3>Loading</h3>
-              <Spinner class="" animation="grow" />
+            <div class="row h-100 page-container">
+              <div class="col-sm-12 my-auto">
+                <h3>Loading</h3>
+                <Spinner class="" animation="grow" />
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </div>
     );
   }
