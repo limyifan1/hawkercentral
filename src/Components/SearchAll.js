@@ -139,6 +139,8 @@ export class SearchAll extends React.Component {
                 classNamePrefix="select"
                 value={this.state.cuisineValue}
                 onChange={this.handleCuisineChange}
+                onMenuOpen={this.handleCuisineMenuOpen}
+                onMenuClose={this.handleCuisineMenuClose}
                 placeholder={context.data.search.filterby}
               />
             </span>
