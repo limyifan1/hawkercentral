@@ -83,7 +83,7 @@ exports.telegramSend = functions.https.onRequest(async (req, res) => {
       "<b>Click to Accept (first come first serve): </b>" +
       url;
 
-    let sent = await bot.telegram.sendMessage("@foodlehdev", message, {
+    let sent = await bot.telegram.sendMessage("@foodlehdelivery", message, {
       parse_mode: "HTML",
     });
     let message_id = sent.message_id;
@@ -171,7 +171,7 @@ exports.telegramEdit = functions.https.onRequest(async (req, res) => {
 
     var message = "<b>A driver has picked up this order! </b>";
     await bot.telegram
-      .editMessageText("@foodlehdev", message_id, "", message, {
+      .editMessageText("@foodlehdelivery", message_id, "", message, {
         parse_mode: "HTML",
       })
       .then(() => {
