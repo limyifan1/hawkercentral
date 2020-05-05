@@ -10,15 +10,14 @@ import delivery_address from "../delivery_address.png";
 import summary from "../summary.png";
 import instructions from "../instructions.jpeg";
 import Cookies from "universal-cookie";
+import DateTimePicker from "react-datetime-picker";
 const cookies = new Cookies();
 const API_KEY = `${process.env.REACT_APP_GKEY}`;
-
 const analytics = firebase.analytics();
 
 function onLoad(name) {
   analytics.logEvent(name);
 }
-
 // function distance_calc(lat1, lon1, lat2, lon2) {
 //   if (lat1 === lat2 && lon1 === lon2) {
 //     return 0;
@@ -39,6 +38,42 @@ function onLoad(name) {
 //     return dist * 1.609344;
 //   }
 // }
+
+const dayName = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
+
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+function formatAMPM(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  var strTime = hours + ":" + minutes + " " + ampm;
+  return strTime;
+}
 
 const addData = async ({
   postal,
@@ -91,32 +126,28 @@ const addData = async ({
 
 const time_now = new Date();
 time_now.setMinutes(time_now.getMinutes() + 30);
-const time_now_plus = time_now.toLocaleTimeString("en-US", {
-  hour12: false,
-  hour: "numeric",
-  minute: "numeric",
-});
+// var time_now_plus = time_now.toLocaleString('en-US')
 
 export class Driver extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      postal: cookies.get("postal"),
+      postal: cookies.get("postal") ? cookies.get("postal") : "",
       postal_to: "",
       latitude: "",
       longitude: "",
       latitude_to: "",
       longitude_to: "",
-      street: cookies.get("street"),
+      street: cookies.get("street") ? cookies.get("street") : "",
       street_to: "",
       cost: "",
       distance: "",
-      unit: cookies.get("unit"),
+      unit: cookies.get("unit") ? cookies.get("unit") : "",
       unit_to: "",
-      contact: cookies.get("contact"),
+      contact: cookies.get("contact") ? cookies.get("contact") : "",
       contact_to: "",
-      time: time_now_plus,
-      note: cookies.get("note"),
+      time: time_now,
+      note: cookies.get("note") ? cookies.get("note") : "",
       pickup_option: false,
       submitted: false,
       show: false,
@@ -259,6 +290,11 @@ export class Driver extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     this.setState({ submitting: true });
+    if (this.state.time < time_now) {
+      alert(
+        "Time cannot be less than 30 minutes from now取食物时间必须至少在30分钟后"
+      );
+    }
     await this.getPostal(this.state.postal_to, "to");
     await this.getPostal(this.state.postal, "from");
     cookies.set("postal", this.state.postal, { path: "/" });
@@ -293,6 +329,14 @@ export class Driver extends React.Component {
         cost: "$" + this.state.cost,
         id: id,
         url: "www.foodleh.app/delivery?id=" + id,
+        time:
+          dayName[this.state.time.getDay()] +
+          " " +
+          this.state.time.getDate() +
+          " " +
+          monthNames[this.state.time.getMonth()] +
+          " " +
+          formatAMPM(this.state.time),
       });
       this.setState({ submitted: true, submitting: false });
     });
@@ -301,6 +345,14 @@ export class Driver extends React.Component {
   componentWillMount() {
     onLoad("find_driver");
   }
+
+  componentDidMount() {
+    // this.setState({time: time_now})
+  }
+
+  handleTime = async (time) => {
+    this.setState({ time: time });
+  };
 
   handleChange = async (event) => {
     const target = event.target;
@@ -471,9 +523,9 @@ export class Driver extends React.Component {
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                         <div class="form-group create-title">
-                          <label for="unit">Unit # 门牌 (Optional)</label>
+                          <label for="unit">Unit # 门牌</label>
                           <input
                             onChange={this.handleChange}
                             value={this.state.unit}
@@ -484,7 +536,7 @@ export class Driver extends React.Component {
                           ></input>
                         </div>
                       </div>
-                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                         <div class="form-group create-title">
                           <label for="unit">Mobile Number 手机号: </label>
                           <div class="input-group">
@@ -512,32 +564,6 @@ export class Driver extends React.Component {
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                        <div class="form-group create-title">
-                          <label for="time">Pickup Time 取食物时间</label>
-                          <input
-                            onChange={this.handleChange}
-                            value={this.state.time}
-                            type="time"
-                            class={
-                              time_now_plus > this.state.time
-                                ? "form-control is-invalid"
-                                : "form-control"
-                            }
-                            name="time"
-                            placeholder="E.g. #01-01"
-                          ></input>
-                          {time_now_plus > this.state.time ? (
-                            <span class="invalid-tooltip">
-                              Time cannot be less than 30 minutes from now
-                              <br />
-                              取食物时间必须至少在30分钟后
-                            </span>
-                          ) : null}
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
                       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group create-title">
                           <label for="note">
@@ -552,6 +578,45 @@ export class Driver extends React.Component {
                             placeholder="E.g. Collect order number 3"
                             maxLength="40"
                           ></input>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <div class="form-group create-title">
+                          <label for="time">Pickup Time 取食物时间</label>
+                          <DateTimePicker
+                            class="form-control is-invalid"
+                            dayPlaceholder="dd"
+                            monthPlaceholder="mm"
+                            yearPlaceholder="yyyy"
+                            hourPlaceholder="hh"
+                            minutePlaceholder="mm"
+                            onChange={this.handleTime}
+                            value={this.state.time}
+                            format="dd/MMM/yyyy hh:mma"
+                            minDate={new Date()}
+                            required
+                          />
+                          {/* <input
+                            onChange={this.handleChange}
+                            value={this.state.time}
+                            type="datetime-local"
+                            class={
+                              time_now_plus > this.state.time
+                                ? "form-control is-invalid"
+                                : "form-control"
+                            }
+                            name="time"
+                            placeholder="E.g. #01-01"
+                          ></input> */}
+                          {time_now > this.state.time ? (
+                            <span class="badge badge-danger">
+                              Time cannot be less than 30 minutes from now
+                              <br />
+                              取食物时间必须至少在30分钟后
+                            </span>
+                          ) : null}
                         </div>
                       </div>
                     </div>
@@ -617,7 +682,7 @@ export class Driver extends React.Component {
                       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         {" "}
                         <div class="form-group create-title">
-                          <label for="unit">Unit # 门牌 (Optional)</label>
+                          <label for="unit">Unit # 门牌</label>
                           <input
                             onChange={this.handleChange}
                             value={this.state.unit_to}
