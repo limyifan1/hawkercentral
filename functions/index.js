@@ -57,9 +57,10 @@ exports.telegramSend = functions.https.onRequest(async (req, res) => {
     var origin = req.body.origin;
     var destination = req.body.destination;
     var cost = req.body.cost;
-    var distance = req.body.distance;
+    // var distance = req.body.distance;
     var url = req.body.url;
     var id = req.body.id;
+    var time = req.body.time;
 
     var message =
       "<b>New Order Received</b> \n" +
@@ -73,11 +74,11 @@ exports.telegramSend = functions.https.onRequest(async (req, res) => {
       "'>" +
       destination +
       "</a>\n" +
-      "<b>Distance: </b>" +
-      distance +
-      "\n" +
-      "<b>Estimated Fee: </b>" +
+      "<b>Fee: </b>" +
       cost +
+      "\n" +
+      "<b>Pickup Time: </b>" +
+      time +
       "\n" +
       "<b>Click to Accept (first come first serve): </b>" +
       url;
@@ -104,15 +105,19 @@ exports.telegramSend = functions.https.onRequest(async (req, res) => {
 
 exports.telegramEdit = functions.https.onRequest(async (req, res) => {
   return cors(req, res, async () => {
-    var message_id = req.body.message_id;
-    var driver_mobile = req.body.driver_mobile;
-    var requester_mobile = req.body.requester_mobile;
-    var origin = req.body.origin;
-    var destination = req.body.destination;
-    var time = req.body.time;
-    var customer_mobile = req.body.customer_mobile;
-    var note = req.body.note;
-    var cost = req.body.cost;
+    var message_id = req.body.message_id ? req.body.message_id : null;
+    var driver_mobile = req.body.driver_mobile ? req.body.driver_mobile : null;
+    var requester_mobile = req.body.requester_mobile
+      ? req.body.requester_mobile
+      : null;
+    var origin = req.body.origin ? req.body.origin : null;
+    var destination = req.body.destination ? req.body.destination : null;
+    var time = req.body.time ? req.body.time : null;
+    var customer_mobile = req.body.customer_mobile
+      ? req.body.customer_mobile
+      : null;
+    var note = req.body.note ? req.body.note : null;
+    var cost = req.body.cost ? req.body.cost : null;
 
     twilio.messages
       .create({
@@ -120,7 +125,9 @@ exports.telegramEdit = functions.https.onRequest(async (req, res) => {
           "Your order has been picked up by a driver. \n Driver Mobile: +65" +
           driver_mobile +
           "\n Delivery Fee: $" +
-          cost,
+          cost +
+          "\n Pickup Time: " +
+          time,
         from: "+12015847715",
         to: "+65" + requester_mobile,
       })
@@ -133,10 +140,10 @@ exports.telegramEdit = functions.https.onRequest(async (req, res) => {
       .create({
         body:
           "Your order has been confirmed. \n " +
-          "Stall Contact: " +
+          "Stall Contact: +65" +
           requester_mobile +
           "\n" +
-          "Customer Mobile: " +
+          "Customer Mobile: +65" +
           customer_mobile +
           "\n" +
           "From: " +

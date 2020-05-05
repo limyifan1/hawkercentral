@@ -88,6 +88,7 @@ const addData = async ({
   toggle,
   docid,
   wechatid,
+  location
 }) => {
   let now = new Date();
   var field = {
@@ -127,6 +128,7 @@ const addData = async ({
     menuprice: menuprice,
     docid: docid,
     wechatid: wechatid,
+    location: location
   };
   if (toggle === "create") {
     let id = await db
