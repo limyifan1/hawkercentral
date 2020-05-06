@@ -131,7 +131,7 @@ export class Delivery extends React.Component {
             origin: snapshot.data().unit + " " + snapshot.data().street,
             destination:
               snapshot.data().unit_to + " " + snapshot.data().street_to,
-            time: snapshot.data().time
+            time: snapshot.data().time && typeof(snapshot.data().time) !== "string"
               ? dayName[snapshot.data().time.toDate().getDay()] +
                 " " +
                 snapshot.data().time.toDate().getDate() +
