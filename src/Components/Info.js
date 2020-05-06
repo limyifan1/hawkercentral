@@ -105,7 +105,7 @@ export class Info extends React.Component {
         text = text + "*" + numItems + "x* _" + this.state.data.menuitem[i] + "_: $" + numItems*thisPrice + "\n";
       }
     }
-    text = text + "\n\nTotal Price (not including delivery): *$" + this.state.totalPrice + "*"
+    text = text + "\n\nTotal Price (not including delivery): *$" + this.state.totalPrice.toFixed(2) + "*"
     text = text + "\nDelivery address: *" + this.state.address + "*";
     if (this.state.notes !== "") {
       // only display notes if customer added
@@ -188,7 +188,7 @@ export class Info extends React.Component {
       }
       data.push(
         <div>
-          Total Price: ${this.state.totalPrice}
+          Total Price: ${this.state.totalPrice.toFixed(2)}
         </div>
       )
       return data;
