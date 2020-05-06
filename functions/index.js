@@ -21,7 +21,7 @@ const app = express();
 const bucket = "gs://backup-bucket-hawkercentral";
 
 
-exports.all = functions.https.onRequest(async (req, res) => {
+exports.all = functions.region('asia-east2').https.onRequest(async (req, res) => {
   return cors(req, res, async () => {
     var result = []
     await admin
@@ -49,7 +49,7 @@ exports.all = functions.https.onRequest(async (req, res) => {
   });
 });
 
-exports.scheduledFirestoreExport = functions.pubsub
+exports.scheduledFirestoreExport = functions.region('asia-east2').pubsub
   .schedule("every 24 hours")
   .onRun((context) => {
     const projectId = process.env.GCP_PROJECT || process.env.GCLOUD_PROJECT;
@@ -81,7 +81,7 @@ const cors = require("cors")({
   origin: true,
 });
 
-exports.telegramSend = functions.https.onRequest(async (req, res) => {
+exports.telegramSend = functions.region('asia-east2').https.onRequest(async (req, res) => {
   return cors(req, res, async () => {
     var origin = req.body.origin;
     var destination = req.body.destination;
@@ -112,7 +112,7 @@ exports.telegramSend = functions.https.onRequest(async (req, res) => {
       "<b>Click to Accept (first come first serve): </b>" +
       url;
 
-    let sent = await bot.telegram.sendMessage("@foodlehdelivery", message, {
+    let sent = await bot.telegram.sendMessage("@foodlehdev", message, {
       parse_mode: "HTML",
     });
     let message_id = sent.message_id;
@@ -132,7 +132,7 @@ exports.telegramSend = functions.https.onRequest(async (req, res) => {
   });
 });
 
-exports.telegramEdit = functions.https.onRequest(async (req, res) => {
+exports.telegramEdit = functions.region('asia-east2').https.onRequest(async (req, res) => {
   return cors(req, res, async () => {
     var message_id = req.body.message_id ? req.body.message_id : null;
     var driver_mobile = req.body.driver_mobile ? req.body.driver_mobile : null;
@@ -200,7 +200,7 @@ exports.telegramEdit = functions.https.onRequest(async (req, res) => {
 
     var message = "<b>A driver has picked up this order! </b>";
     await bot.telegram
-      .editMessageText("@foodlehdelivery", message_id, "", message, {
+      .editMessageText("@foodlehdev", message_id, "", message, {
         parse_mode: "HTML",
       })
       .then(() => {
