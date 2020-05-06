@@ -257,14 +257,6 @@ export class Home extends React.PureComponent {
                     <br />
                     <br />
                   </div>
-                  <div class="container-fluid">
-                    <p style={{ fontSize: "12px" }}>
-                      <LanguageContext.Consumer>
-                        {(context) => context.data.home.acknowledgement}
-                      </LanguageContext.Consumer>
-                    </p>
-                    <br />
-                  </div>
                 </div>
               </div>
             </div>
