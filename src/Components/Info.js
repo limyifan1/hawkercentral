@@ -56,7 +56,7 @@ export class Info extends React.Component {
         return true;
       })
       .catch((error) => {
-        window.location.reload(true)
+        window.location.reload(true);
         console.log(error);
       });
   };
@@ -373,7 +373,10 @@ export class Info extends React.Component {
                         </span>
                       ) : null}
                       {this.state.data.whatsapp ? (
-                        <a href={link}>
+                        <a
+                          href={link}
+                          onClick={()=>onLoad("message", this.state.data.name)}
+                        >
                           <span
                             class="card shadow-lg"
                             style={{
