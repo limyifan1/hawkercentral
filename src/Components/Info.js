@@ -53,6 +53,7 @@ export class Info extends React.Component {
     this.enterDetails = this.enterDetails.bind(this);
     this.handleCustomerDetails = this.handleCustomerDetails.bind(this);
     this.setOrderText = this.setOrderText.bind(this);
+    this.formatSummary = this.formatSummary.bind(this);
   }
 
   componentWillMount() {
@@ -106,6 +107,25 @@ export class Info extends React.Component {
     }
   }
 
+  formatSummary() {
+    let text = "";
+    text = text + "New order from " + this.state.name + "\n";
+    for (let i = 0; i < this.state.data.menuitem.length; i = i + 1) {
+      if (
+        this.state.data.menuitem[i] !== "" &&
+        this.state.data.menuitem !== undefined &&
+        this.state.orderData[i] !== 0
+      ) {
+        // customer ordered this item
+        const numItems = parseInt(this.state.orderData[i]);
+        const thisPrice = parseFloat(this.state.data.menuprice[i]);
+        text = text + "*" + numItems + "x* _" + this.state.data.menuitem[i] + "_: $" + (numItems * thisPrice).toFixed(2) + "\n";
+      }
+    }
+    return (text)
+  }
+
+
   setOrderText() {
     let text = "";
     text = text + "New order from " + this.state.name + "\n";
@@ -130,8 +150,6 @@ export class Info extends React.Component {
     }
     text = text + "\nCustomer phone number: *" + this.state.customerNumber + "*";
     text = text + "\nOrdering from: www.foodleh.app/info?id=" + this.state.id;
-    console.log(text);
-    console.log(encodeURIComponent(text))
     return encodeURIComponent(text);
   }
 
@@ -172,50 +190,94 @@ export class Info extends React.Component {
         ) {
           data.push(
             <div>
-              {this.state.data.menuitem ? this.state.data.menuitem[i] : null} -
-              ${this.state.data.menuprice ? this.state.data.menuprice[i] : null}
-              {" "}
+              <figure
+                class="shadow"
+                style={{
+                  margin: "20px",
+                  paddingLeft: "10px",
+                  paddingTop: "10px",
+                  height: "100px",
+                  backgroundColor: "#f1f1f1",
+                  "border-radius": "5px",
+                  position: "relative",
+                }}
+              >
 
-              {this.state.data.whatsapp ? (
-                <div>
-                  <button
-                    onClick={this.addItem}
-                    name={i}
-                    class="shadow-lg"
-                    style={{
-                      backgroundColor: "#b48300",
-                      color: "white",
-                    }}
-                  >
-                    +
+                <span
+                  style={{
+                    alignContent: "right",
+                    fontSize: "110%",
+                  }}
+                >
+                  <b>{this.state.data.menuitem ? this.state.data.menuitem[i] : null}</b>
+                </span>
+
+                <span
+                  class="shadow badge badge-info float-right m-2"
+                  style={{
+                    backgroundColor: "#b48300",
+                    alignContent: "left",
+                    fontSize: "110%",
+                  }}
+                >
+                  ${this.state.data.menuprice ? this.state.data.menuprice[i] : null}
+                </span>
+
+                {this.state.data.whatsapp ? (
+                  <div>
+                    <button
+                      onClick={this.addItem}
+                      name={i}
+                      class="shadow-sm"
+                      style={{
+                        backgroundColor: "black",
+                        color: "white",
+                        "border-radius": "3px",
+                        position: "absolute",
+                        bottom: "10px",
+                        right: "10px",
+                      }}
+                    >
+                      +
                 </button>
-                  {" "}
-                  {this.state.orderData[i] !== undefined ? this.state.orderData[JSON.parse(JSON.stringify(i))] : 0}
-                  {" "}
-                  <button
-                    onClick={this.minusItem}
-                    name={i}
-                    class="shadow-lg"
-                    style={{
-                      backgroundColor: "#b48300",
-                      color: "white",
-                    }}
-                  >
-                    -
-              </button>
-                </div>
-              ) : null}
 
+                    <span
+                      class="float-right"
+                      style={{
+                        position: "absolute",
+                        bottom: "10px",
+                        right: "35px",
+                        paddingLeft: "10px",
+                        paddingRight: "10px",
+                      }}
+                    >
+                      <b>{this.state.orderData[i] !== undefined ? this.state.orderData[JSON.parse(JSON.stringify(i))] : 0}</b>
+                    </span>
+
+
+                    <button
+                      onClick={this.minusItem}
+                      name={i}
+                      class="shadow-sm float-right"
+                      style={{
+                        backgroundColor: "white",
+                        color: "black",
+                        "border-radius": "3px",
+                        position: "absolute",
+                        bottom: "10px",
+                        right: "65px",
+                      }}
+                    >
+                      -
+              </button>
+                  </div>
+                ) : null}
+              </figure>
             </div>
           );
         }
 
       }
-      data.push(
-        <div>
-          Total Price: ${this.state.totalPrice.toFixed(2)}
-        </div>
-      )
       return data;
     }
   };
@@ -515,26 +577,28 @@ export class Info extends React.Component {
                       {this.state.data.whatsapp ? (
                         <span>
                           <a href={link}>
-                            <span class="col">
+                            <span class="col-xs">
                               <img
                                 alt=""
                                 src={
                                   whatsapp_button
                                 }
-                                style={{ width: "30%" }}
+                                style={{
+                                  width: "25%",
+                                }}
                               />
                             </span>
                           </a>
                           {this.state.data.menu ? (
 
-                            <span class="col">
+                            <span class="col-sm">
                               <img
                                 alt=""
                                 onClick={this.enterDetails}
                                 src={
                                   orderleh
                                 }
-                                style={{ width: "30%", cursor: 'pointer' }}
+                                style={{ width: "25%", cursor: 'pointer' }}
                               />
                             </span>
                           ) : null}
@@ -550,7 +614,7 @@ export class Info extends React.Component {
                                   src={
                                     menu_title
                                   }
-                                  style={{ width: "30%" }}
+                                  style={{ width: "60%" }}
                                 />
                               </span>
                               <br></br>
@@ -561,10 +625,98 @@ export class Info extends React.Component {
                                 <img
                                   alt=""
                                   src={
+                                    revieworder
+                                  }
+                                  style={{ width: "60%" }}
+                                />
+                              </div>
+
+                              <div>
+                                <figure
+                                  class="shadow"
+                                  style={{
+                                    margin: "20px",
+                                    paddingLeft: "10px",
+                                    paddingTop: "10px",
+                                    backgroundColor: "#f1f1f1",
+                                    "border-radius": "5px",
+                                    position: "relative",
+                                  }}
+                                >
+                                  <span style={{
+                                    fontSize: "110%",
+                                  }}>
+                                    <b>Item Summary</b><br /><br />
+                                  </span>
+
+                                  {this.state.data.menuitem.map((item, index) => {
+                                    console.log(index);
+                                    if (item !== undefined && this.state.orderData[index] !== 0) {
+                                      return (
+                                        <div>
+                                          <span style={{
+                                            fontSize: "110%",
+                                          }}>
+                                            <b>{this.state.orderData[index]}x</b> {item}
+                                            <div>
+                                              <span
+                                                class="float-right"
+                                                style={{
+                                                  paddingLeft: "10px",
+                                                  paddingRight: "15px",
+                                                }}
+                                              >
+                                                <b>${(this.state.orderData[index] * this.state.data.menuprice[index]).toFixed(2)}</b>
+                                              </span>
+                                            </div>
+                                          </span>
+                                          <br />
+                                        </div>
+                                      );
+                                    }
+                                  })}
+
+                                  <figcaption>
+                                    <hr style={{
+                                      color: "#b48300",
+                                      backgroundColor: "#b48300",
+                                      height: "1px",
+                                      borderColor: "#b48300",
+                                      width: "100%",
+                                      alignItems: "center",
+                                    }} />
+                                    <div
+                                      style={{
+                                        textAlign: "right",
+                                        paddingBottom: "10px",
+                                        paddingRight: "15px",
+                                        fontSize: "110%",
+                                      }}
+                                    >
+                                      <b>${this.state.totalPrice !== undefined ? this.state.totalPrice.toFixed(2) : "0.00"}</b>
+                                    </div>
+                                    <div
+                                      style={{
+                                        color: "red",
+                                        paddingBottom: "10px",
+                                        paddingRight: "15px",
+                                      }}
+                                    >
+                                      <b>*Delivery fees may apply</b>
+                                    </div>
+                                  </figcaption>
+                                </figure>
+                              </div>
+                              <br />
+                              <div>
+                                <img
+                                  alt=""
+                                  src={
                                     delivery_title
                                   }
-                                  style={{ width: "30%" }}
+                                  style={{ width: "60%" }}
                                 />
+
                                 <div class="form-group create-title">
                                   <label for="name">Name</label>
                                   <input
@@ -637,7 +789,9 @@ export class Info extends React.Component {
                                     type="text"
                                     class="form-control"
                                     name="notes"
-                                    style={{ borderColor: "#b48300", }}
+                                    style={{
+                                      borderColor: "#b48300",
+                                    }}
                                     placeholder="No chilli etc, leave blank if nil"
                                   ></input>
                                 </div>
