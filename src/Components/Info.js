@@ -43,6 +43,8 @@ export class Info extends React.Component {
       name: "",
       address: "",
       notes: "",
+      customerNumber: "",
+      deliveryTime: "",
       id: queryString.parse(this.props.location.search).id,
       galleryOpened: false,
       retrieved: false,
@@ -93,6 +95,14 @@ export class Info extends React.Component {
       this.setState({
         notes: inputValue,
       })
+    } else if (inputField === "customerNumber") {
+      this.setState({
+        customerNumber: inputValue,
+      })
+    } else if (inputField === "deliveryTime") {
+      this.setState({
+        deliveryTime: inputValue,
+      })
     }
   }
 
@@ -108,15 +118,17 @@ export class Info extends React.Component {
         // customer ordered this item
         const numItems = parseInt(this.state.orderData[i]);
         const thisPrice = parseFloat(this.state.data.menuprice[i]);
-        text = text + "*" + numItems + "x* _" + this.state.data.menuitem[i] + "_: $" + numItems * thisPrice + "\n";
+        text = text + "*" + numItems + "x* _" + this.state.data.menuitem[i] + "_: $" + (numItems * thisPrice).toFixed(2) + "\n";
       }
     }
     text = text + "\n\nTotal Price (not including delivery): *$" + this.state.totalPrice.toFixed(2) + "*"
     text = text + "\nDelivery address: *" + this.state.address + "*";
+    text = text + "\nDelivery Date/Time: *" + this.state.deliveryTime + "*";
     if (this.state.notes !== "") {
       // only display notes if customer added
       text = text + "\nAdditional notes: _" + this.state.notes + "_";
     }
+    text = text + "\nCustomer phone number: *" + this.state.customerNumber + "*";
     text = text + "\nOrdering from: www.foodleh.app/info?id=" + this.state.id;
     console.log(text);
     console.log(encodeURIComponent(text))
@@ -530,9 +542,8 @@ export class Info extends React.Component {
                           {this.state.wantToOrder ? (
 
                             <div>
-                              <br></br>
-                              <br></br>
-                              <br></br>
+                              <br /><br />
+
                               <span class="col">
                                 <img
                                   alt=""
@@ -543,60 +554,111 @@ export class Info extends React.Component {
                                 />
                               </span>
                               <br></br>
-                              
-                      <p>{this.getMenu()} </p>
-                      <div>
-                          <div class="form-group create-title">
-                            <label for="name">Your Name</label>
-                            <input
-                              onChange={this.handleCustomerDetails}
-                              value={this.state.name}
-                              type="text"
-                              class="form-control"
-                              name="name"
-                              placeholder="We don't store your info!"
-                            ></input>
-                          </div>
-                          <div class="form-group create-title">
-                            <label for="address">Your Address</label>
-                            <input
-                              onChange={this.handleCustomerDetails}
-                              value={this.state.address}
-                              type="text"
-                              class="form-control"
-                              name="address"
-                              placeholder="We don't store your info!"
-                            ></input>
-                          </div>
-                          <div class="form-group create-title">
-                            <label for="address">Additional Notes</label>
-                            <input
-                              onChange={this.handleCustomerDetails}
-                              value={this.state.notes}
-                              type="text"
-                              class="form-control"
-                              name="notes"
-                              placeholder="Eg no chili, no hum. Leave blank if nil"
-                            ></input>
-                          </div>
-                          <Button
-                            class="shadow-sm"
-                            href={
-                              "https://api.whatsapp.com/send?phone=65" + this.state.data.contact + "&text=" + this.setOrderText()
-                            }
-                            style={{
-                              backgroundColor: "#B48300",
-                              borderColor: "#B48300",
-                              fontSize: "20px",
-                              width: "200px"
-                            }}
-                            name="Language"
-                          >
-                            Place order
+
+                              <p>{this.getMenu()} </p>
+                              <div>
+                                <br />
+                                <img
+                                  alt=""
+                                  src={
+                                    delivery_title
+                                  }
+                                  style={{ width: "30%" }}
+                                />
+                                <div class="form-group create-title">
+                                  <label for="name">Name</label>
+                                  <input
+                                    onChange={this.handleCustomerDetails}
+                                    value={this.state.name}
+                                    type="text"
+                                    class="form-control"
+                                    name="name"
+                                    style={{ borderColor: "#b48300", }}
+                                    placeholder="We don't store your info!"
+                                  ></input>
+                                </div>
+
+                                <div class="form-group create-title">
+                                  <label for="unit">Mobile Number: </label>
+                                  <div class="input-group">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text" id="basic-addon1">
+                                        +65
+                              </span>
+                                    </div>
+                                    <input
+                                      onChange={this.handleCustomerDetails}
+                                      value={this.state.customerNumber}
+                                      type="number"
+                                      name="customerNumber"
+                                      placeholder=" 9xxxxxxx"
+                                      maxLength="8"
+                                      minlength="8"
+                                      pattern="[8-9]{1}[0-9]{7}"
+                                      style={{
+                                        borderColor: "#b48300",
+                                        "border-radius": "5px",
+                                        "border-width": "1px",
+                                      }}
+                                    ></input>
+                                  </div>
+                                </div>
+
+                                <div class="form-group create-title">
+                                  <label for="address">Delivery Day/Time</label>
+                                  <input
+                                    onChange={this.handleCustomerDetails}
+                                    value={this.state.deliveryTime}
+                                    type="text"
+                                    class="form-control"
+                                    name="deliveryTime"
+                                    style={{ borderColor: "#b48300", }}
+                                    placeholder="Eg Thursday 7 May 12.30pm"
+                                  ></input>
+                                </div>
+
+                                <div class="form-group create-title">
+                                  <label for="address">Address</label>
+                                  <input
+                                    onChange={this.handleCustomerDetails}
+                                    value={this.state.address}
+                                    type="text"
+                                    class="form-control"
+                                    name="address"
+                                    style={{ borderColor: "#b48300", }}
+                                    placeholder=""
+                                  ></input>
+                                </div>
+                                <div class="form-group create-title">
+                                  <label for="address">Comments</label>
+                                  <input
+                                    onChange={this.handleCustomerDetails}
+                                    value={this.state.notes}
+                                    type="text"
+                                    class="form-control"
+                                    name="notes"
+                                    style={{ borderColor: "#b48300", }}
+                                    placeholder="No chilli etc, leave blank if nil"
+                                  ></input>
+                                </div>
+                                <Button
+                                  class="shadow-sm"
+                                  href={
+                                    "https://api.whatsapp.com/send?phone=65" + this.state.data.contact + "&text=" + this.setOrderText()
+                                  }
+                                  style={{
+                                    backgroundColor: "#B48300",
+                                    borderColor: "#B48300",
+                                    fontSize: "20px",
+                                    width: "300px"
+                                  }}
+                                  name="Language"
+                                >
+                                  Place order via WhatsApp
                       </Button>
-                      <br />
-                      
-                        </div>
+                                <br />
+
+                              </div>
                             </div>
                           ) : null}
 
@@ -670,7 +732,7 @@ export class Info extends React.Component {
                         <b>Menu Items</b>
                       </h6>
                       <p>{this.getMenu()} </p>
-                      
+
                     </div>
                   ) : null}
                   <br></br>
