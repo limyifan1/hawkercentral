@@ -12,6 +12,7 @@ service cloud.firestore {
     // your app will lose access to your Firestore database
     match /{document=**} {
       allow read, write: if request.time < timestamp.date(2020, 5, 17);
+      allow delete: if false
     }
   }
 }
