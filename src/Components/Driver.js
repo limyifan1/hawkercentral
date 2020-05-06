@@ -8,9 +8,10 @@ import driver from "../driver.png";
 import store_address from "../store_address.png";
 import delivery_address from "../delivery_address.png";
 import summary from "../summary.png";
-import instructions from "../instructions.jpeg";
+import instructions from "../infographic.jpg";
 import Cookies from "universal-cookie";
 import DateTimePicker from "react-datetime-picker";
+
 const cookies = new Cookies();
 const API_KEY = `${process.env.REACT_APP_GKEY}`;
 const analytics = firebase.analytics();
@@ -111,6 +112,8 @@ const addData = async ({
     viewed: false,
     time: time,
     note: note,
+    expired: false,
+    cancelled: false,
   };
   let id = await db
     .collection("deliveries")
@@ -125,7 +128,7 @@ const addData = async ({
 };
 
 const time_now = new Date();
-time_now.setMinutes(time_now.getMinutes() + 30);
+time_now.setHours(time_now.getHours() + 1);
 // var time_now_plus = time_now.toLocaleString('en-US')
 
 export class Driver extends React.Component {
@@ -152,12 +155,15 @@ export class Driver extends React.Component {
       submitted: false,
       show: false,
       directions: false,
+      loadingDir: false,
+      retrievedDir: true,
     };
   }
-
   getDirections = () => {
+    this.setState({ loadingDir: true });
+    console.log(this.state.time);
     const query =
-      "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?" +
+      "https://fathomless-falls-12833.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?" +
       "mode=driving" +
       "&" +
       "region=sg" +
@@ -167,11 +173,15 @@ export class Driver extends React.Component {
       "origin=" +
       this.state.street +
       "&" +
-      "&destination=" +
+      "destination=" +
       this.state.street_to +
+      "&departure_time=" +
+      parseInt(this.state.time.valueOf()/1000) +
       "&" +
-      "&key=" +
+      "key=" +
       API_KEY;
+    console.log(query);
+
     return fetch(query, {
       method: "GET",
       headers: {
@@ -202,7 +212,13 @@ export class Driver extends React.Component {
         } else {
           cost = 18;
         }
-        this.setState({ directions: contents, cost: cost, distance: distance });
+        this.setState({
+          directions: contents,
+          cost: cost,
+          distance: distance,
+          loadingDir: false,
+          retrievedDir: true,
+        });
       })
       .catch((error) => {
         console.log("Error:" + error.toString());
@@ -235,7 +251,7 @@ export class Driver extends React.Component {
 
   sendData = async (query) => {
     let urls = [
-      "https://us-central1-hawkercentral.cloudfunctions.net/telegramSend",
+      "https://asia-east2-hawkercentral.cloudfunctions.net/telegramSend",
     ];
     try {
       Promise.all(
@@ -292,8 +308,11 @@ export class Driver extends React.Component {
     this.setState({ submitting: true });
     if (this.state.time < time_now) {
       alert(
-        "Time cannot be less than 30 minutes from now取食物时间必须至少在30分钟后"
+        "Time cannot be less than 1 hour from now取食物时间必须至少在30分钟后"
       );
+    }
+    if (!this.state.retrievedDir) {
+      alert("Please wait for directions to load");
     }
     await this.getPostal(this.state.postal_to, "to");
     await this.getPostal(this.state.postal, "from");
@@ -326,6 +345,7 @@ export class Driver extends React.Component {
         origin: this.state.street,
         destination: this.state.street_to,
         distance: this.state.directions.routes[0].legs[0].distance.text,
+        requester_mobile: this.state.contact,
         cost: "$" + this.state.cost,
         id: id,
         url: "www.foodleh.app/delivery?id=" + id,
@@ -337,6 +357,7 @@ export class Driver extends React.Component {
           monthNames[this.state.time.getMonth()] +
           " " +
           formatAMPM(this.state.time),
+        duration: this.state.directions.routes[0].legs[0].duration.text
       });
       this.setState({ submitted: true, submitting: false });
     });
@@ -364,7 +385,11 @@ export class Driver extends React.Component {
     if (name === "postal_to" && value.toString().length === 6) {
       await this.getPostal(value, "to");
     }
-    if (this.state.street !== "" && this.state.street_to !== "") {
+    if (
+      (name === "postal" || name === "postal_to") &&
+      this.state.street !== "" &&
+      this.state.street_to !== ""
+    ) {
       this.getDirections();
     }
     this.setState({ [name]: value });
@@ -612,9 +637,9 @@ export class Driver extends React.Component {
                           ></input> */}
                           {time_now > this.state.time ? (
                             <span class="badge badge-danger">
-                              Time cannot be less than 30 minutes from now
+                              Time cannot be less than 1 hour from now
                               <br />
-                              取食物时间必须至少在30分钟后
+                              取食物时间必须至少在1小时后
                             </span>
                           ) : null}
                         </div>
@@ -741,33 +766,48 @@ export class Driver extends React.Component {
                         alt=""
                         style={{ width: "40%" }}
                       />
-
-                      {this.state.directions &&
-                      this.state.directions.routes.length > 0 ? (
-                        <span>
-                          <p style={{ textAlign: "center", fontSize: "20px" }}>
-                            <b>Distance (Google Maps): </b>
-                            <br />
-                            {this.state.directions.routes.length > 0
-                              ? this.state.directions.routes[0].legs[0].distance
-                                  .text
-                              : null}
-                            <br />
-                            <b>Estimated Duration: </b>
-                            <br />
-                            {this.state.directions.routes.length > 0
-                              ? this.state.directions.routes[0].legs[0].duration
-                                  .text
-                              : null}
-                            <br />
-                            <b>Delivery Cost: </b>
-                            <br />
-                            {"$" + this.state.cost.toString()}
-                          </p>
-                        </span>
+                      {this.state.loadingDir ? (
+                        <div>
+                          <br />
+                          <Spinner class="" animation="grow" />
+                        </div>
                       ) : (
-                        <div>Fill in details above</div>
+                        <div>
+                          {this.state.retrievedDir &&
+                          this.state.directions &&
+                          this.state.directions.routes.length > 0 ? (
+                            <span>
+                              <p
+                                style={{
+                                  textAlign: "center",
+                                  fontSize: "20px",
+                                }}
+                              >
+                                <b>Distance (Google Maps): </b>
+                                <br />
+                                {this.state.directions.routes.length > 0
+                                  ? this.state.directions.routes[0].legs[0]
+                                      .distance.text
+                                  : null}
+                                <br />
+                                <b>Estimated Duration: </b>
+                                <br />
+                                {this.state.directions.routes.length > 0
+                                  ? this.state.directions.routes[0].legs[0]
+                                      .duration.text
+                                  : null}
+                                <br />
+                                <b>Delivery Cost: </b>
+                                <br />
+                                {"$" + this.state.cost.toString()}
+                              </p>
+                            </span>
+                          ) : (
+                            <div>Fill in details above</div>
+                          )}
+                        </div>
                       )}
+
                       <br />
                       <div
                         class="form-check create-title"
