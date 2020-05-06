@@ -9,7 +9,6 @@ import "react-multi-carousel/lib/styles.css";
 import queryString from "query-string";
 import { Button, Spinner } from "react-bootstrap";
 import { db } from "./Firestore";
-import whatsapp from "../WhatsApp.svg";
 import ImageGallery from "react-image-gallery";
 import Component from "./index";
 import Clap from "./Clap";
@@ -26,7 +25,7 @@ import revieworder from "../assets/info_review_order.png";
 import firebase from "./Firestore";
 
 const analytics = firebase.analytics();
-
+let results = [];
 function onLoad(name, item) {
   analytics.logEvent(name, { name: item });
 }
@@ -647,8 +646,8 @@ export class Info extends React.Component {
                                   }}>
                                     <b>Item Summary</b><br /><br />
                                   </span>
-
-                                  {this.state.data.menuitem.map((item, index) => {
+                                  
+                                  {results = this.state.data.menuitem.map((item, index) => {
                                     if (item !== undefined && this.state.orderData[index] !== 0) {
                                       return (
                                         <div>
@@ -673,7 +672,7 @@ export class Info extends React.Component {
                                       );
                                     }
                                   })}
-
+                                 
                                   <figcaption>
                                     <hr style={{
                                       color: "#b48300",
