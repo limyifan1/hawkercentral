@@ -589,8 +589,7 @@ export class Info extends React.Component {
                               />
                             </span>
                           </a>
-                          {this.state.data.menu ? (
-
+                          {this.state.data.menu && this.state.data.menuitem.length > 0 && this.state.data.menuitem[0] !== "" ? (
                             <span class="col-sm">
                               <img
                                 alt=""
@@ -650,7 +649,6 @@ export class Info extends React.Component {
                                   </span>
 
                                   {this.state.data.menuitem.map((item, index) => {
-                                    console.log(index);
                                     if (item !== undefined && this.state.orderData[index] !== 0) {
                                       return (
                                         <div>
