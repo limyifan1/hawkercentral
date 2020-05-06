@@ -5,7 +5,14 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### About us
 We are a free, crowdsourced hawker platform in Singapore relying on Singaporeans to share information about our local F&B places. We love hawker food and hope you do too! If you want to contribute, hop over here: [contributing.md](https://github.com/limyifan1/hawkercentral/blob/master/CONTRIBUTING.md)
 
-### Data Dictionary
+### Database Structure
+We have 4 collections in use: hawkers, deliveries, cuisine, etc. <br/>
+##### hawkers collection: 
+Each new hawker listing added as a new document, with an auto-generated id. Each document has the data has shown in data dictionary below<br/>
+##### deliveries collection: 
+Each delivery request is added as a new document, with an auto-generated id. Data still to be confirmed. 
+
+### Data Dictionary (hawkers collection)
   url: (string) the first image uploaded, which is the cover picture<br />
   image2: (string) second image uploaded<br />
   image3: (string) third image uploaded<br />
