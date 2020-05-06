@@ -118,7 +118,7 @@ export class Info extends React.Component {
       ) {
         // customer ordered this item
         const numItems = parseInt(this.state.orderData[i]);
-        const thisPrice = parseFloat(this.state.data.menuprice[i]);
+        const thisPrice = parseFloat(this.state.data.menuprice[i] ? this.state.data.menuprice[i] : 0);
         text = text + "*" + numItems + "x* _" + this.state.data.menuitem[i] + "_: $" + (numItems * thisPrice).toFixed(2) + "\n";
       }
     }
@@ -137,7 +137,7 @@ export class Info extends React.Component {
       ) {
         // customer ordered this item
         const numItems = parseInt(this.state.orderData[i]);
-        const thisPrice = parseFloat(this.state.data.menuprice[i]);
+        const thisPrice = parseFloat(this.state.data.menuprice[i] ? this.state.data.menuprice[i] : 0);
         text = text + "*" + numItems + "x* _" + this.state.data.menuitem[i] + "_: $" + (numItems * thisPrice).toFixed(2) + "\n";
       }
     }
@@ -166,7 +166,7 @@ export class Info extends React.Component {
   addItem = async (event) => {
     const idx = event.target.name;
     this.setState({
-      totalPrice: parseFloat(this.state.totalPrice) + parseFloat(this.state.data.menuprice[idx]),
+      totalPrice: parseFloat(this.state.totalPrice) + parseFloat(this.state.data.menuprice[idx] ? this.state.data.menuprice[idx] : 0),
       orderData: update(this.state.orderData, { [idx]: { $set: parseInt(this.state.orderData[idx]) + 1 } }),
     });
   };
@@ -175,7 +175,7 @@ export class Info extends React.Component {
     const idx = event.target.name;
     this.setState({
       // if customer did not order this item previously, do not change total price, keep # item at 0
-      totalPrice: this.state.orderData[idx] === 0.0 ? this.state.totalPrice : (parseFloat(this.state.totalPrice) - parseFloat(this.state.data.menuprice[idx])),
+      totalPrice: this.state.orderData[idx] === 0.0 ? this.state.totalPrice : (parseFloat(this.state.totalPrice) - parseFloat(this.state.data.menuprice[idx] ? this.state.data.menuprice[idx] : 0)),
       orderData: update(this.state.orderData, { [idx]: { $set: this.state.orderData[idx] === 0 ? 0 : parseInt(this.state.orderData[idx]) - 1 } }),
     });
   };
@@ -196,7 +196,7 @@ export class Info extends React.Component {
                   margin: "20px",
                   paddingLeft: "10px",
                   paddingTop: "10px",
-                  height: "100px",
+                  height: "120px",
                   backgroundColor: "#f1f1f1",
                   "border-radius": "5px",
                   position: "relative",
@@ -220,7 +220,7 @@ export class Info extends React.Component {
                     fontSize: "110%",
                   }}
                 >
-                  ${this.state.data.menuprice ? this.state.data.menuprice[i] : null}
+                  ${this.state.data.menuprice[i] ? this.state.data.menuprice[i] : "TBD"}
                 </span>
 
                 {this.state.data.whatsapp ? (
