@@ -91,6 +91,7 @@ export class Delivery extends React.Component {
       contact_to: "",
       retrieved: false,
       id: queryString.parse(this.props.location.search).id,
+      cancel: queryString.parse(this.props.location.search).cancel,
       pickup_option: false,
       submitted: false,
       driver_contact: cookies.get("driver_contact")
@@ -105,7 +106,23 @@ export class Delivery extends React.Component {
 
   componentWillMount() {
     onLoad("find_driver");
+    if (this.state.cancel) {
+      this.cancelDoc();
+    }
   }
+
+  cancelDoc = async () => {
+    await db
+      .collection("deliveries")
+      .doc(this.state.cancel)
+      .get()
+      .then(async (snapshot) => {
+        if (snapshot.exists) {
+          snapshot.ref.update({ cancelled: true });
+          this.cancelData({ message_id: snapshot.data().message_id });
+        }
+      });
+  };
 
   getDoc = async () => {
     await db
@@ -117,7 +134,7 @@ export class Delivery extends React.Component {
           this.setState({ data: snapshot.data(), retrieved: true });
         }
         onLoad("info_load", snapshot.data().name);
-        if (!snapshot.data().viewed) {
+        if (!snapshot.data().viewed && !snapshot.data().cancelled && !snapshot.data().expired) {
           await db
             .collection("deliveries")
             .doc(this.state.id)
@@ -131,15 +148,16 @@ export class Delivery extends React.Component {
             origin: snapshot.data().unit + " " + snapshot.data().street,
             destination:
               snapshot.data().unit_to + " " + snapshot.data().street_to,
-            time: snapshot.data().time && typeof(snapshot.data().time) !== "string"
-              ? dayName[snapshot.data().time.toDate().getDay()] +
-                " " +
-                snapshot.data().time.toDate().getDate() +
-                " " +
-                monthNames[snapshot.data().time.toDate().getMonth()] +
-                " " +
-                formatAMPM(snapshot.data().time.toDate())
-              : null,
+            time:
+              snapshot.data().time && typeof snapshot.data().time !== "string"
+                ? dayName[snapshot.data().time.toDate().getDay()] +
+                  " " +
+                  snapshot.data().time.toDate().getDate() +
+                  " " +
+                  monthNames[snapshot.data().time.toDate().getMonth()] +
+                  " " +
+                  formatAMPM(snapshot.data().time.toDate())
+                : null,
             note: snapshot.data().note,
             cost: snapshot.data().cost,
           });
@@ -151,9 +169,43 @@ export class Delivery extends React.Component {
       });
   };
 
+  cancelData = async (query) => {
+    let urls = [
+      "https://asia-east2-hawkercentral.cloudfunctions.net/telegramCancel",
+    ];
+    try {
+      Promise.all(
+        urls.map((url) =>
+          fetch(url, {
+            method: "POST",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(query),
+          })
+            .then((response) => {
+              return response.json();
+            })
+            .then((data) => {
+              return data;
+            })
+            .catch((error) => {
+              console.log(error);
+              return error;
+            })
+        )
+      ).then((data) => {
+        // window.location.reload();
+      });
+    } catch (error) {
+      return error;
+    }
+  };
+
   sendData = async (query) => {
     let urls = [
-      "https://us-central1-hawkercentral.cloudfunctions.net/telegramEdit",
+      "https://asia-east2-hawkercentral.cloudfunctions.net/telegramEdit",
     ];
     try {
       Promise.all(
@@ -237,157 +289,174 @@ export class Delivery extends React.Component {
                 class="card shadow row"
                 style={{ width: "100%", padding: "20px", margin: "20px" }}
               >
-                {!this.state.submitted ? (
-                  <Form onSubmit={this.handleSubmit.bind(this)}>
-                    <br />
-                    <label for="unit">Mobile Number:</label>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">
-                          +65
-                        </span>
-                      </div>
-                      <input
-                        onChange={this.handleChange}
-                        value={this.state.driver_contact}
-                        type="number"
-                        class="form-control"
-                        name="driver_contact"
-                        placeholder="9xxxxxxx"
-                        required
-                      ></input>
-                    </div>
-                    <br />
-                    <div class="form-check create-title">
-                      <label class="checkbox-inline">
-                        <input
-                          onChange={this.handleChange}
-                          type="checkbox"
-                          checked={this.state.payment}
-                          value={this.state.payment}
-                          name="payment"
-                          class="form-check-input"
-                        ></input>
-                        Prefer a different PayNow number/UEN?
-                      </label>
-                      <br />
-                    </div>
-                    {this.state.payment ? (
-                      <div class="input-group">
-                        <input
-                          onChange={this.handleChange}
-                          value={this.state.paynow_alternate}
-                          type="number"
-                          class="form-control"
-                          name="paynow_alternate"
-                          placeholder="UEN/PayNow Number"
-                        ></input>
-                      </div>
-                    ) : null}
-                    <br />
-                    <Button
-                      class="shadow-lg"
-                      style={{
-                        backgroundColor: "green",
-                        borderColor: "green",
-                        fontSize: "25px",
-                      }}
-                      type="Submit"
-                    >
-                      Accept Order
-                    </Button>
-                  </Form>
-                ) : this.state.retrieved ? (
+                {this.state.cancel ? (
+                  <h2>You have successfully cancelled the request</h2>
+                ) : (
                   <div>
-                    {!this.state.data.viewed ? (
-                      <div>
+                    {!this.state.submitted ? (
+                      <Form onSubmit={this.handleSubmit.bind(this)}>
                         <br />
-                        <h3>
-                          Congratulations, you got the order!
+                        <label for="unit">Mobile Number:</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">
+                              +65
+                            </span>
+                          </div>
+                          <input
+                            onChange={this.handleChange}
+                            value={this.state.driver_contact}
+                            type="number"
+                            class="form-control"
+                            name="driver_contact"
+                            placeholder="9xxxxxxx"
+                            required
+                          ></input>
+                        </div>
+                        <br />
+                        <div class="form-check create-title">
+                          <label class="checkbox-inline">
+                            <input
+                              onChange={this.handleChange}
+                              type="checkbox"
+                              checked={this.state.payment}
+                              value={this.state.payment}
+                              name="payment"
+                              class="form-check-input"
+                            ></input>
+                            Prefer a different PayNow number/UEN?
+                          </label>
                           <br />
-                        </h3>
-                        <br />
-                        <h5>
-                          Please take a screenshot of this page as the following
-                          information will be deleted after refresh.{" "}
-                        </h5>
-                        <br />
-                        <b>Delivery From:</b> {this.state.data.unit}{" "}
-                        <a
-                          href={
-                            "https://maps.google.com/?q=" +
-                            this.state.data.street
-                          }
-                        >
-                          {this.state.data.street}
-                        </a>
-                        <br />
-                        <b>Delivery To:</b> {this.state.data.unit_to}{" "}
-                        <a
-                          href={
-                            "https://maps.google.com/?q=" +
-                            this.state.data.street_to
-                          }
-                        >
-                          {this.state.data.street_to}
-                        </a>
-                        <br />
-                        <b>Hawker Contact:</b> {this.state.data.contact}
-                        <br />
-                        <b>Customer Contact:</b> {this.state.data.contact_to}
-                        <br />
-                        {this.state.data.time ? (
-                          <div>
-                            {" "}
-                            {dayName[this.state.data.time.toDate().getDay()] +
-                              " " +
-                              this.state.data.time.toDate().getDate() +
-                              " " +
-                              monthNames[
-                                this.state.data.time.toDate().getMonth()
-                              ] +
-                              " " +
-                              formatAMPM(this.state.data.time.toDate())}
+                        </div>
+                        {this.state.payment ? (
+                          <div class="input-group">
+                            <input
+                              onChange={this.handleChange}
+                              value={this.state.paynow_alternate}
+                              type="number"
+                              class="form-control"
+                              name="paynow_alternate"
+                              placeholder="UEN/PayNow Number"
+                            ></input>
                           </div>
                         ) : null}
-                        <b>Pickup Time:</b> <br />
-                        <b>Note from Requester:</b> {this.state.data.note}
                         <br />
-                        <b>Distance:</b> {this.state.data.distance}
-                        <br />
-                        <b>Estimated Fee:</b> ${this.state.data.cost}
-                        <br /> <br />
-                        <b>
-                          <h4>
-                            Contact the hawker directly to arrange delivery
-                          </h4>
-                        </b>
-                        <br /> <br />
-                        <small>
-                          For technical problems, please email us at
-                          foodleh@outlook.com
-                        </small>
+                        <Button
+                          class="shadow-lg"
+                          style={{
+                            backgroundColor: "green",
+                            borderColor: "green",
+                            fontSize: "25px",
+                          }}
+                          type="Submit"
+                        >
+                          Accept Order
+                        </Button>
+                      </Form>
+                    ) : this.state.retrieved ? (
+                      <div>
+                        {!this.state.data.viewed &&
+                        !this.state.data.expired &&
+                        !this.state.data.cancelled ? (
+                          <div>
+                            <br />
+                            <h3>
+                              Congratulations, you got the order!
+                              <br />
+                            </h3>
+                            <br />
+                            <h5>
+                              Please take a screenshot of this page as the
+                              following information will be deleted after
+                              refresh.{" "}
+                            </h5>
+                            <br />
+                            <b>Delivery From:</b> {this.state.data.unit}{" "}
+                            <a
+                              href={
+                                "https://maps.google.com/?q=" +
+                                this.state.data.street
+                              }
+                            >
+                              {this.state.data.street}
+                            </a>
+                            <br />
+                            <b>Delivery To:</b> {this.state.data.unit_to}{" "}
+                            <a
+                              href={
+                                "https://maps.google.com/?q=" +
+                                this.state.data.street_to
+                              }
+                            >
+                              {this.state.data.street_to}
+                            </a>
+                            <br />
+                            <b>Hawker Contact:</b> {this.state.data.contact}
+                            <br />
+                            <b>Customer Contact:</b>{" "}
+                            {this.state.data.contact_to}
+                            <br />
+                            {this.state.data.time ? (
+                              <div>
+                                <b>Pickup Time:</b> <br />
+                                {dayName[
+                                  this.state.data.time.toDate().getDay()
+                                ] +
+                                  " " +
+                                  this.state.data.time.toDate().getDate() +
+                                  " " +
+                                  monthNames[
+                                    this.state.data.time.toDate().getMonth()
+                                  ] +
+                                  " " +
+                                  formatAMPM(this.state.data.time.toDate())}
+                              </div>
+                            ) : null}
+                            <b>Note from Requester:</b> {this.state.data.note}
+                            <br />
+                            <b>Distance:</b> {this.state.data.distance}
+                            <br />
+                            <b>Estimated Fee:</b> ${this.state.data.cost}
+                            <br /> <br />
+                            <b>
+                              <h4>
+                                Contact the hawker directly to arrange delivery
+                              </h4>
+                            </b>
+                            <br /> <br />
+                            <small>
+                              For technical problems, please email us at
+                              foodleh@outlook.com
+                            </small>
+                          </div>
+                        ) : (
+                          <div>
+                            {this.state.data.viewed ? (
+                              <h3>
+                                <br />
+                                <br />
+                                Sorry, someone has already taken the order
+                                <br />
+                              </h3>
+                            ) : (
+                              <h3>
+                                <br />
+                                <br />
+                                Sorry, this order has expired
+                                <br />
+                              </h3>
+                            )}
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div>
-                        {
-                          <h3>
-                            {" "}
-                            <br />
-                            <br />
-                            Sorry, someone has already taken the order
-                            <br />
-                          </h3>
-                        }
+                        <br />
+                        <br />
+                        <h3>Loading</h3>
+                        <Spinner class="" animation="grow" />
                       </div>
                     )}
-                  </div>
-                ) : (
-                  <div>
-                    <br />
-                    <br />
-                    <h3>Loading</h3>
-                    <Spinner class="" animation="grow" />
                   </div>
                 )}
               </div>
