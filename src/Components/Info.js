@@ -16,6 +16,12 @@ import Clap from "./Clap";
 import Linkify from "react-linkify";
 import { withRouter } from "react-router-dom";
 import update from 'immutability-helper';
+import whatsapp_button from "../assets/whatsapp_button.png";
+import orderleh from "../assets/orderleh.png";
+import menu_title from "../assets/info_menu.png";
+import delivery_title from "../assets/info_delivery.png";
+import revieworder from "../assets/info_review_order.png";
+
 
 import firebase from "./Firestore";
 
@@ -118,6 +124,7 @@ export class Info extends React.Component {
   }
 
   enterDetails() {
+    console.log("enterDetails");
     if (this.state.wantToOrder) {
       this.setState({ wantToOrder: false });
     } else {
@@ -159,33 +166,33 @@ export class Info extends React.Component {
 
               {this.state.data.whatsapp ? (
                 <div>
-                <button
-                  onClick={this.addItem}
-                  name={i}
-                  class="shadow-lg"
-                  style={{
-                    backgroundColor: "#b48300",
-                    color: "white",
-                  }}
-                >
-                  +
+                  <button
+                    onClick={this.addItem}
+                    name={i}
+                    class="shadow-lg"
+                    style={{
+                      backgroundColor: "#b48300",
+                      color: "white",
+                    }}
+                  >
+                    +
                 </button>
-              {" "}
-              {this.state.orderData[i] !== undefined ? this.state.orderData[JSON.parse(JSON.stringify(i))] : 0}
-              {" "}
-              <button
-                onClick={this.minusItem}
-                name={i}
-                class="shadow-lg"
-                style={{
-                  backgroundColor: "#b48300",
-                  color: "white",
-                }}
-              >
-                -
+                  {" "}
+                  {this.state.orderData[i] !== undefined ? this.state.orderData[JSON.parse(JSON.stringify(i))] : 0}
+                  {" "}
+                  <button
+                    onClick={this.minusItem}
+                    name={i}
+                    class="shadow-lg"
+                    style={{
+                      backgroundColor: "#b48300",
+                      color: "white",
+                    }}
+                  >
+                    -
               </button>
-              </div>
-              ) : null }
+                </div>
+              ) : null}
 
             </div>
           );
@@ -492,32 +499,110 @@ export class Info extends React.Component {
                           <b>WeChat ID: {this.state.data.wechatid}</b>
                         </span>
                       ) : null}
+                      <br />
                       {this.state.data.whatsapp ? (
-                        <a href={link}>
-                          <span
-                            class="card shadow-lg"
-                            style={{
-                              width: "110px",
-                              height: "30px",
-                              backgroundColor: "grey",
-                              margin: "5px 5px 5px 5px",
-                            }}
-                          >
-                            <card>
-                              {" "}
+                        <span>
+                          <a href={link}>
+                            <span class="col">
                               <img
-                                src={whatsapp}
-                                style={{
-                                  height: "28px",
-                                  padding: "3px 3px 3px",
-                                }}
                                 alt=""
+                                src={
+                                  whatsapp_button
+                                }
+                                style={{ width: "30%" }}
                               />
-                              <span style={{ color: "white" }}> Message</span>
-                            </card>
-                          </span>
-                        </a>
+                            </span>
+                          </a>
+                          {this.state.data.menu ? (
+
+                            <span class="col">
+                              <img
+                                alt=""
+                                onClick={this.enterDetails}
+                                src={
+                                  orderleh
+                                }
+                                style={{ width: "30%", cursor: 'pointer' }}
+                              />
+                            </span>
+                          ) : null}
+
+                          {this.state.wantToOrder ? (
+
+                            <div>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <span class="col">
+                                <img
+                                  alt=""
+                                  src={
+                                    menu_title
+                                  }
+                                  style={{ width: "30%" }}
+                                />
+                              </span>
+                              <br></br>
+                              
+                      <p>{this.getMenu()} </p>
+                      <div>
+                          <div class="form-group create-title">
+                            <label for="name">Your Name</label>
+                            <input
+                              onChange={this.handleCustomerDetails}
+                              value={this.state.name}
+                              type="text"
+                              class="form-control"
+                              name="name"
+                              placeholder="We don't store your info!"
+                            ></input>
+                          </div>
+                          <div class="form-group create-title">
+                            <label for="address">Your Address</label>
+                            <input
+                              onChange={this.handleCustomerDetails}
+                              value={this.state.address}
+                              type="text"
+                              class="form-control"
+                              name="address"
+                              placeholder="We don't store your info!"
+                            ></input>
+                          </div>
+                          <div class="form-group create-title">
+                            <label for="address">Additional Notes</label>
+                            <input
+                              onChange={this.handleCustomerDetails}
+                              value={this.state.notes}
+                              type="text"
+                              class="form-control"
+                              name="notes"
+                              placeholder="Eg no chili, no hum. Leave blank if nil"
+                            ></input>
+                          </div>
+                          <Button
+                            class="shadow-sm"
+                            href={
+                              "https://api.whatsapp.com/send?phone=65" + this.state.data.contact + "&text=" + this.setOrderText()
+                            }
+                            style={{
+                              backgroundColor: "#B48300",
+                              borderColor: "#B48300",
+                              fontSize: "20px",
+                              width: "200px"
+                            }}
+                            name="Language"
+                          >
+                            Place order
+                      </Button>
+                      <br />
+                      
+                        </div>
+                            </div>
+                          ) : null}
+
+                        </span>
                       ) : null}
+                      <br />
                       <Component.Popup
                         data={this.state.data}
                         id={this.state.id}
@@ -578,89 +663,14 @@ export class Info extends React.Component {
                       {this.state.data.description_detail}
                     </p>
                   </Linkify>
-                  {/* {Ordering system appears if menu is present AND whatsapp enabled} */}
-                  {this.state.data.menu ? (
+                  {/* {Menu appears if menu data is present and whatsapp is not present} */}
+                  {this.state.data.menu && !this.state.data.whatsapp ? (
                     <div>
                       <h6 style={{ marginBottom: "0px" }}>
                         <b>Menu Items</b>
                       </h6>
                       <p>{this.getMenu()} </p>
-
-                      {this.state.data.whatsapp ? (
-                        <div>
-                          <Button
-                            class="shadow-sm"
-                            style={{
-                              backgroundColor: "#B48300",
-                              borderColor: "#B48300",
-                              fontSize: "20px",
-                              width: "200px"
-                            }}
-                            onClick={this.enterDetails}
-                            name="details"
-                          >
-                            I want to order!
-                          </Button>
-                        </div>
-                      ) : null}
-
-                      <br></br>
-                      <br></br>
-
-                      {/* {Only display details, Whatsapp button if customer clicks I want to order} */}
-                      {this.state.wantToOrder ?
-
-                        <div>
-                          <div class="form-group create-title">
-                            <label for="name">Your Name</label>
-                            <input
-                              onChange={this.handleCustomerDetails}
-                              value={this.state.name}
-                              type="text"
-                              class="form-control"
-                              name="name"
-                              placeholder="We don't store your info!"
-                            ></input>
-                          </div>
-                          <div class="form-group create-title">
-                            <label for="address">Your Address</label>
-                            <input
-                              onChange={this.handleCustomerDetails}
-                              value={this.state.address}
-                              type="text"
-                              class="form-control"
-                              name="address"
-                              placeholder="We don't store your info!"
-                            ></input>
-                          </div>
-                          <div class="form-group create-title">
-                            <label for="address">Additional Notes</label>
-                            <input
-                              onChange={this.handleCustomerDetails}
-                              value={this.state.notes}
-                              type="text"
-                              class="form-control"
-                              name="notes"
-                              placeholder="Eg no chili, no hum. Leave blank if nil"
-                            ></input>
-                          </div>
-                          <Button
-                            class="shadow-sm"
-                            href={
-                              "https://api.whatsapp.com/send?phone=65" + this.state.data.contact + "&text=" + this.setOrderText()
-                            }
-                            style={{
-                              backgroundColor: "#B48300",
-                              borderColor: "#B48300",
-                              fontSize: "20px",
-                              width: "200px"
-                            }}
-                            name="Language"
-                          >
-                            Place order
-                      </Button>
-                        </div>
-                        : null}
+                      
                     </div>
                   ) : null}
                   <br></br>
