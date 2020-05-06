@@ -20,10 +20,9 @@ const app = express();
 // Replace BUCKET_NAME
 const bucket = "gs://backup-bucket-hawkercentral";
 
-
-exports.all = functions.region('asia-east2').https.onRequest(async (req, res) => {
+exports.all = functions.https.onRequest(async (req, res) => {
   return cors(req, res, async () => {
-    var result = []
+    var result = [];
     await admin
       .app()
       .firestore()
@@ -32,7 +31,7 @@ exports.all = functions.region('asia-east2').https.onRequest(async (req, res) =>
       .then((snapshot) => {
         snapshot.forEach((doc) => {
           if (doc.exists) {
-            data = doc.data()
+            data = doc.data();
             data.id = doc.id;
             result.push(data);
           }
@@ -49,8 +48,9 @@ exports.all = functions.region('asia-east2').https.onRequest(async (req, res) =>
   });
 });
 
-exports.scheduledFirestoreExport = functions.region('asia-east2').pubsub
-  .schedule("every 24 hours")
+exports.scheduledFirestoreExport = functions
+  .region("asia-east2")
+  .pubsub.schedule("every 24 hours")
   .onRun((context) => {
     const projectId = process.env.GCP_PROJECT || process.env.GCLOUD_PROJECT;
     const databaseName = client.databasePath(projectId, "(default)");
@@ -81,135 +81,233 @@ const cors = require("cors")({
   origin: true,
 });
 
-exports.telegramSend = functions.region('asia-east2').https.onRequest(async (req, res) => {
-  return cors(req, res, async () => {
-    var origin = req.body.origin;
-    var destination = req.body.destination;
-    var cost = req.body.cost;
-    // var distance = req.body.distance;
-    var url = req.body.url;
-    var id = req.body.id;
-    var time = req.body.time;
+exports.telegramSend = functions
+  .region("asia-east2")
+  .https.onRequest(async (req, res) => {
+    return cors(req, res, async () => {
+      var origin = req.body.origin;
+      var destination = req.body.destination;
+      var cost = req.body.cost;
+      // var distance = req.body.distance;
+      var url = req.body.url;
+      var id = req.body.id;
+      var time = req.body.time;
+      var cancel = "www.foodleh.app/delivery?cancel=" + id;
+      var requester_mobile = req.body.requester_mobile;
+      var duration = req.body.duration
+      var message =
+        "<b>New Order Received</b> \n" +
+        "<b>From: </b> <a href='https://maps.google.com/?q=" +
+        origin +
+        "'>" +
+        origin +
+        "</a>\n" +
+        "<b>To: </b><a href='https://maps.google.com/?q=" +
+        destination +
+        "'>" +
+        destination +
+        "</a>\n" +
+        "<b>Fee: </b>" +
+        cost +
+        "\n" +
+        "<b>Pickup Time: </b>" +
+        time +
+        "\n" +
+        "<b>Est. Duration: </b>" +
+        duration +
+        "\n" +
+        "<b>Click to Accept (first come first serve): </b>" +
+        url +
+        "\n (request expires 30 minutes before pickup)";
 
-    var message =
-      "<b>New Order Received</b> \n" +
-      "<b>From: </b> <a href='https://maps.google.com/?q=" +
-      origin +
-      "'>" +
-      origin +
-      "</a>\n" +
-      "<b>To: </b><a href='https://maps.google.com/?q=" +
-      destination +
-      "'>" +
-      destination +
-      "</a>\n" +
-      "<b>Fee: </b>" +
-      cost +
-      "\n" +
-      "<b>Pickup Time: </b>" +
-      time +
-      "\n" +
-      "<b>Click to Accept (first come first serve): </b>" +
-      url;
+      let sent = await bot.telegram.sendMessage("@foodlehdelivery", message, {
+        parse_mode: "HTML",
+      });
 
-    let sent = await bot.telegram.sendMessage("@foodlehdev", message, {
-      parse_mode: "HTML",
+      twilio.messages
+        .create({
+          body:
+            "Your request has been received and will expire 30 minutes before pickup time. To cancel your request, please go to link below.  我们已收到您的要求。若在取食物的三十分钟之前没有司机接受，您的要求并会自动取消。若您要马上取消，请到以下链接：" +
+            cancel +
+            ".",
+          from: "+12015847715",
+          to: "+65" + requester_mobile,
+        })
+        .then((message) => console.log(message.sid))
+        .catch((e) => {
+          console.log(e);
+        });
+
+      let message_id = sent.message_id;
+      await admin
+        .app()
+        .firestore()
+        .collection("deliveries")
+        .doc(id)
+        .update({
+          message_id: message_id,
+        })
+        .then(() => {
+          res.setHeader("Access-Control-Allow-Origin", "*");
+          res.status(200).send(message);
+          return true;
+        });
     });
-    let message_id = sent.message_id;
-    await admin
+  });
+
+exports.telegramEdit = functions
+  .region("asia-east2")
+  .https.onRequest(async (req, res) => {
+    return cors(req, res, async () => {
+      var message_id = req.body.message_id ? req.body.message_id : null;
+      var driver_mobile = req.body.driver_mobile
+        ? req.body.driver_mobile
+        : null;
+      var requester_mobile = req.body.requester_mobile
+        ? req.body.requester_mobile
+        : null;
+      var origin = req.body.origin ? req.body.origin : null;
+      var destination = req.body.destination ? req.body.destination : null;
+      var time = req.body.time ? req.body.time : null;
+      var customer_mobile = req.body.customer_mobile
+        ? req.body.customer_mobile
+        : null;
+      var note = req.body.note ? req.body.note : null;
+      var cost = req.body.cost ? req.body.cost : null;
+
+      twilio.messages
+        .create({
+          body:
+            "Your order has been picked up by a driver. 您的要求以有司机接受。\n Driver Mobile 司机手机号: +65" +
+            driver_mobile +
+            "\n Delivery Fee: $" +
+            cost +
+            "\n Pickup Time: " +
+            time,
+          from: "+12015847715",
+          to: "+65" + requester_mobile,
+        })
+        .then((message) => console.log(message.sid))
+        .catch((e) => {
+          console.log(e);
+        });
+
+      twilio.messages
+        .create({
+          body:
+            "Your order has been confirmed. \n " +
+            "Stall Contact: +65" +
+            requester_mobile +
+            "\n" +
+            "Customer Mobile: +65" +
+            customer_mobile +
+            "\n" +
+            "From: " +
+            origin +
+            "\n" +
+            "To: " +
+            destination +
+            "\n" +
+            "Pickup Time: " +
+            time +
+            "\n" +
+            "Delivery Fee: $" +
+            cost +
+            "\n" +
+            "Note: " +
+            note +
+            "\n",
+          from: "+12015847715",
+          to: "+65" + driver_mobile,
+        })
+        .then((message) => console.log(message.sid))
+        .catch((e) => {
+          console.log(e);
+        });
+
+      var message = "<b>A driver has picked up this order! </b>";
+      await bot.telegram
+        .editMessageText("@foodlehdelivery", message_id, "", message, {
+          parse_mode: "HTML",
+        })
+        .then(() => {
+          res.setHeader("Access-Control-Allow-Origin", "*");
+          res.status(200).send(message);
+          return true;
+        });
+    });
+  });
+
+exports.telegramCancel = functions
+  .region("asia-east2")
+  .https.onRequest(async (req, res) => {
+    return cors(req, res, async () => {
+      var message_id = req.body.message_id ? req.body.message_id : null;
+
+      var message = "<b>The hawker has cancelled this request. </b>";
+      await bot.telegram
+        .editMessageText("@foodlehdelivery", message_id, "", message, {
+          parse_mode: "HTML",
+        })
+        .then(() => {
+          res.setHeader("Access-Control-Allow-Origin", "*");
+          res.status(200).send(message);
+          return true;
+        });
+    });
+  });
+
+exports.taskRunner = functions
+  .region("asia-east2")
+  .runWith({ memory: "2GB" })
+  .pubsub.schedule("* * * * *")
+  .onRun(async (context) => {
+    // set now as 20 minutes ago
+    var now = admin.firestore.Timestamp.now();
+    console.log(now);
+    const query = admin
       .app()
       .firestore()
       .collection("deliveries")
-      .doc(id)
-      .update({
-        message_id: message_id,
-      })
-      .then(() => {
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.status(200).send(message);
-        return true;
-      });
+      .where("lastmodified", "<=", now)
+      .where("viewed", "==", false)
+      .where("expired", "==", false)
+      .where("cancelled", "==", false);
+
+    const tasks = await query.get();
+
+    // Jobs to execute concurrently.
+    const jobs = [];
+
+    // Loop over documents and push job.
+    tasks.forEach((snapshot) => {
+      const { message_id } = snapshot.data();
+      var expiry = new Date(
+        snapshot.data().time.toDate().getTime() - 30 * 60000
+      );
+      var now = new Date();
+      console.log(message_id, now - expiry);
+      if (now - expiry > 0) {
+        var message = "<b>This request has expired </b>";
+        const job1 = snapshot.ref.update({ expired: true });
+        console.log(message_id + " expired");
+        const job2 = bot.telegram.editMessageText(
+          "@foodlehdelivery",
+          message_id,
+          "",
+          message,
+          {
+            parse_mode: "HTML",
+          }
+        );
+        jobs.push(job1);
+        jobs.push(job2);
+      }
+    });
+
+    // Execute all jobs concurrently
+    return await Promise.all(jobs);
   });
-});
-
-exports.telegramEdit = functions.region('asia-east2').https.onRequest(async (req, res) => {
-  return cors(req, res, async () => {
-    var message_id = req.body.message_id ? req.body.message_id : null;
-    var driver_mobile = req.body.driver_mobile ? req.body.driver_mobile : null;
-    var requester_mobile = req.body.requester_mobile
-      ? req.body.requester_mobile
-      : null;
-    var origin = req.body.origin ? req.body.origin : null;
-    var destination = req.body.destination ? req.body.destination : null;
-    var time = req.body.time ? req.body.time : null;
-    var customer_mobile = req.body.customer_mobile
-      ? req.body.customer_mobile
-      : null;
-    var note = req.body.note ? req.body.note : null;
-    var cost = req.body.cost ? req.body.cost : null;
-
-    twilio.messages
-      .create({
-        body:
-          "Your order has been picked up by a driver. \n Driver Mobile: +65" +
-          driver_mobile +
-          "\n Delivery Fee: $" +
-          cost +
-          "\n Pickup Time: " +
-          time,
-        from: "+12015847715",
-        to: "+65" + requester_mobile,
-      })
-      .then((message) => console.log(message.sid))
-      .catch((e) => {
-        console.log(e);
-      });
-
-    twilio.messages
-      .create({
-        body:
-          "Your order has been confirmed. \n " +
-          "Stall Contact: +65" +
-          requester_mobile +
-          "\n" +
-          "Customer Mobile: +65" +
-          customer_mobile +
-          "\n" +
-          "From: " +
-          origin +
-          "\n" +
-          "To: " +
-          destination +
-          "\n" +
-          "Pickup Time: " +
-          time +
-          "\n" +
-          "Delivery Fee: $" +
-          cost +
-          "\n" +
-          "Note: " +
-          note +
-          "\n",
-        from: "+12015847715",
-        to: "+65" + driver_mobile,
-      })
-      .then((message) => console.log(message.sid))
-      .catch((e) => {
-        console.log(e);
-      });
-
-    var message = "<b>A driver has picked up this order! </b>";
-    await bot.telegram
-      .editMessageText("@foodlehdev", message_id, "", message, {
-        parse_mode: "HTML",
-      })
-      .then(() => {
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.status(200).send(message);
-        return true;
-      });
-  });
-});
 
 // var admin = require("firebase-admin");
 // var functions = require("firebase-functions");
