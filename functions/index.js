@@ -20,6 +20,35 @@ const app = express();
 // Replace BUCKET_NAME
 const bucket = "gs://backup-bucket-hawkercentral";
 
+
+exports.all = functions.https.onRequest(async (req, res) => {
+  return cors(req, res, async () => {
+    var result = []
+    await admin
+      .app()
+      .firestore()
+      .collection("hawkers")
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          if (doc.exists) {
+            data = doc.data()
+            data.id = doc.id;
+            result.push(data);
+          }
+        });
+        console.log("Fetched successfully!");
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.status(200).send(result);
+        return true;
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(405).send(error);
+      });
+  });
+});
+
 exports.scheduledFirestoreExport = functions.pubsub
   .schedule("every 24 hours")
   .onRun((context) => {
