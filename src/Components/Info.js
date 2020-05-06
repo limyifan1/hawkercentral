@@ -102,7 +102,7 @@ export class Info extends React.Component {
         // customer ordered this item
         const numItems = parseInt(this.state.orderData[i]);
         const thisPrice = parseFloat(this.state.data.menuprice[i]);
-        text = text + "*" + numItems + "x* _" + this.state.data.menuitem[i] + "_: $" + numItems*thisPrice + "\n";
+        text = text + "*" + numItems + "x* _" + this.state.data.menuitem[i] + "_: $" + numItems * thisPrice + "\n";
       }
     }
     text = text + "\n\nTotal Price (not including delivery): *$" + this.state.totalPrice.toFixed(2) + "*"
@@ -156,17 +156,20 @@ export class Info extends React.Component {
               {this.state.data.menuitem ? this.state.data.menuitem[i] : null} -
               ${this.state.data.menuprice ? this.state.data.menuprice[i] : null}
               {" "}
-              <button
-                onClick={this.addItem}
-                name={i}
-                class="shadow-lg"
-                style={{
-                  backgroundColor: "#b48300",
-                  color: "white",
-                }}
-              >
-                +
-              </button>
+
+              {this.state.data.whatsapp ? (
+                <div>
+                <button
+                  onClick={this.addItem}
+                  name={i}
+                  class="shadow-lg"
+                  style={{
+                    backgroundColor: "#b48300",
+                    color: "white",
+                  }}
+                >
+                  +
+                </button>
               {" "}
               {this.state.orderData[i] !== undefined ? this.state.orderData[JSON.parse(JSON.stringify(i))] : 0}
               {" "}
@@ -181,6 +184,9 @@ export class Info extends React.Component {
               >
                 -
               </button>
+              </div>
+              ) : null }
+
             </div>
           );
         }
@@ -572,26 +578,31 @@ export class Info extends React.Component {
                       {this.state.data.description_detail}
                     </p>
                   </Linkify>
-                  {/* {Ordering system appears if menu is present} */}
+                  {/* {Ordering system appears if menu is present AND whatsapp enabled} */}
                   {this.state.data.menu ? (
                     <div>
                       <h6 style={{ marginBottom: "0px" }}>
                         <b>Menu Items</b>
                       </h6>
                       <p>{this.getMenu()} </p>
-                      <Button
-                        class="shadow-sm"
-                        style={{
-                          backgroundColor: "#B48300",
-                          borderColor: "#B48300",
-                          fontSize: "20px",
-                          width: "200px"
-                        }}
-                        onClick={this.enterDetails}
-                        name="details"
-                      >
-                        I want to order!
+
+                      {this.state.data.whatsapp ? (
+                        <div>
+                          <Button
+                            class="shadow-sm"
+                            style={{
+                              backgroundColor: "#B48300",
+                              borderColor: "#B48300",
+                              fontSize: "20px",
+                              width: "200px"
+                            }}
+                            onClick={this.enterDetails}
+                            name="details"
+                          >
+                            I want to order!
                           </Button>
+                        </div>
+                      ) : null}
 
                       <br></br>
                       <br></br>
