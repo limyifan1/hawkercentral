@@ -39,7 +39,9 @@ export class Info extends React.Component {
       totalPrice: 0.0,
       wantToOrder: false,
       name: "",
-      address: "",
+      unit: "",
+      street: "",
+      postal: "",
       notes: "",
       customerNumber: "",
       deliveryTime: "",
@@ -83,7 +85,7 @@ export class Info extends React.Component {
       });
   };
 
-  handleCustomerDetails = (event) => {
+  handleCustomerDetails = async (event) => {
     const inputValue = event.target.value;
     const inputField = event.target.name;
     if (inputField === "name") {
@@ -106,7 +108,54 @@ export class Info extends React.Component {
       this.setState({
         deliveryTime: inputValue,
       });
+    } else if (inputField === "unit") {
+      this.setState({
+        unit: inputValue,
+      });
+    } else if (inputField === "street") {
+      this.setState({
+        street: inputValue, // TODO: autofill
+      });
+    } else if (inputField === "postal") {
+      this.setState({
+        postal: inputValue,
+      });
+      await this.getPostal(inputValue);
     }
+  };
+
+  async getPostal(postal) {
+    // event.preventDefault();
+    let data = await this.callPostal(postal);
+    if (data !== undefined) {
+      this.setState({
+        street: data["ADDRESS"],
+      });
+    }
+  }
+
+  callPostal = (postal) => {
+    return fetch(
+      "https://developers.onemap.sg/commonapi/search?searchVal=" +
+        postal +
+        "&returnGeom=Y&getAddrDetails=Y"
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(
+        function (jsonResponse) {
+          if (
+            jsonResponse !== undefined &&
+            jsonResponse["results"] !== undefined
+          ) {
+            return jsonResponse["results"][0];
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   };
 
   formatSummary() {
@@ -167,7 +216,7 @@ export class Info extends React.Component {
       "\n\nTotal Price (not including delivery): *$" +
       this.state.totalPrice.toFixed(2) +
       "*";
-    text = text + "\nDelivery address: *" + this.state.address + "*";
+    text = text + "\nDelivery address: *" + this.state.street + " #" + this.state.unit + " " + this.state.postal + "*";
     text = text + "\nDelivery Date/Time: *" + this.state.deliveryTime + "*";
     if (this.state.notes !== "") {
       // only display notes if customer added
@@ -269,7 +318,6 @@ export class Info extends React.Component {
                 >
                   <br />
                   {this.state.data.whatsapp ? (
-                    //<div class="btn-group float-right" role="group" aria-label="Basic example">
                     <div>
                       <Button
                         variant="light"
@@ -281,8 +329,6 @@ export class Info extends React.Component {
                           backgroundColor: "white",
                           color: "black",
                           "border-radius": "3px",
-                          // position: "absolute",
-                          // bottom: "10px",
                           margin: "10px",
                         }}
                       >
@@ -290,8 +336,6 @@ export class Info extends React.Component {
                       </Button>
                       <span
                         style={{
-                          // position: "absolute",
-                          // bottom: "10px",
                           margin: "10px",
                         }}
                       >
@@ -313,9 +357,6 @@ export class Info extends React.Component {
                           backgroundColor: "black",
                           color: "white",
                           "border-radius": "3px",
-                          // position: "absolute",
-                          // bottom: "10px",
-                          // // right: "10px",
                           margin: "10px",
                         }}
                       >
@@ -753,8 +794,6 @@ export class Info extends React.Component {
                                                         backgroundColor: "white",
                                                         color: "black",
                                                         "border-radius": "3px",
-                                                        // position: "absolute",
-                                                        // bottom: "10px",
                                                         margin: "10px",
                                                       }}
                                                     >
@@ -762,8 +801,6 @@ export class Info extends React.Component {
                       </Button>
                                                     <span
                                                       style={{
-                                                        // position: "absolute",
-                                                        // bottom: "10px",
                                                         margin: "10px",
                                                       }}
                                                     >
@@ -785,9 +822,6 @@ export class Info extends React.Component {
                                                         backgroundColor: "black",
                                                         color: "white",
                                                         "border-radius": "3px",
-                                                        // position: "absolute",
-                                                        // bottom: "10px",
-                                                        // // right: "10px",
                                                         margin: "10px",
                                                       }}
                                                     >
@@ -811,54 +845,6 @@ export class Info extends React.Component {
                                                   : "TBD"}
                                               </span>
                                             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                            // <div>
-                                            //   <span
-                                            //     style={{
-                                            //       fontSize: "110%",
-                                            //     }}
-                                            //   >
-                                            //     <b>
-                                            //       {this.state.orderData[index]}x
-                                            //     </b>{" "}
-                                            //     {item}
-                                            //     <div>
-                                            //       <span
-                                            //         class="float-right"
-                                            //         style={{
-                                            //           paddingLeft: "10px",
-                                            //           paddingRight: "15px",
-                                            //         }}
-                                            //       >
-                                            //         <b>
-                                            //           $
-                                            //           {(
-                                            //             this.state.orderData[
-                                            //               index
-                                            //             ] *
-                                            //             this.state.data
-                                            //               .menuprice[index]
-                                            //           ).toFixed(2)}
-                                            //         </b>
-                                            //       </span>
-                                            //     </div>
-                                            //   </span>
-                                            //<br />
-                                            //</div>
                                           );
                                         }
                                       }
@@ -966,6 +952,75 @@ export class Info extends React.Component {
                                   ></input>
                                 </div>
 
+
+
+
+                                <div>
+                                  <div class="row">
+                                    {" "}
+                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                      {" "}
+                                      <div class="form-group create-title">
+                                        <label for="postalcode">Postal Code</label>
+                                        <div class="input-group">
+                                          <input
+                                            onChange={this.handleCustomerDetails}
+                                            value={this.state.postal}
+                                            type="number"
+                                            class={
+                                              !this.state.postal
+                                                ? "form-control is-invalid"
+                                                : "form-control"
+                                            }
+                                            name="postal"
+                                            placeholder="Enter Postal Code 邮区编号"
+                                            min="0"
+                                            required
+                                          ></input>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                      {" "}
+                                      <div class="form-group create-title">
+                                        <label for="unit">Unit #</label>
+                                        <input
+                                          onChange={this.handleCustomerDetails}
+                                          value={this.state.unit}
+                                          type="text"
+                                          class="form-control"
+                                          name="unit"
+                                          placeholder="E.g. #01-01"
+                                        ></input>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                      <div class="form-group create-title">
+                                        <label for="street">
+                                          Street Name<b> (Auto-Filled)</b>
+                                        </label>
+                                        <input
+                                          onChange={this.handleCustomerDetails}
+                                          value={this.state.street}
+                                          type="text"
+                                          class={
+                                            !this.state.street
+                                              ? "form-control is-invalid"
+                                              : "form-control"
+                                          }
+                                          name="street"
+                                          placeholder="Enter Street Name 街道"
+                                        ></input>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+
+
+                                {/* 
                                 <div class="form-group create-title">
                                   <label for="address">Address</label>
                                   <input
@@ -977,7 +1032,8 @@ export class Info extends React.Component {
                                     style={{ borderColor: "#b48300" }}
                                     placeholder=""
                                   ></input>
-                                </div>
+                                </div> */}
+
                                 <div class="form-group create-title">
                                   <label for="address">Comments</label>
                                   <input
