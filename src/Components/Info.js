@@ -762,6 +762,7 @@ export class Info extends React.Component {
                                           return (
                                             <div style={{
                                               position: "relative",
+                                              padding: "5px",
                                             }}>
                                               <span
                                                 style={{
