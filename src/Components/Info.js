@@ -14,13 +14,12 @@ import Component from "./index";
 import Clap from "./Clap";
 import Linkify from "react-linkify";
 import { withRouter } from "react-router-dom";
-import update from 'immutability-helper';
+import update from "immutability-helper";
 import whatsapp_button from "../assets/whatsapp_button.png";
 import orderleh from "../assets/orderleh.png";
 import menu_title from "../assets/info_menu.png";
 import delivery_title from "../assets/info_delivery.png";
 import revieworder from "../assets/info_review_order.png";
-
 
 import firebase from "./Firestore";
 
@@ -68,14 +67,18 @@ export class Info extends React.Component {
       .then((snapshot) => {
         if (snapshot.exists) {
           // After querying db for data, initialize orderData if menu info is available
-          this.setState({ data: snapshot.data(), retrieved: true, orderData: new Array(snapshot.data().menuitem.length).fill(0) });
+          this.setState({
+            data: snapshot.data(),
+            retrieved: true,
+            orderData: new Array(snapshot.data().menuitem.length).fill(0),
+          });
         }
         onLoad("info_load", snapshot.data().name);
         console.log("Fetched successfully!");
         return true;
       })
       .catch((error) => {
-        window.location.reload(true)
+        window.location.reload(true);
         console.log(error);
       });
   };
@@ -86,25 +89,25 @@ export class Info extends React.Component {
     if (inputField === "name") {
       this.setState({
         name: inputValue,
-      })
+      });
     } else if (inputField === "address") {
       this.setState({
         address: inputValue,
-      })
+      });
     } else if (inputField === "notes") {
       this.setState({
         notes: inputValue,
-      })
+      });
     } else if (inputField === "customerNumber") {
       this.setState({
         customerNumber: inputValue,
-      })
+      });
     } else if (inputField === "deliveryTime") {
       this.setState({
         deliveryTime: inputValue,
-      })
+      });
     }
-  }
+  };
 
   formatSummary() {
     let text = "";
@@ -117,13 +120,22 @@ export class Info extends React.Component {
       ) {
         // customer ordered this item
         const numItems = parseInt(this.state.orderData[i]);
-        const thisPrice = parseFloat(this.state.data.menuprice[i] ? this.state.data.menuprice[i] : 0);
-        text = text + "*" + numItems + "x* _" + this.state.data.menuitem[i] + "_: $" + (numItems * thisPrice).toFixed(2) + "\n";
+        const thisPrice = parseFloat(
+          this.state.data.menuprice[i] ? this.state.data.menuprice[i] : 0
+        );
+        text =
+          text +
+          "*" +
+          numItems +
+          "x* _" +
+          this.state.data.menuitem[i] +
+          "_: $" +
+          (numItems * thisPrice).toFixed(2) +
+          "\n";
       }
     }
-    return (text)
+    return text;
   }
-
 
   setOrderText() {
     let text = "";
@@ -136,18 +148,33 @@ export class Info extends React.Component {
       ) {
         // customer ordered this item
         const numItems = parseInt(this.state.orderData[i]);
-        const thisPrice = parseFloat(this.state.data.menuprice[i] ? this.state.data.menuprice[i] : 0);
-        text = text + "*" + numItems + "x* _" + this.state.data.menuitem[i] + "_: $" + (numItems * thisPrice).toFixed(2) + "\n";
+        const thisPrice = parseFloat(
+          this.state.data.menuprice[i] ? this.state.data.menuprice[i] : 0
+        );
+        text =
+          text +
+          "*" +
+          numItems +
+          "x* _" +
+          this.state.data.menuitem[i] +
+          "_: $" +
+          (numItems * thisPrice).toFixed(2) +
+          "\n";
       }
     }
-    text = text + "\n\nTotal Price (not including delivery): *$" + this.state.totalPrice.toFixed(2) + "*"
+    text =
+      text +
+      "\n\nTotal Price (not including delivery): *$" +
+      this.state.totalPrice.toFixed(2) +
+      "*";
     text = text + "\nDelivery address: *" + this.state.address + "*";
     text = text + "\nDelivery Date/Time: *" + this.state.deliveryTime + "*";
     if (this.state.notes !== "") {
       // only display notes if customer added
       text = text + "\nAdditional notes: _" + this.state.notes + "_";
     }
-    text = text + "\nCustomer phone number: *" + this.state.customerNumber + "*";
+    text =
+      text + "\nCustomer phone number: *" + this.state.customerNumber + "*";
     text = text + "\nOrdering from: www.foodleh.app/info?id=" + this.state.id;
     return encodeURIComponent(text);
   }
@@ -161,13 +188,18 @@ export class Info extends React.Component {
     }
   }
 
-
   addItem = async (event) => {
     console.log("addItem");
     const idx = event.target.name;
     this.setState({
-      totalPrice: parseFloat(this.state.totalPrice) + parseFloat(this.state.data.menuprice[idx] ? this.state.data.menuprice[idx] : 0),
-      orderData: update(this.state.orderData, { [idx]: { $set: parseInt(this.state.orderData[idx]) + 1 } }),
+      totalPrice:
+        parseFloat(this.state.totalPrice) +
+        parseFloat(
+          this.state.data.menuprice[idx] ? this.state.data.menuprice[idx] : 0
+        ),
+      orderData: update(this.state.orderData, {
+        [idx]: { $set: parseInt(this.state.orderData[idx]) + 1 },
+      }),
     });
   };
 
@@ -176,8 +208,23 @@ export class Info extends React.Component {
     const idx = event.target.name;
     this.setState({
       // if customer did not order this item previously, do not change total price, keep # item at 0
-      totalPrice: this.state.orderData[idx] === 0.0 ? this.state.totalPrice : (parseFloat(this.state.totalPrice) - parseFloat(this.state.data.menuprice[idx] ? this.state.data.menuprice[idx] : 0)),
-      orderData: update(this.state.orderData, { [idx]: { $set: this.state.orderData[idx] === 0 ? 0 : parseInt(this.state.orderData[idx]) - 1 } }),
+      totalPrice:
+        this.state.orderData[idx] === 0.0
+          ? this.state.totalPrice
+          : parseFloat(this.state.totalPrice) -
+            parseFloat(
+              this.state.data.menuprice[idx]
+                ? this.state.data.menuprice[idx]
+                : 0
+            ),
+      orderData: update(this.state.orderData, {
+        [idx]: {
+          $set:
+            this.state.orderData[idx] === 0
+              ? 0
+              : parseInt(this.state.orderData[idx]) - 1,
+        },
+      }),
     });
   };
 
@@ -203,17 +250,23 @@ export class Info extends React.Component {
                   position: "relative",
                 }}
               >
-
                 <span
                   style={{
                     alignContent: "right",
                     fontSize: "110%",
                   }}
                 >
-                  <b>{this.state.data.menuitem ? this.state.data.menuitem[i] : null}</b>
+                  <b>
+                    {this.state.data.menuitem
+                      ? this.state.data.menuitem[i]
+                      : null}
+                  </b>
                 </span>
-                <div class="btn-group float-right" role="group" aria-label="Basic example">
-
+                <div
+                  class="btn-group float-right"
+                  role="group"
+                  aria-label="Basic example"
+                >
                   <br />
                   {this.state.data.whatsapp ? (
                     //<div class="btn-group float-right" role="group" aria-label="Basic example">
@@ -234,7 +287,7 @@ export class Info extends React.Component {
                         }}
                       >
                         -
-            </Button>
+                      </Button>
                       <span
                         style={{
                           // position: "absolute",
@@ -242,7 +295,13 @@ export class Info extends React.Component {
                           margin: "10px",
                         }}
                       >
-                        <b>{this.state.orderData[i] !== undefined ? this.state.orderData[JSON.parse(JSON.stringify(i))] : 0}</b>
+                        <b>
+                          {this.state.orderData[i] !== undefined
+                            ? this.state.orderData[
+                                JSON.parse(JSON.stringify(i))
+                              ]
+                            : 0}
+                        </b>
                       </span>
                       <Button
                         variant="dark"
@@ -261,13 +320,9 @@ export class Info extends React.Component {
                         }}
                       >
                         +
-               </Button>
+                      </Button>
                     </div>
-
                   ) : null}
-
-
-
                 </div>
                 <br />
                 <span
@@ -278,13 +333,15 @@ export class Info extends React.Component {
                     fontSize: "110%",
                   }}
                 >
-                  ${this.state.data.menuprice[i] ? this.state.data.menuprice[i] : "TBD"}
+                  $
+                  {this.state.data.menuprice[i]
+                    ? this.state.data.menuprice[i]
+                    : "TBD"}
                 </span>
               </figure>
             </div>
           );
         }
-
       }
       return data;
     }
@@ -305,7 +362,7 @@ export class Info extends React.Component {
           value="click"
           className={`image-gallery-fullscreen-button${
             isFullscreen ? " active" : ""
-            }`}
+          }`}
           onClick={onClick}
         />
       );
@@ -549,10 +606,10 @@ export class Info extends React.Component {
                     this.state.data.website.slice(0, 4) === "http" ? (
                       <a href={this.state.data.website}>Website Link</a>
                     ) : (
-                        <a href={"https://" + this.state.data.website}>
-                          Website Link
-                        </a>
-                      )
+                      <a href={"https://" + this.state.data.website}>
+                        Website Link
+                      </a>
+                    )
                   ) : null}
                   <br />
                   <svg
@@ -588,39 +645,35 @@ export class Info extends React.Component {
                             <span class="col-xs">
                               <img
                                 alt=""
-                                src={
-                                  whatsapp_button
-                                }
+                                src={whatsapp_button}
                                 style={{
                                   width: "25%",
                                 }}
                               />
                             </span>
                           </a>
-                          {this.state.data.menu && this.state.data.menuitem.length > 0 && this.state.data.menuitem[0] !== "" ? (
+                          {this.state.data.menu &&
+                          this.state.data.menuitem.length > 0 &&
+                          this.state.data.menuitem[0] !== "" ? (
                             <span class="col-sm">
                               <img
                                 alt=""
                                 onClick={this.enterDetails}
-                                src={
-                                  orderleh
-                                }
-                                style={{ width: "25%", cursor: 'pointer' }}
+                                src={orderleh}
+                                style={{ width: "25%", cursor: "pointer" }}
                               />
                             </span>
                           ) : null}
 
                           {this.state.wantToOrder ? (
-
                             <div>
-                              <br /><br />
+                              <br />
+                              <br />
 
                               <span class="col">
                                 <img
                                   alt=""
-                                  src={
-                                    menu_title
-                                  }
+                                  src={menu_title}
                                   style={{ width: "60%" }}
                                 />
                               </span>
@@ -631,9 +684,7 @@ export class Info extends React.Component {
                                 <br />
                                 <img
                                   alt=""
-                                  src={
-                                    revieworder
-                                  }
+                                  src={revieworder}
                                   style={{ width: "60%" }}
                                 />
                               </div>
@@ -650,47 +701,74 @@ export class Info extends React.Component {
                                     position: "relative",
                                   }}
                                 >
-                                  <span style={{
-                                    fontSize: "110%",
-                                  }}>
-                                    <b>Item Summary</b><br /><br />
+                                  <span
+                                    style={{
+                                      fontSize: "110%",
+                                    }}
+                                  >
+                                    <b>Item Summary</b>
+                                    <br />
+                                    <br />
                                   </span>
 
-                                  {results = this.state.data.menuitem.map((item, index) => {
-                                    if (item !== undefined && this.state.orderData[index] !== 0) {
-                                      return (
-                                        <div>
-                                          <span style={{
-                                            fontSize: "110%",
-                                          }}>
-                                            <b>{this.state.orderData[index]}x</b> {item}
+                                  {
+                                    (results = this.state.data.menuitem.map(
+                                      (item, index) => {
+                                        if (
+                                          item !== undefined &&
+                                          this.state.orderData[index] !== 0
+                                        ) {
+                                          return (
                                             <div>
                                               <span
-                                                class="float-right"
                                                 style={{
-                                                  paddingLeft: "10px",
-                                                  paddingRight: "15px",
+                                                  fontSize: "110%",
                                                 }}
                                               >
-                                                <b>${(this.state.orderData[index] * this.state.data.menuprice[index]).toFixed(2)}</b>
+                                                <b>
+                                                  {this.state.orderData[index]}x
+                                                </b>{" "}
+                                                {item}
+                                                <div>
+                                                  <span
+                                                    class="float-right"
+                                                    style={{
+                                                      paddingLeft: "10px",
+                                                      paddingRight: "15px",
+                                                    }}
+                                                  >
+                                                    <b>
+                                                      $
+                                                      {(
+                                                        this.state.orderData[
+                                                          index
+                                                        ] *
+                                                        this.state.data
+                                                          .menuprice[index]
+                                                      ).toFixed(2)}
+                                                    </b>
+                                                  </span>
+                                                </div>
                                               </span>
+                                              <br />
                                             </div>
-                                          </span>
-                                          <br />
-                                        </div>
-                                      );
-                                    }
-                                  })}
+                                          );
+                                        }
+                                      }
+                                    ))
+                                  }
 
                                   <figcaption>
-                                    <hr style={{
-                                      color: "#b48300",
-                                      backgroundColor: "#b48300",
-                                      height: "1px",
-                                      borderColor: "#b48300",
-                                      width: "100%",
-                                      alignItems: "center",
-                                    }} />
+                                    <hr
+                                      style={{
+                                        color: "#b48300",
+                                        backgroundColor: "#b48300",
+                                        height: "1px",
+                                        borderColor: "#b48300",
+                                        width: "100%",
+                                        alignItems: "center",
+                                      }}
+                                    />
                                     <div
                                       style={{
                                         textAlign: "right",
@@ -699,7 +777,12 @@ export class Info extends React.Component {
                                         fontSize: "110%",
                                       }}
                                     >
-                                      <b>${this.state.totalPrice !== undefined ? this.state.totalPrice.toFixed(2) : "0.00"}</b>
+                                      <b>
+                                        $
+                                        {this.state.totalPrice !== undefined
+                                          ? this.state.totalPrice.toFixed(2)
+                                          : "0.00"}
+                                      </b>
                                     </div>
                                     <div
                                       style={{
@@ -717,9 +800,7 @@ export class Info extends React.Component {
                               <div>
                                 <img
                                   alt=""
-                                  src={
-                                    delivery_title
-                                  }
+                                  src={delivery_title}
                                   style={{ width: "60%" }}
                                 />
 
@@ -731,23 +812,27 @@ export class Info extends React.Component {
                                     type="text"
                                     class="form-control"
                                     name="name"
-                                    style={{ borderColor: "#b48300", }}
+                                    style={{ borderColor: "#b48300" }}
                                     placeholder="We don't store your info!"
                                   ></input>
                                 </div>
 
                                 <div class="form-group create-title">
                                   <label for="unit">Mobile Number: </label>
-                                  <div class="input-group mb-3">
+                                  <div class="input-group mb-12">
                                     <div class="input-group-prepend">
-                                      <span class="input-group-text" id="basic-addon1">
+                                      <span
+                                        class="input-group-text"
+                                        id="basic-addon1"
+                                      >
                                         +65
-                              </span>
+                                      </span>
                                     </div>
                                     <input
                                       onChange={this.handleCustomerDetails}
                                       value={this.state.customerNumber}
                                       type="number"
+                                      class="form-control"
                                       name="customerNumber"
                                       placeholder=" 9xxxxxxx"
                                       maxLength="8"
@@ -769,7 +854,7 @@ export class Info extends React.Component {
                                     type="text"
                                     class="form-control"
                                     name="deliveryTime"
-                                    style={{ borderColor: "#b48300", }}
+                                    style={{ borderColor: "#b48300" }}
                                     placeholder="Eg Thursday 7 May 12.30pm"
                                   ></input>
                                 </div>
@@ -782,7 +867,7 @@ export class Info extends React.Component {
                                     type="text"
                                     class="form-control"
                                     name="address"
-                                    style={{ borderColor: "#b48300", }}
+                                    style={{ borderColor: "#b48300" }}
                                     placeholder=""
                                   ></input>
                                 </div>
@@ -803,24 +888,25 @@ export class Info extends React.Component {
                                 <Button
                                   class="shadow-sm"
                                   href={
-                                    "https://api.whatsapp.com/send?phone=65" + this.state.data.contact + "&text=" + this.setOrderText()
+                                    "https://api.whatsapp.com/send?phone=65" +
+                                    this.state.data.contact +
+                                    "&text=" +
+                                    this.setOrderText()
                                   }
                                   style={{
                                     backgroundColor: "#B48300",
                                     borderColor: "#B48300",
                                     fontSize: "20px",
-                                    width: "300px"
+                                    width: "300px",
                                   }}
                                   name="Language"
                                 >
                                   Place order via WhatsApp
-                      </Button>
+                                </Button>
                                 <br />
-
                               </div>
                             </div>
                           ) : null}
-
                         </span>
                       ) : null}
                       <br />
@@ -851,7 +937,7 @@ export class Info extends React.Component {
                         >
                           <b>{this.state.data.promo}</b>:{" "}
                           {this.state.data.condition &&
-                            this.state.data.condition.length > 40
+                          this.state.data.condition.length > 40
                             ? this.state.data.condition.slice(0, 40) + "..."
                             : this.state.data.condition}
                         </div>
@@ -891,7 +977,6 @@ export class Info extends React.Component {
                         <b>Menu Items</b>
                       </h6>
                       <p>{this.getMenu()} </p>
-
                     </div>
                   ) : null}
                   <br></br>
@@ -946,13 +1031,13 @@ export class Info extends React.Component {
             </div>
           </div>
         ) : (
-            <div class="row h-100 page-container">
-              <div class="col-sm-12 my-auto">
-                <h3>Loading</h3>
-                <Spinner class="" animation="grow" />
-              </div>
+          <div class="row h-100 page-container">
+            <div class="col-sm-12 my-auto">
+              <h3>Loading</h3>
+              <Spinner class="" animation="grow" />
             </div>
-          )}
+          </div>
+        )}
       </div>
     );
   }
