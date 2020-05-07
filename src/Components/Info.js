@@ -212,11 +212,11 @@ export class Info extends React.Component {
         this.state.orderData[idx] === 0.0
           ? this.state.totalPrice
           : parseFloat(this.state.totalPrice) -
-            parseFloat(
-              this.state.data.menuprice[idx]
-                ? this.state.data.menuprice[idx]
-                : 0
-            ),
+          parseFloat(
+            this.state.data.menuprice[idx]
+              ? this.state.data.menuprice[idx]
+              : 0
+          ),
       orderData: update(this.state.orderData, {
         [idx]: {
           $set:
@@ -298,8 +298,8 @@ export class Info extends React.Component {
                         <b>
                           {this.state.orderData[i] !== undefined
                             ? this.state.orderData[
-                                JSON.parse(JSON.stringify(i))
-                              ]
+                            JSON.parse(JSON.stringify(i))
+                            ]
                             : 0}
                         </b>
                       </span>
@@ -362,7 +362,7 @@ export class Info extends React.Component {
           value="click"
           className={`image-gallery-fullscreen-button${
             isFullscreen ? " active" : ""
-          }`}
+            }`}
           onClick={onClick}
         />
       );
@@ -606,10 +606,10 @@ export class Info extends React.Component {
                     this.state.data.website.slice(0, 4) === "http" ? (
                       <a href={this.state.data.website}>Website Link</a>
                     ) : (
-                      <a href={"https://" + this.state.data.website}>
-                        Website Link
-                      </a>
-                    )
+                        <a href={"https://" + this.state.data.website}>
+                          Website Link
+                        </a>
+                      )
                   ) : null}
                   <br />
                   <svg
@@ -653,17 +653,17 @@ export class Info extends React.Component {
                             </span>
                           </a>
                           {this.state.data.menu &&
-                          this.state.data.menuitem.length > 0 &&
-                          this.state.data.menuitem[0] !== "" ? (
-                            <span class="col-sm">
-                              <img
-                                alt=""
-                                onClick={this.enterDetails}
-                                src={orderleh}
-                                style={{ width: "25%", cursor: "pointer" }}
-                              />
-                            </span>
-                          ) : null}
+                            this.state.data.menuitem.length > 0 &&
+                            this.state.data.menuitem[0] !== "" ? (
+                              <span class="col-sm">
+                                <img
+                                  alt=""
+                                  onClick={this.enterDetails}
+                                  src={orderleh}
+                                  style={{ width: "25%", cursor: "pointer" }}
+                                />
+                              </span>
+                            ) : null}
 
                           {this.state.wantToOrder ? (
                             <div>
@@ -713,45 +713,152 @@ export class Info extends React.Component {
 
                                   {
                                     (results = this.state.data.menuitem.map(
-                                      (item, index) => {
+                                      (item, i) => {
                                         if (
                                           item !== undefined &&
-                                          this.state.orderData[index] !== 0
+                                          this.state.orderData[i] !== 0
                                         ) {
                                           return (
-                                            <div>
+                                            <div style={{
+                                              position: "relative",
+                                            }}>
                                               <span
                                                 style={{
+                                                  alignContent: "right",
                                                   fontSize: "110%",
                                                 }}
                                               >
                                                 <b>
-                                                  {this.state.orderData[index]}x
-                                                </b>{" "}
-                                                {item}
-                                                <div>
-                                                  <span
-                                                    class="float-right"
-                                                    style={{
-                                                      paddingLeft: "10px",
-                                                      paddingRight: "15px",
-                                                    }}
-                                                  >
-                                                    <b>
-                                                      $
-                                                      {(
-                                                        this.state.orderData[
-                                                          index
-                                                        ] *
-                                                        this.state.data
-                                                          .menuprice[index]
-                                                      ).toFixed(2)}
-                                                    </b>
-                                                  </span>
-                                                </div>
+                                                  {this.state.data.menuitem
+                                                    ? this.state.data.menuitem[i]
+                                                    : null}
+                                                </b>
                                               </span>
+                                              <div
+                                                class="btn-group float-right"
+                                                role="group"
+                                                aria-label="Basic example"
+                                              >
+                                                <br />
+                                                {this.state.data.whatsapp ? (
+                                                  //<div class="btn-group float-right" role="group" aria-label="Basic example">
+                                                  <div>
+                                                    <Button
+                                                      variant="light"
+                                                      size="sm"
+                                                      onClick={this.minusItem}
+                                                      name={i}
+                                                      className="shadow-sm"
+                                                      style={{
+                                                        backgroundColor: "white",
+                                                        color: "black",
+                                                        "border-radius": "3px",
+                                                        // position: "absolute",
+                                                        // bottom: "10px",
+                                                        margin: "10px",
+                                                      }}
+                                                    >
+                                                      -
+                      </Button>
+                                                    <span
+                                                      style={{
+                                                        // position: "absolute",
+                                                        // bottom: "10px",
+                                                        margin: "10px",
+                                                      }}
+                                                    >
+                                                      <b>
+                                                        {this.state.orderData[i] !== undefined
+                                                          ? this.state.orderData[
+                                                          JSON.parse(JSON.stringify(i))
+                                                          ]
+                                                          : 0}
+                                                      </b>
+                                                    </span>
+                                                    <Button
+                                                      variant="dark"
+                                                      size="sm"
+                                                      onClick={this.addItem}
+                                                      name={i}
+                                                      className="shadow-sm"
+                                                      style={{
+                                                        backgroundColor: "black",
+                                                        color: "white",
+                                                        "border-radius": "3px",
+                                                        // position: "absolute",
+                                                        // bottom: "10px",
+                                                        // // right: "10px",
+                                                        margin: "10px",
+                                                      }}
+                                                    >
+                                                      +
+                      </Button>
+                                                  </div>
+                                                ) : null}
+                                              </div>
                                               <br />
+                                              <span
+                                                class="shadow badge badge-info m-2"
+                                                style={{
+                                                  backgroundColor: "#b48300",
+                                                  alignContent: "left",
+                                                  fontSize: "110%",
+                                                }}
+                                              >
+                                                $
+                  {this.state.data.menuprice[i]
+                                                  ? this.state.data.menuprice[i]
+                                                  : "TBD"}
+                                              </span>
                                             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            // <div>
+                                            //   <span
+                                            //     style={{
+                                            //       fontSize: "110%",
+                                            //     }}
+                                            //   >
+                                            //     <b>
+                                            //       {this.state.orderData[index]}x
+                                            //     </b>{" "}
+                                            //     {item}
+                                            //     <div>
+                                            //       <span
+                                            //         class="float-right"
+                                            //         style={{
+                                            //           paddingLeft: "10px",
+                                            //           paddingRight: "15px",
+                                            //         }}
+                                            //       >
+                                            //         <b>
+                                            //           $
+                                            //           {(
+                                            //             this.state.orderData[
+                                            //               index
+                                            //             ] *
+                                            //             this.state.data
+                                            //               .menuprice[index]
+                                            //           ).toFixed(2)}
+                                            //         </b>
+                                            //       </span>
+                                            //     </div>
+                                            //   </span>
+                                            //<br />
+                                            //</div>
                                           );
                                         }
                                       }
@@ -937,7 +1044,7 @@ export class Info extends React.Component {
                         >
                           <b>{this.state.data.promo}</b>:{" "}
                           {this.state.data.condition &&
-                          this.state.data.condition.length > 40
+                            this.state.data.condition.length > 40
                             ? this.state.data.condition.slice(0, 40) + "..."
                             : this.state.data.condition}
                         </div>
@@ -1031,13 +1138,13 @@ export class Info extends React.Component {
             </div>
           </div>
         ) : (
-          <div class="row h-100 page-container">
-            <div class="col-sm-12 my-auto">
-              <h3>Loading</h3>
-              <Spinner class="" animation="grow" />
+            <div class="row h-100 page-container">
+              <div class="col-sm-12 my-auto">
+                <h3>Loading</h3>
+                <Spinner class="" animation="grow" />
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </div>
     );
   }
