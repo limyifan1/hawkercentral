@@ -974,7 +974,7 @@ export class Info extends React.Component {
                                                 : "form-control"
                                             }
                                             name="postal"
-                                            placeholder="Enter Postal Code 邮区编号"
+                                            placeholder="Enter Postal Code"
                                             min="0"
                                             required
                                           ></input>
@@ -991,7 +991,7 @@ export class Info extends React.Component {
                                           type="text"
                                           class="form-control"
                                           name="unit"
-                                          placeholder="E.g. #01-01"
+                                          placeholder="E.g. 01-01"
                                         ></input>
                                       </div>
                                     </div>
@@ -1012,7 +1012,7 @@ export class Info extends React.Component {
                                               : "form-control"
                                           }
                                           name="street"
-                                          placeholder="Enter Street Name 街道"
+                                          placeholder="Enter Street Name"
                                         ></input>
                                       </div>
                                     </div>
