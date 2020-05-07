@@ -7,7 +7,7 @@ import React from "react";
 import "../App.css";
 import "react-multi-carousel/lib/styles.css";
 import queryString from "query-string";
-import { Button, Spinner, Container, Row, Col, ButtonGroup } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { db } from "./Firestore";
 import ImageGallery from "react-image-gallery";
 import Component from "./index";
@@ -213,64 +213,64 @@ export class Info extends React.Component {
                   <b>{this.state.data.menuitem ? this.state.data.menuitem[i] : null}</b>
                 </span>
                 <div class="btn-group float-right" role="group" aria-label="Basic example">
-                
-                <br />
-                {this.state.data.whatsapp ? (
-                  //<div class="btn-group float-right" role="group" aria-label="Basic example">
-                  <div>
-                  <Button
-                    variant="dark"
-                    size="sm"
-                    onClick={this.addItem}
-                    name={i}
-                    className="shadow-sm"
-                    style={{
-                      backgroundColor: "black",
-                      color: "white",
-                      "border-radius": "3px",
-                      // position: "absolute",
-                      // bottom: "10px",
-                      // // right: "10px",
-                      margin: "10px",
-                    }}
-                  >
-                    +
-               </Button>
-                  <span
-                    style={{
-                      // position: "absolute",
-                      // bottom: "10px",
-                      margin: "10px",
-                    }}
-                  >
-                    <b>{this.state.orderData[i] !== undefined ? this.state.orderData[JSON.parse(JSON.stringify(i))] : 0}</b>
-                  </span>
-                  <Button
-                    variant="light"
-                    size="sm"
-                    onClick={this.minusItem}
-                    name={i}
-                    className="shadow-sm"
-                    style={{
-                      backgroundColor: "white",
-                      color: "black",
-                      "border-radius": "3px",
-                      // position: "absolute",
-                      // bottom: "10px",
-                      margin: "10px",
-                    }}
-                  >
-                    -
-            </Button>
-               </div>
 
-                ) : null}
-           
-            
-            
-                  </div>
-                  <br/>
-                  <span
+                  <br />
+                  {this.state.data.whatsapp ? (
+                    //<div class="btn-group float-right" role="group" aria-label="Basic example">
+                    <div>
+                      <Button
+                        variant="light"
+                        size="sm"
+                        onClick={this.minusItem}
+                        name={i}
+                        className="shadow-sm"
+                        style={{
+                          backgroundColor: "white",
+                          color: "black",
+                          "border-radius": "3px",
+                          // position: "absolute",
+                          // bottom: "10px",
+                          margin: "10px",
+                        }}
+                      >
+                        -
+            </Button>
+                      <span
+                        style={{
+                          // position: "absolute",
+                          // bottom: "10px",
+                          margin: "10px",
+                        }}
+                      >
+                        <b>{this.state.orderData[i] !== undefined ? this.state.orderData[JSON.parse(JSON.stringify(i))] : 0}</b>
+                      </span>
+                      <Button
+                        variant="dark"
+                        size="sm"
+                        onClick={this.addItem}
+                        name={i}
+                        className="shadow-sm"
+                        style={{
+                          backgroundColor: "black",
+                          color: "white",
+                          "border-radius": "3px",
+                          // position: "absolute",
+                          // bottom: "10px",
+                          // // right: "10px",
+                          margin: "10px",
+                        }}
+                      >
+                        +
+               </Button>
+                    </div>
+
+                  ) : null}
+
+
+
+                </div>
+                <br />
+                <span
                   class="shadow badge badge-info m-2"
                   style={{
                     backgroundColor: "#b48300",
@@ -738,7 +738,7 @@ export class Info extends React.Component {
 
                                 <div class="form-group create-title">
                                   <label for="unit">Mobile Number: </label>
-                                  <div class="input-group">
+                                  <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                       <span class="input-group-text" id="basic-addon1">
                                         +65
@@ -866,7 +866,7 @@ export class Info extends React.Component {
                   />
                   <br />
                   <h6 style={{ marginBottom: "0px" }}>
-                    <b>Brief Description</b>
+                    <b>Brief Description</b>a
                   </h6>
                   <Linkify>
                     <p style={{ marginBottom: "20px" }}>
