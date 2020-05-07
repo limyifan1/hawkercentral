@@ -5,10 +5,12 @@
 
 let cheerio = require("cheerio");
 const axios = require("axios");
+var Jimp = require("jimp");
 
 const firebase = require("firebase");
 require("firebase/firestore");
-const data = require("../mrt_stations.json");
+require("firebase/storage");
+// const data = require("../mrt_stations.json");
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 
 firebase.initializeApp({
@@ -23,6 +25,7 @@ firebase.initializeApp({
 });
 
 const db = firebase.firestore();
+const storage = firebase.storage();
 
 function capitalize_Words(str) {
   return str.replace(/\w\S*/g, function (txt) {
@@ -370,4 +373,112 @@ const retrieveData = async () => {
     });
 };
 
-retrieveData();
+const getDelivery = async () => {
+  await db
+    .collection("deliveries")
+    .doc("zH70UkXEQ35Oq93hEtui")
+    .get()
+    .then((snapshot) => {
+      if (snapshot.exists) {
+        console.log(
+          new Date() -
+            new Date(snapshot.data().lastmodified.toDate().getTime() + 60000)
+        );
+      }
+      console.log("Fetched successfully!");
+      return true;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+const handleFireBaseUpload = (image, newName) => {
+  Jimp.read(image).then((image) => {
+    // image.quality(50);
+    // image.resize(Jimp.AUTO, 750);
+    console.log(image);
+    image.getBase64(Jimp.AUTO, (err, res) => {
+      console.log(res);
+      console.log(newName);
+      storage
+        .ref(`/images/${newName}`)
+        .putString(res, "base64")
+        .then((snapshot) => {
+          console.log;
+        })
+        .catch((error) => {});
+    });
+  });
+};
+
+const getTake = async () => {
+  // await db
+  //   .collection("hawkers")
+  //   .doc("00HGb7M7JhQm58KGk88d")
+  //   .get()
+  //   .then(async (snapshot) => {
+  //     if (snapshot.exists) {
+  //       console.log(snapshot.data().url);
+  //       var firebaseURL = await handleFireBaseUpload(
+  //         snapshot.data().url,
+  //         snapshot.data().name
+  //       );
+  //       console.log(firebaseURL);
+  //     }
+  //     return true;
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+  var count = 0;
+  var ncount = 0;
+
+  return fetch("https://take.sg/api/latest?page=0&limit=1000")
+    .then(function (response) {
+      return response.json();
+    })
+    .then(
+      async function (jsonResponse) {
+        jsonResponse.forEach((element) => {
+          if (element.location && element.location.lat) {
+            count += 1;
+          } else {
+            console.log(element);
+            ncount += 1;
+          }
+        });
+        console.log(count, ncount);
+        // var image_url = jsonResponse[0].images[0];
+        // var newName = "1111111111111111" + jsonResponse[0].name + ".jpg";
+        // var firebaseURL = await handleFireBaseUpload(image_url, newName);
+        // console.log("url: " + firebaseURL);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+};
+
+const transferData = async () => {
+  await db
+    .collection("development")
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach(async (element) => {
+        await db
+          .collection("hawkers")
+          .add(element.data())
+          .then((d) => {
+            console.log("adding" + element.data().name);
+          });
+      });
+      console.log("Fetched successfully!");
+      return true;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+transferData();
