@@ -7,7 +7,7 @@ import React from "react";
 import "../App.css";
 import "react-multi-carousel/lib/styles.css";
 import queryString from "query-string";
-import { Button, Spinner } from "react-bootstrap";
+import { Button, Spinner, Container, Row, Col, ButtonGroup } from "react-bootstrap";
 import { db } from "./Firestore";
 import ImageGallery from "react-image-gallery";
 import Component from "./index";
@@ -163,6 +163,7 @@ export class Info extends React.Component {
 
 
   addItem = async (event) => {
+    console.log("addItem");
     const idx = event.target.name;
     this.setState({
       totalPrice: parseFloat(this.state.totalPrice) + parseFloat(this.state.data.menuprice[idx] ? this.state.data.menuprice[idx] : 0),
@@ -171,6 +172,7 @@ export class Info extends React.Component {
   };
 
   minusItem = async (event) => {
+    console.log("minusItem");
     const idx = event.target.name;
     this.setState({
       // if customer did not order this item previously, do not change total price, keep # item at 0
@@ -210,9 +212,66 @@ export class Info extends React.Component {
                 >
                   <b>{this.state.data.menuitem ? this.state.data.menuitem[i] : null}</b>
                 </span>
+                <div class="btn-group float-right" role="group" aria-label="Basic example">
+                
+                <br />
+                {this.state.data.whatsapp ? (
+                  //<div class="btn-group float-right" role="group" aria-label="Basic example">
+                  <div>
+                  <Button
+                    variant="dark"
+                    size="sm"
+                    onClick={this.addItem}
+                    name={i}
+                    className="shadow-sm"
+                    style={{
+                      backgroundColor: "black",
+                      color: "white",
+                      "border-radius": "3px",
+                      // position: "absolute",
+                      // bottom: "10px",
+                      // // right: "10px",
+                      margin: "10px",
+                    }}
+                  >
+                    +
+               </Button>
+                  <span
+                    style={{
+                      // position: "absolute",
+                      // bottom: "10px",
+                      margin: "10px",
+                    }}
+                  >
+                    <b>{this.state.orderData[i] !== undefined ? this.state.orderData[JSON.parse(JSON.stringify(i))] : 0}</b>
+                  </span>
+                  <Button
+                    variant="light"
+                    size="sm"
+                    onClick={this.minusItem}
+                    name={i}
+                    className="shadow-sm"
+                    style={{
+                      backgroundColor: "white",
+                      color: "black",
+                      "border-radius": "3px",
+                      // position: "absolute",
+                      // bottom: "10px",
+                      margin: "10px",
+                    }}
+                  >
+                    -
+            </Button>
+               </div>
 
-                <span
-                  class="shadow badge badge-info float-right m-2"
+                ) : null}
+           
+            
+            
+                  </div>
+                  <br/>
+                  <span
+                  class="shadow badge badge-info m-2"
                   style={{
                     backgroundColor: "#b48300",
                     alignContent: "left",
@@ -221,56 +280,6 @@ export class Info extends React.Component {
                 >
                   ${this.state.data.menuprice[i] ? this.state.data.menuprice[i] : "TBD"}
                 </span>
-
-                {this.state.data.whatsapp ? (
-                  <div>
-                    <button
-                      onClick={this.addItem}
-                      name={i}
-                      class="shadow-sm"
-                      style={{
-                        backgroundColor: "black",
-                        color: "white",
-                        "border-radius": "3px",
-                        position: "absolute",
-                        bottom: "10px",
-                        right: "10px",
-                      }}
-                    >
-                      +
-                </button>
-
-                    <span
-                      class="float-right"
-                      style={{
-                        position: "absolute",
-                        bottom: "10px",
-                        right: "35px",
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                      }}
-                    >
-                      <b>{this.state.orderData[i] !== undefined ? this.state.orderData[JSON.parse(JSON.stringify(i))] : 0}</b>
-                    </span>
-
-
-                    <button
-                      onClick={this.minusItem}
-                      name={i}
-                      class="shadow-sm float-right"
-                      style={{
-                        backgroundColor: "white",
-                        color: "black",
-                        "border-radius": "3px",
-                        position: "absolute",
-                        bottom: "10px",
-                        right: "65px",
-                      }}
-                    >
-                      -
-              </button>
-                  </div>
-                ) : null}
               </figure>
             </div>
           );
@@ -646,7 +655,7 @@ export class Info extends React.Component {
                                   }}>
                                     <b>Item Summary</b><br /><br />
                                   </span>
-                                  
+
                                   {results = this.state.data.menuitem.map((item, index) => {
                                     if (item !== undefined && this.state.orderData[index] !== 0) {
                                       return (
@@ -672,7 +681,7 @@ export class Info extends React.Component {
                                       );
                                     }
                                   })}
-                                 
+
                                   <figcaption>
                                     <hr style={{
                                       color: "#b48300",
@@ -747,7 +756,6 @@ export class Info extends React.Component {
                                       style={{
                                         borderColor: "#b48300",
                                         "border-radius": "5px",
-                                        "border-width": "1px",
                                       }}
                                     ></input>
                                   </div>
