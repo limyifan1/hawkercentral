@@ -20,7 +20,7 @@
     "react-bootstrap": "1.0.1",
     "react-bootstrap-typeahead": "4.2.2",
     "react-clap-button": "1.2.9",
-    "react-datetime-picker": "^3.0.2",
+    "react-datetime-picker": "3.0.2",
     "react-dom": "16.13.1",
     "react-ga": "2.7.0",
     "react-i18next": "11.4.0",
