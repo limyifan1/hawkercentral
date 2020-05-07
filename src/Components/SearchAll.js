@@ -87,7 +87,7 @@ export class SearchAll extends React.Component {
 
   retrieveData = async () => {
     this.setState({ retrieved: false });
-    let query = db.collection("hawkers");
+    let query = db.collection("development");
     if (this.state.cuisineValue && this.state.cuisineValue.length > 0) {
       const categories = this.state.cuisineValue.map((c) => c.label);
       query = query.where("categories", "array-contains-any", categories);

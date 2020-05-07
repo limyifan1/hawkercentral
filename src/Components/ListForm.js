@@ -17,7 +17,8 @@ import CreatableSelect from "react-select/creatable";
 import { withRouter } from "react-router-dom";
 import { LanguageContext } from "./themeContext";
 // const API_KEY = `${process.env.REACT_APP_GKEY}`
-
+// const API_KEY = `${process.env.REACT_APP_GKEY}`;
+const ONEMAP_KEY = `${process.env.ONEMAP_KEY}`;
 const icon = (
   <div>
     <svg
@@ -138,7 +139,7 @@ const addData = async ({
   };
   if (toggle === "create") {
     let id = await db
-      .collection("hawkers")
+      .collection("development")
       .add({
         ...field,
         claps: 0,
@@ -226,6 +227,7 @@ export class ListForm extends React.Component {
     this.handleCreate = this.handleCreate.bind(this);
     // this.handleImageAsFile = this.handleImageAsFile.bind(this);
     this.handleFireBaseUpload = this.handleFireBaseUpload.bind(this);
+    this.callLatLng = this.callLatLng.bind(this);
   }
 
   componentWillMount() {
@@ -295,11 +297,15 @@ export class ListForm extends React.Component {
   }
 
   callPostal = (postal) => {
-    return fetch(
-      "https://developers.onemap.sg/commonapi/search?searchVal=" +
-        postal +
-        "&returnGeom=Y&getAddrDetails=Y"
-    )
+    let url = new URL("https://developers.onemap.sg/commonapi/search?");
+    let params = new URLSearchParams(url.search.slice(1));
+    params.append("returnGeom", "Y");
+    params.append("getAddrDetails", "Y");
+    params.append("searchVal", postal);
+    var query =
+      "https://developers.onemap.sg/commonapi/search?" + params.toString();
+    console.log(query);
+    return fetch(query)
       .then(function (response) {
         return response.json();
       })
@@ -452,6 +458,318 @@ export class ListForm extends React.Component {
         this.handleFireBaseUpload(image, newName, name);
       };
     }
+  };
+
+  callLatLng = (lat, lng) => {
+    let url =
+      "https://developers.onemap.sg/privateapi/commonsvc/revgeocode?location=" +
+      lat +
+      "," +
+      lng +
+      "&token=" +
+      ONEMAP_KEY;
+    return fetch(url)
+      .then(function (response) {
+        return response.json();
+      })
+      .then(
+        function (jsonResponse) {
+          if (
+            jsonResponse !== undefined &&
+            jsonResponse["GeocodeInfo"] !== undefined
+          ) {
+            return jsonResponse["GeocodeInfo"][0];
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
+
+  callPlaces = (query) => {
+    let url = new URL(
+      "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?"
+    );
+    let params = new URLSearchParams(url.search.slice(1));
+    params.append("input", query);
+
+    var search =
+      "https://fathomless-falls-12833.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?key=AIzaSyD-VLudeXJLkXugSRNCVNY4dySGsiM1AcY&fields=geometry&inputtype=textquery&" +
+      params.toString() +
+      "&location=1.3521,103.8198&radius=100000";
+
+    console.log(search);
+    return fetch(search)
+      .then(function (response) {
+        return response.json();
+      })
+      .then(
+        function (jsonResponse) {
+          if (
+            jsonResponse &&
+            jsonResponse.candidates &&
+            jsonResponse.candidates[0]
+          ) {
+            console.log(jsonResponse);
+            return jsonResponse.candidates[0].geometry.location;
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
+
+  continueUpload = async (images, element) => {
+    var postal;
+    var street;
+    var latitude;
+    var longitude;
+    if (element.location && element.location.lat) {
+      let places = await this.callPlaces(element.address);
+      latitude = places ? places.lat : null;
+      longitude = places ? places.lng : null;
+      console.log("Lat Lng: " + latitude, longitude);
+      let result = await this.callLatLng(latitude, longitude);
+      postal = result ? result.POSTALCODE : null;
+
+      if (postal !== undefined && postal !== null) {
+        let data = await this.callPostal(postal);
+        if (postal !== undefined && data !== undefined) {
+          street = data["ADDRESS"];
+          longitude = data["LONGITUDE"];
+          latitude = data["LATITUDE"];
+          postal = data["POSTAL"] !== "NIL" ? data["POSTAL"] : null;
+        }
+      }
+    }
+
+    if (latitude && longitude) {
+      console.log({
+        url: images[0] !== undefined ? images[0] : "",
+        image2: images[1] !== undefined ? images[1] : "",
+        image3: images[2] !== undefined ? images[2] : "",
+        image4: images[3] !== undefined ? images[3] : "",
+        image5: images[4] !== undefined ? images[4] : "",
+        image6: images[5] !== undefined ? images[5] : "",
+        name: element.name !== undefined ? element.name : "",
+        cuisine: [],
+        postal: postal !== undefined ? postal : "",
+        street: street !== undefined ? street : "",
+        unit: "",
+        description:
+          element.description !== undefined
+            ? element.description.slice(0, 40)
+            : "",
+        description_detail:
+          element.description !== undefined
+            ? element.description + "\n Contributed by take.sg"
+            : "",
+        region: ["Islandwide"],
+        price:
+          element.delivery_cost !== undefined
+            ? "$" + element.delivery_cost
+            : "",
+        contact: element.phone !== undefined ? element.phone.slice(2) : "",
+        latitude: latitude !== undefined ? latitude : "",
+        longitude: longitude !== undefined ? longitude : "",
+        call: true,
+        whatsapp: true,
+        sms: true,
+        inperson: !element.selfPickupOff,
+        opening: "",
+        pickup_option: !element.selfPickupOff,
+        delivery_option: true,
+        website: element.reference !== undefined ? element.reference : "",
+        promo: element.sale !== undefined ? element.sale : "",
+        condition: "",
+        delivery_detail: "",
+        menu: true,
+        menuitem: [],
+        menuprice: [],
+        toggle: "create",
+        docid: "",
+        wechatid: "",
+        location: geo.point(Number(latitude), Number(longitude)),
+        menu_combined: element.menus !== undefined ? element.menus : "",
+        tagsValue: element.tags !== undefined ? element.tags : "",
+        delivery: "",
+      });
+      await addData({
+        url: images[0] !== undefined ? images[0] : "",
+        image2: images[1] !== undefined ? images[1] : "",
+        image3: images[2] !== undefined ? images[2] : "",
+        image4: images[3] !== undefined ? images[3] : "",
+        image5: images[4] !== undefined ? images[4] : "",
+        image6: images[5] !== undefined ? images[5] : "",
+        name: element.name !== undefined ? element.name : "",
+        cuisine: [],
+        postal: postal !== undefined ? postal : "",
+        street: street !== undefined ? street : "",
+        unit: "",
+        description:
+          element.description !== undefined
+            ? element.description.slice(0, 40)
+            : "",
+        description_detail:
+          element.description !== undefined
+            ? element.description + "\n Contributed by take.sg"
+            : "",
+        region: ["Islandwide"],
+        price:
+          element.delivery_cost !== undefined
+            ? "$" + element.delivery_cost
+            : "",
+        contact: element.phone !== undefined ? element.phone.slice(2) : "",
+        latitude: latitude !== undefined ? latitude : "",
+        longitude: longitude !== undefined ? longitude : "",
+        call: true,
+        whatsapp: true,
+        sms: true,
+        inperson: !element.selfPickupOff,
+        opening: "",
+        pickup_option: !element.selfPickupOff,
+        delivery_option: true,
+        website: element.reference !== undefined ? element.reference : "",
+        promo: element.sale !== undefined ? element.sale : "",
+        condition: "",
+        delivery_detail: "",
+        menu: true,
+        menuitem: [],
+        menuprice: [],
+        toggle: "create",
+        docid: "",
+        wechatid: "",
+        location: geo.point(Number(latitude), Number(longitude)),
+        menu_combined: element.menus !== undefined ? element.menus : "",
+        tagsValue: element.tags !== undefined ? element.tags : "",
+        delivery: "",
+      });
+    } else {
+      console.log(
+        "Not Valid. Skipping..." + element.name + " " + element.address
+      );
+      console.log(latitude, longitude, postal);
+    }
+  };
+
+  startUpload = async () => {
+    console.log("upload started");
+    var existing = [];
+    await db
+      .collection("development")
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((d) => {
+          existing.push(d.data().name);
+        });
+      });
+    fetch(
+      "https://fathomless-falls-12833.herokuapp.com/"
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(
+        (jsonResponse) => {
+          jsonResponse.forEach(async (element) => {
+            if (
+              element.address !== undefined &&
+              !existing.includes(element.name)
+            ) {
+              let images = [];
+              for (let index = 0; index < 6; index++) {
+                if (element.images[index]) {
+                  let image_url =
+                    "https://fathomless-falls-12833.herokuapp.com/" +
+                    element.images[index];
+                  let newName = element.name + index;
+                  var jobs = [];
+                  let job = Jimp.read(image_url)
+                    .then(async (image) => {
+                      image.quality(50);
+                      image.resize(Jimp.AUTO, 750);
+                      image.getBase64(Jimp.AUTO, async (_err, res) => {
+                        const uploadTask = storage
+                          .ref(`/images/${newName}`)
+                          .putString(res, "data_url");
+                        uploadTask.on(
+                          "state_changed",
+                          (snapShot) => {
+                            //takes a snap shot of the process as it is happening
+                            console.log(snapShot);
+                          },
+                          (err) => {
+                            //catches the errors
+                            console.log(err);
+                          },
+                          () => {
+                            // gets the functions from storage refences the image storage in firebase by the children
+                            // gets the download url then sets the image from firebase as the value for the imgUrl key:
+                            storage
+                              .ref("images")
+                              .child(newName)
+                              .getDownloadURL()
+                              .then((fireBaseUrl) => {
+                                console.log(fireBaseUrl);
+                                images.push(fireBaseUrl);
+                              });
+                          }
+                        );
+                      });
+                    })
+                    .catch((e) => {
+                      console.log(e);
+                      return null;
+                    });
+                  jobs.push(job);
+                }
+              }
+              await Promise.all(jobs);
+              await this.continueUpload(images, element);
+              console.log("Completed");
+            }
+          });
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
+
+  handleTakeUpload = (image_url, newName) => {
+    Jimp.read(image_url).then((image) => {
+      image.quality(50);
+      image.resize(Jimp.AUTO, 750);
+      image.getBase64(Jimp.AUTO, (err, res) => {
+        const uploadTask = storage
+          .ref(`/images/${newName}`)
+          .putString(res, "data_url");
+        uploadTask.on(
+          "state_changed",
+          (snapShot) => {
+            //takes a snap shot of the process as it is happening
+            console.log(snapShot);
+          },
+          (err) => {
+            //catches the errors
+            console.log(err);
+          },
+          () => {
+            // gets the functions from storage refences the image storage in firebase by the children
+            // gets the download url then sets the image from firebase as the value for the imgUrl key:
+            storage
+              .ref("images")
+              .child(newName)
+              .getDownloadURL()
+              .then((fireBaseUrl) => {
+                console.log(fireBaseUrl);
+              });
+          }
+        );
+      });
+    });
   };
 
   handleFireBaseUpload = (image, newName, name) => {
@@ -722,6 +1040,18 @@ export class ListForm extends React.Component {
   render({ apiReady, maps, map } = this.state) {
     return (
       <div>
+        <Button
+          class="shadow-sm"
+          style={{
+            backgroundColor: "#b48300",
+            borderColor: "#b48300",
+          }}
+          type="Submit"
+          onClick={this.startUpload}
+        >
+          Test
+        </Button>
+
         <Form onSubmit={this.handleSubmit.bind(this)}>
           <div class="row">
             <div class="col">

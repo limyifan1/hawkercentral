@@ -44,7 +44,7 @@ export class Info extends React.Component {
 
   getDoc = async () => {
     await db
-      .collection("hawkers")
+      .collection("development")
       .doc(this.state.id)
       .get()
       .then((snapshot) => {
@@ -62,21 +62,23 @@ export class Info extends React.Component {
   };
 
   getMenu = () => {
-    if (this.state.data.menuitem) {
+    if (this.state.data.menu_combined) {
       let data = [];
-      for (let i = 0; i < this.state.data.menuitem.length; i = i + 1) {
+      this.state.data.menu_combined.forEach((element) => {
         if (
-          this.state.data.menuitem[i] !== "" &&
-          this.state.data.menuitem !== undefined
+          element.name &&
+          element.name !== "" &&
+          element.price &&
+          element.price !== ""
         ) {
           data.push(
             <div>
-              {this.state.data.menuitem ? this.state.data.menuitem[i] : null} -
-              ${this.state.data.menuprice ? this.state.data.menuprice[i] : null}
+              {element.name && element.name !== "" ? element.name : null} - $
+              {element.price && element.price !== "" ? element.price : null}
             </div>
           );
         }
-      }
+      });
       return data;
     }
   };
@@ -375,7 +377,9 @@ export class Info extends React.Component {
                       {this.state.data.whatsapp ? (
                         <a
                           href={link}
-                          onClick={()=>onLoad("message", this.state.data.name)}
+                          onClick={() =>
+                            onLoad("message", this.state.data.name)
+                          }
                         >
                           <span
                             class="card shadow-lg"
@@ -437,7 +441,7 @@ export class Info extends React.Component {
                   ) : null}
                   <br />
                   <Clap
-                    collection={"hawkers"}
+                    collection={"development"}
                     id={this.state.id}
                     claps={this.state.data.claps}
                   />
