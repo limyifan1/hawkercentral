@@ -11,7 +11,7 @@
     "bootstrap": "4.4.1",
     "cheerio": "1.0.0-rc.3",
     "csv-writer": "1.6.0",
-    "firebase": "7.14.2",
+    "firebase": "7.14.3",
     "geofirex": "0.1.0",
     "google-map-react": "1.1.7",
     "jimp": "0.10.3",
