@@ -134,33 +134,39 @@ export class Delivery extends React.Component {
           this.setState({ data: snapshot.data(), retrieved: true });
         }
         onLoad("info_load", snapshot.data().name);
-        if (!snapshot.data().viewed && !snapshot.data().cancelled && !snapshot.data().expired) {
+        if (
+          !snapshot.data().viewed &&
+          !snapshot.data().cancelled &&
+          !snapshot.data().expired
+        ) {
           await db
             .collection("deliveries")
             .doc(this.state.id)
             .update({ viewed: true })
-            .then((d) => {});
-          await this.sendData({
-            message_id: snapshot.data().message_id,
-            driver_mobile: this.state.driver_contact,
-            requester_mobile: snapshot.data().contact,
-            customer_mobile: snapshot.data().contact_to,
-            origin: snapshot.data().unit + " " + snapshot.data().street,
-            destination:
-              snapshot.data().unit_to + " " + snapshot.data().street_to,
-            time:
-              snapshot.data().time && typeof snapshot.data().time !== "string"
-                ? dayName[snapshot.data().time.toDate().getDay()] +
-                  " " +
-                  snapshot.data().time.toDate().getDate() +
-                  " " +
-                  monthNames[snapshot.data().time.toDate().getMonth()] +
-                  " " +
-                  formatAMPM(snapshot.data().time.toDate())
-                : null,
-            note: snapshot.data().note,
-            cost: snapshot.data().cost,
-          });
+            .then(async (d) => {
+              await this.sendData({
+                message_id: snapshot.data().message_id,
+                driver_mobile: this.state.driver_contact,
+                requester_mobile: snapshot.data().contact,
+                customer_mobile: snapshot.data().contact_to,
+                origin: snapshot.data().unit + " " + snapshot.data().street,
+                destination:
+                  snapshot.data().unit_to + " " + snapshot.data().street_to,
+                time:
+                  snapshot.data().time &&
+                  typeof snapshot.data().time !== "string"
+                    ? dayName[snapshot.data().time.toDate().getDay()] +
+                      " " +
+                      snapshot.data().time.toDate().getDate() +
+                      " " +
+                      monthNames[snapshot.data().time.toDate().getMonth()] +
+                      " " +
+                      formatAMPM(snapshot.data().time.toDate())
+                    : null,
+                note: snapshot.data().note,
+                cost: snapshot.data().cost,
+              });
+            });
         }
         return true;
       })
