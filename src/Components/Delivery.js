@@ -122,27 +122,28 @@ export class Delivery extends React.Component {
             .collection("deliveries")
             .doc(this.state.id)
             .update({ viewed: true })
-            .then((d) => {});
-          await this.sendData({
-            message_id: snapshot.data().message_id,
-            driver_mobile: this.state.driver_contact,
-            requester_mobile: snapshot.data().contact,
-            customer_mobile: snapshot.data().contact_to,
-            origin: snapshot.data().unit + " " + snapshot.data().street,
-            destination:
-              snapshot.data().unit_to + " " + snapshot.data().street_to,
-            time: snapshot.data().time
-              ? dayName[snapshot.data().time.toDate().getDay()] +
-                " " +
-                snapshot.data().time.toDate().getDate() +
-                " " +
-                monthNames[snapshot.data().time.toDate().getMonth()] +
-                " " +
-                formatAMPM(snapshot.data().time.toDate())
-              : null,
-            note: snapshot.data().note,
-            cost: snapshot.data().cost,
-          });
+            .then(async (d) => {
+              await this.sendData({
+                message_id: snapshot.data().message_id,
+                driver_mobile: this.state.driver_contact,
+                requester_mobile: snapshot.data().contact,
+                customer_mobile: snapshot.data().contact_to,
+                origin: snapshot.data().unit + " " + snapshot.data().street,
+                destination:
+                  snapshot.data().unit_to + " " + snapshot.data().street_to,
+                time: snapshot.data().time
+                  ? dayName[snapshot.data().time.toDate().getDay()] +
+                    " " +
+                    snapshot.data().time.toDate().getDate() +
+                    " " +
+                    monthNames[snapshot.data().time.toDate().getMonth()] +
+                    " " +
+                    formatAMPM(snapshot.data().time.toDate())
+                  : null,
+                note: snapshot.data().note,
+                cost: snapshot.data().cost,
+              });
+            });
         }
         return true;
       })
