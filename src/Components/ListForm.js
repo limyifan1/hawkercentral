@@ -337,8 +337,8 @@ export class ListForm extends React.Component {
       cuisineValue: ["cuisine", "categories"],
       region: ["region", "regions"],
       latitude: ["latitude", "location"],
-      menuitem: ["menu_combined"],
-      menuprice: ["menu_combined"],
+      menuitem: ["menuitem", "menu_combined"],
+      menuprice: ["menuprice", "menu_combined"],
     }
     
     let edited_fields = [];
