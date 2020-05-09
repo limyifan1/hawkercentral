@@ -335,9 +335,21 @@ export class Info extends React.Component {
                   </svg>
                   {this.state.data.website ? (
                     this.state.data.website.slice(0, 4) === "http" ? (
-                      <a href={this.state.data.website}>Website Link</a>
+                      <a
+                        onClick={() =>
+                          onLoad("website_click", this.state.data.name)
+                        }
+                        href={this.state.data.website}
+                      >
+                        Website Link
+                      </a>
                     ) : (
-                      <a href={"https://" + this.state.data.website}>
+                      <a
+                        onClick={() =>
+                          onLoad("website_click", this.state.data.name)
+                        }
+                        href={"https://" + this.state.data.website}
+                      >
                         Website Link
                       </a>
                     )
