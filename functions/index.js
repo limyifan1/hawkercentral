@@ -183,11 +183,11 @@ exports.telegramEdit = functions
       twilio.messages
         .create({
           body:
-            "Your order has been picked up by a driver. 您的要求以有司机接受。\n Driver Mobile 司机手机号: +65" +
+            "Order picked up by driver 您的订单已有司机接受。\n Driver 司机: +65" +
             driver_mobile +
-            "\n Delivery Fee: $" +
+            "\n Delivery 运送: $" +
             cost +
-            "\n Pickup Time: " +
+            "\n Pickup 抵达: " +
             time,
           from: "+12015847715",
           to: "+65" + requester_mobile,
