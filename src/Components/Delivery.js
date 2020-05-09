@@ -405,7 +405,7 @@ export class Delivery extends React.Component {
                             <br />
                             {this.state.data.time ? (
                               <div>
-                                <b>Pickup Time:</b> <br />
+                                <b>Pickup Time:</b>
                                 {dayName[
                                   this.state.data.time.toDate().getDay()
                                 ] +
@@ -423,13 +423,13 @@ export class Delivery extends React.Component {
                             <br />
                             <b>Distance:</b> {this.state.data.distance}
                             <br />
-                            {this.state.duration ? (
+                            {this.state.data.duration ? (
                               <div>
                                 <b>Est. Duration:</b> {this.state.data.duration}
                                 <br />{" "}
                               </div>
                             ) : null}
-                            {this.state.arrival ? (
+                            {this.state.data.arrival ? (
                               <div>
                                 <b>Est. Arrival Time:</b>{" "}
                                 {this.state.data.arrival}
