@@ -155,15 +155,18 @@ const handleData = async ({
       });
     return id;
   } else if (toggle === "edit") {
-    let editedFieldsAndValues = _.pick(field, editedFields);
-    console.log(editedFieldsAndValues);
-    await Helpers.sendEmailToUpdateListing(docid, editedFieldsAndValues)
-      .then((result) => {
-        console.log(result);
-      })
-      .catch(function (error) {
-        console.error("Error sending email: ", error);
-      });
+    if (editedFields.length > 0) {
+      let editedFieldsAndValues = _.pick(field, editedFields);
+      await Helpers.sendEmailToUpdateListing(docid, editedFieldsAndValues)
+        .then((result) => {
+          console.log(result);
+        })
+        .catch(function (error) {
+          console.error("Error sending email: ", error);
+        });
+    }
+
+    return docid;
   }
 };
 
@@ -430,7 +433,12 @@ export class ListForm extends React.Component {
         });
       } else if (this.props.toggle === "edit") {
         this.setState({ isLoading: false });
-        this.props.onSubmitEdit();
+
+        if (edited_fields.length === 0) {
+          this.props.onSubmitEdit(false);
+        } else {
+          this.props.onSubmitEdit(true);
+        }
       }
     });
   };

@@ -28,9 +28,12 @@ export class Popup extends React.Component {
     this.setState({ show: false });
   };
 
-  handleSubmitEdit = () => {
+  handleSubmitEdit = (hasEdit) => {
     this.setHide();
-    this.props.onSubmitEdit();
+
+    if (hasEdit) {
+      this.props.onSubmitEdit();
+    }
   }
 
   render() {
