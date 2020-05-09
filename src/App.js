@@ -21,7 +21,7 @@ if (cookies.get("language") === null || cookies.get("language") === undefined) {
   cookies.set("language", "en", { path: "/" });
 }
 
-{/* This will only be useful if we convert to server-side rendering ie not CRA */}
+// {/* This will only be useful if we convert to server-side rendering ie not CRA */}
 function SeoHelmet() {
   const description = "Save our local F&B! FoodLeh? is a nonprofit crowdsourced hawker directory relying on Singaporeans to share information about our local F&B places.";
   const url = "https://www.foodleh.app/";
