@@ -6,7 +6,7 @@
 import React, { Fragment } from "react";
 import "../App.css";
 import { db, storage, geo } from "./Firestore";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Spinner } from "react-bootstrap";
 import logo from "../mrt_logo.png";
 import Select from "react-select";
 import Item from "./Item";
@@ -216,6 +216,7 @@ export class ListForm extends React.Component {
       wechatid: "",
       tagsValue: [],
       tags: [],
+      isLoading: false,
     };
 
     this.initialState = _.cloneDeep(this.state);
@@ -370,6 +371,7 @@ export class ListForm extends React.Component {
     });
     let edited_fields = [];
     if (this.props.toggle === "edit") {
+      this.setState({ isLoading: true });
       edited_fields = this.getEditedFields();
     }
 
@@ -428,6 +430,7 @@ export class ListForm extends React.Component {
         });
       } else if (this.props.toggle === "edit") {
         console.log("Your listing will be updated after your edits are approved!");
+        this.setState({ isLoading: false });
         this.props.onSubmitEdit();
       }
     });
@@ -2003,8 +2006,17 @@ export class ListForm extends React.Component {
                               }}
                               type="Submit"
                               // onClick={this.handleSubmit}
+                              disabled={this.state.isLoading}
                             >
-                              {context.data.create.submit}
+                              { this.state.isLoading 
+                              ? <Spinner
+                                  as="span"
+                                  animation="border"
+                                  size="sm"
+                                  role="status"
+                                  aria-hidden="true"
+                                />
+                              : context.data.create.submit }
                             </Button>
                           </div>
                         </div>
