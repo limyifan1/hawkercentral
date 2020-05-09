@@ -131,7 +131,7 @@ exports.telegramSend = functions
       twilio.messages
         .create({
           body:
-            "Your request has been received and will expire 30 minutes before pickup time. To cancel your request, please go to link below.  我们已收到您的要求。若在取食物的三十分钟之前没有司机接受，您的要求并会自动取消。若您要马上取消，请到以下链接：" +
+            "Request received & expire 30 minutes before pickup.  我们已收到您的要求并在取食物时间的三十分钟前自动取消. To Cancel 马上取消: " +
             cancel +
             ".",
           from: "+12015847715",
@@ -200,11 +200,11 @@ exports.telegramEdit = functions
       twilio.messages
         .create({
           body:
-            "Your order has been confirmed. \n " +
-            "Stall Contact: +65" +
+            "Order Confirmed: "+time+" \n " +
+            "Stall: " +
             requester_mobile +
             "\n" +
-            "Customer Mobile: +65" +
+            "Customer: " +
             customer_mobile +
             "\n" +
             "From: " +
@@ -213,13 +213,11 @@ exports.telegramEdit = functions
             "To: " +
             destination +
             "\n" +
-            "Pickup Time: " +
-            time +
             "\n" +
-            "Est. Arrival (15 min buffer): " +
+            "ETA: " +
             arrival +
             "\n" +
-            "Delivery Fee: $" +
+            "Delivery: $" +
             cost +
             "\n" +
             "Note: " +
