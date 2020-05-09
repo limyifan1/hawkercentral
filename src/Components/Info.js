@@ -23,6 +23,16 @@ import menu_title from "../assets/info_menu.png";
 import delivery_title from "../assets/info_delivery.png";
 import revieworder from "../assets/info_review_order.png";
 import firebase from "./Firestore";
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  TwitterShareButton,
+  TwitterIcon,
+  TelegramShareButton,
+  TelegramIcon,
+  WhatsappShareButton,
+  WhatsappIcon,
+} from "react-share";
 
 const analytics = firebase.analytics();
 function onLoad(name, item) {
@@ -59,6 +69,7 @@ export class Info extends React.Component {
   componentWillMount() {
     this.getDoc();
     console.log("run");
+    console.log(window.location.href);
   }
 
   getDoc = async () => {
@@ -137,8 +148,8 @@ export class Info extends React.Component {
   callPostal = (postal) => {
     return fetch(
       "https://developers.onemap.sg/commonapi/search?searchVal=" +
-        postal +
-        "&returnGeom=Y&getAddrDetails=Y"
+      postal +
+      "&returnGeom=Y&getAddrDetails=Y"
     )
       .then(function (response) {
         return response.json();
@@ -275,11 +286,11 @@ export class Info extends React.Component {
         this.state.orderData[idx] === 0.0
           ? this.state.totalPrice
           : parseFloat(this.state.totalPrice) -
-            parseFloat(
-              this.state.data.menu_combined[idx].price
-                ? this.state.data.menu_combined[idx].price
-                : 0
-            ),
+          parseFloat(
+            this.state.data.menu_combined[idx].price
+              ? this.state.data.menu_combined[idx].price
+              : 0
+          ),
       orderData: update(this.state.orderData, {
         [idx]: {
           $set:
@@ -349,8 +360,8 @@ export class Info extends React.Component {
                         <b>
                           {this.state.orderData[i] !== undefined
                             ? this.state.orderData[
-                                JSON.parse(JSON.stringify(i))
-                              ]
+                            JSON.parse(JSON.stringify(i))
+                            ]
                             : 0}
                         </b>
                       </span>
@@ -407,7 +418,7 @@ export class Info extends React.Component {
           value="click"
           className={`image-gallery-fullscreen-button${
             isFullscreen ? " active" : ""
-          }`}
+            }`}
           onClick={onClick}
         />
       );
@@ -594,32 +605,32 @@ export class Info extends React.Component {
                     </div>
                   ) : null}
                   {this.state.data.pickup_option ||
-                  this.state.data.delivery_option ? (
-                    <div>
-                      <svg
-                        class="bi bi-bag"
-                        width="14"
-                        height="14"
-                        viewBox="0 0 16 16"
-                        fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M14 5H2v9a1 1 0 001 1h10a1 1 0 001-1V5zM1 4v10a2 2 0 002 2h10a2 2 0 002-2V4H1z"
-                          clip-rule="evenodd"
-                        />
-                        <path d="M8 1.5A2.5 2.5 0 005.5 4h-1a3.5 3.5 0 117 0h-1A2.5 2.5 0 008 1.5z" />
-                      </svg>{" "}
-                      {this.state.data.pickup_option ? (
-                        <span class="badge badge-success">Da Bao</span>
-                      ) : null}
-                      {this.state.data.delivery_option ? (
-                        <span class="badge badge-success">Delivery</span>
-                      ) : null}{" "}
-                      <br />
-                    </div>
-                  ) : null}
+                    this.state.data.delivery_option ? (
+                      <div>
+                        <svg
+                          class="bi bi-bag"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 16 16"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M14 5H2v9a1 1 0 001 1h10a1 1 0 001-1V5zM1 4v10a2 2 0 002 2h10a2 2 0 002-2V4H1z"
+                            clip-rule="evenodd"
+                          />
+                          <path d="M8 1.5A2.5 2.5 0 005.5 4h-1a3.5 3.5 0 117 0h-1A2.5 2.5 0 008 1.5z" />
+                        </svg>{" "}
+                        {this.state.data.pickup_option ? (
+                          <span class="badge badge-success">Da Bao</span>
+                        ) : null}
+                        {this.state.data.delivery_option ? (
+                          <span class="badge badge-success">Delivery</span>
+                        ) : null}{" "}
+                        <br />
+                      </div>
+                    ) : null}
                   {regions.length > 0 ? (
                     <div>
                       <svg
@@ -716,17 +727,17 @@ export class Info extends React.Component {
                           </a>
                         </span>
                         {this.state.data.menu &&
-                        this.state.data.menu_combined.length > 0 &&
-                        this.state.data.menu_combined[0].name !== "" ? (
-                          <span class="">
-                            <img
-                              alt=""
-                              onClick={this.enterDetails}
-                              src={orderleh}
-                              style={{ width: "25%", cursor: "pointer" }}
-                            />
-                          </span>
-                        ) : null}
+                          this.state.data.menu_combined.length > 0 &&
+                          this.state.data.menu_combined[0].name !== "" ? (
+                            <span class="">
+                              <img
+                                alt=""
+                                onClick={this.enterDetails}
+                                src={orderleh}
+                                style={{ width: "25%", cursor: "pointer" }}
+                              />
+                            </span>
+                          ) : null}
 
                         {this.state.wantToOrder ? (
                           <div>
@@ -828,12 +839,12 @@ export class Info extends React.Component {
                                                 >
                                                   <b>
                                                     {this.state.orderData[i] !==
-                                                    undefined
+                                                      undefined
                                                       ? this.state.orderData[
-                                                          JSON.parse(
-                                                            JSON.stringify(i)
-                                                          )
-                                                        ]
+                                                      JSON.parse(
+                                                        JSON.stringify(i)
+                                                      )
+                                                      ]
                                                       : 0}
                                                   </b>
                                                 </span>
@@ -1094,6 +1105,31 @@ export class Info extends React.Component {
                     ) : null}
                   </div>
                   <br />
+                  Share this with friends! 
+                  <br />
+                  <FacebookShareButton 
+                    url={"www.foodleh.app/info?id=" + this.state.id}
+                    quote={"Hungry? Try out " + this.state.data.name + " now!"}
+                    hashtag={"#saveourFnB"}>
+                    <FacebookIcon size={32} round={true} />
+                  </FacebookShareButton>{" "}
+                  <WhatsappShareButton 
+                    url={"www.foodleh.app/info?id=" + this.state.id}
+                    title={"Hungry? Try out " + this.state.data.name + " now!"}>
+                    <WhatsappIcon size={32} round={true} />
+                  </WhatsappShareButton>{" "}
+                  <TelegramShareButton 
+                    url={"www.foodleh.app/info?id=" + this.state.id}
+                    title={"Hungry? Try out " + this.state.data.name + " now!"}>
+                    <TelegramIcon size={32} round={true} />
+                  </TelegramShareButton>{" "}
+                  <TwitterShareButton 
+                  url={"www.foodleh.app/info?id=" + this.state.id}
+                  title={"Hungry? Try out " + this.state.data.name + " now!"}>
+                    <TwitterIcon size={32} round={true} />
+                  </TwitterShareButton>{" "}
+
+                  <br />
                   <Component.Popup data={this.state.data} id={this.state.id} />
                   <br />
                   {this.state.data.promo ? (
@@ -1116,7 +1152,7 @@ export class Info extends React.Component {
                         >
                           <b>{this.state.data.promo}</b>:{" "}
                           {this.state.data.condition &&
-                          this.state.data.condition.length > 40
+                            this.state.data.condition.length > 40
                             ? this.state.data.condition.slice(0, 40) + "..."
                             : this.state.data.condition}
                         </div>
@@ -1144,23 +1180,23 @@ export class Info extends React.Component {
                       </p>
                     ) : null}
                     {this.state.data.description_detail &&
-                    this.state.data.description_detail !== "" &&
-                    this.state.data.description_detail !== undefined ? (
-                      <div>
-                        {console.log(this.state.data.description_detail)}
-                        <h6 style={{ marginBottom: "0px" }}>
-                          <b>Detailed Description</b>
-                        </h6>
-                        <p
-                          style={{
-                            "white-space": "pre-line",
-                            marginBottom: "20px",
-                          }}
-                        >
-                          {this.state.data.description_detail}
-                        </p>
-                      </div>
-                    ) : null}
+                      this.state.data.description_detail !== "" &&
+                      this.state.data.description_detail !== undefined ? (
+                        <div>
+                          {console.log(this.state.data.description_detail)}
+                          <h6 style={{ marginBottom: "0px" }}>
+                            <b>Detailed Description</b>
+                          </h6>
+                          <p
+                            style={{
+                              "white-space": "pre-line",
+                              marginBottom: "20px",
+                            }}
+                          >
+                            {this.state.data.description_detail}
+                          </p>
+                        </div>
+                      ) : null}
                   </Linkify>
                   {/* {Menu appears if menu data is present and whatsapp is not present} */}
                   {this.state.data.menu && !this.state.data.whatsapp ? (
@@ -1241,13 +1277,13 @@ export class Info extends React.Component {
             </div>
           </div>
         ) : (
-          <div class="row h-100 page-container">
-            <div class="col-sm-12 my-auto">
-              <h3>Loading</h3>
-              <Spinner class="" animation="grow" />
+            <div class="row h-100 page-container">
+              <div class="col-sm-12 my-auto">
+                <h3>Loading</h3>
+                <Spinner class="" animation="grow" />
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </div>
     );
   }
