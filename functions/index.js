@@ -216,7 +216,7 @@ exports.telegramEdit = functions
             "Pickup Time: " +
             time +
             "\n" +
-            "Est. Arrival: " +
+            "Est. Arrival (15 min buffer): " +
             arrival +
             "\n" +
             "Delivery Fee: $" +
