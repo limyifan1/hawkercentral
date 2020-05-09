@@ -687,6 +687,7 @@ export class Info extends React.Component {
                       onClick={() =>
                         onLoad("website_click", this.state.data.name)
                       }
+                      target="blank"
                     >
                       <img
                         alt=""
