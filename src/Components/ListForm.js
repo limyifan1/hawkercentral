@@ -13,10 +13,16 @@ import Item from "./Item";
 import Jimp from "jimp";
 import Helpers from "../Helpers/helpers";
 import CreatableSelect from "react-select/creatable";
-
+import firebase from "./Firestore";
 import { withRouter } from "react-router-dom";
 import { LanguageContext } from "./themeContext";
 // const API_KEY = `${process.env.REACT_APP_GKEY}`
+
+const analytics = firebase.analytics();
+
+function onClick(name) {
+  analytics.logEvent(name)
+}
 
 const icon = (
   <div>
@@ -328,6 +334,12 @@ export class ListForm extends React.Component {
         price: this.state.menuprice[index],
       };
     });
+    if(this.props.toggle === "create"){
+      onClick("create_submit_click")
+    }
+    else{
+        onClick("edit_submit_click")
+    }
     await addData({
       url: this.state.image1,
       image2: this.state.image2,
