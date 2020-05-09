@@ -83,6 +83,7 @@ export class Popup extends React.Component {
               toggle="edit"
               id={this.props.id}
               data={this.props.data}
+              onSubmitEdit={this.setHide}
             />
           </Modal.Body>
         </Modal>

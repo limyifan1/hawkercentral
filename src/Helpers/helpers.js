@@ -1,3 +1,5 @@
+import emailjs from 'emailjs-com';
+
 /**
  * compare two values and returns true if match else false
  * @param str1
@@ -44,8 +46,31 @@ function mapSnapshotToDocs (snapshot) {
 	return data;
 }
 
+/**
+ * Sends an email to notify of a proposed change to a listform
+ * @param doc_id - document id as assigned in Firebase
+ * @param listform_fields - listform fields with proposed updates
+ */
+async function sendEmailToUpdateListing(doc_id, listform_fields) {
+	const EMAIL_API_KEY = `${process.env.REACT_APP_EMAIL_API_KEY}`;
+	const email_params = {
+		listing_id: doc_id,
+		message: JSON.stringify(listform_fields, null, 2),
+	}
+
+	await emailjs.send('outlook', 'contact_form', email_params, EMAIL_API_KEY)
+		.then((result) => {
+			console.log(result);
+			return result;
+		}, (error) => {
+			console.log(error);
+			return error;
+		});
+}
+
 export default {
 	compareString,
 	capitalizeFirstLetter,
-	mapSnapshotToDocs
+	mapSnapshotToDocs,
+	sendEmailToUpdateListing
 }
