@@ -95,6 +95,7 @@ exports.telegramSend = functions
       var cancel = "www.foodleh.app/delivery?cancel=" + id;
       var requester_mobile = req.body.requester_mobile;
       var duration = req.body.duration
+      var arrival = req.body.arrival
       var message =
         "<b>New Order Received</b> \n" +
         "<b>From: </b> <a href='https://maps.google.com/?q=" +
@@ -115,6 +116,9 @@ exports.telegramSend = functions
         "\n" +
         "<b>Est. Duration: </b>" +
         duration +
+        "\n" +
+        "<b>Est. Arrival: </b>" +
+        arrival +
         "\n" +
         "<b>Click to Accept (first come first serve): </b>" +
         url +
@@ -174,6 +178,7 @@ exports.telegramEdit = functions
         : null;
       var note = req.body.note ? req.body.note : null;
       var cost = req.body.cost ? req.body.cost : null;
+      var arrival = req.body.arrival ? req.body.arrival : null;
 
       twilio.messages
         .create({
@@ -210,6 +215,9 @@ exports.telegramEdit = functions
             "\n" +
             "Pickup Time: " +
             time +
+            "\n" +
+            "Est. Arrival: " +
+            arrival +
             "\n" +
             "Delivery Fee: $" +
             cost +
