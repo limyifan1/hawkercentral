@@ -17,7 +17,7 @@ import { withRouter } from "react-router-dom";
 import update from "immutability-helper";
 import whatsapp_button from "../assets/whatsapp_button.png";
 import orderleh from "../assets/orderleh.png";
-import menu_button from "../assets/menu_button.png";
+// import menu_button from "../assets/menu_button.png";
 import website_button from "../assets/website_button.png";
 import menu_title from "../assets/info_menu.png";
 import delivery_title from "../assets/info_delivery.png";
