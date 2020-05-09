@@ -136,8 +136,8 @@ export class Info extends React.Component {
   callPostal = (postal) => {
     return fetch(
       "https://developers.onemap.sg/commonapi/search?searchVal=" +
-        postal +
-        "&returnGeom=Y&getAddrDetails=Y"
+      postal +
+      "&returnGeom=Y&getAddrDetails=Y"
     )
       .then(function (response) {
         return response.json();
@@ -274,11 +274,11 @@ export class Info extends React.Component {
         this.state.orderData[idx] === 0.0
           ? this.state.totalPrice
           : parseFloat(this.state.totalPrice) -
-            parseFloat(
-              this.state.data.menu_combined[idx].price
-                ? this.state.data.menu_combined[idx].price
-                : 0
-            ),
+          parseFloat(
+            this.state.data.menu_combined[idx].price
+              ? this.state.data.menu_combined[idx].price
+              : 0
+          ),
       orderData: update(this.state.orderData, {
         [idx]: {
           $set:
@@ -348,8 +348,8 @@ export class Info extends React.Component {
                         <b>
                           {this.state.orderData[i] !== undefined
                             ? this.state.orderData[
-                                JSON.parse(JSON.stringify(i))
-                              ]
+                            JSON.parse(JSON.stringify(i))
+                            ]
                             : 0}
                         </b>
                       </span>
@@ -406,7 +406,7 @@ export class Info extends React.Component {
           value="click"
           className={`image-gallery-fullscreen-button${
             isFullscreen ? " active" : ""
-          }`}
+            }`}
           onClick={onClick}
         />
       );
@@ -572,22 +572,28 @@ export class Info extends React.Component {
                     {this.state.data.unit} {this.state.data.street}
                   </a>
                   <br />
-                  <svg
-                    class="bi bi-tag-fill"
-                    width="1em"
-                    height="1em"
-                    viewBox="0 0 16 16"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M2 1a1 1 0 00-1 1v4.586a1 1 0 00.293.707l7 7a1 1 0 001.414 0l4.586-4.586a1 1 0 000-1.414l-7-7A1 1 0 006.586 1H2zm4 3.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>{" "}
-                  {cuisine}
-                  <br />
+                  {cuisine.length > 0 ? (
+                    <div>
+                      <svg
+                        class="bi bi-tag-fill"
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M2 1a1 1 0 00-1 1v4.586a1 1 0 00.293.707l7 7a1 1 0 001.414 0l4.586-4.586a1 1 0 000-1.414l-7-7A1 1 0 006.586 1H2zm4 3.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>{" "}
+                      {cuisine}
+                      <br />
+                    </div>
+                  ) : null}
+                  {this.state.data.pickup_option || this.state.data.delivery_option ? (
+                    <div>
                   <svg
                     class="bi bi-bag"
                     width="14"
@@ -610,64 +616,76 @@ export class Info extends React.Component {
                     <span class="badge badge-success">Delivery</span>
                   ) : null}{" "}
                   <br />
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="black"
-                    stroke-width="3"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="feather feather-truck"
-                  >
-                    <rect x="1" y="3" width="15" height="13"></rect>
-                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-                    <circle cx="5.5" cy="18.5" r="2.5"></circle>
-                    <circle cx="18.5" cy="18.5" r="2.5"></circle>
-                  </svg>{" "}
-                  {regions}
-                  <br />
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="black"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="feather feather-globe"
-                    style={{ marginRight: "5px" }}
-                  >
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="2" y1="12" x2="22" y2="12"></line>
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                  </svg>
-                  {this.state.data.website ? (
-                    this.state.data.website.slice(0, 4) === "http" ? (
-                      <a
-                        onClick={() =>
-                          onLoad("website_click", this.state.data.name)
-                        }
-                        href={this.state.data.website}
-                      >
-                        Website Link
-                      </a>
-                    ) : (
-                      <a
-                        onClick={() =>
-                          onLoad("website_click", this.state.data.name)
-                        }
-                        href={"https://" + this.state.data.website}
-                      >
-                        Website Link
-                      </a>
-                    )
+                  </div>
                   ) : null}
-                  <br />
+
+                  {regions.length > 0 ? (
+                    <div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="black"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="feather feather-truck"
+                      >
+                        <rect x="1" y="3" width="15" height="13"></rect>
+                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                        <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                        <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                      </svg>{" "}
+                      {regions}
+                      <br />
+                    </div>
+                  ) : null}
+                  {this.state.data.website ? (
+                    <div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="black"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="feather feather-globe"
+                        style={{ marginRight: "5px" }}
+                      >
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                      </svg>
+
+                      {this.state.data.website.slice(0, 4) === "http" ? (
+                        <a
+                          onClick={() =>
+                            onLoad("website_click", this.state.data.name)
+                          }
+                          href={this.state.data.website}
+                        >
+                          Website Link
+                        </a>
+                      ) : (
+                          <a
+                            onClick={() =>
+                              onLoad("website_click", this.state.data.name)
+                            }
+                            href={"https://" + this.state.data.website}
+                          >
+                            Website Link
+                          </a>
+                        )}
+                      <br />
+                    </div>
+                  ) : null}
+{this.state.data.contact !== "0" ? (
+  <div>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -682,7 +700,7 @@ export class Info extends React.Component {
                   >
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                   </svg>{" "}
-                  {this.state.data.contact ? (
+                  
                     <span>
                       {this.state.data.contact} {" ("}
                       {this.state.data.whatsapp ? <span>WhatsApp </span> : null}
@@ -714,17 +732,17 @@ export class Info extends React.Component {
                             </span>
                           </a>
                           {this.state.data.menu &&
-                          this.state.data.menu_combined.length > 0 &&
-                          this.state.data.menu_combined[0].name !== "" ? (
-                            <span class="col-sm">
-                              <img
-                                alt=""
-                                onClick={this.enterDetails}
-                                src={orderleh}
-                                style={{ width: "25%", cursor: "pointer" }}
-                              />
-                            </span>
-                          ) : null}
+                            this.state.data.menu_combined.length > 0 &&
+                            this.state.data.menu_combined[0].name !== "" ? (
+                              <span class="col-sm">
+                                <img
+                                  alt=""
+                                  onClick={this.enterDetails}
+                                  src={orderleh}
+                                  style={{ width: "25%", cursor: "pointer" }}
+                                />
+                              </span>
+                            ) : null}
 
                           {this.state.wantToOrder ? (
                             <div>
@@ -831,13 +849,13 @@ export class Info extends React.Component {
                                                           i
                                                         ] !== undefined
                                                           ? this.state
-                                                              .orderData[
-                                                              JSON.parse(
-                                                                JSON.stringify(
-                                                                  i
-                                                                )
-                                                              )
-                                                            ]
+                                                            .orderData[
+                                                          JSON.parse(
+                                                            JSON.stringify(
+                                                              i
+                                                            )
+                                                          )
+                                                          ]
                                                           : 0}
                                                       </b>
                                                     </span>
@@ -877,7 +895,7 @@ export class Info extends React.Component {
                                             </div>
                                           );
                                         }
-                                        else{
+                                        else {
                                           return null
                                         }
                                       }
@@ -1105,12 +1123,14 @@ export class Info extends React.Component {
                         </span>
                       ) : null}
                       <br />
+                      </span>
+                    </div>
+                  ) : null}
                       <Component.Popup
                         data={this.state.data}
                         id={this.state.id}
                       />
-                    </span>
-                  ) : null}
+
                   <br />
                   {this.state.data.promo ? (
                     <div
@@ -1132,7 +1152,7 @@ export class Info extends React.Component {
                         >
                           <b>{this.state.data.promo}</b>:{" "}
                           {this.state.data.condition &&
-                          this.state.data.condition.length > 40
+                            this.state.data.condition.length > 40
                             ? this.state.data.condition.slice(0, 40) + "..."
                             : this.state.data.condition}
                         </div>
@@ -1145,25 +1165,40 @@ export class Info extends React.Component {
                     id={this.state.id}
                     claps={this.state.data.claps}
                   />
-                  <br />
-                  <h6 style={{ marginBottom: "0px" }}>
-                    <b>Brief Description</b>a
-                  </h6>
-                  <Linkify>
-                    <p style={{ marginBottom: "20px" }}>
-                      {this.state.data.description}
-                    </p>
-                    <h6 style={{ marginBottom: "0px" }}>
-                      <b>Detailed Description</b>
-                    </h6>
-                    <p
-                      style={{
-                        "white-space": "pre-line",
-                        marginBottom: "20px",
-                      }}
-                    >
-                      {this.state.data.description_detail}
-                    </p>
+
+                  {this.state.data.description ? (
+                    <div>
+                      <br />
+                      <h6 style={{ marginBottom: "0px" }}>
+                        <b>Brief Description</b>
+                      </h6>
+                    </div>
+                  ) : null}
+                  < Linkify >
+                    {
+                      this.state.data.description ? (
+                        <p style={{ marginBottom: "20px" }}>
+                          {this.state.data.description}
+                        </p>
+                      ) : null}
+                    {this.state.data.description_detail 
+                    && this.state.data.description_detail !== ""
+                    &&  this.state.data.description_detail !== undefined ? (
+                      <div>
+                        {console.log(this.state.data.description_detail)}
+                        <h6 style={{ marginBottom: "0px" }}>
+                          <b>Detailed Description</b>
+                        </h6>
+                        <p
+                          style={{
+                            "white-space": "pre-line",
+                            marginBottom: "20px",
+                          }}
+                        >
+                          {this.state.data.description_detail}
+                        </p>
+                      </div>
+                    ) : null}
                   </Linkify>
                   {/* {Menu appears if menu data is present and whatsapp is not present} */}
                   {this.state.data.menu && !this.state.data.whatsapp ? (
@@ -1172,38 +1207,51 @@ export class Info extends React.Component {
                         <b>Menu Items</b>
                       </h6>
                       <p>{this.getMenu()} </p>
+                      <br></br>
                     </div>
                   ) : null}
-                  <br></br>
-                  <h6 style={{ marginBottom: "0px" }}>
-                    <b>Details Regarding Delivery</b>
-                  </h6>
-                  <Linkify>
-                    <p
-                      style={{
-                        "white-space": "pre-line",
-                        marginBottom: "20px",
-                      }}
-                    >
-                      {this.state.data.delivery_detail}
-                    </p>
-                  </Linkify>
-                  <h6 style={{ marginBottom: "0px" }}>
-                    <b>Delivery Fees</b>
-                  </h6>
-                  <p
-                    style={{ "white-space": "pre-line", marginBottom: "20px" }}
-                  >
-                    {this.state.data.price}
-                  </p>
-                  <h6 style={{ marginBottom: "0px" }}>
-                    <b>Opening Hours</b>
-                  </h6>
-                  <p
-                    style={{ "white-space": "pre-line", marginBottom: "20px" }}
-                  >
-                    {this.state.data.opening}
-                  </p>
+
+                  {this.state.data.delivery_detail ? (
+                    <div>
+                      <h6 style={{ marginBottom: "0px" }}>
+                        <b>Details Regarding Delivery</b>
+                      </h6>
+                      <Linkify>
+                        <p
+                          style={{
+                            "white-space": "pre-line",
+                            marginBottom: "20px",
+                          }}
+                        >
+                          {this.state.data.delivery_detail}
+                        </p>
+                      </Linkify>
+                    </div>
+                  ) : null}
+                  {this.state.data.price ? (
+                    <div>
+                      <h6 style={{ marginBottom: "0px" }}>
+                        <b>Delivery Fees</b>
+                      </h6>
+                      <p
+                        style={{ "white-space": "pre-line", marginBottom: "20px" }}
+                      >
+                        {this.state.data.price}
+                      </p>
+                    </div>
+                  ) : null}
+                  {this.state.data.opening ? (
+                    <div>
+                      <h6 style={{ marginBottom: "0px" }}>
+                        <b>Opening Hours</b>
+                      </h6>
+                      <p
+                        style={{ "white-space": "pre-line", marginBottom: "20px" }}
+                      >
+                        {this.state.data.opening}
+                      </p>
+                    </div>
+                  ) : null}
                   {/* <p style={{ marginBottom: "20px" }}>
                     {this.state.data.website ? (
                       this.state.data.website.slice(0, 4) === "http" ? (
@@ -1226,13 +1274,14 @@ export class Info extends React.Component {
             </div>
           </div>
         ) : (
-          <div class="row h-100 page-container">
-            <div class="col-sm-12 my-auto">
-              <h3>Loading</h3>
-              <Spinner class="" animation="grow" />
+            <div class="row h-100 page-container">
+              <div class="col-sm-12 my-auto">
+                <h3>Loading</h3>
+                <Spinner class="" animation="grow" />
+              </div>
             </div>
-          </div>
-        )}
+          )
+        }
       </div>
     );
   }
