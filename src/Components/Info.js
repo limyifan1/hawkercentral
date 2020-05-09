@@ -137,8 +137,8 @@ export class Info extends React.Component {
   callPostal = (postal) => {
     return fetch(
       "https://developers.onemap.sg/commonapi/search?searchVal=" +
-      postal +
-      "&returnGeom=Y&getAddrDetails=Y"
+        postal +
+        "&returnGeom=Y&getAddrDetails=Y"
     )
       .then(function (response) {
         return response.json();
@@ -275,11 +275,11 @@ export class Info extends React.Component {
         this.state.orderData[idx] === 0.0
           ? this.state.totalPrice
           : parseFloat(this.state.totalPrice) -
-          parseFloat(
-            this.state.data.menu_combined[idx].price
-              ? this.state.data.menu_combined[idx].price
-              : 0
-          ),
+            parseFloat(
+              this.state.data.menu_combined[idx].price
+                ? this.state.data.menu_combined[idx].price
+                : 0
+            ),
       orderData: update(this.state.orderData, {
         [idx]: {
           $set:
@@ -349,8 +349,8 @@ export class Info extends React.Component {
                         <b>
                           {this.state.orderData[i] !== undefined
                             ? this.state.orderData[
-                            JSON.parse(JSON.stringify(i))
-                            ]
+                                JSON.parse(JSON.stringify(i))
+                              ]
                             : 0}
                         </b>
                       </span>
@@ -407,7 +407,7 @@ export class Info extends React.Component {
           value="click"
           className={`image-gallery-fullscreen-button${
             isFullscreen ? " active" : ""
-            }`}
+          }`}
           onClick={onClick}
         />
       );
@@ -593,7 +593,8 @@ export class Info extends React.Component {
                       <br />
                     </div>
                   ) : null}
-                  {this.state.data.pickup_option || this.state.data.delivery_option ? (
+                  {this.state.data.pickup_option ||
+                  this.state.data.delivery_option ? (
                     <div>
                       <svg
                         class="bi bi-bag"
@@ -619,7 +620,6 @@ export class Info extends React.Component {
                       <br />
                     </div>
                   ) : null}
-
                   {regions.length > 0 ? (
                     <div>
                       <svg
@@ -643,7 +643,6 @@ export class Info extends React.Component {
                       <br />
                     </div>
                   ) : null}
-
                   {this.state.data.contact !== "0" ? (
                     <div>
                       <svg
@@ -660,10 +659,11 @@ export class Info extends React.Component {
                       >
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                       </svg>{" "}
-
                       <span>
                         {this.state.data.contact} {" ("}
-                        {this.state.data.whatsapp ? <span>WhatsApp </span> : null}
+                        {this.state.data.whatsapp ? (
+                          <span>WhatsApp </span>
+                        ) : null}
                         {this.state.data.sms ? <span>SMS </span> : null}
                         {this.state.data.call ? <span>Call </span> : null}
                         {") "} <br />
@@ -676,36 +676,35 @@ export class Info extends React.Component {
                     </div>
                   ) : null}
                   <br />
-
                   {/* custom button display: menu, website, message */}
-                  <div class="row">
-                  <a
-                          href= {this.state.data.website.slice(0, 4) === "http" ? (
-                            this.state.data.website) : ("https://" + this.state.data.website)
-                          }
-                          onClick={() =>
-                            onLoad("website_click", this.state.data.name)
-                          }
-                        >
-                          <span class="col-xs">
-                            <img
-                              alt=""
-                              src={website_button}
-                              style={{
-                                width: "25%",
-                              }}
-                            />
-                          </span>
-                        </a>
+                  <div>
+                    <a
+                      href={
+                        this.state.data.website.slice(0, 4) === "http"
+                          ? this.state.data.website
+                          : "https://" + this.state.data.website
+                      }
+                      onClick={() =>
+                        onLoad("website_click", this.state.data.name)
+                      }
+                    >
+                      <img
+                        alt=""
+                        src={website_button}
+                        style={{
+                          width: "25%",
+                        }}
+                      />
+                    </a>
                     {this.state.data.whatsapp ? (
                       <span>
-                        <a
-                          href={link}
-                          onClick={() =>
-                            onLoad("message", this.state.data.name)
-                          }
-                        >
-                          <span class="col-xs">
+                        <span class="">
+                          <a
+                            href={link}
+                            onClick={() =>
+                              onLoad("message", this.state.data.name)
+                            }
+                          >
                             <img
                               alt=""
                               src={whatsapp_button}
@@ -713,27 +712,27 @@ export class Info extends React.Component {
                                 width: "25%",
                               }}
                             />
-                          </span>
-                        </a>
+                          </a>
+                        </span>
                         {this.state.data.menu &&
-                          this.state.data.menu_combined.length > 0 &&
-                          this.state.data.menu_combined[0].name !== "" ? (
-                            <span class="col-sm">
-                              <img
-                                alt=""
-                                onClick={this.enterDetails}
-                                src={orderleh}
-                                style={{ width: "25%", cursor: "pointer" }}
-                              />
-                            </span>
-                          ) : null}
+                        this.state.data.menu_combined.length > 0 &&
+                        this.state.data.menu_combined[0].name !== "" ? (
+                          <span class="">
+                            <img
+                              alt=""
+                              onClick={this.enterDetails}
+                              src={orderleh}
+                              style={{ width: "25%", cursor: "pointer" }}
+                            />
+                          </span>
+                        ) : null}
 
                         {this.state.wantToOrder ? (
                           <div>
                             <br />
                             <br />
 
-                            <span class="col">
+                            <span class="">
                               <img
                                 alt=""
                                 src={menu_title}
@@ -774,117 +773,105 @@ export class Info extends React.Component {
                                   <br />
                                 </span>
                                 {/* Item represents object with properties name and price */}
-                                {
-                                  (this.state.data.menu_combined.map(
-                                    (item, i) => {
-                                      if (
-                                        item !== undefined &&
-                                        this.state.orderData[i] !== 0
-                                      ) {
-                                        return (
-                                          <div
+                                {this.state.data.menu_combined.map(
+                                  (item, i) => {
+                                    if (
+                                      item !== undefined &&
+                                      this.state.orderData[i] !== 0
+                                    ) {
+                                      return (
+                                        <div
+                                          style={{
+                                            position: "relative",
+                                            padding: "5px",
+                                          }}
+                                        >
+                                          <span
                                             style={{
-                                              position: "relative",
-                                              padding: "5px",
+                                              alignContent: "right",
+                                              fontSize: "110%",
                                             }}
                                           >
-                                            <span
-                                              style={{
-                                                alignContent: "right",
-                                                fontSize: "110%",
-                                              }}
-                                            >
-                                              <b>
-                                                {item.name ? item.name : null}
-                                              </b>
-                                            </span>
-                                            <div
-                                              class="btn-group float-right"
-                                              role="group"
-                                              aria-label="Basic example"
-                                            >
-                                              <br />
-                                              {this.state.data.whatsapp ? (
-                                                //<div class="btn-group float-right" role="group" aria-label="Basic example">
-                                                <div>
-                                                  <Button
-                                                    variant="light"
-                                                    size="sm"
-                                                    onClick={this.minusItem}
-                                                    name={i}
-                                                    className="shadow-sm"
-                                                    style={{
-                                                      backgroundColor:
-                                                        "white",
-                                                      color: "black",
-                                                      "border-radius": "3px",
-                                                      margin: "10px",
-                                                    }}
-                                                  >
-                                                    -
-                                                    </Button>
-                                                  <span
-                                                    style={{
-                                                      margin: "10px",
-                                                    }}
-                                                  >
-                                                    <b>
-                                                      {this.state.orderData[
-                                                        i
-                                                      ] !== undefined
-                                                        ? this.state
-                                                          .orderData[
-                                                        JSON.parse(
-                                                          JSON.stringify(
-                                                            i
-                                                          )
-                                                        )
-                                                        ]
-                                                        : 0}
-                                                    </b>
-                                                  </span>
-                                                  <Button
-                                                    variant="dark"
-                                                    size="sm"
-                                                    onClick={this.addItem}
-                                                    name={i}
-                                                    className="shadow-sm"
-                                                    style={{
-                                                      backgroundColor:
-                                                        "black",
-                                                      color: "white",
-                                                      "border-radius": "3px",
-                                                      margin: "10px",
-                                                    }}
-                                                  >
-                                                    +
-                                                    </Button>
-                                                </div>
-                                              ) : null}
-                                            </div>
+                                            <b>
+                                              {item.name ? item.name : null}
+                                            </b>
+                                          </span>
+                                          <div
+                                            class="btn-group float-right"
+                                            role="group"
+                                            aria-label="Basic example"
+                                          >
                                             <br />
-                                            <span
-                                              class="shadow badge badge-info m-2"
-                                              style={{
-                                                backgroundColor: "#b48300",
-                                                alignContent: "left",
-                                                fontSize: "110%",
-                                              }}
-                                            >
-                                              $
-                                                {item.price
-                                                ? item.price
-                                                : "TBD"}
-                                            </span>
+                                            {this.state.data.whatsapp ? (
+                                              //<div class="btn-group float-right" role="group" aria-label="Basic example">
+                                              <div>
+                                                <Button
+                                                  variant="light"
+                                                  size="sm"
+                                                  onClick={this.minusItem}
+                                                  name={i}
+                                                  className="shadow-sm"
+                                                  style={{
+                                                    backgroundColor: "white",
+                                                    color: "black",
+                                                    "border-radius": "3px",
+                                                    margin: "10px",
+                                                  }}
+                                                >
+                                                  -
+                                                </Button>
+                                                <span
+                                                  style={{
+                                                    margin: "10px",
+                                                  }}
+                                                >
+                                                  <b>
+                                                    {this.state.orderData[i] !==
+                                                    undefined
+                                                      ? this.state.orderData[
+                                                          JSON.parse(
+                                                            JSON.stringify(i)
+                                                          )
+                                                        ]
+                                                      : 0}
+                                                  </b>
+                                                </span>
+                                                <Button
+                                                  variant="dark"
+                                                  size="sm"
+                                                  onClick={this.addItem}
+                                                  name={i}
+                                                  className="shadow-sm"
+                                                  style={{
+                                                    backgroundColor: "black",
+                                                    color: "white",
+                                                    "border-radius": "3px",
+                                                    margin: "10px",
+                                                  }}
+                                                >
+                                                  +
+                                                </Button>
+                                              </div>
+                                            ) : null}
                                           </div>
-                                        );
-                                      }
-                                      else {
-                                        return null
-                                      }
+                                          <br />
+                                          <span
+                                            class="shadow badge badge-info m-2"
+                                            style={{
+                                              backgroundColor: "#b48300",
+                                              alignContent: "left",
+                                              fontSize: "110%",
+                                            }}
+                                          >
+                                            ${item.price ? item.price : "TBD"}
+                                          </span>
+                                        </div>
+                                      );
+                                    } else {
+                                      return null;
                                     }
-                                  ))
-                                }
+                                  }
+                                )}
 
                                 <figcaption>
                                   <hr
@@ -907,7 +894,7 @@ export class Info extends React.Component {
                                   >
                                     <b>
                                       $
-                                        {this.state.totalPrice !== undefined
+                                      {this.state.totalPrice !== undefined
                                         ? this.state.totalPrice.toFixed(2)
                                         : "0.00"}
                                     </b>
@@ -954,7 +941,7 @@ export class Info extends React.Component {
                                       id="basic-addon1"
                                     >
                                       +65
-                                      </span>
+                                    </span>
                                   </div>
                                   <input
                                     onChange={this.handleCustomerDetails}
@@ -995,12 +982,10 @@ export class Info extends React.Component {
                                     <div class="form-group create-title">
                                       <label for="postalcode">
                                         Postal Code
-                                        </label>
+                                      </label>
                                       <div class="input-group">
                                         <input
-                                          onChange={
-                                            this.handleCustomerDetails
-                                          }
+                                          onChange={this.handleCustomerDetails}
                                           value={this.state.postal}
                                           type="number"
                                           class={
@@ -1099,7 +1084,7 @@ export class Info extends React.Component {
                                 name="Language"
                               >
                                 Place order via WhatsApp
-                                </Button>
+                              </Button>
                               <br />
                             </div>
                           </div>
@@ -1108,13 +1093,7 @@ export class Info extends React.Component {
                     ) : null}
                   </div>
                   <br />
-
-
-                  <Component.Popup
-                    data={this.state.data}
-                    id={this.state.id}
-                  />
-
+                  <Component.Popup data={this.state.data} id={this.state.id} />
                   <br />
                   {this.state.data.promo ? (
                     <div
@@ -1136,7 +1115,7 @@ export class Info extends React.Component {
                         >
                           <b>{this.state.data.promo}</b>:{" "}
                           {this.state.data.condition &&
-                            this.state.data.condition.length > 40
+                          this.state.data.condition.length > 40
                             ? this.state.data.condition.slice(0, 40) + "..."
                             : this.state.data.condition}
                         </div>
@@ -1149,7 +1128,6 @@ export class Info extends React.Component {
                     id={this.state.id}
                     claps={this.state.data.claps}
                   />
-
                   {this.state.data.description ? (
                     <div>
                       <br />
@@ -1158,31 +1136,30 @@ export class Info extends React.Component {
                       </h6>
                     </div>
                   ) : null}
-                  < Linkify >
-                    {
-                      this.state.data.description ? (
-                        <p style={{ marginBottom: "20px" }}>
-                          {this.state.data.description}
+                  <Linkify>
+                    {this.state.data.description ? (
+                      <p style={{ marginBottom: "20px" }}>
+                        {this.state.data.description}
+                      </p>
+                    ) : null}
+                    {this.state.data.description_detail &&
+                    this.state.data.description_detail !== "" &&
+                    this.state.data.description_detail !== undefined ? (
+                      <div>
+                        {console.log(this.state.data.description_detail)}
+                        <h6 style={{ marginBottom: "0px" }}>
+                          <b>Detailed Description</b>
+                        </h6>
+                        <p
+                          style={{
+                            "white-space": "pre-line",
+                            marginBottom: "20px",
+                          }}
+                        >
+                          {this.state.data.description_detail}
                         </p>
-                      ) : null}
-                    {this.state.data.description_detail
-                      && this.state.data.description_detail !== ""
-                      && this.state.data.description_detail !== undefined ? (
-                        <div>
-                          {console.log(this.state.data.description_detail)}
-                          <h6 style={{ marginBottom: "0px" }}>
-                            <b>Detailed Description</b>
-                          </h6>
-                          <p
-                            style={{
-                              "white-space": "pre-line",
-                              marginBottom: "20px",
-                            }}
-                          >
-                            {this.state.data.description_detail}
-                          </p>
-                        </div>
-                      ) : null}
+                      </div>
+                    ) : null}
                   </Linkify>
                   {/* {Menu appears if menu data is present and whatsapp is not present} */}
                   {this.state.data.menu && !this.state.data.whatsapp ? (
@@ -1194,7 +1171,6 @@ export class Info extends React.Component {
                       <br></br>
                     </div>
                   ) : null}
-
                   {this.state.data.delivery_detail ? (
                     <div>
                       <h6 style={{ marginBottom: "0px" }}>
@@ -1218,7 +1194,10 @@ export class Info extends React.Component {
                         <b>Delivery Fees</b>
                       </h6>
                       <p
-                        style={{ "white-space": "pre-line", marginBottom: "20px" }}
+                        style={{
+                          "white-space": "pre-line",
+                          marginBottom: "20px",
+                        }}
                       >
                         {this.state.data.price}
                       </p>
@@ -1230,7 +1209,10 @@ export class Info extends React.Component {
                         <b>Opening Hours</b>
                       </h6>
                       <p
-                        style={{ "white-space": "pre-line", marginBottom: "20px" }}
+                        style={{
+                          "white-space": "pre-line",
+                          marginBottom: "20px",
+                        }}
                       >
                         {this.state.data.opening}
                       </p>
@@ -1258,14 +1240,13 @@ export class Info extends React.Component {
             </div>
           </div>
         ) : (
-            <div class="row h-100 page-container">
-              <div class="col-sm-12 my-auto">
-                <h3>Loading</h3>
-                <Spinner class="" animation="grow" />
-              </div>
+          <div class="row h-100 page-container">
+            <div class="col-sm-12 my-auto">
+              <h3>Loading</h3>
+              <Spinner class="" animation="grow" />
             </div>
-          )
-        }
+          </div>
+        )}
       </div>
     );
   }
