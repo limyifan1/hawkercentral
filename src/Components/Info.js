@@ -136,8 +136,8 @@ export class Info extends React.Component {
   callPostal = (postal) => {
     return fetch(
       "https://developers.onemap.sg/commonapi/search?searchVal=" +
-        postal +
-        "&returnGeom=Y&getAddrDetails=Y"
+      postal +
+      "&returnGeom=Y&getAddrDetails=Y"
     )
       .then(function (response) {
         return response.json();
@@ -274,11 +274,11 @@ export class Info extends React.Component {
         this.state.orderData[idx] === 0.0
           ? this.state.totalPrice
           : parseFloat(this.state.totalPrice) -
-            parseFloat(
-              this.state.data.menu_combined[idx].price
-                ? this.state.data.menu_combined[idx].price
-                : 0
-            ),
+          parseFloat(
+            this.state.data.menu_combined[idx].price
+              ? this.state.data.menu_combined[idx].price
+              : 0
+          ),
       orderData: update(this.state.orderData, {
         [idx]: {
           $set:
@@ -348,8 +348,8 @@ export class Info extends React.Component {
                         <b>
                           {this.state.orderData[i] !== undefined
                             ? this.state.orderData[
-                                JSON.parse(JSON.stringify(i))
-                              ]
+                            JSON.parse(JSON.stringify(i))
+                            ]
                             : 0}
                         </b>
                       </span>
@@ -406,7 +406,7 @@ export class Info extends React.Component {
           value="click"
           className={`image-gallery-fullscreen-button${
             isFullscreen ? " active" : ""
-          }`}
+            }`}
           onClick={onClick}
         />
       );
@@ -657,15 +657,15 @@ export class Info extends React.Component {
                         Website Link
                       </a>
                     ) : (
-                      <a
-                        onClick={() =>
-                          onLoad("website_click", this.state.data.name)
-                        }
-                        href={"https://" + this.state.data.website}
-                      >
-                        Website Link
-                      </a>
-                    )
+                        <a
+                          onClick={() =>
+                            onLoad("website_click", this.state.data.name)
+                          }
+                          href={"https://" + this.state.data.website}
+                        >
+                          Website Link
+                        </a>
+                      )
                   ) : null}
                   <br />
                   <svg
@@ -714,17 +714,17 @@ export class Info extends React.Component {
                             </span>
                           </a>
                           {this.state.data.menu &&
-                          this.state.data.menu_combined.length > 0 &&
-                          this.state.data.menu_combined[0].name !== "" ? (
-                            <span class="col-sm">
-                              <img
-                                alt=""
-                                onClick={this.enterDetails}
-                                src={orderleh}
-                                style={{ width: "25%", cursor: "pointer" }}
-                              />
-                            </span>
-                          ) : null}
+                            this.state.data.menu_combined.length > 0 &&
+                            this.state.data.menu_combined[0].name !== "" ? (
+                              <span class="col-sm">
+                                <img
+                                  alt=""
+                                  onClick={this.enterDetails}
+                                  src={orderleh}
+                                  style={{ width: "25%", cursor: "pointer" }}
+                                />
+                              </span>
+                            ) : null}
 
                           {this.state.wantToOrder ? (
                             <div>
@@ -831,13 +831,13 @@ export class Info extends React.Component {
                                                           i
                                                         ] !== undefined
                                                           ? this.state
-                                                              .orderData[
-                                                              JSON.parse(
-                                                                JSON.stringify(
-                                                                  i
-                                                                )
-                                                              )
-                                                            ]
+                                                            .orderData[
+                                                          JSON.parse(
+                                                            JSON.stringify(
+                                                              i
+                                                            )
+                                                          )
+                                                          ]
                                                           : 0}
                                                       </b>
                                                     </span>
@@ -877,7 +877,7 @@ export class Info extends React.Component {
                                             </div>
                                           );
                                         }
-                                        else{
+                                        else {
                                           return null
                                         }
                                       }
@@ -1132,7 +1132,7 @@ export class Info extends React.Component {
                         >
                           <b>{this.state.data.promo}</b>:{" "}
                           {this.state.data.condition &&
-                          this.state.data.condition.length > 40
+                            this.state.data.condition.length > 40
                             ? this.state.data.condition.slice(0, 40) + "..."
                             : this.state.data.condition}
                         </div>
@@ -1145,14 +1145,24 @@ export class Info extends React.Component {
                     id={this.state.id}
                     claps={this.state.data.claps}
                   />
-                  <br />
-                  <h6 style={{ marginBottom: "0px" }}>
-                    <b>Brief Description</b>a
-                  </h6>
-                  <Linkify>
-                    <p style={{ marginBottom: "20px" }}>
-                      {this.state.data.description}
-                    </p>
+                  
+                  {this.state.data.description ? (
+                    <div>
+                    <br />
+                    <h6 style={{ marginBottom: "0px" }}>
+                      <b>Brief Description</b>
+                    </h6>
+                    </div>
+                  ) : null}
+                  < Linkify >
+                    {
+                      this.state.data.description ? (
+                        <p style={{ marginBottom: "20px" }}>
+                          {this.state.data.description}
+                        </p>
+                      ) : null}
+                    {this.state.data.description_detail ? (
+                      <div>
                     <h6 style={{ marginBottom: "0px" }}>
                       <b>Detailed Description</b>
                     </h6>
@@ -1164,47 +1174,62 @@ export class Info extends React.Component {
                     >
                       {this.state.data.description_detail}
                     </p>
-                  </Linkify>
-                  {/* {Menu appears if menu data is present and whatsapp is not present} */}
-                  {this.state.data.menu && !this.state.data.whatsapp ? (
-                    <div>
-                      <h6 style={{ marginBottom: "0px" }}>
-                        <b>Menu Items</b>
-                      </h6>
-                      <p>{this.getMenu()} </p>
                     </div>
-                  ) : null}
-                  <br></br>
-                  <h6 style={{ marginBottom: "0px" }}>
-                    <b>Details Regarding Delivery</b>
-                  </h6>
-                  <Linkify>
-                    <p
-                      style={{
-                        "white-space": "pre-line",
-                        marginBottom: "20px",
-                      }}
-                    >
-                      {this.state.data.delivery_detail}
-                    </p>
+                    ) : null}
                   </Linkify>
-                  <h6 style={{ marginBottom: "0px" }}>
-                    <b>Delivery Fees</b>
-                  </h6>
+                {/* {Menu appears if menu data is present and whatsapp is not present} */}
+                {this.state.data.menu && !this.state.data.whatsapp ? (
+                  <div>
+                    <h6 style={{ marginBottom: "0px" }}>
+                      <b>Menu Items</b>
+                    </h6>
+                    <p>{this.getMenu()} </p>
+                    <br></br>
+                  </div>
+                ) : null}
+                
+                {this.state.data.delivery_detail ? (
+                  <div>
+                <h6 style={{ marginBottom: "0px" }}>
+                  <b>Details Regarding Delivery</b>
+                </h6>
+                <Linkify>
                   <p
-                    style={{ "white-space": "pre-line", marginBottom: "20px" }}
+                    style={{
+                      "white-space": "pre-line",
+                      marginBottom: "20px",
+                    }}
                   >
-                    {this.state.data.price}
+                    {this.state.data.delivery_detail}
                   </p>
-                  <h6 style={{ marginBottom: "0px" }}>
-                    <b>Opening Hours</b>
-                  </h6>
-                  <p
-                    style={{ "white-space": "pre-line", marginBottom: "20px" }}
-                  >
-                    {this.state.data.opening}
-                  </p>
-                  {/* <p style={{ marginBottom: "20px" }}>
+                </Linkify>
+                </div>
+                ) : null}
+                {this.state.data.price ? (
+                  <div>
+                <h6 style={{ marginBottom: "0px" }}>
+                  <b>Delivery Fees</b>
+                </h6>
+                <p
+                  style={{ "white-space": "pre-line", marginBottom: "20px" }}
+                >
+                  {this.state.data.price}
+                </p>
+                </div>
+                ) : null}
+                {this.state.data.opening ? (
+                  <div>
+                <h6 style={{ marginBottom: "0px" }}>
+                  <b>Opening Hours</b>
+                </h6>
+                <p
+                  style={{ "white-space": "pre-line", marginBottom: "20px" }}
+                >
+                  {this.state.data.opening}
+                </p>
+                </div>
+                ) : null}
+                {/* <p style={{ marginBottom: "20px" }}>
                     {this.state.data.website ? (
                       this.state.data.website.slice(0, 4) === "http" ? (
                         <a href={this.state.data.website}>Website Link</a>
@@ -1215,24 +1240,25 @@ export class Info extends React.Component {
                       )
                     ) : null}
                   </p> */}
-                  <p style={{ color: "grey" }}>
-                    <small>
-                      Are you the owner? Email foodleh@outlook.com for
+                <p style={{ color: "grey" }}>
+                  <small>
+                    Are you the owner? Email foodleh@outlook.com for
                       enquiries.{" "}
-                    </small>
-                  </p>
-                </div>
+                  </small>
+                </p>
               </div>
             </div>
           </div>
-        ) : (
-          <div class="row h-100 page-container">
-            <div class="col-sm-12 my-auto">
-              <h3>Loading</h3>
-              <Spinner class="" animation="grow" />
-            </div>
           </div>
-        )}
+    ) : (
+      <div class="row h-100 page-container">
+        <div class="col-sm-12 my-auto">
+          <h3>Loading</h3>
+          <Spinner class="" animation="grow" />
+        </div>
+      </div>
+    )
+  }
       </div>
     );
   }
