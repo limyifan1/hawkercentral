@@ -7,19 +7,23 @@ import React from "react";
 import "../App.css";
 import "react-multi-carousel/lib/styles.css";
 import queryString from "query-string";
-import { Spinner } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { db } from "./Firestore";
-import whatsapp from "../WhatsApp.svg";
 import ImageGallery from "react-image-gallery";
 import Component from "./index";
 import Clap from "./Clap";
 import Linkify from "react-linkify";
 import { withRouter } from "react-router-dom";
+import update from "immutability-helper";
+import whatsapp_button from "../assets/whatsapp_button.png";
+import orderleh from "../assets/orderleh.png";
+import menu_title from "../assets/info_menu.png";
+import delivery_title from "../assets/info_delivery.png";
+import revieworder from "../assets/info_review_order.png";
 
 import firebase from "./Firestore";
 
 const analytics = firebase.analytics();
-
 function onLoad(name, item) {
   analytics.logEvent(name, { name: item });
 }
@@ -30,12 +34,26 @@ export class Info extends React.Component {
 
     this.state = {
       data: [],
+      orderData: [],
+      totalPrice: 0.0,
+      wantToOrder: false,
+      name: "",
+      unit: "",
+      street: "",
+      postal: "",
+      notes: "",
+      customerNumber: "",
+      deliveryTime: "",
       id: queryString.parse(this.props.location.search).id,
       galleryOpened: false,
       retrieved: false,
       activePhoto: 1,
       hasReviewMessage: false,
     };
+    this.enterDetails = this.enterDetails.bind(this);
+    this.handleCustomerDetails = this.handleCustomerDetails.bind(this);
+    this.setOrderText = this.setOrderText.bind(this);
+    this.formatSummary = this.formatSummary.bind(this);
   }
 
   componentWillMount() {
@@ -50,7 +68,12 @@ export class Info extends React.Component {
       .get()
       .then((snapshot) => {
         if (snapshot.exists) {
-          this.setState({ data: snapshot.data(), retrieved: true });
+          // After querying db for data, initialize orderData if menu info is available
+          this.setState({
+            data: snapshot.data(),
+            retrieved: true,
+            orderData: new Array(snapshot.data().menu_combined.length).fill(0),
+          });
         }
         onLoad("info_load", snapshot.data().name);
         console.log("Fetched successfully!");
@@ -62,15 +85,305 @@ export class Info extends React.Component {
       });
   };
 
+  handleCustomerDetails = async (event) => {
+    const inputValue = event.target.value;
+    const inputField = event.target.name;
+    if (inputField === "name") {
+      this.setState({
+        name: inputValue,
+      });
+    } else if (inputField === "address") {
+      this.setState({
+        address: inputValue,
+      });
+    } else if (inputField === "notes") {
+      this.setState({
+        notes: inputValue,
+      });
+    } else if (inputField === "customerNumber") {
+      this.setState({
+        customerNumber: inputValue,
+      });
+    } else if (inputField === "deliveryTime") {
+      this.setState({
+        deliveryTime: inputValue,
+      });
+    } else if (inputField === "unit") {
+      this.setState({
+        unit: inputValue,
+      });
+    } else if (inputField === "street") {
+      this.setState({
+        street: inputValue, // TODO: autofill
+      });
+    } else if (inputField === "postal") {
+      this.setState({
+        postal: inputValue,
+      });
+      await this.getPostal(inputValue);
+    }
+  };
+
+  async getPostal(postal) {
+    // event.preventDefault();
+    let data = await this.callPostal(postal);
+    if (data !== undefined) {
+      this.setState({
+        street: data["ADDRESS"],
+      });
+    }
+  }
+
+  callPostal = (postal) => {
+    return fetch(
+      "https://developers.onemap.sg/commonapi/search?searchVal=" +
+        postal +
+        "&returnGeom=Y&getAddrDetails=Y"
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(
+        function (jsonResponse) {
+          if (
+            jsonResponse !== undefined &&
+            jsonResponse["results"] !== undefined
+          ) {
+            return jsonResponse["results"][0];
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
+
+  formatSummary() {
+    let text = "";
+    text = text + "New order from " + this.state.name + "\n";
+    for (let i = 0; i < this.state.data.menu_combined.length; i = i + 1) {
+      if (
+        this.state.data.menu_combined !== undefined &&
+        this.state.data.menu_combined[i].name !== "" &&
+        this.state.orderData[i] !== 0
+      ) {
+        // customer ordered this item
+        const numItems = parseInt(this.state.orderData[i]);
+        const thisPrice = parseFloat(
+          this.state.data.menu_combined[i].price
+            ? this.state.data.menu_combined[i].price
+            : 0
+        );
+        text =
+          text +
+          "*" +
+          numItems +
+          "x* _" +
+          this.state.data.menu_combined[i].name +
+          "_: $" +
+          (numItems * thisPrice).toFixed(2) +
+          "\n";
+      }
+    }
+    return text;
+  }
+
+  setOrderText() {
+    let text = "";
+    text = text + "New order from " + this.state.name + "\n";
+    for (let i = 0; i < this.state.data.menu_combined.length; i = i + 1) {
+      if (
+        this.state.data.menu_combined !== undefined &&
+        this.state.data.menu_combined[i].name !== "" &&
+        this.state.orderData[i] !== 0
+      ) {
+        // customer ordered this item
+        const numItems = parseInt(this.state.orderData[i]);
+        const thisPrice = parseFloat(
+          this.state.data.menu_combined[i].price
+            ? this.state.data.menu_combined[i].price
+            : 0
+        );
+        text =
+          text +
+          "*" +
+          numItems +
+          "x* _" +
+          this.state.data.menu_combined[i].name +
+          "_: $" +
+          (numItems * thisPrice).toFixed(2) +
+          "\n";
+      }
+    }
+    text =
+      text +
+      "\n\nTotal Price (not including delivery): *$" +
+      this.state.totalPrice.toFixed(2) +
+      "*";
+    text =
+      text +
+      "\nDelivery address: *" +
+      this.state.street +
+      " #" +
+      this.state.unit +
+      " " +
+      this.state.postal +
+      "*";
+    text = text + "\nDelivery Date/Time: *" + this.state.deliveryTime + "*";
+    if (this.state.notes !== "") {
+      // only display notes if customer added
+      text = text + "\nAdditional notes: _" + this.state.notes + "_";
+    }
+    text =
+      text + "\nCustomer phone number: *" + this.state.customerNumber + "*";
+    text = text + "\nOrdering from: www.foodleh.app/info?id=" + this.state.id;
+    return encodeURIComponent(text);
+  }
+
+  enterDetails() {
+    console.log("enterDetails");
+    if (this.state.wantToOrder) {
+      this.setState({ wantToOrder: false });
+    } else {
+      this.setState({ wantToOrder: true });
+    }
+  }
+
+  addItem = async (event) => {
+    console.log("addItem");
+    const idx = event.target.name;
+    this.setState({
+      totalPrice:
+        parseFloat(this.state.totalPrice) +
+        parseFloat(
+          this.state.data.menu_combined[idx].price
+            ? this.state.data.menu_combined[idx].price
+            : 0
+        ),
+      orderData: update(this.state.orderData, {
+        [idx]: { $set: parseInt(this.state.orderData[idx]) + 1 },
+      }),
+    });
+  };
+
+  minusItem = async (event) => {
+    console.log("minusItem");
+    const idx = event.target.name;
+    this.setState({
+      // if customer did not order this item previously, do not change total price, keep # item at 0
+      totalPrice:
+        this.state.orderData[idx] === 0.0
+          ? this.state.totalPrice
+          : parseFloat(this.state.totalPrice) -
+            parseFloat(
+              this.state.data.menu_combined[idx].price
+                ? this.state.data.menu_combined[idx].price
+                : 0
+            ),
+      orderData: update(this.state.orderData, {
+        [idx]: {
+          $set:
+            this.state.orderData[idx] === 0
+              ? 0
+              : parseInt(this.state.orderData[idx]) - 1,
+        },
+      }),
+    });
+  };
+
   getMenu = () => {
     if (this.state.data.menu_combined) {
       let data = [];
-      this.state.data.menu_combined.forEach((element) => {
+      this.state.data.menu_combined.forEach((element, i) => {
         if (element.name && element.price) {
           data.push(
             <div>
-              {element.name ? element.name : null} - $
-              {element.price ? element.price : null}
+              <figure
+                class="shadow"
+                style={{
+                  margin: "20px",
+                  paddingLeft: "10px",
+                  paddingTop: "10px",
+                  height: "120px",
+                  backgroundColor: "#f1f1f1",
+                  "border-radius": "5px",
+                  position: "relative",
+                }}
+              >
+                <span
+                  style={{
+                    alignContent: "right",
+                    fontSize: "110%",
+                  }}
+                >
+                  <b>{element ? element.name : null}</b>
+                </span>
+                <div
+                  class="btn-group float-right"
+                  role="group"
+                  aria-label="Basic example"
+                >
+                  <br />
+                  {this.state.data.whatsapp ? (
+                    <div>
+                      <Button
+                        variant="light"
+                        size="sm"
+                        onClick={this.minusItem}
+                        name={i}
+                        className="shadow-sm"
+                        style={{
+                          backgroundColor: "white",
+                          color: "black",
+                          "border-radius": "3px",
+                          margin: "10px",
+                        }}
+                      >
+                        -
+                      </Button>
+                      <span
+                        style={{
+                          margin: "10px",
+                        }}
+                      >
+                        <b>
+                          {this.state.orderData[i] !== undefined
+                            ? this.state.orderData[
+                                JSON.parse(JSON.stringify(i))
+                              ]
+                            : 0}
+                        </b>
+                      </span>
+                      <Button
+                        variant="dark"
+                        size="sm"
+                        onClick={this.addItem}
+                        name={i}
+                        className="shadow-sm"
+                        style={{
+                          backgroundColor: "black",
+                          color: "white",
+                          "border-radius": "3px",
+                          margin: "10px",
+                        }}
+                      >
+                        +
+                      </Button>
+                    </div>
+                  ) : null}
+                </div>
+                <br />
+                <span
+                  class="shadow badge badge-info m-2"
+                  style={{
+                    backgroundColor: "#b48300",
+                    alignContent: "left",
+                    fontSize: "110%",
+                  }}
+                >
+                  ${element.price ? element.price : "TBD"}
+                </span>
+              </figure>
             </div>
           );
         }
@@ -371,9 +684,21 @@ export class Info extends React.Component {
                   </svg>
                   {this.state.data.website ? (
                     this.state.data.website.slice(0, 4) === "http" ? (
-                      <a href={this.state.data.website}>Website Link</a>
+                      <a
+                        onClick={() =>
+                          onLoad("website_click", this.state.data.name)
+                        }
+                        href={this.state.data.website}
+                      >
+                        Website Link
+                      </a>
                     ) : (
-                      <a href={"https://" + this.state.data.website}>
+                      <a
+                        onClick={() =>
+                          onLoad("website_click", this.state.data.name)
+                        }
+                        href={"https://" + this.state.data.website}
+                      >
                         Website Link
                       </a>
                     )
@@ -405,37 +730,417 @@ export class Info extends React.Component {
                           <b>WeChat ID: {this.state.data.wechatid}</b>
                         </span>
                       ) : null}
+                      <br />
                       {this.state.data.whatsapp ? (
-                        <a
-                          href={link}
-                          onClick={() =>
-                            onLoad("message", this.state.data.name)
-                          }
-                        >
-                          <span
-                            class="card shadow-lg"
-                            style={{
-                              width: "110px",
-                              height: "30px",
-                              backgroundColor: "grey",
-                              margin: "5px 5px 5px 5px",
-                            }}
+                        <span>
+                          <a
+                            href={link}
+                            onClick={() =>
+                              onLoad("message", this.state.data.name)
+                            }
                           >
-                            <card>
-                              {" "}
+                            <span class="col-xs">
                               <img
-                                src={whatsapp}
-                                style={{
-                                  height: "28px",
-                                  padding: "3px 3px 3px",
-                                }}
                                 alt=""
+                                src={whatsapp_button}
+                                style={{
+                                  width: "25%",
+                                }}
                               />
-                              <span style={{ color: "white" }}> Message</span>
-                            </card>
-                          </span>
-                        </a>
+                            </span>
+                          </a>
+                          {this.state.data.menu &&
+                          this.state.data.menu_combined.length > 0 &&
+                          this.state.data.menu_combined[0].name !== "" ? (
+                            <span class="col-sm">
+                              <img
+                                alt=""
+                                onClick={this.enterDetails}
+                                src={orderleh}
+                                style={{ width: "25%", cursor: "pointer" }}
+                              />
+                            </span>
+                          ) : null}
+
+                          {this.state.wantToOrder ? (
+                            <div>
+                              <br />
+                              <br />
+
+                              <span class="col">
+                                <img
+                                  alt=""
+                                  src={menu_title}
+                                  style={{ width: "60%" }}
+                                />
+                              </span>
+                              <br></br>
+
+                              <p>{this.getMenu()} </p>
+                              <div>
+                                <br />
+                                <img
+                                  alt=""
+                                  src={revieworder}
+                                  style={{ width: "60%" }}
+                                />
+                              </div>
+
+                              <div>
+                                <figure
+                                  class="shadow"
+                                  style={{
+                                    margin: "20px",
+                                    paddingLeft: "10px",
+                                    paddingTop: "10px",
+                                    backgroundColor: "#f1f1f1",
+                                    "border-radius": "5px",
+                                    position: "relative",
+                                  }}
+                                >
+                                  <span
+                                    style={{
+                                      fontSize: "110%",
+                                    }}
+                                  >
+                                    <b>Item Summary</b>
+                                    <br />
+                                    <br />
+                                  </span>
+                                  {/* Item represents object with properties name and price */}
+                                  {
+                                    (this.state.data.menu_combined.map(
+                                      (item, i) => {
+                                        if (
+                                          item !== undefined &&
+                                          this.state.orderData[i] !== 0
+                                        ) {
+                                          return (
+                                            <div
+                                              style={{
+                                                position: "relative",
+                                                padding: "5px",
+                                              }}
+                                            >
+                                              <span
+                                                style={{
+                                                  alignContent: "right",
+                                                  fontSize: "110%",
+                                                }}
+                                              >
+                                                <b>
+                                                  {item.name ? item.name : null}
+                                                </b>
+                                              </span>
+                                              <div
+                                                class="btn-group float-right"
+                                                role="group"
+                                                aria-label="Basic example"
+                                              >
+                                                <br />
+                                                {this.state.data.whatsapp ? (
+                                                  //<div class="btn-group float-right" role="group" aria-label="Basic example">
+                                                  <div>
+                                                    <Button
+                                                      variant="light"
+                                                      size="sm"
+                                                      onClick={this.minusItem}
+                                                      name={i}
+                                                      className="shadow-sm"
+                                                      style={{
+                                                        backgroundColor:
+                                                          "white",
+                                                        color: "black",
+                                                        "border-radius": "3px",
+                                                        margin: "10px",
+                                                      }}
+                                                    >
+                                                      -
+                                                    </Button>
+                                                    <span
+                                                      style={{
+                                                        margin: "10px",
+                                                      }}
+                                                    >
+                                                      <b>
+                                                        {this.state.orderData[
+                                                          i
+                                                        ] !== undefined
+                                                          ? this.state
+                                                              .orderData[
+                                                              JSON.parse(
+                                                                JSON.stringify(
+                                                                  i
+                                                                )
+                                                              )
+                                                            ]
+                                                          : 0}
+                                                      </b>
+                                                    </span>
+                                                    <Button
+                                                      variant="dark"
+                                                      size="sm"
+                                                      onClick={this.addItem}
+                                                      name={i}
+                                                      className="shadow-sm"
+                                                      style={{
+                                                        backgroundColor:
+                                                          "black",
+                                                        color: "white",
+                                                        "border-radius": "3px",
+                                                        margin: "10px",
+                                                      }}
+                                                    >
+                                                      +
+                                                    </Button>
+                                                  </div>
+                                                ) : null}
+                                              </div>
+                                              <br />
+                                              <span
+                                                class="shadow badge badge-info m-2"
+                                                style={{
+                                                  backgroundColor: "#b48300",
+                                                  alignContent: "left",
+                                                  fontSize: "110%",
+                                                }}
+                                              >
+                                                $
+                                                {item.price
+                                                  ? item.price
+                                                  : "TBD"}
+                                              </span>
+                                            </div>
+                                          );
+                                        }
+                                        else{
+                                          return null
+                                        }
+                                      }
+                                    ))
+                                  }
+
+                                  <figcaption>
+                                    <hr
+                                      style={{
+                                        color: "#b48300",
+                                        backgroundColor: "#b48300",
+                                        height: "1px",
+                                        borderColor: "#b48300",
+                                        width: "100%",
+                                        alignItems: "center",
+                                      }}
+                                    />
+                                    <div
+                                      style={{
+                                        textAlign: "right",
+                                        paddingBottom: "10px",
+                                        paddingRight: "15px",
+                                        fontSize: "110%",
+                                      }}
+                                    >
+                                      <b>
+                                        $
+                                        {this.state.totalPrice !== undefined
+                                          ? this.state.totalPrice.toFixed(2)
+                                          : "0.00"}
+                                      </b>
+                                    </div>
+                                    <div
+                                      style={{
+                                        color: "red",
+                                        paddingBottom: "10px",
+                                        paddingRight: "15px",
+                                      }}
+                                    >
+                                      <b>*Delivery fees may apply</b>
+                                    </div>
+                                  </figcaption>
+                                </figure>
+                              </div>
+                              <br />
+                              <div>
+                                <img
+                                  alt=""
+                                  src={delivery_title}
+                                  style={{ width: "60%" }}
+                                />
+
+                                <div class="form-group create-title">
+                                  <label for="name">Name</label>
+                                  <input
+                                    onChange={this.handleCustomerDetails}
+                                    value={this.state.name}
+                                    type="text"
+                                    class="form-control"
+                                    name="name"
+                                    style={{ borderColor: "#b48300" }}
+                                    placeholder="We don't store your info!"
+                                  ></input>
+                                </div>
+
+                                <div class="form-group create-title">
+                                  <label for="unit">Mobile Number: </label>
+                                  <div class="input-group mb-12">
+                                    <div class="input-group-prepend">
+                                      <span
+                                        class="input-group-text"
+                                        id="basic-addon1"
+                                      >
+                                        +65
+                                      </span>
+                                    </div>
+                                    <input
+                                      onChange={this.handleCustomerDetails}
+                                      value={this.state.customerNumber}
+                                      type="number"
+                                      class="form-control"
+                                      name="customerNumber"
+                                      placeholder=" 9xxxxxxx"
+                                      maxLength="8"
+                                      minlength="8"
+                                      pattern="[8-9]{1}[0-9]{7}"
+                                      style={{
+                                        borderColor: "#b48300",
+                                        "border-radius": "5px",
+                                      }}
+                                    ></input>
+                                  </div>
+                                </div>
+
+                                <div class="form-group create-title">
+                                  <label for="address">Delivery Day/Time</label>
+                                  <input
+                                    onChange={this.handleCustomerDetails}
+                                    value={this.state.deliveryTime}
+                                    type="text"
+                                    class="form-control"
+                                    name="deliveryTime"
+                                    style={{ borderColor: "#b48300" }}
+                                    placeholder="Eg Thursday 7 May 12.30pm"
+                                  ></input>
+                                </div>
+
+                                <div>
+                                  <div class="row">
+                                    {" "}
+                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                      {" "}
+                                      <div class="form-group create-title">
+                                        <label for="postalcode">
+                                          Postal Code
+                                        </label>
+                                        <div class="input-group">
+                                          <input
+                                            onChange={
+                                              this.handleCustomerDetails
+                                            }
+                                            value={this.state.postal}
+                                            type="number"
+                                            class={
+                                              !this.state.postal
+                                                ? "form-control is-invalid"
+                                                : "form-control"
+                                            }
+                                            name="postal"
+                                            placeholder="Enter Postal Code"
+                                            min="0"
+                                            required
+                                          ></input>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                      {" "}
+                                      <div class="form-group create-title">
+                                        <label for="unit">Unit #</label>
+                                        <input
+                                          onChange={this.handleCustomerDetails}
+                                          value={this.state.unit}
+                                          type="text"
+                                          class="form-control"
+                                          name="unit"
+                                          placeholder="E.g. 01-01"
+                                        ></input>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                      <div class="form-group create-title">
+                                        <label for="street">
+                                          Street Name<b> (Auto-Filled)</b>
+                                        </label>
+                                        <input
+                                          onChange={this.handleCustomerDetails}
+                                          value={this.state.street}
+                                          type="text"
+                                          class={
+                                            !this.state.street
+                                              ? "form-control is-invalid"
+                                              : "form-control"
+                                          }
+                                          name="street"
+                                          placeholder="Enter Street Name"
+                                        ></input>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* 
+                                <div class="form-group create-title">
+                                  <label for="address">Address</label>
+                                  <input
+                                    onChange={this.handleCustomerDetails}
+                                    value={this.state.address}
+                                    type="text"
+                                    class="form-control"
+                                    name="address"
+                                    style={{ borderColor: "#b48300" }}
+                                    placeholder=""
+                                  ></input>
+                                </div> */}
+
+                                <div class="form-group create-title">
+                                  <label for="address">Comments</label>
+                                  <input
+                                    onChange={this.handleCustomerDetails}
+                                    value={this.state.notes}
+                                    type="text"
+                                    class="form-control"
+                                    name="notes"
+                                    style={{
+                                      borderColor: "#b48300",
+                                    }}
+                                    placeholder="No chilli etc, leave blank if nil"
+                                  ></input>
+                                </div>
+                                <Button
+                                  class="shadow-sm"
+                                  href={
+                                    "https://api.whatsapp.com/send?phone=65" +
+                                    this.state.data.contact +
+                                    "&text=" +
+                                    this.setOrderText()
+                                  }
+                                  style={{
+                                    backgroundColor: "#B48300",
+                                    borderColor: "#B48300",
+                                    fontSize: "20px",
+                                    width: "300px",
+                                  }}
+                                  name="Language"
+                                >
+                                  Place order via WhatsApp
+                                </Button>
+                                <br />
+                              </div>
+                            </div>
+                          ) : null}
+                        </span>
                       ) : null}
+                      <br />
                       <Component.Popup
                         data={this.state.data}
                         id={this.state.id}
@@ -479,7 +1184,7 @@ export class Info extends React.Component {
                   />
                   <br />
                   <h6 style={{ marginBottom: "0px" }}>
-                    <b>Brief Description</b>
+                    <b>Brief Description</b>a
                   </h6>
                   <Linkify>
                     <p style={{ marginBottom: "20px" }}>
@@ -497,7 +1202,8 @@ export class Info extends React.Component {
                       {this.state.data.description_detail}
                     </p>
                   </Linkify>
-                  {this.state.data.menu ? (
+                  {/* {Menu appears if menu data is present and whatsapp is not present} */}
+                  {this.state.data.menu && !this.state.data.whatsapp ? (
                     <div>
                       <h6 style={{ marginBottom: "0px" }}>
                         <b>Menu Items</b>
@@ -505,6 +1211,7 @@ export class Info extends React.Component {
                       <p>{this.getMenu()} </p>
                     </div>
                   ) : null}
+                  <br></br>
                   <h6 style={{ marginBottom: "0px" }}>
                     <b>Details Regarding Delivery</b>
                   </h6>

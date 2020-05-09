@@ -13,12 +13,18 @@ import Item from "./Item";
 import Jimp from "jimp";
 import Helpers from "../Helpers/helpers";
 import CreatableSelect from "react-select/creatable";
-
+import firebase from "./Firestore";
 import { withRouter } from "react-router-dom";
 import { LanguageContext } from "./themeContext";
 // const API_KEY = `${process.env.REACT_APP_GKEY}`
 
 import _ from 'lodash';
+
+const analytics = firebase.analytics();
+
+function onClick(name) {
+  analytics.logEvent(name)
+}
 
 const icon = (
   <div>
@@ -64,12 +70,14 @@ const handleData = async ({
   image6,
   name,
   cuisine,
+  categories,
   postal,
   street,
   unit,
   description,
   description_detail,
   region,
+  regions,
   delivery,
   price,
   contact,
@@ -115,7 +123,9 @@ const handleData = async ({
     unit: unit,
     delivery: delivery,
     cuisine: cuisine,
+    categories: categories,
     region: region,
+    regions: regions,
     price: price,
     contact: contact,
     call: call,
@@ -372,8 +382,12 @@ export class ListForm extends React.Component {
         price: this.state.menuprice[index],
       };
     });
+
     let edited_fields = [];
-    if (this.props.toggle === "edit") {
+    if(this.props.toggle === "create"){
+      onClick("create_submit_click");
+    } else {
+      onClick("edit_submit_click");
       this.setState({ isLoading: true });
       edited_fields = this.getEditedFields();
     }

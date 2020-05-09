@@ -92,6 +92,8 @@ const addData = async ({
   contact_to,
   time,
   note,
+  arrival,
+  duration
 }) => {
   let now = new Date();
   var field = {
@@ -114,6 +116,8 @@ const addData = async ({
     note: note,
     expired: false,
     cancelled: false,
+    arrival: arrival,
+    duration: duration
   };
   let id = await db
     .collection("deliveries")
@@ -176,7 +180,7 @@ export class Driver extends React.Component {
       "destination=" +
       this.state.street_to +
       "&departure_time=" +
-      parseInt(this.state.time.valueOf()/1000) +
+      parseInt(this.state.time.valueOf() / 1000) +
       "&" +
       "key=" +
       API_KEY;
@@ -321,6 +325,20 @@ export class Driver extends React.Component {
     cookies.set("unit", this.state.unit, { path: "/" });
     cookies.set("contact", this.state.contact, { path: "/" });
     cookies.set("note", this.state.note, { path: "/" });
+    var arrival = new Date(this.state.time);
+    arrival.setMinutes(
+      arrival.getMinutes() +
+        15 +
+        this.state.directions.routes[0].legs[0].duration.value / 60
+    );
+    arrival =
+      dayName[arrival.getDay()] +
+      " " +
+      arrival.getDate() +
+      " " +
+      monthNames[arrival.getMonth()] +
+      " " +
+      formatAMPM(arrival);
     await addData({
       origin: this.state.street,
       destination: this.state.street_to,
@@ -340,6 +358,8 @@ export class Driver extends React.Component {
       contact_to: this.state.contact_to,
       time: this.state.time,
       note: this.state.note,
+      arrival: arrival,
+      duration: this.state.directions.routes[0].legs[0].duration.text
     }).then((id) => {
       this.sendData({
         origin: this.state.street,
@@ -357,7 +377,8 @@ export class Driver extends React.Component {
           monthNames[this.state.time.getMonth()] +
           " " +
           formatAMPM(this.state.time),
-        duration: this.state.directions.routes[0].legs[0].duration.text
+        duration: this.state.directions.routes[0].legs[0].duration.text,
+        arrival: arrival
       });
       this.setState({ submitted: true, submitting: false });
     });
@@ -404,6 +425,19 @@ export class Driver extends React.Component {
   };
 
   render() {
+    var arrival;
+    if (
+      this.state.retrievedDir &&
+      this.state.directions &&
+      this.state.directions.routes.length > 0
+    ) {
+      arrival = new Date(this.state.time);
+      arrival.setMinutes(
+        arrival.getMinutes() +
+          15 +
+          this.state.directions.routes[0].legs[0].duration.value / 60
+      );
+    }
     return (
       <div>
         <Modal
@@ -783,19 +817,37 @@ export class Driver extends React.Component {
                                   fontSize: "20px",
                                 }}
                               >
-                                <b>Distance (Google Maps): </b>
+                                <b>Distance 距离 (Google Maps): </b>
                                 <br />
                                 {this.state.directions.routes.length > 0
                                   ? this.state.directions.routes[0].legs[0]
                                       .distance.text
                                   : null}
                                 <br />
-                                <b>Estimated Duration: </b>
+                                <b>Est. Duration 预测行程时间: </b>
                                 <br />
                                 {this.state.directions.routes.length > 0
                                   ? this.state.directions.routes[0].legs[0]
                                       .duration.text
                                   : null}
+                                <br />
+                                <b>
+                                  Arrival Time 预测到达时间 <br />{" "}
+                                  <small style={{ color: "grey" }}>
+                                    (Pickup Time + Duration + 15 min):
+                                  </small>
+                                </b>
+                                <br />
+                                {this.state.directions.routes.length > 0
+                                  ? dayName[arrival.getDay()] +
+                                    " " +
+                                    arrival.getDate() +
+                                    " " +
+                                    monthNames[arrival.getMonth()] +
+                                    " " +
+                                    formatAMPM(arrival)
+                                  : null}
+
                                 <br />
                                 <b>Delivery Cost: </b>
                                 <br />

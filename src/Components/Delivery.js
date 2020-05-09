@@ -105,7 +105,7 @@ export class Delivery extends React.Component {
   }
 
   componentWillMount() {
-    onLoad("find_driver");
+    onLoad("find_delivery");
     if (this.state.cancel) {
       this.cancelDoc();
     }
@@ -134,33 +134,40 @@ export class Delivery extends React.Component {
           this.setState({ data: snapshot.data(), retrieved: true });
         }
         onLoad("info_load", snapshot.data().name);
-        if (!snapshot.data().viewed && !snapshot.data().cancelled && !snapshot.data().expired) {
+        if (
+          !snapshot.data().viewed &&
+          !snapshot.data().cancelled &&
+          !snapshot.data().expired
+        ) {
           await db
             .collection("deliveries")
             .doc(this.state.id)
             .update({ viewed: true })
-            .then((d) => {});
-          await this.sendData({
-            message_id: snapshot.data().message_id,
-            driver_mobile: this.state.driver_contact,
-            requester_mobile: snapshot.data().contact,
-            customer_mobile: snapshot.data().contact_to,
-            origin: snapshot.data().unit + " " + snapshot.data().street,
-            destination:
-              snapshot.data().unit_to + " " + snapshot.data().street_to,
-            time:
-              snapshot.data().time && typeof snapshot.data().time !== "string"
-                ? dayName[snapshot.data().time.toDate().getDay()] +
-                  " " +
-                  snapshot.data().time.toDate().getDate() +
-                  " " +
-                  monthNames[snapshot.data().time.toDate().getMonth()] +
-                  " " +
-                  formatAMPM(snapshot.data().time.toDate())
-                : null,
-            note: snapshot.data().note,
-            cost: snapshot.data().cost,
-          });
+            .then(async (d) => {
+              await this.sendData({
+                message_id: snapshot.data().message_id,
+                driver_mobile: this.state.driver_contact,
+                requester_mobile: snapshot.data().contact,
+                customer_mobile: snapshot.data().contact_to,
+                origin: snapshot.data().unit + " " + snapshot.data().street,
+                destination:
+                  snapshot.data().unit_to + " " + snapshot.data().street_to,
+                time:
+                  snapshot.data().time &&
+                  typeof snapshot.data().time !== "string"
+                    ? dayName[snapshot.data().time.toDate().getDay()] +
+                      " " +
+                      snapshot.data().time.toDate().getDate() +
+                      " " +
+                      monthNames[snapshot.data().time.toDate().getMonth()] +
+                      " " +
+                      formatAMPM(snapshot.data().time.toDate())
+                    : null,
+                note: snapshot.data().note,
+                cost: snapshot.data().cost,
+                arrival: snapshot.data().arrival
+              });
+            });
         }
         return true;
       })
@@ -398,7 +405,7 @@ export class Delivery extends React.Component {
                             <br />
                             {this.state.data.time ? (
                               <div>
-                                <b>Pickup Time:</b> <br />
+                                <b>Pickup Time:</b>
                                 {dayName[
                                   this.state.data.time.toDate().getDay()
                                 ] +
@@ -416,6 +423,19 @@ export class Delivery extends React.Component {
                             <br />
                             <b>Distance:</b> {this.state.data.distance}
                             <br />
+                            {this.state.data.duration ? (
+                              <div>
+                                <b>Est. Duration:</b> {this.state.data.duration}
+                                <br />{" "}
+                              </div>
+                            ) : null}
+                            {this.state.data.arrival ? (
+                              <div>
+                                <b>Est. Arrival Time:</b>{" "}
+                                {this.state.data.arrival}
+                                <br />{" "}
+                              </div>
+                            ) : null}
                             <b>Estimated Fee:</b> ${this.state.data.cost}
                             <br /> <br />
                             <b>
