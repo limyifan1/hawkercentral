@@ -429,7 +429,6 @@ export class ListForm extends React.Component {
           search: "?id=" + id,
         });
       } else if (this.props.toggle === "edit") {
-        console.log("Your listing will be updated after your edits are approved!");
         this.setState({ isLoading: false });
         this.props.onSubmitEdit();
       }

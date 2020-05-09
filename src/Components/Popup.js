@@ -28,6 +28,11 @@ export class Popup extends React.Component {
     this.setState({ show: false });
   };
 
+  handleSubmitEdit = () => {
+    this.setHide();
+    this.props.onSubmitEdit();
+  }
+
   render() {
     return (
       <span>
@@ -83,7 +88,7 @@ export class Popup extends React.Component {
               toggle="edit"
               id={this.props.id}
               data={this.props.data}
-              onSubmitEdit={this.setHide}
+              onSubmitEdit={this.handleSubmitEdit}
             />
           </Modal.Body>
         </Modal>
