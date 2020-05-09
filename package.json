@@ -13,6 +13,7 @@
     "csv-writer": "1.6.0",
     "firebase": "7.14.3",
     "gatsby-plugin-react-helmet": "^3.3.1",
+    "emailjs-com": "^2.4.1",
     "geofirex": "0.1.0",
     "google-map-react": "1.1.7",
     "immutability-helper": "3.0.2",

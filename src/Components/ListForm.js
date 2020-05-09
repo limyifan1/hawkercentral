@@ -6,7 +6,7 @@
 import React, { Fragment } from "react";
 import "../App.css";
 import { db, storage, geo } from "./Firestore";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Spinner } from "react-bootstrap";
 import logo from "../mrt_logo.png";
 import Select from "react-select";
 import Item from "./Item";
@@ -17,6 +17,8 @@ import firebase from "./Firestore";
 import { withRouter } from "react-router-dom";
 import { LanguageContext } from "./themeContext";
 // const API_KEY = `${process.env.REACT_APP_GKEY}`
+
+import _ from 'lodash';
 
 const analytics = firebase.analytics();
 
@@ -59,7 +61,7 @@ const icon = (
   </div>
 );
 
-const addData = async ({
+const handleData = async ({
   url,
   image2,
   image3,
@@ -101,6 +103,7 @@ const addData = async ({
   location,
   menu_combined,
   tagsValue,
+  editedFields,
 }) => {
   let now = new Date();
   var field = {
@@ -162,20 +165,18 @@ const addData = async ({
       });
     return id;
   } else if (toggle === "edit") {
-    console.log(field);
-    let id = await db
-      .collection("hawkers")
-      .doc(docid)
-      .update(field)
-      .then(function (d) {
-        //   console.log(docRef.id);
-        //   return docRef.id;
-      })
-      .catch(function (error) {
-        console.error("Error adding document: ", error);
-        // alert("Failed")
-      });
-    return id;
+    if (editedFields.length > 0) {
+      let editedFieldsAndValues = _.pick(field, editedFields);
+      await Helpers.sendEmailToUpdateListing(docid, editedFieldsAndValues)
+        .then((result) => {
+          console.log(result);
+        })
+        .catch(function (error) {
+          console.error("Error sending email: ", error);
+        });
+    }
+
+    return docid;
   }
 };
 
@@ -228,7 +229,11 @@ export class ListForm extends React.Component {
       wechatid: "",
       tagsValue: [],
       tags: [],
+      isLoading: false,
     };
+
+    this.initialState = _.cloneDeep(this.state);
+
     this.handleRegionChange = this.handleRegionChange.bind(this);
     this.handleMultiChange = this.handleMultiChange.bind(this);
     this.handleCuisineChange = this.handleCuisineChange.bind(this);
@@ -238,47 +243,55 @@ export class ListForm extends React.Component {
     this.handleFireBaseUpload = this.handleFireBaseUpload.bind(this);
   }
 
+  getInitialState() {
+    const initialState = {
+      name: this.props.data.name,
+      postal: this.props.data.postal,
+      street: this.props.data.street,
+      price: this.props.data.price,
+      description: this.props.data.description,
+      description_detail: this.props.data.description_detail,
+      image1: this.props.data.url ? this.props.data.url : "",
+      image2: this.props.data.image2 ? this.props.data.image2 : "",
+      image3: this.props.data.image3 ? this.props.data.image3 : "",
+      image4: this.props.data.image4 ? this.props.data.image4 : "",
+      image5: this.props.data.image5 ? this.props.data.image5 : "",
+      image6: this.props.data.image6 ? this.props.data.image6 : "",
+      imageName: "Upload Image",
+      longitude: this.props.data.longitude,
+      latitude: this.props.data.latitude,
+      unit: this.props.data.unit,
+      delivery_option: this.props.data.delivery_option,
+      pickup_option: this.props.data.pickup_option,
+      cuisineValue: this.props.data.cuisine,
+      call: this.props.data.call,
+      whatsapp: this.props.data.whatsapp,
+      sms: this.props.data.sms,
+      inperson: this.props.data.inperson,
+      contact: this.props.data.contact,
+      docid: this.props.id,
+      opening: this.props.data.opening,
+      region: this.props.data.region,
+      website: this.props.data.website,
+      promo: this.props.data.promo,
+      condition: this.props.data.condition,
+      delivery_detail: this.props.data.delivery_detail,
+      menu: this.props.data.menu,
+      menuitem: this.props.data.menuitem,
+      menuprice: this.props.data.menuprice,
+      wechatid: this.props.data.wechatid ? this.props.data.wechatid : "",
+    };
+
+    return _.cloneDeep(initialState);
+  }
+
   componentWillMount() {
     this.getFirestoreData();
     this.getTags();
     if (this.props.toggle === "edit") {
-      this.setState({
-        name: this.props.data.name,
-        postal: this.props.data.postal,
-        street: this.props.data.street,
-        price: this.props.data.price,
-        description: this.props.data.description,
-        description_detail: this.props.data.description_detail,
-        image1: this.props.data.url ? this.props.data.url : "",
-        image2: this.props.data.image2 ? this.props.data.image2 : "",
-        image3: this.props.data.image3 ? this.props.data.image3 : "",
-        image4: this.props.data.image4 ? this.props.data.image4 : "",
-        image5: this.props.data.image5 ? this.props.data.image5 : "",
-        image6: this.props.data.image6 ? this.props.data.image6 : "",
-        imageName: "Upload Image",
-        longitude: this.props.data.longitude,
-        latitude: this.props.data.latitude,
-        unit: this.props.data.unit,
-        delivery_option: this.props.data.delivery_option,
-        pickup_option: this.props.data.pickup_option,
-        cuisineValue: this.props.data.cuisine,
-        call: this.props.data.call,
-        whatsapp: this.props.data.whatsapp,
-        sms: this.props.data.sms,
-        inperson: this.props.data.inperson,
-        contact: this.props.data.contact,
-        docid: this.props.id,
-        opening: this.props.data.opening,
-        region: this.props.data.region,
-        website: this.props.data.website,
-        promo: this.props.data.promo,
-        condition: this.props.data.condition,
-        delivery_detail: this.props.data.delivery_detail,
-        menu: this.props.data.menu,
-        menuitem: this.props.data.menuitem,
-        menuprice: this.props.data.menuprice,
-        wechatid: this.props.data.wechatid ? this.props.data.wechatid : "",
-      });
+      this.setState(this.getInitialState());
+      const initialState = this.getInitialState();
+      this.initialState = {...this.initialState, ...initialState};
     }
   }
 
@@ -328,6 +341,37 @@ export class ListForm extends React.Component {
       );
   };
 
+  getEditedFields = () => {
+    const specialKeys = {
+      image1: ["url"],
+      cuisineValue: ["cuisine", "categories"],
+      region: ["region", "regions"],
+      latitude: ["latitude", "location"],
+      menuitem: ["menuitem", "menu_combined"],
+      menuprice: ["menuprice", "menu_combined"],
+    }
+    
+    let edited_fields = [];
+
+    Object.keys(this.state).forEach(key => {
+      const initialVal = this.initialState[key];
+      const currentVal = this.state[key];
+
+      if (!(_.isEqual(initialVal, currentVal))) {
+        if (Object.prototype.hasOwnProperty.call(specialKeys, key)) {
+          const relatedKeys = specialKeys[key];
+          relatedKeys.forEach(relatedKey => {
+            edited_fields.push(relatedKey);
+          });
+        } else {
+          edited_fields.push(key);
+        }
+      }
+    });
+
+    return edited_fields;
+  }
+
   handleSubmit = async (event) => {
     event.preventDefault();
     this.getPostal(this.state.postal);
@@ -338,13 +382,17 @@ export class ListForm extends React.Component {
         price: this.state.menuprice[index],
       };
     });
+
+    let edited_fields = [];
     if(this.props.toggle === "create"){
-      onClick("create_submit_click")
+      onClick("create_submit_click");
+    } else {
+      onClick("edit_submit_click");
+      this.setState({ isLoading: true });
+      edited_fields = this.getEditedFields();
     }
-    else{
-        onClick("edit_submit_click")
-    }
-    await addData({
+
+    await handleData({
       url: this.state.image1,
       image2: this.state.image2,
       image3: this.state.image3,
@@ -390,14 +438,21 @@ export class ListForm extends React.Component {
       docid: this.state.docid,
       wechatid: this.state.wechatid,
       tagsValue: this.state.tagsValue,
+      editedFields: edited_fields,
     }).then((id) => {
       if (this.props.toggle === "create") {
         this.props.history.push({
           pathname: "/info",
           search: "?id=" + id,
         });
-      } else {
-        window.location.reload();
+      } else if (this.props.toggle === "edit") {
+        this.setState({ isLoading: false });
+
+        if (edited_fields.length === 0) {
+          this.props.onSubmitEdit(false);
+        } else {
+          this.props.onSubmitEdit(true);
+        }
       }
     });
   };
@@ -545,6 +600,8 @@ export class ListForm extends React.Component {
       return x < y ? -1 : x > y ? 1 : 0;
     });
     this.setState({ data: data_mrt, cuisineOptions: data_cuisine });
+    this.initialState['data'] = _.cloneDeep(data_mrt);
+    this.initialState['cuisineOptions'] = _.cloneDeep(data_cuisine);
   }
 
   retrieveData = async () => {
@@ -564,6 +621,7 @@ export class ListForm extends React.Component {
         .get()
         .then(Helpers.mapSnapshotToDocs);
       this.setState({ tags: tags });
+      this.initialState['tags'] = _.cloneDeep(tags);
       console.log(this.state.tags);
     } catch (error) {
       console.log("Error getting document:", error);
@@ -1969,8 +2027,17 @@ export class ListForm extends React.Component {
                               }}
                               type="Submit"
                               // onClick={this.handleSubmit}
+                              disabled={this.state.isLoading}
                             >
-                              {context.data.create.submit}
+                              { this.state.isLoading 
+                              ? <Spinner
+                                  as="span"
+                                  animation="border"
+                                  size="sm"
+                                  role="status"
+                                  aria-hidden="true"
+                                />
+                              : context.data.create.submit }
                             </Button>
                           </div>
                         </div>

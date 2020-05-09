@@ -59,6 +59,7 @@ export class Info extends React.Component {
       galleryOpened: false,
       retrieved: false,
       activePhoto: 1,
+      hasReviewMessage: false,
     };
     this.enterDetails = this.enterDetails.bind(this);
     this.handleCustomerDetails = this.handleCustomerDetails.bind(this);
@@ -455,6 +456,13 @@ export class Info extends React.Component {
     }
   };
 
+  showReviewMessage = () => {
+    this.setState({ hasReviewMessage: true });
+    setTimeout(() => {
+      this.setState({ hasReviewMessage: false });
+    }, 10000);
+  }
+
   render() {
     let cuisine = [];
     let regions = [];
@@ -524,6 +532,34 @@ export class Info extends React.Component {
       <div>
         {this.state.retrieved ? (
           <div class="container" style={{ paddingTop: "56px", width: "100%" }}>
+            { this.state.hasReviewMessage ? 
+            <div class="row"
+              style={{
+                marginTop: "20px",
+                marginBottom: "20px", 
+              }}>
+              <div class="card shadow"
+                style={{
+                  color: "black",
+                  backgroundColor: "white",
+                  width: "100%",
+                }}
+              >
+                <span class="card-body">
+                  <div
+                    class="card-title"
+                    style={{
+                      fontSize: "13px",
+                      margin: "0px"
+                    }}
+                  >
+                    <p style={{ margin: "0px" }}>
+                      Your edit(s) will be reflected once they have been reviewed. Thank you for your patience!
+                    </p>
+                  </div>
+                </span>
+              </div>
+            </div> : null }
             <div class="row">
               <div
                 class="jumbotron col-xs-6 col-sm-6 col-md-6 col-lg-6"
@@ -1130,7 +1166,11 @@ export class Info extends React.Component {
                   </TwitterShareButton>{" "}
 
                   <br />
-                  <Component.Popup data={this.state.data} id={this.state.id} />
+                  <Component.Popup 
+                    data={this.state.data} 
+                    id={this.state.id} 
+                    onSubmitEdit={this.showReviewMessage}
+                  />
                   <br />
                   {this.state.data.promo ? (
                     <div
