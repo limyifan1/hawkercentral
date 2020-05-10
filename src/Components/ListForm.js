@@ -104,6 +104,7 @@ const handleData = async ({
   menu_combined,
   tagsValue,
   editedFields,
+  originalName
 }) => {
   let now = new Date();
   var field = {
@@ -167,7 +168,7 @@ const handleData = async ({
   } else if (toggle === "edit") {
     if (editedFields.length > 0) {
       let editedFieldsAndValues = _.pick(field, editedFields);
-      await Helpers.sendEmailToUpdateListing(docid, editedFieldsAndValues)
+      await Helpers.sendEmailToUpdateListing(docid, originalName, editedFieldsAndValues)
         .then((result) => {
           console.log(result);
         })
@@ -439,6 +440,7 @@ export class ListForm extends React.Component {
       wechatid: this.state.wechatid,
       tagsValue: this.state.tagsValue,
       editedFields: edited_fields,
+      originalName: this.initialState.name,
     }).then((id) => {
       if (this.props.toggle === "create") {
         this.props.history.push({
