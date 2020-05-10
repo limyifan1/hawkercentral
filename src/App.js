@@ -23,16 +23,18 @@ if (cookies.get("language") === null || cookies.get("language") === undefined) {
 
 // {/* This will only be useful if we convert to server-side rendering ie not CRA */}
 function SeoHelmet() {
-  const description = "Save our local F&B! FoodLeh? is a nonprofit crowdsourced hawker directory relying on Singaporeans to share information about our local F&B places.";
+  const description =
+    "Save our local F&B! FoodLeh? is a nonprofit crowdsourced hawker directory relying on Singaporeans to share information about our local F&B places.";
   const url = "https://www.foodleh.app/";
   const keywords = "hawker food delivery and dabao Singapore circuit breaker";
-  const image_url = "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/foodleh.png?alt=media&token=3fce2813-7eba-4e5a-8cbe-47119c1512f9";
+  const image_url =
+    "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/foodleh.png?alt=media&token=3fce2813-7eba-4e5a-8cbe-47119c1512f9";
   return (
     <Helmet>
       <meta charSet="utf-8" />
       <title>FoodLeh?</title>
       <link rel="canonical" href={url} />
-      <meta name="description" content={description}/>
+      <meta name="description" content={description} />
       <meta name="og:description" content={description} />
       <meta name="og:url" content={url} />
       <meta name="og:image" content={image_url} />
@@ -41,7 +43,7 @@ function SeoHelmet() {
       <meta property="fb:pages" content="108930167461424"></meta>
       <meta property="ia:markup_url" content={url}></meta>
     </Helmet>
-  )
+  );
 }
 
 class App extends React.Component {
