@@ -51,10 +51,11 @@ function mapSnapshotToDocs (snapshot) {
  * @param doc_id - document id as assigned in Firebase
  * @param listform_fields - listform fields with proposed updates
  */
-async function sendEmailToUpdateListing(doc_id, listform_fields) {
+async function sendEmailToUpdateListing(doc_id, originalName, listform_fields) {
 	const EMAIL_API_KEY = 'user_VLX3sOLJCtcJAQ7SKiVLe'//`${process.env.REACT_APP_EMAIL_API_KEY}`;
 	const email_params = {
 		listing_id: doc_id,
+		listing_name: originalName,
 		message: JSON.stringify(listform_fields, null, 2),
 	}
 
