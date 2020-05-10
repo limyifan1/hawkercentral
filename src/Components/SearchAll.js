@@ -12,6 +12,7 @@ import Select from "react-select";
 
 import firebase from "./Firestore";
 import Helpers from "../Helpers/helpers";
+import { values as cuisines } from "../Helpers/categories";
 import { LanguageContext } from "./themeContext";
 
 const analytics = firebase.analytics();
@@ -19,40 +20,6 @@ const analytics = firebase.analytics();
 function onLoad(name) {
   analytics.logEvent(name);
 }
-
-const cuisines = [
-  "American",
-  "Healthy",
-  "Sandwiches",
-  "Asian",
-  "Indian",
-  "Seafood",
-  "Bakery and Cakes",
-  "Indonesia",
-  "Local",
-  "Beverages",
-  "Italian",
-  "Sushi",
-  "Burgers",
-  "Japanese",
-  "Thai",
-  "Chicken",
-  "Korean",
-  "Vegetarian",
-  "Vegan",
-  "Chinese",
-  "Malay",
-  "Vietnamese",
-  "Dessert",
-  "Malaysian",
-  "Western",
-  "Fast Food",
-  "Meat",
-  "Halal",
-  "Pizza",
-  "Mediterranean",
-  "Grocery Shopping",
-];
 
 let searchTimer = null;
 
