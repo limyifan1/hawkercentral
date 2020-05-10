@@ -6,7 +6,6 @@
 import Home from "./Home";
 import Menu from "./Menu";
 import Create from "./Create";
-import Search from "./Search";
 import Listing from "./Listing";
 import Item from "./Item";
 import Results from "./Results";
@@ -26,7 +25,6 @@ export default {
   Home,
   Menu,
   Create,
-  Search,
   Listing,
   Item,
   Results,
