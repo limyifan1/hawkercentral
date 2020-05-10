@@ -467,11 +467,16 @@ export class Info extends React.Component {
     let cuisine = [];
     let regions = [];
     let photos = [];
-
     let link = "https://wa.me/65" + this.state.data.contact;
     if (this.state.retrieved) {
       if (this.state.data.cuisine) {
         this.state.data.cuisine.forEach((element) => {
+          cuisine.push(<span class="badge badge-info">{element.label}</span>);
+        });
+      }
+      console.log(this.state.data.tagsValue)
+      if (this.state.data.tagsValue) {
+        this.state.data.tagsValue.forEach((element) => {
           cuisine.push(<span class="badge badge-info">{element.label}</span>);
         });
       }
