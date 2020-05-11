@@ -14,6 +14,7 @@
 const fs = require('fs');
 const path = require("path");
 
+// TODO: Change this to dev environment
 const TEST_FIREBASE_PROJECT_ID = "hawkercentral-fork";
 
 // TODO: Change this to your real Firebase Project ID
@@ -275,7 +276,7 @@ describe("hawkers", async () => {
   });
 //#endregion
 
-//#region contact number can be set with 0
+//#region test contact number can be set with 0
 describe("hawkers", async () => {
   const db = firebase.initializeTestApp({
     projectId: TEST_FIREBASE_PROJECT_ID,
@@ -343,6 +344,7 @@ describe("hawkers", async () => {
 });
 //#endregion
   
+//#region test if data in /hawkers can be read by anyone
 describe("hawkers", async () => {
   const db = firebase.initializeTestApp({
     projectId: TEST_FIREBASE_PROJECT_ID,
@@ -412,8 +414,10 @@ describe("hawkers", async () => {
     await firebase.assertSucceeds(db.collection('hawkers').get());
   });
 });
+//#endregion
 
 
+//#region test if data can be set with an arbitrary field
 describe("hawkers", async () => {
   const db = firebase.initializeTestApp({
     projectId: TEST_FIREBASE_PROJECT_ID,
@@ -480,7 +484,10 @@ describe("hawkers", async () => {
       }));
   });
 });
+//#endregion
 
+
+//#region test if data can be set without the required fields
 describe("hawkers", async () => {
   const db = firebase.initializeTestApp({
     projectId: TEST_FIREBASE_PROJECT_ID,
@@ -544,3 +551,4 @@ describe("hawkers", async () => {
       }));
   });
 });
+//#endregion
