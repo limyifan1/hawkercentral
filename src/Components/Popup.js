@@ -5,21 +5,11 @@
 
 import React from "react";
 import "../App.css";
-import { Button, Modal, Spinner } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import Component from "../Components";
-import Helpers from "../Helpers/helpers";
+import DeleteModal from "./DeleteModal";
 
 import { withRouter } from "react-router-dom";
-
-const sendDeleteEmail = async(docid, originalName) => {
-  await Helpers.sendEmailToUpdateListing(docid, originalName, "delete", {})
-    .then((result) => {
-      console.log(result);
-    })
-    .catch(function (error) {
-      console.error("Error sending email: ", error);
-    });
-};
 
 export class Popup extends React.Component {
   constructor(props) {
@@ -56,14 +46,8 @@ export class Popup extends React.Component {
     this.setState({ showDeleteModal: false });
   };
 
-  handleSubmitDelete = async () => {
-    this.setState({ isDeleting: true });
-    await sendDeleteEmail(this.props.id, this.props.data.name)
-      .then(() => {
-        this.setHideDeleteModal();
-        this.setState({ isDeleting: false });
-        this.props.onSubmitDelete();
-      });
+  handleSubmitDelete = () => {
+    this.props.onSubmitDelete();
   }
 
   render() {
@@ -141,58 +125,13 @@ export class Popup extends React.Component {
             />
           </Modal.Body>
         </Modal>
-        <Modal
-          onHide={this.setHideDeleteModal}
-          show={this.state.showDeleteModal}
-          dialogClassName="modal-dialog modal-90w"
-          aria-labelledby="example-custom-modal-styling-title"
-          style={{ "margin-top": "50px" }}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title id="example-custom-modal-styling-title">
-              Delete Hawker Listing
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>Are you sure you want to delete this hawker listing?</p>
-            <Button
-              class="shadow-sm"
-              style={{
-                backgroundColor: "#ffffff",
-                borderColor: "#b48300",
-                float: "right",
-                marginLeft: "12px",
-              }}
-              onClick={this.setHideDeleteModal}
-              disabled={this.state.isDeleting}
-            >
-              <p style={{ 
-                margin: "0rem",
-                color: "black", 
-              }}>No</p>
-            </Button>
-            <Button
-              class="shadow-sm"
-              style={{
-                backgroundColor: "#b48300",
-                borderColor: "#b48300",
-                float: "right",
-              }}
-              onClick={this.handleSubmitDelete}
-              disabled={this.state.isDeleting}
-            >
-              { this.state.isDeleting 
-              ? <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />
-              : <p style={{ margin: "0rem" }}>Yes</p> }
-            </Button>
-          </Modal.Body>
-        </Modal>
+        <DeleteModal 
+          showDeleteModal={this.state.showDeleteModal}
+          hideDeleteModal={this.setHideDeleteModal}
+          docId={this.props.id}
+          originalName={this.props.data.name} 
+          onSubmitDelete={this.handleSubmitDelete}
+          />
       </span>
     );
   }

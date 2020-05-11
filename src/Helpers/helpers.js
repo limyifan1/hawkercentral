@@ -65,7 +65,7 @@ async function sendEmailToUpdateListing(docId, originalName, actionWord, listfor
 		email_params['description'] = "A user has requested to edit this listing to:";
 		email_params['message'] = JSON.stringify(listformFields, null, 2);
 	} else if (actionWord === "delete") {
-		email_params['description'] = "A user has reqeusted to delete this listing.";
+		email_params['description'] = "A user has requested to delete this listing.";
 	}
 
 	await emailjs.send('outlook', 'contact_form', email_params, EMAIL_API_KEY)
