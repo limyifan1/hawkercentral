@@ -5,7 +5,7 @@
 
 import React from "react";
 import "../App.css";
-import { Modal } from "react-bootstrap";
+import { Button, Modal, Spinner } from "react-bootstrap";
 import Component from "../Components";
 
 import { withRouter } from "react-router-dom";
@@ -15,25 +15,37 @@ export class Popup extends React.Component {
     super(props);
 
     this.state = {
-      show: false,
-      setShow: false,
+      showEditModal: false,
+      showDeleteModal: false,
     };
   }
 
-  setShow = () => {
-    this.setState({ show: true });
+  setShowEditModal = () => {
+    this.setState({ showEditModal: true });
   };
 
-  setHide = () => {
-    this.setState({ show: false });
+  setHideEditModal = () => {
+    this.setState({ showEditModal: false });
   };
 
   handleSubmitEdit = (hasEdit) => {
-    this.setHide();
+    this.setHideEditModal();
 
     if (hasEdit) {
       this.props.onSubmitEdit();
     }
+  }
+
+  setShowDeleteModal = () => {
+    this.setState({ showDeleteModal: true });
+  };
+
+  setHideDeleteModal = () => {
+    this.setState({ showDeleteModal: false });
+  };
+
+  handleSubmitDelete = () => {
+    this.props.onSubmitDelete();
   }
 
   render() {
@@ -44,7 +56,24 @@ export class Popup extends React.Component {
           style={{ backgroundColor: "", position: "relative", left: "20px" }}
         >
           <div
-            onClick={() => this.setShow()}
+            onClick={() => this.setShowDeleteModal()}
+            class="d-flex justify-content-center"
+            style={{
+              border: "2px solid",
+              "border-color": "grey",
+              color: "black",
+              width: "60px",
+              alignText: "center",
+              fontSize: "12px",
+              cursor: "pointer",
+              marginTop: "12px",
+              marginRight: "12px",
+            }}
+          >
+            Delete
+          </div>
+          <div
+            onClick={() => this.setShowEditModal()}
             class="d-flex justify-content-center"
             style={{
               border: "2px solid",
@@ -73,10 +102,9 @@ export class Popup extends React.Component {
             </span>
           ) : null}
         </div>
-
         <Modal
-          onHide={this.setHide}
-          show={this.state.show}
+          onHide={this.setHideEditModal}
+          show={this.state.showEditModal}
           dialogClassName="modal-dialog modal-90w"
           aria-labelledby="example-custom-modal-styling-title"
           style={{ "margin-top": "50px" }}
@@ -93,6 +121,58 @@ export class Popup extends React.Component {
               data={this.props.data}
               onSubmitEdit={this.handleSubmitEdit}
             />
+          </Modal.Body>
+        </Modal>
+        <Modal
+          onHide={this.setHideDeleteModal}
+          show={this.state.showDeleteModal}
+          dialogClassName="modal-dialog modal-90w"
+          aria-labelledby="example-custom-modal-styling-title"
+          style={{ "margin-top": "50px" }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="example-custom-modal-styling-title">
+              Delete Hawker Listing
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Are you sure you want to delete this hawker listing?</p>
+            <Button
+              class="shadow-sm"
+              style={{
+                backgroundColor: "#ffffff",
+                borderColor: "#b48300",
+                float: "right",
+                marginLeft: "12px",
+              }}
+              onClick={this.setHideDeleteModal}
+              disabled={this.state.isLoading}
+            >
+              <p style={{ 
+                margin: "0rem",
+                color: "black", 
+              }}>No</p>
+            </Button>
+            <Button
+              class="shadow-sm"
+              style={{
+                backgroundColor: "#b48300",
+                borderColor: "#b48300",
+                float: "right",
+              }}
+              onClick={this.handleSubmitDelete}
+              disabled={this.state.isLoading}
+            >
+              { this.state.isLoading 
+              ? <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+              : <p style={{ margin: "0rem" }}>Yes</p> }
+            </Button>
           </Modal.Body>
         </Modal>
       </span>
