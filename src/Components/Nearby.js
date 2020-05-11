@@ -12,6 +12,7 @@ import { Spinner } from "react-bootstrap";
 import Select from "react-select";
 import firebase, { db, geo, geoToPromise } from "./Firestore";
 import Helpers from "../Helpers/helpers";
+import { values as cuisines } from "../Helpers/categories";
 import { LanguageContext } from "./themeContext";
 
 const analytics = firebase.analytics();
@@ -19,40 +20,6 @@ const analytics = firebase.analytics();
 function onLoad(name) {
   analytics.logEvent(name);
 }
-
-const cuisines = [
-  "American",
-  "Healthy",
-  "Sandwiches",
-  "Asian",
-  "Indian",
-  "Seafood",
-  "Bakery and Cakes",
-  "Indonesia",
-  "Local",
-  "Beverages",
-  "Italian",
-  "Sushi",
-  "Burgers",
-  "Japanese",
-  "Thai",
-  "Chicken",
-  "Korean",
-  "Vegetarian",
-  "Vegan",
-  "Chinese",
-  "Malay",
-  "Vietnamese",
-  "Dessert",
-  "Malaysian",
-  "Western",
-  "Fast Food",
-  "Meat",
-  "Halal",
-  "Pizza",
-  "Mediterranean",
-  "Grocery Shopping",
-];
 
 // const responsive = {
 //   superLargeDesktop: {
@@ -154,12 +121,16 @@ export class Nearby extends React.Component {
       );
       placesWithinReach.forEach((d) => (placesById[d.id] = d));
 
-      const islandwide = await db
+      const userRegion = await Helpers.postalPlanningRegion(this.state.query);
+      const regions = await db
         .collection("hawkers")
-        .where("regions", "array-contains", "Islandwide")
+        .where("regions", "array-contains-any", [
+          "Islandwide",
+          userRegion.region,
+        ])
         .get()
         .then(Helpers.mapSnapshotToDocs);
-      islandwide.forEach((d) => (placesById[d.id] = d));
+      regions.forEach((d) => (placesById[d.id] = d));
 
       data = Object.values(placesById);
     } else {
@@ -168,6 +139,17 @@ export class Nearby extends React.Component {
         .get()
         .then(Helpers.mapSnapshotToDocs);
     }
+
+    data = data.map((d) => {
+      if (d.tagsValue !== undefined) {
+        d.tags = d.tagsValue.map((v) => v.trim().toLowerCase());
+        d.menu_list = d.menu_combined.map((v) => v.name.trim().toLowerCase());
+      } else {
+        d.menu_list = [];
+        d.tags = [];
+      }
+      return d;
+    });
 
     this.setState({ data, retrieved: true });
     window.scrollTo(0, this.context.scrollPosition);
@@ -283,7 +265,9 @@ export class Nearby extends React.Component {
               .includes(this.state.search.toLowerCase()) ||
             d.description_detail
               .toLowerCase()
-              .includes(this.state.search.toLowerCase())
+              .includes(this.state.search.toLowerCase()) ||
+            d.tags.includes(this.state.search.toLowerCase()) ||
+            d.menu_list.includes(this.state.search.toLowerCase())
           );
         });
       }
@@ -394,16 +378,16 @@ export class Nearby extends React.Component {
               result.nearby.length > 0 ? (
                 result.nearby
               ) : (
-                  <span class="mt-5">No Results Found</span>
-                )
+                <span class="mt-5">No Results Found</span>
+              )
             ) : (
-                <div class="row h-100 page-container">
-                  <div class="col-sm-12 my-auto">
-                    <h3>Loading</h3>
-                    <Spinner class="" animation="grow" />
-                  </div>
+              <div class="row h-100 page-container">
+                <div class="col-sm-12 my-auto">
+                  <h3>Loading</h3>
+                  <Spinner class="" animation="grow" />
                 </div>
-              )}
+              </div>
+            )}
           </div>
         </div>
       </div>

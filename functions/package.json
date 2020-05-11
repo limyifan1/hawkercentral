@@ -15,6 +15,7 @@
   "dependencies": {
     "firebase-admin": "8.12.1",
     "firebase-functions": "3.6.1",
+    "request": "^2.88.2",
     "telegraf": "3.38.0",
     "twilio": "3.43.0"
   },
