@@ -454,7 +454,7 @@ export class ListForm extends React.Component {
       toggle: this.props.toggle,
       docid: this.state.docid,
       wechatid: this.state.wechatid,
-      tagsValue: this.state.tagsValue,
+      tagsValue: this.state.tagsValue.map((v) => v.label.trim()),
       editedFields: edited_fields,
       originalName: this.initialState.name,
     }).then((id) => {
