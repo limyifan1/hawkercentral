@@ -1023,7 +1023,6 @@ export class Info extends React.Component {
                                           >
                                             <br />
                                             {this.state.data.whatsapp ? (
-                                              //<div class="btn-group float-right" role="group" aria-label="Basic example">
                                               <div>
                                                 <Button
                                                   variant="light"
