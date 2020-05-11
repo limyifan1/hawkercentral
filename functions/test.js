@@ -88,6 +88,7 @@ after(() => {
 });
 
 // Unit test the security rules
+//#region Test if data can be created with the correct fields
 describe("hawkers", () => {
 
   const db = firebase.initializeTestApp({
@@ -147,7 +148,9 @@ describe("hawkers", () => {
       }));
   });
 });
+//#endregion
 
+//#region Test if operation fails if there are missing fields
 describe("hawkers", async () => {
   const db = firebase.initializeTestApp({
     projectId: TEST_FIREBASE_PROJECT_ID,
@@ -207,6 +210,7 @@ describe("hawkers", async () => {
       }));
   });
 });
+//#endregion
 
 //#region test if operation fails if phone number is invalid
 describe("hawkers", async () => {
