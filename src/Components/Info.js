@@ -1467,6 +1467,17 @@ export class Info extends React.Component {
                       </p>
                     </div>
                   ) : null}
+                  {/* <p style={{ marginBottom: "20px" }}>
+                    {this.state.data.website ? (
+                      this.state.data.website.slice(0, 4) === "http" ? (
+                        <a href={this.state.data.website}>Website Link</a>
+                      ) : (
+                        <a href={"https://" + this.state.data.website}>
+                          Website Link
+                        </a>
+                      )
+                    ) : null}
+                  </p> */}
                   <p style={{ color: "grey" }}>
                     <small>
                       Are you the owner? Email foodleh@outlook.com for
