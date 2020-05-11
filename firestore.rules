@@ -1,18 +1,126 @@
 rules_version = '2';
 service cloud.firestore {
-  match /databases/{database}/documents {
 
-    // This rule allows anyone on the internet to view, edit, and delete
-    // all data in your Firestore database. It is useful for getting
-    // started, but it is configured to expire after 30 days because it
-    // leaves your app open to attackers. At that time, all client
-    // requests to your Firestore database will be denied.
-    //
-    // Make sure to write security rules for your app before that time, or else
-    // your app will lose access to your Firestore database
-    match /{document=**} {
-      allow read, write: if request.time < timestamp.date(2020, 5, 17);
-      allow delete: if false
+  //Matches only /hawkers/{documentId} and not any deeper subcollections/documents, those matches has to be written explicitly
+  match /databases/{database}/documents {
+  //checks if a given number is a postive number and is a number object
+  	function isNumber(num){
+    	return (num is float || num is int);
+    }
+
+    // function isValidLatLng(lat, lng){
+    // 	return (isNumber(lat) && isNumber(lng)) && ((lat >= -90 && lat <= 90) && (lng >= -180 && lng <= 180));
+    // }
+
+    function isString(stringToTest){
+      return (stringToTest is string);
+    }
+    
+    function isPositiveNumber(num){
+      return isNumber(num) && num > 0;
+    }
+
+    function isValidPhoneNumber(num){
+       return string(num).matches('^(6|8|9)[0-9]{7}$') || num == 0;
+    }
+
+    function hasValidFields(fields){
+      return fields.hasAll([
+      'name', 
+      'postal' , 
+      'street', 
+      'price', 
+      'description', 
+      'description_detail', 
+      'image1', 'image2', 
+      'image3', 
+      'image4', 
+      'image5', 
+      'image6' ,
+      'imageFile1',
+      'imageFile2',
+      'imageFile3',
+      'imageFile4',
+      'imageFile5',
+      'imageFile6',
+      'imageName',
+      'longitude', 
+      'latitude',
+      'unit',
+      'delivery_option',
+      'pickup_option',
+      'delivery',
+      'cuisineValue',
+      'call',
+      'whatsapp',
+      'sms',
+      'inperson',
+      'contact',
+      'docid',
+      'opening',
+      'region',
+      'website',
+      'promo',
+      'condition',
+      'delivery_detail',
+      'menu',
+      'menuitem',
+      'menuprice',
+      'wechatid' ])
+    }
+
+    // function isNull(obj){
+    //   return obj == null;
+    // }
+
+    // //TODO Need structure of regions
+    // function isValidRegion(regions){
+    //   return regions.hasOnly();
+    // }
+
+    // //TODO Need structure of cuisines
+    // function isValidCuisine(cusines){
+    //   return array.hasOnly()
+    // }
+
+    // //TODO Need valid categories 
+    // function isValidCategory(categories){
+    //   return categories.hasOnly()
+    // }
+
+    // function isBooleanOrNull(obj){
+    //   return obj is bool || obj == null;
+    // }
+
+    // function isStringOrNull(obj){
+    //     return obj == null || obj is string;
+    // }
+
+    match /hawkers/{document} {
+      //Reads are public, but may incur download costs if malicious users continuously reads them.
+      allow read;
+      //So are writes, all they need to know is the correct structure to allow these writes, but we validation, we can prevent less garbage data.
+      allow write: if isString(request.resource.data.name) // Required Field 
+      && isValidPhoneNumber(request.resource.data.contact) // Required Field
+      && isPositiveNumber(request.resource.data.postal) // Required Field
+      && hasValidFields(request.resource.data.keys()) //This prevents any writes without any of these fields and prevents arbitrary fields from being written.
+      // && request.resource.data.size() == 42 //This matches the number of fields we currently have and locks it in to the number of fields, but since we have optional fields, we should remove it for now
+      
+      // Validations below are pending confirmation/more data structure. 
+
+      // && isPostiveNumber(request.resource.data.price) //Pending confirmations.
+      // && isStringOrNull(request.resource.data.url)      
+      // && isStringOrNull(request.resource.data.description)
+      // && isStringOrNull(request.resource.data.unit)
+      // && isStringOrNull(request.resource.data.street)
+      // && isStringOrNull(request.resource.data.description_detail)
+      // && isBooleanOrNull(request.resource.data.call)
+      // && isBooleanOrNull(request.resource.data.whatsapp)
+      // && isBooleanOrNull(request.resource.data.sms)
+      // && isBooleanOrNull(request.resource.data.inperson)
+      // && isBooleanOrNull(request.resource.data.pickup_option)
+      // && isBooleanOrNull(request.resource.data.delivery_option)
+      allow delete: if false;
     }
   }
 }
