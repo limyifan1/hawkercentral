@@ -96,6 +96,16 @@ service cloud.firestore {
     //     return obj == null || obj is string;
     // }
 
+    //TODO Need structure
+    match /deliveries/{document=**} {
+      allow read, write;
+    }
+
+    //TODO Need structure
+    match /cuisine/{document=**} {
+      allow read, write;
+    }
+
     match /hawkers/{document} {
       //Reads are public, but may incur download costs if malicious users continuously reads them.
       allow read;
