@@ -304,11 +304,20 @@ export class Info extends React.Component {
     });
   };
 
-  getMenu = () => {
+
+
+  getMenu = (without_first_item) => {
     if (this.state.data.menu_combined) {
       let data = [];
       this.state.data.menu_combined.forEach((element, i) => {
-        if (element.name && element.price && i !== 0) {
+        console.log(without_first_item);
+        // If without_first_item, condition should be (element.name && element.price && i !== 0)) [1]
+        // Else condition should only be (element.name && element.price) [2]
+        let toPush = true;
+        without_first_item ? ((element.name && element.price && i !== 0)
+          ? (toPush = true) : (toPush = false)) :
+          ((element.name && element.price) ? (toPush = true) : (toPush = false));
+        if (toPush) {
           data.push(
             <div>
               <figure
@@ -927,9 +936,10 @@ export class Info extends React.Component {
                             </div>
                           ) : null}
 
-                        {/* See more button expands menu if > 1 item && customer hasn't clicked Menu / see more */}
-                        {!this.state.wantToOrder && this.state.data.menu && this.state.data.menu_combined.length > 1 &&
-                          this.state.data.menu_combined[1].name !== "" ? (
+                        {/* See more button shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
+                        {((!this.state.wantToOrder && this.state.data.menu && this.state.data.menu_combined.length > 1 &&
+                          this.state.data.menu_combined[1].name !== "") ||
+                          (!this.state.wantToOrder && this.state.data.menu_combined[1].name === "")) ? (
                             <div>
                               <hr
                                 style={{
@@ -961,7 +971,7 @@ export class Info extends React.Component {
                         {/* Display the rest of the menu if customer clicks Menu / see more */}
                         {this.state.wantToOrder ? (
                           <div>
-                            <p>{this.getMenu()} </p>
+                            <p>{this.getMenu(true)} </p>
                             <div>
                               <br />
                               <img
@@ -1418,7 +1428,7 @@ export class Info extends React.Component {
                       <h6 style={{ marginBottom: "0px" }}>
                         <b>Menu Items</b>
                       </h6>
-                      <p>{this.getMenu()} </p>
+                      <p>{this.getMenu(false)} </p>
                       <br></br>
                     </div>
                   ) : null}
