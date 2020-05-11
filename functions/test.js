@@ -300,7 +300,7 @@ describe("hawkers", async () => {
   });
 
   it("contact can be set with 0", async () => {
-    await firebase.assertFails(db.collection("hawkers").doc().set({
+    await firebase.assertSucceeds(db.collection("hawkers").doc().set({
       name: "test 123",
       postal: 760777,
       street: "",
@@ -512,6 +512,8 @@ describe("hawkers", async () => {
 
   it("cannot be set without required fields", async () => {
     await firebase.assertFails(db.collection("hawkers").doc().set({
+      name: "test 123",
+      postal: 760777,
       street: "",
       price: "",
       description: "",
@@ -540,6 +542,7 @@ describe("hawkers", async () => {
       whatsapp: false,
       sms: false,
       inperson: false,
+      contact: 12345678,
       docid: "",
       opening: "",
       region: [],
@@ -551,6 +554,7 @@ describe("hawkers", async () => {
       menuitem: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
       menuprice: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
       wechatid: "",
+      test_extra_data : "",
       test_extra_data : "",
       }));
   });
