@@ -157,7 +157,10 @@ export class Nearby extends React.Component {
       const userRegion = await Helpers.postalPlanningRegion(this.state.query);
       const regions = await db
         .collection("hawkers")
-        .where("regions", "array-contains-any", ["Islandwide",userRegion.region])
+        .where("regions", "array-contains-any", [
+          "Islandwide",
+          userRegion.region,
+        ])
         .get()
         .then(Helpers.mapSnapshotToDocs);
       regions.forEach((d) => (placesById[d.id] = d));
@@ -169,6 +172,17 @@ export class Nearby extends React.Component {
         .get()
         .then(Helpers.mapSnapshotToDocs);
     }
+
+    data = data.map((d) => {
+      if (d.tagsValue !== undefined) {
+        d.tags = d.tagsValue.map((v) => v.trim().toLowerCase());
+        d.menu_list = d.menu_combined.map((v) => v.name.trim().toLowerCase());
+      } else {
+        d.menu_list = [];
+        d.tags = [];
+      }
+      return d;
+    });
 
     this.setState({ data, retrieved: true });
     window.scrollTo(0, this.context.scrollPosition);
@@ -284,7 +298,9 @@ export class Nearby extends React.Component {
               .includes(this.state.search.toLowerCase()) ||
             d.description_detail
               .toLowerCase()
-              .includes(this.state.search.toLowerCase())
+              .includes(this.state.search.toLowerCase()) ||
+            d.tags.includes(this.state.search.toLowerCase()) ||
+            d.menu_list.includes(this.state.search.toLowerCase())
           );
         });
       }
