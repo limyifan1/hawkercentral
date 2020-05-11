@@ -747,6 +747,10 @@ export class ListForm extends React.Component {
               value: "islandwide",
             },
             {
+              label: "Northeast",
+              value: "northeast",
+            },
+            {
               label: "North",
               value: "north",
             },
