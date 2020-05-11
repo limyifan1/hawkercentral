@@ -10,7 +10,7 @@ const { Telegraf } = require("telegraf");
 var admin = require("firebase-admin");
 const express = require("express");
 admin.initializeApp(functions.config().firebase);
-
+var request = require("request");
 const accountSid = functions.config().twilio.sid;
 const authToken = functions.config().twilio.token;
 const twilio = require("twilio")(accountSid, authToken);
@@ -19,6 +19,31 @@ const twilio = require("twilio")(accountSid, authToken);
 const app = express();
 // Replace BUCKET_NAME
 const bucket = "gs://backup-bucket-hawkercentral";
+
+exports.requestOneMap = functions
+  .region("asia-east2")
+  .https.onRequest(async (req, res) => {
+    return cors(req, res, async () => {
+      var options = {
+        method: "POST",
+        url: "https://developers.onemap.sg/privateapi/auth/post/getToken",
+        headers: {
+          "cache-control": "no-cache",
+          "content-type":
+            "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
+        },
+        formData: {
+          email: functions.config().onemap.email,
+          password: functions.config().onemap.password,
+        },
+      };
+
+      request(options, (error, response, body) => {
+        if (error) throw new Error(error);
+        res.status(200).send(body);
+      });
+    });
+  });
 
 exports.all = functions.https.onRequest(async (req, res) => {
   return cors(req, res, async () => {
@@ -94,8 +119,8 @@ exports.telegramSend = functions
       var time = req.body.time;
       var cancel = "www.foodleh.app/delivery?cancel=" + id;
       var requester_mobile = req.body.requester_mobile;
-      var duration = req.body.duration
-      var arrival = req.body.arrival
+      var duration = req.body.duration;
+      var arrival = req.body.arrival;
       var message =
         "<b>New Order Received</b> \n" +
         "<b>From: </b> <a href='https://maps.google.com/?q=" +
@@ -200,7 +225,9 @@ exports.telegramEdit = functions
       twilio.messages
         .create({
           body:
-            "Order Confirmed: "+time+" \n " +
+            "Order Confirmed: " +
+            time +
+            " \n " +
             "Stall: " +
             requester_mobile +
             "\n" +
