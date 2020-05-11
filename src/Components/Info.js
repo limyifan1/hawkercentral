@@ -787,6 +787,7 @@ export class Info extends React.Component {
                         <span class="">
                           <a
                             href={link}
+                            target="blank"
                             onClick={() =>
                               onLoad("message", this.state.data.name)
                             }
@@ -1294,6 +1295,7 @@ export class Info extends React.Component {
                                   "&text=" +
                                   this.setOrderText()
                                 }
+                                target="blank"
                                 style={{
                                   backgroundColor: "#B48300",
                                   borderColor: "#B48300",
