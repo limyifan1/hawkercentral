@@ -16,10 +16,10 @@ import Linkify from "react-linkify";
 import { withRouter } from "react-router-dom";
 import update from "immutability-helper";
 import whatsapp_button from "../assets/whatsapp_button.png";
-import orderleh from "../assets/orderleh.png";
-// import menu_button from "../assets/menu_button.png";
+import menu_button from "../assets/menu_button.png";
 import website_button from "../assets/website_button.png";
 import menu_title from "../assets/info_menu.png";
+import orderleh_title from "../assets/orderleh_title.png";
 import delivery_title from "../assets/info_delivery.png";
 import revieworder from "../assets/info_review_order.png";
 import firebase from "./Firestore";
@@ -308,7 +308,7 @@ export class Info extends React.Component {
     if (this.state.data.menu_combined) {
       let data = [];
       this.state.data.menu_combined.forEach((element, i) => {
-        if (element.name && element.price) {
+        if (element.name && element.price && i !== 0) {
           data.push(
             <div>
               <figure
@@ -746,8 +746,21 @@ export class Info extends React.Component {
                     </div>
                   ) : null}
                   <br />
-                  {/* custom button display: menu, website, message */}
+                  {/* Custom button display: menu, website, message */}
                   <div>
+                    {this.state.data.menu &&
+                      this.state.data.whatsapp &&
+                      this.state.data.menu_combined.length > 0 &&
+                      this.state.data.menu_combined[0].name !== "" ? (
+                        <span class="">
+                          <img
+                            alt=""
+                            onClick={this.enterDetails}
+                            src={menu_button}
+                            style={{ width: "25%", cursor: "pointer" }}
+                          />
+                        </span>
+                      ) : null}
                     {this.state.data.website ? (
                       <a
                         href={
@@ -787,33 +800,166 @@ export class Info extends React.Component {
                             />
                           </a>
                         </span>
+
+                        {/* Display appropriate header - menu / menu with Whatsapp ordering */}
                         {this.state.data.menu &&
+                          this.state.data.whatsapp &&
                           this.state.data.menu_combined.length > 0 &&
                           this.state.data.menu_combined[0].name !== "" ? (
-                            <span class="">
-                              <img
-                                alt=""
-                                onClick={this.enterDetails}
-                                src={orderleh}
-                                style={{ width: "25%", cursor: "pointer" }}
-                              />
-                            </span>
+
+                            <div>
+                              <br />
+                              <br />
+                              <span class="">
+                                <img
+                                  alt=""
+                                  src={orderleh_title}
+                                  style={{ width: "60%" }}
+                                />
+                              </span>
+                            </div>
+                          ) : (
+                            this.state.data.menu && this.state.data.menu_combined.length > 0 &&
+                              this.state.data.menu_combined[0].name !== "" ? (
+                                <div>
+                                  <br />
+                                  <br />
+
+                                  <span class="">
+                                    <img
+                                      alt=""
+                                      src={menu_title}
+                                      style={{ width: "60%" }}
+                                    />
+                                  </span>
+                                </div>
+                              ) : null
+                          )}
+                        {/* Display the first item of the menu with a see more button - TODO: boilerplate code */}
+                        {this.state.data.menu && this.state.data.menu_combined.length > 0 &&
+                          this.state.data.menu_combined[0].name !== "" ? (
+                            <div>
+                              <figure
+                                class="shadow"
+                                style={{
+                                  margin: "20px",
+                                  paddingLeft: "10px",
+                                  paddingTop: "10px",
+                                  height: "120px",
+                                  backgroundColor: "#f1f1f1",
+                                  "border-radius": "5px",
+                                  position: "relative",
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    alignContent: "right",
+                                    fontSize: "110%",
+                                  }}
+                                >
+                                  <b>{this.state.data.menu_combined[0] ? this.state.data.menu_combined[0].name : null}</b>
+                                </span>
+                                <div
+                                  class="btn-group float-right"
+                                  role="group"
+                                  aria-label="Basic example"
+                                >
+                                  <br />
+                                  {this.state.data.whatsapp ? (
+                                    <div>
+                                      <Button
+                                        variant="light"
+                                        size="sm"
+                                        onClick={this.minusItem}
+                                        name={0} // hardcode 0 to display first menu item
+                                        className="shadow-sm"
+                                        style={{
+                                          backgroundColor: "white",
+                                          color: "black",
+                                          "border-radius": "3px",
+                                          margin: "10px",
+                                        }}
+                                      >
+                                        -
+                      </Button>
+                                      <span
+                                        style={{
+                                          margin: "10px",
+                                        }}
+                                      >
+                                        <b>
+                                          {this.state.orderData[0] !== undefined
+                                            ? this.state.orderData[0] // hardcode 0 to display first menu item
+                                            : 0}
+                                        </b>
+                                      </span>
+                                      <Button
+                                        variant="dark"
+                                        size="sm"
+                                        onClick={this.addItem}
+                                        name={0} // hardcode 0 to display first menu item
+                                        className="shadow-sm"
+                                        style={{
+                                          backgroundColor: "black",
+                                          color: "white",
+                                          "border-radius": "3px",
+                                          margin: "10px",
+                                        }}
+                                      >
+                                        +
+                      </Button>
+                                    </div>
+                                  ) : null}
+                                </div>
+                                <br />
+                                <span
+                                  class="shadow badge badge-info m-2"
+                                  style={{
+                                    backgroundColor: "#b48300",
+                                    alignContent: "left",
+                                    fontSize: "110%",
+                                  }}
+                                >
+                                  ${this.state.data.menu_combined[0].price ? this.state.data.menu_combined[0].price : "TBD"}
+                                </span>
+                              </figure>
+                            </div>
                           ) : null}
 
+                        {/* See more button expands menu if > 1 item && customer hasn't clicked Menu / see more */}
+                        {!this.state.wantToOrder && this.state.data.menu && this.state.data.menu_combined.length > 1 &&
+                          this.state.data.menu_combined[1].name !== "" ? (
+                            <div>
+                              <hr
+                                style={{
+                                  color: "grey",
+                                  backgroundColor: "grey",
+                                  height: "1px",
+                                  borderColor: "grey",
+                                  width: "100%",
+                                  alignItems: "center",
+                                  marginBottom: "0px", // aligns See More to divider
+                                }}
+                              />
+                              <div
+                                style={{
+                                  textAlign: "center",
+                                  paddingRight: "15px",
+                                  fontSize: "110%",
+                                  cursor: "pointer",
+                                  color: "grey",
+                                }}
+                                onClick={this.enterDetails}
+                              >
+                                <b>
+                                  see more ↓
+                              </b>
+                              </div>
+                            </div>
+                          ) : null}
+                        {/* Display the rest of the menu if customer clicks Menu / see more */}
                         {this.state.wantToOrder ? (
                           <div>
-                            <br />
-                            <br />
-
-                            <span class="">
-                              <img
-                                alt=""
-                                src={menu_title}
-                                style={{ width: "60%" }}
-                              />
-                            </span>
-                            <br></br>
-
                             <p>{this.getMenu()} </p>
                             <div>
                               <br />
@@ -845,6 +991,7 @@ export class Info extends React.Component {
                                   <br />
                                   <br />
                                 </span>
+
                                 {/* Item represents object with properties name and price */}
                                 {this.state.data.menu_combined.map(
                                   (item, i) => {
