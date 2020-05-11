@@ -477,7 +477,7 @@ export class Info extends React.Component {
       console.log(this.state.data.tagsValue)
       if (this.state.data.tagsValue) {
         this.state.data.tagsValue.forEach((element) => {
-          cuisine.push(<span class="badge badge-info">{element.label}</span>);
+          cuisine.push(<span class="badge badge-secondary">{element}</span>);
         });
       }
       if (this.state.data.regions) {
