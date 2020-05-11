@@ -48,15 +48,24 @@ function mapSnapshotToDocs (snapshot) {
 
 /**
  * Sends an email to notify of a proposed change to a listform
- * @param doc_id - document id as assigned in Firebase
- * @param listform_fields - listform fields with proposed updates
+ * @param docId - document id as assigned in Firebase
+ * @param originalName - the original name of the store in the listing
+ * @param actionWord - the proposed change made to the listing
+ * @param listformFields - listform fields with proposed edits
  */
-async function sendEmailToUpdateListing(doc_id, originalName, listform_fields) {
-	const EMAIL_API_KEY = 'user_VLX3sOLJCtcJAQ7SKiVLe'//`${process.env.REACT_APP_EMAIL_API_KEY}`;
+async function sendEmailToUpdateListing(docId, originalName, actionWord, listformFields) {
+	const EMAIL_API_KEY = `${process.env.REACT_APP_EMAIL_API_KEY}`;
 	const email_params = {
-		listing_id: doc_id,
+		listing_id: docId,
 		listing_name: originalName,
-		message: JSON.stringify(listform_fields, null, 2),
+		action_word: actionWord,
+	}
+
+	if (actionWord === "edit") {
+		email_params['description'] = "A user has requested to edit this listing to:";
+		email_params['message'] = JSON.stringify(listformFields, null, 2);
+	} else if (actionWord === "delete") {
+		email_params['description'] = "A user has reqeusted to delete this listing.";
 	}
 
 	await emailjs.send('outlook', 'contact_form', email_params, EMAIL_API_KEY)

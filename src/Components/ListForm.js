@@ -168,7 +168,7 @@ const handleData = async ({
   } else if (toggle === "edit") {
     if (editedFields.length > 0) {
       let editedFieldsAndValues = _.pick(field, editedFields);
-      await Helpers.sendEmailToUpdateListing(docid, originalName, editedFieldsAndValues)
+      await Helpers.sendEmailToUpdateListing(docid, originalName, "edit", editedFieldsAndValues)
         .then((result) => {
           console.log(result);
         })

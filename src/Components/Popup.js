@@ -7,8 +7,19 @@ import React from "react";
 import "../App.css";
 import { Button, Modal, Spinner } from "react-bootstrap";
 import Component from "../Components";
+import Helpers from "../Helpers/helpers";
 
 import { withRouter } from "react-router-dom";
+
+const sendDeleteEmail = async(docid, originalName) => {
+  await Helpers.sendEmailToUpdateListing(docid, originalName, "delete", {})
+    .then((result) => {
+      console.log(result);
+    })
+    .catch(function (error) {
+      console.error("Error sending email: ", error);
+    });
+};
 
 export class Popup extends React.Component {
   constructor(props) {
@@ -17,6 +28,7 @@ export class Popup extends React.Component {
     this.state = {
       showEditModal: false,
       showDeleteModal: false,
+      isDeleting: false,
     };
   }
 
@@ -44,9 +56,14 @@ export class Popup extends React.Component {
     this.setState({ showDeleteModal: false });
   };
 
-  handleSubmitDelete = () => {
-    this.setHideDeleteModal();
-    this.props.onSubmitDelete();
+  handleSubmitDelete = async () => {
+    this.setState({ isDeleting: true });
+    await sendDeleteEmail(this.props.id, this.props.data.name)
+      .then(() => {
+        this.setHideDeleteModal();
+        this.setState({ isDeleting: false });
+        this.props.onSubmitDelete();
+      });
   }
 
   render() {
@@ -147,7 +164,7 @@ export class Popup extends React.Component {
                 marginLeft: "12px",
               }}
               onClick={this.setHideDeleteModal}
-              disabled={this.state.isLoading}
+              disabled={this.state.isDeleting}
             >
               <p style={{ 
                 margin: "0rem",
@@ -162,9 +179,9 @@ export class Popup extends React.Component {
                 float: "right",
               }}
               onClick={this.handleSubmitDelete}
-              disabled={this.state.isLoading}
+              disabled={this.state.isDeleting}
             >
-              { this.state.isLoading 
+              { this.state.isDeleting 
               ? <Spinner
                   as="span"
                   animation="border"
