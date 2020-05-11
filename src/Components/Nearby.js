@@ -154,12 +154,13 @@ export class Nearby extends React.Component {
       );
       placesWithinReach.forEach((d) => (placesById[d.id] = d));
 
-      const islandwide = await db
+      const userRegion = await Helpers.postalPlanningRegion(this.state.query);
+      const regions = await db
         .collection("hawkers")
-        .where("regions", "array-contains", "Islandwide")
+        .where("regions", "array-contains-any", ["Islandwide",userRegion.region])
         .get()
         .then(Helpers.mapSnapshotToDocs);
-      islandwide.forEach((d) => (placesById[d.id] = d));
+      regions.forEach((d) => (placesById[d.id] = d));
 
       data = Object.values(placesById);
     } else {
@@ -394,16 +395,16 @@ export class Nearby extends React.Component {
               result.nearby.length > 0 ? (
                 result.nearby
               ) : (
-                  <span class="mt-5">No Results Found</span>
-                )
+                <span class="mt-5">No Results Found</span>
+              )
             ) : (
-                <div class="row h-100 page-container">
-                  <div class="col-sm-12 my-auto">
-                    <h3>Loading</h3>
-                    <Spinner class="" animation="grow" />
-                  </div>
+              <div class="row h-100 page-container">
+                <div class="col-sm-12 my-auto">
+                  <h3>Loading</h3>
+                  <Spinner class="" animation="grow" />
                 </div>
-              )}
+              </div>
+            )}
           </div>
         </div>
       </div>
