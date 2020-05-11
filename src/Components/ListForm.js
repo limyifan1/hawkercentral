@@ -168,7 +168,11 @@ const handleData = async ({
   } else if (toggle === "edit") {
     if (editedFields.length > 0) {
       let editedFieldsAndValues = _.pick(field, editedFields);
-      await Helpers.sendEmailToUpdateListing(docid, originalName, editedFieldsAndValues)
+      await Helpers.sendEmailToUpdateListing(
+        docid,
+        originalName,
+        editedFieldsAndValues
+      )
         .then((result) => {
           console.log(result);
         })
@@ -264,7 +268,13 @@ export class ListForm extends React.Component {
       unit: this.props.data.unit,
       delivery_option: this.props.data.delivery_option,
       pickup_option: this.props.data.pickup_option,
-      cuisineValue: this.props.data.cuisine,
+      cuisineValue: this.props.data.categories.map((v) => {
+        return {
+          label: v,
+          value: v,
+        };
+      }),
+      categories: this.props.data.cuisine,
       call: this.props.data.call,
       whatsapp: this.props.data.whatsapp,
       sms: this.props.data.sms,
@@ -272,7 +282,13 @@ export class ListForm extends React.Component {
       contact: this.props.data.contact,
       docid: this.props.id,
       opening: this.props.data.opening,
-      region: this.props.data.region,
+      region: this.props.data.regions.map((v) => {
+        return {
+          label: v,
+          value: v,
+        };
+      }),
+      regions: this.props.data.region,
       website: this.props.data.website,
       promo: this.props.data.promo,
       condition: this.props.data.condition,
@@ -292,7 +308,7 @@ export class ListForm extends React.Component {
     if (this.props.toggle === "edit") {
       this.setState(this.getInitialState());
       const initialState = this.getInitialState();
-      this.initialState = {...this.initialState, ...initialState};
+      this.initialState = { ...this.initialState, ...initialState };
     }
   }
 
@@ -350,18 +366,18 @@ export class ListForm extends React.Component {
       latitude: ["latitude", "location"],
       menuitem: ["menuitem", "menu_combined"],
       menuprice: ["menuprice", "menu_combined"],
-    }
-    
+    };
+
     let edited_fields = [];
 
-    Object.keys(this.state).forEach(key => {
+    Object.keys(this.state).forEach((key) => {
       const initialVal = this.initialState[key];
       const currentVal = this.state[key];
 
-      if (!(_.isEqual(initialVal, currentVal))) {
+      if (!_.isEqual(initialVal, currentVal)) {
         if (Object.prototype.hasOwnProperty.call(specialKeys, key)) {
           const relatedKeys = specialKeys[key];
-          relatedKeys.forEach(relatedKey => {
+          relatedKeys.forEach((relatedKey) => {
             edited_fields.push(relatedKey);
           });
         } else {
@@ -371,7 +387,7 @@ export class ListForm extends React.Component {
     });
 
     return edited_fields;
-  }
+  };
 
   handleSubmit = async (event) => {
     event.preventDefault();
@@ -385,7 +401,7 @@ export class ListForm extends React.Component {
     });
 
     let edited_fields = [];
-    if(this.props.toggle === "create"){
+    if (this.props.toggle === "create") {
       onClick("create_submit_click");
     } else {
       onClick("edit_submit_click");
@@ -602,8 +618,8 @@ export class ListForm extends React.Component {
       return x < y ? -1 : x > y ? 1 : 0;
     });
     this.setState({ data: data_mrt, cuisineOptions: data_cuisine });
-    this.initialState['data'] = _.cloneDeep(data_mrt);
-    this.initialState['cuisineOptions'] = _.cloneDeep(data_cuisine);
+    this.initialState["data"] = _.cloneDeep(data_mrt);
+    this.initialState["cuisineOptions"] = _.cloneDeep(data_cuisine);
   }
 
   retrieveData = async () => {
@@ -623,7 +639,7 @@ export class ListForm extends React.Component {
         .get()
         .then(Helpers.mapSnapshotToDocs);
       this.setState({ tags: tags });
-      this.initialState['tags'] = _.cloneDeep(tags);
+      this.initialState["tags"] = _.cloneDeep(tags);
       console.log(this.state.tags);
     } catch (error) {
       console.log("Error getting document:", error);
@@ -2031,15 +2047,17 @@ export class ListForm extends React.Component {
                               // onClick={this.handleSubmit}
                               disabled={this.state.isLoading}
                             >
-                              { this.state.isLoading 
-                              ? <Spinner
+                              {this.state.isLoading ? (
+                                <Spinner
                                   as="span"
                                   animation="border"
                                   size="sm"
                                   role="status"
                                   aria-hidden="true"
                                 />
-                              : context.data.create.submit }
+                              ) : (
+                                context.data.create.submit
+                              )}
                             </Button>
                           </div>
                         </div>
