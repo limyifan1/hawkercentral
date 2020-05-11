@@ -458,9 +458,9 @@ export class Info extends React.Component {
   };
 
   showReviewEditMessage = () => {
-    this.setState({ 
+    this.setState({
       hasReviewEditMessage: true,
-      hasReviewDeleteMessage: false 
+      hasReviewDeleteMessage: false
     });
     setTimeout(() => {
       this.setState({ hasReviewEditMessage: false });
@@ -468,7 +468,7 @@ export class Info extends React.Component {
   }
 
   showReviewDeleteMessage = () => {
-    this.setState({ 
+    this.setState({
       hasReviewDeleteMessage: true,
       hasReviewEditMessage: false
     });
@@ -551,38 +551,38 @@ export class Info extends React.Component {
       <div>
         {this.state.retrieved ? (
           <div class="container" style={{ paddingTop: "56px", width: "100%" }}>
-            { (this.state.hasReviewEditMessage || this.state.hasReviewDeleteMessage) ? 
-            <div class="row"
-              style={{
-                marginTop: "20px",
-                marginBottom: "20px", 
-              }}>
-              <div class="card shadow"
+            {(this.state.hasReviewEditMessage || this.state.hasReviewDeleteMessage) ?
+              <div class="row"
                 style={{
-                  color: "black",
-                  backgroundColor: "white",
-                  width: "100%",
-                }}
-              >
-                <span class="card-body">
-                  <div
-                    class="card-title"
-                    style={{
-                      fontSize: "13px",
-                      margin: "0px"
-                    }}
-                  >
-                    { this.state.hasReviewEditMessage 
-                    ? <p style={{ margin: "0px" }}>
-                      Your edit(s) will be reflected once they have been reviewed. Thank you for your patience!
+                  marginTop: "20px",
+                  marginBottom: "20px",
+                }}>
+                <div class="card shadow"
+                  style={{
+                    color: "black",
+                    backgroundColor: "white",
+                    width: "100%",
+                  }}
+                >
+                  <span class="card-body">
+                    <div
+                      class="card-title"
+                      style={{
+                        fontSize: "13px",
+                        margin: "0px"
+                      }}
+                    >
+                      {this.state.hasReviewEditMessage
+                        ? <p style={{ margin: "0px" }}>
+                          Your edit(s) will be reflected once they have been reviewed. Thank you for your patience!
                     </p>
-                    : <p style={{ margin: "0px" }}>
-                    This listing will be deleted once your request has been reviewed. Thank you for your patience!
-                    </p> }
-                  </div>
-                </span>
-              </div>
-            </div> : null }
+                        : <p style={{ margin: "0px" }}>
+                          This listing will be deleted once your request has been reviewed. Thank you for your patience!
+                    </p>}
+                    </div>
+                  </span>
+                </div>
+              </div> : null}
             <div class="row">
               <div
                 class="jumbotron col-xs-6 col-sm-6 col-md-6 col-lg-6"
@@ -748,25 +748,27 @@ export class Info extends React.Component {
                   <br />
                   {/* custom button display: menu, website, message */}
                   <div>
-                    <a
-                      href={
-                        this.state.data.website.slice(0, 4) === "http"
-                          ? this.state.data.website
-                          : "https://" + this.state.data.website
-                      }
-                      onClick={() =>
-                        onLoad("website_click", this.state.data.name)
-                      }
-                      target="blank"
-                    >
-                      <img
-                        alt=""
-                        src={website_button}
-                        style={{
-                          width: "25%",
-                        }}
-                      />
-                    </a>
+                    {this.state.data.website ? (
+                      <a
+                        href={
+                          this.state.data.website.slice(0, 4) === "http"
+                            ? this.state.data.website
+                            : "https://" + this.state.data.website
+                        }
+                        onClick={() =>
+                          onLoad("website_click", this.state.data.name)
+                        }
+                        target="blank"
+                      >
+                        <img
+                          alt=""
+                          src={website_button}
+                          style={{
+                            width: "25%",
+                          }}
+                        />
+                      </a>
+                    ) : null}
                     {this.state.data.whatsapp ? (
                       <span>
                         <span class="">
@@ -1164,34 +1166,34 @@ export class Info extends React.Component {
                     ) : null}
                   </div>
                   <br />
-                  Share this with friends! 
+                  Share this with friends!
                   <br />
-                  <FacebookShareButton 
+                  <FacebookShareButton
                     url={"www.foodleh.app/info?id=" + this.state.id}
                     quote={"Hungry? Try out " + this.state.data.name + " now!"}
                     hashtag={"#saveourFnB"}>
                     <FacebookIcon size={32} round={true} />
                   </FacebookShareButton>{" "}
-                  <WhatsappShareButton 
+                  <WhatsappShareButton
                     url={"www.foodleh.app/info?id=" + this.state.id}
                     title={"Hungry? Try out " + this.state.data.name + " now!"}>
                     <WhatsappIcon size={32} round={true} />
                   </WhatsappShareButton>{" "}
-                  <TelegramShareButton 
+                  <TelegramShareButton
                     url={"www.foodleh.app/info?id=" + this.state.id}
                     title={"Hungry? Try out " + this.state.data.name + " now!"}>
                     <TelegramIcon size={32} round={true} />
                   </TelegramShareButton>{" "}
-                  <TwitterShareButton 
-                  url={"www.foodleh.app/info?id=" + this.state.id}
-                  title={"Hungry? Try out " + this.state.data.name + " now!"}>
+                  <TwitterShareButton
+                    url={"www.foodleh.app/info?id=" + this.state.id}
+                    title={"Hungry? Try out " + this.state.data.name + " now!"}>
                     <TwitterIcon size={32} round={true} />
                   </TwitterShareButton>{" "}
 
                   <br />
-                  <Component.Popup 
-                    data={this.state.data} 
-                    id={this.state.id} 
+                  <Component.Popup
+                    data={this.state.data}
+                    id={this.state.id}
                     onSubmitEdit={this.showReviewEditMessage}
                     onSubmitDelete={this.showReviewDeleteMessage}
                   />
