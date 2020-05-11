@@ -483,21 +483,21 @@ export class Info extends React.Component {
     let photos = [];
     let link = "https://wa.me/65" + this.state.data.contact;
     if (this.state.retrieved) {
-      if (this.state.data.cuisine) {
-        this.state.data.cuisine.forEach((element) => {
-          cuisine.push(<span class="badge badge-info">{element.label}</span>);
+      if (this.state.data.categories) {
+        this.state.data.categories.forEach((element) => {
+          cuisine.push(<span class="badge badge-info">{element}</span>);
         });
       }
       console.log(this.state.data.tagsValue)
       if (this.state.data.tagsValue) {
         this.state.data.tagsValue.forEach((element) => {
-          cuisine.push(<span class="badge badge-info">{element.label}</span>);
+          cuisine.push(<span class="badge badge-secondary">{element}</span>);
         });
       }
-      if (this.state.data.region) {
-        this.state.data.region.forEach((element) => {
+      if (this.state.data.regions) {
+        this.state.data.regions.forEach((element) => {
           regions.push(
-            <span class="badge badge-warning">{element.label}</span>
+            <span class="badge badge-warning">{element}</span>
           );
         });
       }

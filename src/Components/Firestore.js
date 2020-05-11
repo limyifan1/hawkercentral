@@ -5,9 +5,11 @@
 
 const firebase = require("firebase");
 require("firebase/firestore");
-require('firebase/analytics');
 require('firebase/auth');
 require('firebase/storage');
+if (typeof window !== 'undefined') {
+  require('firebase/analytics');
+}
 
 const geofirex = require("geofirex");
 
@@ -21,7 +23,10 @@ firebase.initializeApp({
     appId: "1:596185831538:web:9cbfb234d1fff146cf8aeb",
     measurementId: "G-Z220VNJFT9"
   });
-firebase.analytics();
+
+if (typeof window !== 'undefined') {
+  firebase.analytics();
+}
 
 const db = firebase.firestore();
 const storage = firebase.storage();
@@ -29,7 +34,9 @@ const storage = firebase.storage();
 const geo = geofirex.init(firebase);
 const geoToPromise = geofirex.get;
 
-export  {
-    geo, geoToPromise,
-    db, storage, firebase as default
+module.exports = {
+  __esModule: true,
+  geo, geoToPromise,
+  db, storage, firebase,
+  default: firebase,
 }
