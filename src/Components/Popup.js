@@ -7,6 +7,7 @@ import React from "react";
 import "../App.css";
 import { Modal } from "react-bootstrap";
 import Component from "../Components";
+import DeleteModal from "./DeleteModal";
 
 import { withRouter } from "react-router-dom";
 
@@ -15,25 +16,38 @@ export class Popup extends React.Component {
     super(props);
 
     this.state = {
-      show: false,
-      setShow: false,
+      showEditModal: false,
+      showDeleteModal: false,
+      isDeleting: false,
     };
   }
 
-  setShow = () => {
-    this.setState({ show: true });
+  setShowEditModal = () => {
+    this.setState({ showEditModal: true });
   };
 
-  setHide = () => {
-    this.setState({ show: false });
+  setHideEditModal = () => {
+    this.setState({ showEditModal: false });
   };
 
   handleSubmitEdit = (hasEdit) => {
-    this.setHide();
+    this.setHideEditModal();
 
     if (hasEdit) {
       this.props.onSubmitEdit();
     }
+  }
+
+  setShowDeleteModal = () => {
+    this.setState({ showDeleteModal: true });
+  };
+
+  setHideDeleteModal = () => {
+    this.setState({ showDeleteModal: false });
+  };
+
+  handleSubmitDelete = () => {
+    this.props.onSubmitDelete();
   }
 
   render() {
@@ -44,7 +58,24 @@ export class Popup extends React.Component {
           style={{ backgroundColor: "", position: "relative", left: "20px" }}
         >
           <div
-            onClick={() => this.setShow()}
+            onClick={() => this.setShowDeleteModal()}
+            class="d-flex justify-content-center"
+            style={{
+              border: "2px solid",
+              "border-color": "grey",
+              color: "black",
+              width: "60px",
+              alignText: "center",
+              fontSize: "12px",
+              cursor: "pointer",
+              marginTop: "12px",
+              marginRight: "12px",
+            }}
+          >
+            Delete
+          </div>
+          <div
+            onClick={() => this.setShowEditModal()}
             class="d-flex justify-content-center"
             style={{
               border: "2px solid",
@@ -73,10 +104,9 @@ export class Popup extends React.Component {
             </span>
           ) : null}
         </div>
-
         <Modal
-          onHide={this.setHide}
-          show={this.state.show}
+          onHide={this.setHideEditModal}
+          show={this.state.showEditModal}
           dialogClassName="modal-dialog modal-90w"
           aria-labelledby="example-custom-modal-styling-title"
           style={{ "margin-top": "50px" }}
@@ -95,6 +125,13 @@ export class Popup extends React.Component {
             />
           </Modal.Body>
         </Modal>
+        <DeleteModal 
+          showDeleteModal={this.state.showDeleteModal}
+          hideDeleteModal={this.setHideDeleteModal}
+          docId={this.props.id}
+          originalName={this.props.data.name} 
+          onSubmitDelete={this.handleSubmitDelete}
+          />
       </span>
     );
   }
