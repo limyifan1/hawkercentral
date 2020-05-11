@@ -53,7 +53,6 @@ function mapSnapshotToDocs(snapshot) {
  * @param actionWord - the proposed change made to the listing
  * @param listformFields - listform fields with proposed edits
  */
-<<<<<<< HEAD
 async function sendEmailToUpdateListing(docId, originalName, actionWord, listformFields) {
 	const EMAIL_API_KEY = `${process.env.REACT_APP_EMAIL_API_KEY}`;
 	const email_params = {
@@ -68,14 +67,6 @@ async function sendEmailToUpdateListing(docId, originalName, actionWord, listfor
 	} else if (actionWord === "delete") {
 		email_params['description'] = "A user has requested to delete this listing.";
 	}
-=======
-async function sendEmailToUpdateListing(doc_id, originalName, listform_fields) {
-  const EMAIL_API_KEY = `${process.env.REACT_APP_EMAIL_API_KEY}`;
-  const email_params = {
-    listing_id: doc_id,
-    listing_name: originalName,
-    message: JSON.stringify(listform_fields, null, 2),
-  };
 
   await emailjs
     .send("outlook", "contact_form", email_params, EMAIL_API_KEY)
@@ -114,7 +105,6 @@ async function getLatLng(postal) {
       }
     );
 }
->>>>>>> 05a86afc943cc5c192731facffe51f7233fe633a
 
 async function getPlanningArea(postal_lat, postal_lon) {
   let result = await getOneMapToken();
