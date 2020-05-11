@@ -59,7 +59,8 @@ export class Info extends React.Component {
       galleryOpened: false,
       retrieved: false,
       activePhoto: 1,
-      hasReviewMessage: false,
+      hasReviewEditMessage: false,
+      hasReviewDeleteMessage: false,
     };
     this.enterDetails = this.enterDetails.bind(this);
     this.handleCustomerDetails = this.handleCustomerDetails.bind(this);
@@ -456,10 +457,23 @@ export class Info extends React.Component {
     }
   };
 
-  showReviewMessage = () => {
-    this.setState({ hasReviewMessage: true });
+  showReviewEditMessage = () => {
+    this.setState({ 
+      hasReviewEditMessage: true,
+      hasReviewDeleteMessage: false 
+    });
     setTimeout(() => {
-      this.setState({ hasReviewMessage: false });
+      this.setState({ hasReviewEditMessage: false });
+    }, 10000);
+  }
+
+  showReviewDeleteMessage = () => {
+    this.setState({ 
+      hasReviewDeleteMessage: true,
+      hasReviewEditMessage: false
+    });
+    setTimeout(() => {
+      this.setState({ hasReviewDeleteMessage: false });
     }, 10000);
   }
 
@@ -537,7 +551,7 @@ export class Info extends React.Component {
       <div>
         {this.state.retrieved ? (
           <div class="container" style={{ paddingTop: "56px", width: "100%" }}>
-            { this.state.hasReviewMessage ? 
+            { (this.state.hasReviewEditMessage || this.state.hasReviewDeleteMessage) ? 
             <div class="row"
               style={{
                 marginTop: "20px",
@@ -558,9 +572,13 @@ export class Info extends React.Component {
                       margin: "0px"
                     }}
                   >
-                    <p style={{ margin: "0px" }}>
+                    { this.state.hasReviewEditMessage 
+                    ? <p style={{ margin: "0px" }}>
                       Your edit(s) will be reflected once they have been reviewed. Thank you for your patience!
                     </p>
+                    : <p style={{ margin: "0px" }}>
+                    This listing will be deleted once your request has been reviewed. Thank you for your patience!
+                    </p> }
                   </div>
                 </span>
               </div>
@@ -1174,7 +1192,8 @@ export class Info extends React.Component {
                   <Component.Popup 
                     data={this.state.data} 
                     id={this.state.id} 
-                    onSubmitEdit={this.showReviewMessage}
+                    onSubmitEdit={this.showReviewEditMessage}
+                    onSubmitDelete={this.showReviewDeleteMessage}
                   />
                   <br />
                   {this.state.data.promo ? (

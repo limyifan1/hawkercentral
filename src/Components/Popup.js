@@ -45,6 +45,7 @@ export class Popup extends React.Component {
   };
 
   handleSubmitDelete = () => {
+    this.setHideDeleteModal();
     this.props.onSubmitDelete();
   }
 
