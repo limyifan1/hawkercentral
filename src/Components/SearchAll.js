@@ -92,7 +92,19 @@ export class SearchAll extends React.Component {
       const categories = this.state.cuisineValue.map((c) => c.label);
       query = query.where("categories", "array-contains-any", categories);
     }
-    const data = await query.get().then(Helpers.mapSnapshotToDocs);
+    var data = await query.get().then(Helpers.mapSnapshotToDocs);
+    data = data.map(d=>{
+      if (d.tagsValue !== undefined) {
+        d.tags = d.tagsValue.map((v) => v.trim().toLowerCase());
+        d.menu_list = d.menu_combined.map((v) => v.name.trim().toLowerCase());
+      }
+      else{
+        d.menu_list = []
+        d.tags = []
+      }
+      return d
+    })
+    
     this.setState({ data, retrieved: true });
     window.scrollTo(0, this.context.scrollPosition);
     this.context.setScrollPosition(0); // reset scrollPosition
@@ -184,7 +196,9 @@ export class SearchAll extends React.Component {
               .includes(this.state.search.toLowerCase()) ||
             d.description_detail
               .toLowerCase()
-              .includes(this.state.search.toLowerCase())
+              .includes(this.state.search.toLowerCase()) ||
+            d.tags.includes(this.state.search.toLowerCase()) || 
+            d.menu_list.includes(this.state.search.toLowerCase())
           );
         });
       }
