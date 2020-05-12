@@ -12,7 +12,7 @@ import summary from "../summary.png";
 import instructions from "../infographic.jpg";
 import Cookies from "universal-cookie";
 import DateTimePicker from "react-datetime-picker";
-
+import Helpers from "../Helpers/helpers"
 const cookies = new Cookies();
 const API_KEY = `${process.env.REACT_APP_GKEY}`;
 const analytics = firebase.analytics();
@@ -144,9 +144,11 @@ export class Driver extends React.Component {
       retrievedDir: true,
     };
   }
-  getDirections = () => {
+  getDirections = async () => {
     this.setState({ loadingDir: true });
-    console.log(this.state.time);
+    let regionFrom = await Helpers.postalPlanningRegion(this.state.postal)
+    let regionTo = await Helpers.postalPlanningRegion(this.state.postal_to)
+    var results = await Helpers.getPlanningDetails(regionFrom.planningarea, regionTo.planningarea)
     const query =
       "https://fathomless-falls-12833.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?" +
       "mode=driving" +
@@ -165,7 +167,6 @@ export class Driver extends React.Component {
       "&" +
       "key=" +
       API_KEY;
-    console.log(query);
 
     return fetch(query, {
       method: "GET",
@@ -178,25 +179,11 @@ export class Driver extends React.Component {
         return response.json();
       })
       .then((contents) => {
-        console.log(contents);
-        var cost;
+        var cost = results;
         var distance =
           contents && contents.routes.length > 0
             ? contents.routes[0].legs[0].distance.value
             : 0;
-        if (distance < 5000) {
-          cost = 6;
-        } else if (distance < 10000) {
-          cost = 8;
-        } else if (distance < 15000) {
-          cost = 10;
-        } else if (distance < 20000) {
-          cost = 12;
-        } else if (distance < 25000) {
-          cost = 15;
-        } else {
-          cost = 18;
-        }
         this.setState({
           directions: contents,
           cost: cost,
@@ -800,7 +787,7 @@ export class Driver extends React.Component {
                                 <b>
                                   Arrival Time 预测到达时间 <br />{" "}
                                   <small style={{ color: "grey" }}>
-                                    (Pickup Time + Duration + 15 min):
+                                    (Pickup Time + Duration + 15 min Buffer):
                                   </small>
                                 </b>
                                 <br />
