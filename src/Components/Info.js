@@ -699,7 +699,7 @@ export class Info extends React.Component {
                     <div>
                       <svg
                         class="bi bi-tag-fill"
-                        width="1em"
+                        width="0.88em"
                         height="1em"
                         viewBox="0 0 16 16"
                         fill="currentColor"
