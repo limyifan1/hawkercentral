@@ -144,6 +144,7 @@ export class Driver extends React.Component {
       directions: false,
       loadingDir: false,
       retrievedDir: false,
+      regionFrom: "",
     };
   }
   getDirections = async () => {
@@ -185,18 +186,20 @@ export class Driver extends React.Component {
       })
       .then((contents) => {
         var cost = results;
-        var distance =
-          contents && contents.routes.length > 0
-            ? contents.routes[0].legs[0].distance.value
-            : 0;
-        this.setState({
-          regionFrom: regionFrom,
-          directions: contents,
-          cost: cost,
-          distance: distance,
-          loadingDir: false,
-          retrievedDir: true,
-        });
+        if (results !== null) {
+          var distance =
+            contents && contents.routes.length > 0
+              ? contents.routes[0].legs[0].distance.value
+              : 0;
+          this.setState({
+            regionFrom: regionFrom,
+            directions: contents,
+            cost: cost,
+            distance: distance,
+            loadingDir: false,
+            retrievedDir: true,
+          });
+        }
       })
       .catch((error) => {
         console.log("Error:" + error.toString());
@@ -827,31 +830,19 @@ export class Driver extends React.Component {
                                           {this.state.regionFrom.planningarea}:
                                         </h5>
                                         <div class="d-none d-md-inline-block">
-                                          <a
-                                            href={
-                                              "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
-                                              this.state.regionFrom.planningarea
-                                                .replace(/ /g, "")
-                                                .toLowerCase() +
-                                              ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
-                                            }
+                                          <Button
+                                            variant="contained"
+                                            color={"primary"}
+                                            size="large"
+                                            startIcon={<SaveIcon />}
+                                            style={{
+                                              position: "absolute",
+                                              right: "30%",
+                                            }}
                                             target="blank"
-                                            rel="noopener noreferrer"
-                                            download
                                           >
-                                            <Button
-                                              variant="contained"
-                                              color={"primary"}
-                                              size="large"
-                                              startIcon={<SaveIcon />}
-                                              style={{
-                                                position: "absolute",
-                                                right: "30%",
-                                              }}
-                                            >
-                                              View Full 全图
-                                            </Button>
-                                          </a>
+                                            View Full 全图
+                                          </Button>
                                           <img
                                             src={
                                               "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
@@ -873,6 +864,7 @@ export class Driver extends React.Component {
                                             color={"primary"}
                                             size="large"
                                             startIcon={<SaveIcon />}
+                                            target="blank"
                                             style={{
                                               position: "absolute",
                                               right: "5%",

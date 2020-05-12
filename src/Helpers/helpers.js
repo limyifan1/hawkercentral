@@ -207,7 +207,12 @@ async function getPlanningDetails(from, to) {
     .then(async (d) => {
       return d.data();
     });
-  return data[to].price;
+  if(data){
+    return data[to].price;
+  }
+  else{
+    return null
+  }
 }
 
 function getOneMapToken() {
