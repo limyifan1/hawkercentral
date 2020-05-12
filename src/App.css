@@ -452,6 +452,7 @@ button:focus {
 }
 
 .App {
+  font-family: "Open Sans", "Roboto", "Arial", sans-serif;
   text-align: center;
 }
 
