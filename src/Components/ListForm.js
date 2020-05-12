@@ -388,7 +388,6 @@ export class ListForm extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     this.getPostal(this.state.postal);
-    console.log(this.state);
     let menu_combined = this.state.menuitem.map((item, index) => {
       return {
         name: this.state.menuitem[index],
@@ -415,7 +414,7 @@ export class ListForm extends React.Component {
       name: this.state.name,
       cuisine: this.state.cuisineValue,
       categories: this.state.cuisineValue.map((v) => v.label.trim()),
-      postal: this.state.postal,
+      postal: Number(this.state.postal),
       street: this.state.street,
       unit: this.state.unit,
       description: this.state.description,
@@ -518,7 +517,6 @@ export class ListForm extends React.Component {
     const image = event.target.files[0];
     const name = event.target.name;
     this.setState({ [name]: image });
-    console.log(name, image);
     if (image !== undefined) {
       var date = new Date();
       var timestamp = date.getTime();
@@ -584,30 +582,31 @@ export class ListForm extends React.Component {
     let fireData = await this.retrieveData();
     let data_mrt = [];
     let data_cuisine = [];
-    let current = new Set();
-    fireData[1].forEach(function (doc) {
+    // let current = new Set();
+    fireData.forEach(function (doc) {
       if (doc.exists) {
+        console.log(doc.data())
         var d = doc.data();
         data_cuisine.push(d);
       }
     });
-    fireData[0].forEach(function (doc) {
-      if (doc.exists) {
-        var d = doc.data();
-        d.label = d.name;
-        d.value = d.name;
-        if (!current.has(d.name)) {
-          data_mrt.push(d);
-          current.add(d.name);
-        }
-      }
-    });
+    // fireData[0].forEach(function (doc) {
+    //   if (doc.exists) {
+    //     var d = doc.data();
+    //     d.label = d.name;
+    //     d.value = d.name;
+    //     if (!current.has(d.name)) {
+    //       data_mrt.push(d);
+    //       current.add(d.name);
+    //     }
+    //   }
+    // });
 
-    data_mrt = data_mrt.sort(function (a, b) {
-      var x = a.name.toLowerCase();
-      var y = b.name.toLowerCase();
-      return x < y ? -1 : x > y ? 1 : 0;
-    });
+    // data_mrt = data_mrt.sort(function (a, b) {
+    //   var x = a.name.toLowerCase();
+    //   var y = b.name.toLowerCase();
+    //   return x < y ? -1 : x > y ? 1 : 0;
+    // });
     data_cuisine = data_cuisine.sort(function (a, b) {
       var x = a.label.toLowerCase();
       var y = b.label.toLowerCase();
@@ -620,9 +619,9 @@ export class ListForm extends React.Component {
 
   retrieveData = async () => {
     try {
-      const querySnapshot_mrt = await db.collection("mrt").get();
+      // const querySnapshot_mrt = await db.collection("mrt").get();
       const querySnapshot_cuisine = await db.collection("cuisine").get();
-      return [querySnapshot_mrt, querySnapshot_cuisine];
+      return querySnapshot_cuisine;
     } catch (error) {
       console.log("Error getting document:", error);
     }
