@@ -644,7 +644,7 @@ describe("deliveries", async () => {
     // Create dummy data for read
     const hawkerRef = admin.collection("deliveries");
     await hawkerRef.doc().set({
-        name: "" + Math.random(),
+        name: "" + String(Math.random()),
         delivery_detail: "",
       });
   });
@@ -675,7 +675,7 @@ describe("deliveries", async () => {
     // Create dummy data for read
     const deliveryRef = admin.collection("deliveries");
     await deliveryRef.doc('TESTDELIVERY1').set({
-        name: "" + Math.random(),
+        name: "" + String(Math.random()),
         delivery_detail: "",
       });
 
