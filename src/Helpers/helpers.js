@@ -207,7 +207,7 @@ async function getPlanningDetails(from, to) {
     .then(async (d) => {
       return d.data();
     });
-  if(data){
+  if(data && data[to]){
     return data[to].price;
   }
   else{

@@ -840,6 +840,14 @@ export class Driver extends React.Component {
                                               right: "30%",
                                             }}
                                             target="blank"
+                                            href={
+                                              "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
+                                              this.state.regionFrom.planningarea
+                                                .replace(/ /g, "")
+                                                .toLowerCase() +
+                                              ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
+                                            }
+                                            download
                                           >
                                             View Full 全图
                                           </Button>
