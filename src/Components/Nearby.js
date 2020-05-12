@@ -14,11 +14,49 @@ import firebase, { db, geo, geoToPromise } from "./Firestore";
 import Helpers from "../Helpers/helpers";
 import { values as cuisines } from "../Helpers/categories";
 import { LanguageContext } from "./themeContext";
+import Zoom from "@material-ui/core/Zoom";
+import useScrollTrigger from "@material-ui/core/useScrollTrigger";
+import Fab from "@material-ui/core/Fab";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
 const analytics = firebase.analytics();
 
 function onLoad(name) {
   analytics.logEvent(name);
+}
+
+function ScrollTop(props) {
+  const { children, window } = props;
+  // Note that you normally won't need to set the window ref as useScrollTrigger
+  // will default to window.
+  // This is only being set here because the demo is in an iframe.
+  const trigger = useScrollTrigger({
+    target: window ? window() : undefined,
+    disableHysteresis: true,
+    threshold: 100,
+  });
+
+  const handleClick = (event) => {
+    const anchor = (event.target.ownerDocument || document).querySelectorAll(
+      "#back-to-top-anchor"
+    )[0];
+
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
+  return (
+    <Zoom in={trigger}>
+      <div
+        onClick={handleClick}
+        role="presentation"
+        style={{ position: "fixed", bottom: "50px", right: "30px" }}
+      >
+        {children}
+      </div>
+    </Zoom>
+  );
 }
 
 // const responsive = {
@@ -333,7 +371,7 @@ export class Nearby extends React.Component {
             <LanguageContext.Consumer>
               {(context) => (
                 <div class="col-12 col-sm-10 col-md-6">
-                  <h3>
+                  <h3 id="back-to-top-anchor">
                     {context.data.search.nearyouat}{" "}
                     <span style={{ color: "#b48300" }}>{this.state.query}</span>
                   </h3>
@@ -388,6 +426,11 @@ export class Nearby extends React.Component {
                 </div>
               </div>
             )}
+            <ScrollTop>
+              <Fab color="primary" size="small" aria-label="scroll back to top">
+                <KeyboardArrowUpIcon />
+              </Fab>
+            </ScrollTop>
           </div>
         </div>
       </div>
