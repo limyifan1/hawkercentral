@@ -15,6 +15,33 @@ import en from "./assets/translations/en.json";
 import zh from "./assets/translations/zh.json";
 import { LanguageContext } from "./Components/themeContext";
 import { Helmet } from "react-helmet";
+import { ThemeProvider } from "@material-ui/styles";
+
+import { createMuiTheme } from "@material-ui/core/styles";
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: "#F0AE00",
+      main: "#b48300",
+      dark: "#b48300",
+      contrastText: "#fff",
+    },
+    secondary: {
+      light: "#ff7961",
+      main: "#f44336",
+      dark: "#ba000d",
+      contrastText: "#000",
+    },
+  },
+  typography: {
+    fontFamily: '"Open Sans", "Roboto", "Arial", sans-serif',
+    fontSize: 14,
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+  },
+});
 
 const cookies = new Cookies();
 if (cookies.get("language") === null || cookies.get("language") === undefined) {
@@ -95,28 +122,29 @@ class App extends React.Component {
     // uses the theme from state while the one outside uses
     // the default dark theme
     return (
-      <Router>
-        <LanguageContext.Provider value={this.state}>
-          <Components.Menu />
-
-          <div className="App">
-            <SeoHelmet />
-            <Route exact path="/" component={Components.Home} />
-            {/* <Route exact path="/listing" component={Components.Listing} /> */}
-            <Route exact path="/create" component={Components.Create} />
-            <Route exact path="/nearby" component={Components.Nearby} />
-            <Route exact path="/info" component={Components.Info} />
-            {/* <Route exact path="/news" component={Components.News} /> */}
-            <Route exact path="/searchall" component={Components.SearchAll} />
-            <Route exact path="/about" component={Components.About} />
-            <Route exact path="/driver" component={Components.Driver} />
-            <Route exact path="/delivery" component={Components.Delivery} />
-            <script src="/__/firebase/7.14.1/firebase-app.js"></script>
-            <script src="/__/firebase/7.14.1/firebase-analytics.js"></script>
-            <script src="/__/firebase/init.js"></script>
-          </div>
-        </LanguageContext.Provider>
-      </Router>
+      <ThemeProvider theme={theme}>
+        <Router>
+          <LanguageContext.Provider value={this.state}>
+            <div className="App">
+              <Components.Menu />
+              <SeoHelmet />
+              <Route exact path="/" component={Components.Home} />
+              {/* <Route exact path="/listing" component={Components.Listing} /> */}
+              <Route exact path="/create" component={Components.Create} />
+              <Route exact path="/nearby" component={Components.Nearby} />
+              <Route exact path="/info" component={Components.Info} />
+              {/* <Route exact path="/news" component={Components.News} /> */}
+              <Route exact path="/searchall" component={Components.SearchAll} />
+              <Route exact path="/about" component={Components.About} />
+              <Route exact path="/driver" component={Components.Driver} />
+              <Route exact path="/delivery" component={Components.Delivery} />
+              <script src="/__/firebase/7.14.1/firebase-app.js"></script>
+              <script src="/__/firebase/7.14.1/firebase-analytics.js"></script>
+              <script src="/__/firebase/init.js"></script>
+            </div>
+          </LanguageContext.Provider>
+        </Router>
+      </ThemeProvider>
     );
   }
 }
