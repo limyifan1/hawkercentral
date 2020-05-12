@@ -53,20 +53,27 @@ function mapSnapshotToDocs(snapshot) {
  * @param actionWord - the proposed change made to the listing
  * @param listformFields - listform fields with proposed edits
  */
-async function sendEmailToUpdateListing(docId, originalName, actionWord, listformFields) {
-	const EMAIL_API_KEY = `${process.env.REACT_APP_EMAIL_API_KEY}`;
-	const email_params = {
-		listing_id: docId,
-		listing_name: originalName,
-		action_word: actionWord,
-	}
+async function sendEmailToUpdateListing(
+  docId,
+  originalName,
+  actionWord,
+  listformFields
+) {
+  const EMAIL_API_KEY = `${process.env.REACT_APP_EMAIL_API_KEY}`;
+  const email_params = {
+    listing_id: docId,
+    listing_name: originalName,
+    action_word: actionWord,
+  };
 
-	if (actionWord === "edit") {
-		email_params['description'] = "A user has requested to edit this listing to:";
-		email_params['message'] = JSON.stringify(listformFields, null, 2);
-	} else if (actionWord === "delete") {
-		email_params['description'] = "A user has requested to delete this listing.";
-	}
+  if (actionWord === "edit") {
+    email_params["description"] =
+      "A user has requested to edit this listing to:";
+    email_params["message"] = JSON.stringify(listformFields, null, 2);
+  } else if (actionWord === "delete") {
+    email_params["description"] =
+      "A user has requested to delete this listing.";
+  }
 
   await emailjs
     .send("outlook", "contact_form", email_params, EMAIL_API_KEY)
@@ -163,6 +170,46 @@ async function requestNewOneMapToken() {
   }
 }
 
+async function getPlanningDetails(from, to) {
+  // change the naming for start to match those in our files
+  if (["ORCHARD", "NEWTON"].includes(from)) {
+    from = "Orchardnewton";
+  } else if (
+    ["OUTRAM", "SINGAPORE RIVER", "MUSEUM", "RIVER VALLEY"].includes(from)
+  ) {
+    from = "DHOBY";
+  } else if (
+    ["MARINA SOUTH", "DOWNTOWN CORE", "STRAITS VIEW", "MARINA EAST"].includes(
+      from
+    )
+  ) {
+    from = "DOWNTOWN";
+  }
+
+  if (["ORCHARD", "NEWTON"].includes(to)) {
+    to = "Orchardnewton";
+  } else if (
+    ["OUTRAM", "SINGAPORE RIVER", "MUSEUM", "RIVER VALLEY"].includes(to)
+  ) {
+    to = "DHOBY";
+  } else if (
+    ["MARINA SOUTH", "DOWNTOWN CORE", "STRAITS VIEW", "MARINA EAST"].includes(
+      to
+    )
+  ) {
+    to = "DOWNTOWN";
+  }
+
+  let data = await db
+    .collection("delivery_price")
+    .doc(from)
+    .get()
+    .then(async (d) => {
+      return d.data();
+    });
+  return data[to].price;
+}
+
 function getOneMapToken() {
   return db
     .collection("etc")
@@ -175,7 +222,7 @@ function getOneMapToken() {
         const newQuery = await requestNewOneMapToken();
         const newToken = newQuery[0].access_token;
         const newExpiry = newQuery[0].expiry_timestamp;
-        snapshot.ref.update({expiry: newExpiry, key: newToken})
+        snapshot.ref.update({ expiry: newExpiry, key: newToken });
       }
       return snapshot.data();
     });
@@ -258,4 +305,5 @@ export default {
   sendEmailToUpdateListing,
   postalPlanningRegion,
   getLatLng,
+  getPlanningDetails,
 };
