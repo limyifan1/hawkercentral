@@ -67,7 +67,8 @@ service cloud.firestore {
     'wechatid',
     'location',
     'menu_combined',
-    'tagsValue']) && fields.size() == 41
+    'tagsValue',
+    'claps' ]) && fields.size() == 42
     }
     
     // TODO: Need structure

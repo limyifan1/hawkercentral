@@ -23,40 +23,35 @@ const REAL_FIREBASE_PROJECT_ID = "hawkercentral-fork";
 const firebase = require("@firebase/testing");
 
 const foodLehDummyData = {
-  name: "test 123",
-  postal: 760777,
-  street: "",
-  price: "",
-  description: "",
-  description_detail: "",
-  image1: "",
+  name: "Test Name",
+  postal: 777777,
+  street: "Test STreet",
+  description: "Test Description",
+  description_detail: "Test Detail",
+  url: "Test URL",
   image2: "",
   image3: "",
   image4: "",
   image5: "",
   image6: "",
-  imageFile1: "",
-  imageFile2: "",
-  imageFile3: "",
-  imageFile4: "",
-  imageFile5: "",
-  imageFile6: "",
-  imageName: "Upload Image",
-  longitude: 103.8198,
-  latitude: 1.3521,
+  latitude: "",
+  longitude: "",
   unit: "",
-  delivery_option: false,
-  pickup_option: true,
-  delivery: [],
-  cuisineValue: [],
+  delivery: "",
+  cuisine: "",
+  categories: "",
+  region: "",
+  regions: "",
+  price: "",
+  contact: 12345678,
   call: false,
   whatsapp: false,
   sms: false,
   inperson: false,
-  contact: 96665555,
-  docid: "",
+  lastmodified: "",
   opening: "",
-  region: [],
+  delivery_option: false,
+  pickup_option: false,
   website: "",
   promo: "",
   condition: "",
@@ -64,7 +59,12 @@ const foodLehDummyData = {
   menu: false,
   menuitem: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
   menuprice: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+  docid: "TESTHAWKER1",
   wechatid: "",
+  location: {lat : 10.11, lng: 104.11},
+  menu_combined: {name : "testname", price : "1.11"},
+  tagsValue: [],
+  claps : 0
 };
 
 const foodLehAuth = {
@@ -144,6 +144,7 @@ describe("hawkers", () => {
       location: {lat : 10.11, lng: 104.11},
       menu_combined: {name : "testname", price : "1.11"},
       tagsValue: [],
+      claps : 0
       }));
   });
 });
@@ -206,6 +207,7 @@ describe("hawkers", async () => {
         region: [],
         website: "",
         promo: "",
+        claps : 0
       }));
   });
 });
@@ -232,40 +234,35 @@ describe("hawkers", async () => {
   
     it("cannot be set with invalid contact number", async () => {
       await firebase.assertFails(db.collection("hawkers").doc().set({
-        name: "test 123",
-        postal: 760777,
-        street: "",
-        price: "",
-        description: "",
-        description_detail: "",
-        image1: "",
+        name: "Test Name",
+        postal: 777777,
+        street: "Test STreet",
+        description: "Test Description",
+        description_detail: "Test Detail",
+        url: "Test URL",
         image2: "",
         image3: "",
         image4: "",
         image5: "",
         image6: "",
-        imageFile1: "",
-        imageFile2: "",
-        imageFile3: "",
-        imageFile4: "",
-        imageFile5: "",
-        imageFile6: "",
-        imageName: "Upload Image",
-        longitude: 103.8198,
-        latitude: 1.3521,
+        latitude: "",
+        longitude: "",
         unit: "",
-        delivery_option: false,
-        pickup_option: true,
-        delivery: [],
-        cuisineValue: [],
+        delivery: "",
+        cuisine: "",
+        categories: "",
+        region: "",
+        regions: "",
+        price: "",
+        contact: 12345678,
         call: false,
         whatsapp: false,
         sms: false,
         inperson: false,
-        contact: 12345678,
-        docid: "",
+        lastmodified: "",
         opening: "",
-        region: [],
+        delivery_option: false,
+        pickup_option: false,
         website: "",
         promo: "",
         condition: "",
@@ -273,7 +270,12 @@ describe("hawkers", async () => {
         menu: false,
         menuitem: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
         menuprice: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        docid: "TESTHAWKER1",
         wechatid: "",
+        location: {lat : 10.11, lng: 104.11},
+        menu_combined: {name : "testname", price : "1.11"},
+        tagsValue: [],
+        claps : 0
         }));
     });
   });
@@ -341,6 +343,7 @@ describe("hawkers", async () => {
       location: {lat : 10.11, lng: 104.11},
       menu_combined: {name : "testname", price : "1.11"},
       tagsValue: [],
+      claps : 0
       }));
   });
 });
@@ -402,6 +405,7 @@ describe("hawkers", async () => {
       location: {lat : 10.11, lng: 104.11},
       menu_combined: {name : "testname", price : "1.11"},
       tagsValue: [],
+      claps : 0
       });
 
   });
@@ -480,6 +484,7 @@ describe("hawkers", async () => {
       location: {lat : 10.11, lng: 104.11},
       menu_combined: {name : "testname", price : "1.11"},
       tagsValue: [],
+      claps : 0,
       test_extra_field : "Test"
       }));
   });
@@ -547,6 +552,7 @@ describe("hawkers", async () => {
       docid: "testref",
       wechatid: "",
       location: {lat : 10.11, lng: 104.11},
+      claps : 0
       }));
   });
 });
@@ -608,6 +614,7 @@ describe("hawkers", async () => {
       location: {lat : 10.11, lng: 104.11},
       menu_combined: {name : "testname", price : "1.11"},
       tagsValue: [],
+      claps : 0
       });
   });
 
