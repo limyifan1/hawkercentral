@@ -26,48 +26,48 @@ service cloud.firestore {
     }
 
     function hasValidFields(fields){
-      return fields.hasAll([
-      'name', 
-      'postal' , 
-      'street', 
-      'price', 
-      'description', 
-      'description_detail', 
-      'image1', 'image2', 
-      'image3', 
-      'image4', 
-      'image5', 
-      'image6' ,
-      'imageFile1',
-      'imageFile2',
-      'imageFile3',
-      'imageFile4',
-      'imageFile5',
-      'imageFile6',
-      'imageName',
-      'longitude', 
-      'latitude',
-      'unit',
-      'delivery_option',
-      'pickup_option',
-      'delivery',
-      'cuisineValue',
-      'call',
-      'whatsapp',
-      'sms',
-      'inperson',
-      'contact',
-      'docid',
-      'opening',
-      'region',
-      'website',
-      'promo',
-      'condition',
-      'delivery_detail',
-      'menu',
-      'menuitem',
-      'menuprice',
-      'wechatid' ])
+      return fields.hasOnly([
+     'name',
+    'postal',
+    'street',
+    'description',
+    'description_detail',
+    'url',
+    'image2',
+    'image3',
+    'image4',
+    'image5',
+    'image6',
+    'latitude',
+    'longitude',
+    'unit',
+    'delivery',
+    'cuisine',
+    'categories',
+    'region',
+    'regions',
+    'price',
+    'contact',
+    'call',
+    'whatsapp',
+    'sms',
+    'inperson',
+    'lastmodified',
+    'opening',
+    'delivery_option',
+    'pickup_option',
+    'website',
+    'promo',
+    'condition',
+    'delivery_detail',
+    'menu',
+    'menuitem',
+    'menuprice',
+    'docid',
+    'wechatid',
+    'location',
+    'menu_combined',
+    'tagsValue']) && fields.size() == 41
     }
     
     // TODO: Need structure
@@ -90,7 +90,7 @@ service cloud.firestore {
       //Reads are public, but may incur download costs if malicious users continuously reads them.
       allow read;
       //So are writes, all they need to know is the correct structure to allow these writes, but we validation, we can prevent less garbage data.
-      allow write: if isString(request.resource.data.name) // Required Field 
+      allow create: if isString(request.resource.data.name) // Required Field 
       && isValidPhoneNumber(request.resource.data.contact) // Required Field
       && isPositiveNumber(request.resource.data.postal) // Required Field
       && hasValidFields(request.resource.data.keys()) //This prevents any writes without any of these fields and prevents arbitrary fields from being written.
