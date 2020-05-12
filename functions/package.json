@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@firebase/testing": "0.19.3",
-    "eslint": "6.8.0",
+    "eslint": "7.0.0",
     "eslint-plugin-promise": "4.2.1",
     "firebase-functions-test": "0.2.1",
     "mocha": "6.2.3"
