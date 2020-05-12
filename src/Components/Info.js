@@ -1017,6 +1017,8 @@ export class Info extends React.Component {
                           this.state.data.menu_combined[1].name !== "") ||
                           (!this.state.wantToOrder &&
                             this.state.data.menu &&
+                            this.state.data.menu_combined[0] &&
+                            this.state.data.menu_combined[0].name !== "" &&
                             this.state.data.menu_combined[1] &&
                             this.state.data.menu_combined[1].name === "") ? (
                             <div>
