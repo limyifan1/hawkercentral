@@ -6,7 +6,8 @@
 import React from "react";
 import "../App.css";
 // import {Typeahead} from 'react-bootstrap-typeahead';
-import {  Button } from "react-bootstrap";
+// import {  Button } from "react-bootstrap";
+import Button from "@material-ui/core/Button";
 import { withRouter } from "react-router-dom";
 import Cookies from "universal-cookie";
 
@@ -14,24 +15,8 @@ const cookies = new Cookies();
 
 export class Search extends React.Component {
   state = {
-    postal: cookies.get('postal_search'),
+    postal: cookies.get("postal_search"),
     loading: false,
-  };
-
-  _renderMenuItemChildren = (option, props, index) => {
-    return (
-      <div>
-        <div class="row">
-          <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-            {/* <img style={{"width":"20px"}} src={logo} alt="logo"/> */}
-          </div>
-          <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-            <div>{option.name}</div>
-          </div>
-          <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10"></div>
-        </div>
-      </div>
-    );
   };
 
   handleChange = (event) => {
@@ -58,7 +43,7 @@ export class Search extends React.Component {
           this.state.postal +
           "&returnGeom=Y&getAddrDetails=Y"
       );
-      
+
       return (await response.json()).results[0];
     } catch (error) {
       console.log(error);
@@ -68,7 +53,7 @@ export class Search extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    cookies.set("postal_search", this.state.postal, { path: '/' });
+    cookies.set("postal_search", this.state.postal, { path: "/" });
 
     if (this.props.option === "") {
       alert("Please choose either da bao or delivery thank you :)");
@@ -82,12 +67,12 @@ export class Search extends React.Component {
     }
 
     const search = new URLSearchParams();
-    search.append('postal', this.state.postal);
-    search.append('street', postal.ADDRESS);
-    search.append('lng', postal.LONGITUDE);
-    search.append('lat', postal.LATITUDE);
-    search.append('distance', '5');
-    search.append('option', this.props.option);
+    search.append("postal", this.state.postal);
+    search.append("street", postal.ADDRESS);
+    search.append("lng", postal.LONGITUDE);
+    search.append("lat", postal.LATITUDE);
+    search.append("distance", "5");
+    search.append("option", this.props.option);
 
     this.props.history.push({
       pathname: "/nearby",
@@ -122,13 +107,20 @@ export class Search extends React.Component {
         <div class="row mt-4">
           <div class="col">
             <Button
-              class="shadow-sm"
               type="submit"
-              variant="outline-secondary"
-              style={{ backgroundColor: "#b48300", borderColor: "#b48300" }}
+              variant={"contained"}
+              // variant="outline-secondary"
+              style={{
+                backgroundColor: "#b48300",
+                borderColor: "#b48300",
+                width: "100px",
+              }}
               disabled={this.state.loading}
+              color={"secondary"}
             >
-              <span style={{ color: "white" }}>{this.state.loading ? 'Searching...' : 'Search'}</span>
+              <span style={{ color: "white" }}>
+                {this.state.loading ? "Searching..." : "Search"}
+              </span>
             </Button>
           </div>
         </div>
