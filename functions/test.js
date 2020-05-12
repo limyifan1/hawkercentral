@@ -560,3 +560,138 @@ describe("hawkers", async () => {
   });
 });
 //#endregion
+
+//#region test if data in /hawkers can be read by anyone
+describe("hawkers", async () => {
+  const db = firebase.initializeTestApp({
+    projectId: TEST_FIREBASE_PROJECT_ID,
+    auth: foodLehAuth
+  }).firestore();
+
+  before(async () => {
+    const admin = firebase.initializeAdminApp({
+      projectId: TEST_FIREBASE_PROJECT_ID
+    }).firestore();
+
+    // Create dummy data for read
+    const hawkerRef = admin.collection("hawkers");
+    await hawkerRef.doc('TESTHAWKER1').set({
+        name: "" + Math.random(),
+        postal: "" + Math.random(),
+        street: "",
+        price: "",
+        description: "",
+        description_detail: "",
+        image1: "",
+        image2: "",
+        image3: "",
+        image4: "",
+        image5: "",
+        image6: "",
+        imageFile1: "",
+        imageFile2: "",
+        imageFile3: "",
+        imageFile4: "",
+        imageFile5: "",
+        imageFile6: "",
+        imageName: "Upload Image",
+        longitude: 103.8198,
+        latitude: 1.3521,
+        unit: "",
+        delivery_option: false,
+        pickup_option: true,
+        delivery: [],
+        cuisineValue: [],
+        call: false,
+        whatsapp: false,
+        sms: false,
+        inperson: false,
+        contact: "",
+        docid: "",
+        opening: "",
+        region: [],
+        website: "",
+        promo: "",
+        condition: "",
+        delivery_detail: "",
+        menu: false,
+        menuitem: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        menuprice: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        wechatid: "",
+      });
+
+  });
+
+  after(() => {
+    // Clear data from the emulator
+    firebase.clearFirestoreData({ projectId: TEST_FIREBASE_PROJECT_ID });
+  });
+
+  it("cannot be deleted by anyone", async () => {
+    await firebase.assertFails(db.collection('hawkers').doc('TESTHAWKER1').delete());
+  });
+});
+//#endregion
+
+//#region test if data in /deliveries can be read by anyone
+describe("deliveries", async () => {
+  const db = firebase.initializeTestApp({
+    projectId: TEST_FIREBASE_PROJECT_ID,
+    auth: foodLehAuth
+  }).firestore();
+
+  before(async () => {
+    const admin = firebase.initializeAdminApp({
+      projectId: TEST_FIREBASE_PROJECT_ID
+    }).firestore();
+
+    // Create dummy data for read
+    const hawkerRef = admin.collection("deliveries");
+    await hawkerRef.doc().set({
+        name: "" + Math.random(),
+        delivery_detail: "",
+      });
+  });
+
+  after(() => {
+    // Clear data from the emulator
+    firebase.clearFirestoreData({ projectId: TEST_FIREBASE_PROJECT_ID });
+  });
+
+  it("can be read by anyone", async () => {
+    await firebase.assertSucceeds(db.collection('deliveries').get());
+  });
+});
+//#endregion
+
+//#region test if data in /deliveries cannot be read by anyone
+describe("deliveries", async () => {
+  const db = firebase.initializeTestApp({
+    projectId: TEST_FIREBASE_PROJECT_ID,
+    auth: foodLehAuth
+  }).firestore();
+
+  before(async () => {
+    const admin = firebase.initializeAdminApp({
+      projectId: TEST_FIREBASE_PROJECT_ID
+    }).firestore();
+
+    // Create dummy data for read
+    const deliveryRef = admin.collection("deliveries");
+    await deliveryRef.doc('TESTDELIVERY1').set({
+        name: "" + Math.random(),
+        delivery_detail: "",
+      });
+
+  });
+
+  after(() => {
+    // Clear data from the emulator
+    firebase.clearFirestoreData({ projectId: TEST_FIREBASE_PROJECT_ID });
+  });
+
+  it("cannot be deleted by anyone", async () => {
+    await firebase.assertFails(db.collection('deliveries').doc('TESTDELIVERY1').delete());
+  });
+});
+//#endregion
