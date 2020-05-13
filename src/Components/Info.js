@@ -919,7 +919,7 @@ export class Info extends React.Component {
                         {this.state.data.menu &&
                         this.state.data.menu_combined.length > 0 &&
                         this.state.data.menu_combined[0].name !== "" ? (
-                          <div>
+                          <div style={{zIndex: -999}}>
                             <figure
                               class="shadow row"
                               style={{
@@ -930,7 +930,7 @@ export class Info extends React.Component {
                                 position: "relative",
                                 display: "flex",
                                 padding: "10px 40px 40px",
-                                zIndex: -9999
+                                zIndex: 1,
                               }}
                             >
                               {/* gradient overlay shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
@@ -952,7 +952,7 @@ export class Info extends React.Component {
                                       height: "150px",
                                       "border-radius": "5px",
                                       position: "absolute",
-                                      top: "-10px",
+                                      bottom: "-30px",
                                       left: "-15px",
                                       zIndex: "999",
                                     }}
@@ -1017,7 +1017,7 @@ export class Info extends React.Component {
                                           variant="light"
                                           size="sm"
                                           onClick={this.minusItem}
-                                          name={0} // hardcode 0 to display first menu item
+                                          name={0}
                                           className="shadow-sm"
                                           style={{
                                             backgroundColor: "white",
@@ -1064,7 +1064,6 @@ export class Info extends React.Component {
                             </figure>
                           </div>
                         ) : null}
-
                         {/* See more button shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
                         {(!this.state.wantToOrder &&
                           this.state.data.menu &&
@@ -1077,7 +1076,7 @@ export class Info extends React.Component {
                           this.state.data.menu_combined[0].name !== "" &&
                           this.state.data.menu_combined[1] &&
                           this.state.data.menu_combined[1].name === "") ? (
-                          <div style={{ zIndex: 9999 }}>
+                          <div style={{marginTop: "30px"}}>
                             <hr
                               style={{
                                 color: "grey",
@@ -1087,7 +1086,6 @@ export class Info extends React.Component {
                                 width: "100%",
                                 alignItems: "center",
                                 marginBottom: "0px", // aligns See More to divider
-                                zIndex: 9999,
                               }}
                             />
                             <div
@@ -1097,7 +1095,6 @@ export class Info extends React.Component {
                                 fontSize: "110%",
                                 cursor: "pointer",
                                 color: "grey",
-                                zIndex: 9999,
                               }}
                               onClick={this.enterDetails}
                             >
@@ -1105,6 +1102,7 @@ export class Info extends React.Component {
                             </div>
                           </div>
                         ) : null}
+
                         {/* Display the rest of the menu if customer clicks Menu / see more */}
                         {this.state.wantToOrder ? (
                           <div>
