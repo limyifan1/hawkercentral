@@ -215,7 +215,7 @@ async function getPlanningDetails(from, to) {
   }
 }
 
-function getOneMapToken() {
+function getOneMapToken(){
   return db
     .collection("etc")
     .doc("onemap")
@@ -233,11 +233,20 @@ function getOneMapToken() {
     });
 }
 
-var postalPlanningRegion = async (postal) => {
+var postalPlanningRegion = async (postal, lat, lng) => {
   try {
-    let postal_addressdetails = await getLatLng(postal);
-    let postal_lat = postal_addressdetails["LATITUDE"];
-    let postal_lon = postal_addressdetails["LONGITUDE"];
+
+    let postal_lat
+    let postal_lon
+    if(!lat || !lng){
+      let postal_addressdetails = await getLatLng(postal);
+      postal_lat = postal_addressdetails["LATITUDE"];
+      postal_lon = postal_addressdetails["LONGITUDE"];  
+    }
+    else{
+      postal_lat = lat
+      postal_lon = lng
+    }
     var planningarea = await getPlanningArea(postal_lat, postal_lon);
     let districtpostal = Number(String(postal).slice(0, 2));
     let centrallist =
