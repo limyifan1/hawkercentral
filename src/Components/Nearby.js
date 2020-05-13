@@ -154,22 +154,25 @@ export class Nearby extends React.Component {
       // Object's valuess
       const placesById = {};
 
-      const placesWithinReach = await geoToPromise(
-        geo.query("hawkers").within(centre, 10, "location")
-      );
-      placesWithinReach.forEach((d) => (placesById[d.id] = d));
+      // const placesWithinReach = await geoToPromise(
+      //   geo.query("hawkers").within(centre, 10, "location")
+      // );
+      // placesWithinReach.forEach((d) => (placesById[d.id] = d));
 
-      const userRegion = await Helpers.postalPlanningRegion(this.state.query);
+      const userRegion = await Helpers.postalPlanningRegion(
+        this.state.query,
+        this.state.latitude,
+        this.state.longitude
+      );
       const regions = await db
         .collection("hawkers")
         .where("regions", "array-contains-any", [
           "Islandwide",
-          userRegion.region,
+          userRegion,
         ])
         .get()
         .then(Helpers.mapSnapshotToDocs);
       regions.forEach((d) => (placesById[d.id] = d));
-
       data = Object.values(placesById);
     } else {
       data = await db
