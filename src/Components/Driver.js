@@ -849,7 +849,7 @@ export class Driver extends React.Component {
                         </div>
                       ) : (
                         <div>
-                          {this.state.retrievedMap ? (
+                          {this.state.retrievedMap && this.state.regionFrom.planningarea? (
                             <span>
                               <h5 style={{ fontWeight: "bold" }}>
                                 Delivery Fees From {' '}
