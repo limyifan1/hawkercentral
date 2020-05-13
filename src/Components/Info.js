@@ -930,6 +930,7 @@ export class Info extends React.Component {
                                 position: "relative",
                                 display: "flex",
                                 padding: "10px 40px 40px",
+                                zIndex: -9999
                               }}
                             >
                               {/* gradient overlay shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
@@ -953,6 +954,7 @@ export class Info extends React.Component {
                                       position: "absolute",
                                       top: "-10px",
                                       left: "-15px",
+                                      zIndex: "999",
                                     }}
                                   />
                                 </span>
@@ -1075,7 +1077,7 @@ export class Info extends React.Component {
                           this.state.data.menu_combined[0].name !== "" &&
                           this.state.data.menu_combined[1] &&
                           this.state.data.menu_combined[1].name === "") ? (
-                          <div>
+                          <div style={{ zIndex: 9999 }}>
                             <hr
                               style={{
                                 color: "grey",
@@ -1085,6 +1087,7 @@ export class Info extends React.Component {
                                 width: "100%",
                                 alignItems: "center",
                                 marginBottom: "0px", // aligns See More to divider
+                                zIndex: 9999,
                               }}
                             />
                             <div
@@ -1094,6 +1097,7 @@ export class Info extends React.Component {
                                 fontSize: "110%",
                                 cursor: "pointer",
                                 color: "grey",
+                                zIndex: 9999,
                               }}
                               onClick={this.enterDetails}
                             >
@@ -1124,6 +1128,7 @@ export class Info extends React.Component {
                                   backgroundColor: "#f1f1f1",
                                   "border-radius": "5px",
                                   position: "relative",
+                                  zIndex: -2,
                                 }}
                               >
                                 <span
