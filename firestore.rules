@@ -93,6 +93,20 @@ service cloud.firestore {
       allow update: if true;
       allow create: if true;
     }
+    
+    match /etc/{document=**} {
+      allow read: if true;
+      allow delete: if false;
+      allow update: if true;
+      allow create: if true;
+    }
+    
+    match /delivery_price/{document=**} {
+      allow read: if true;
+      allow delete: if false;
+      allow update: if true;
+      allow create: if true;
+    }
 
     match /hawkers/{document} {
       //Reads are public, but may incur download costs if malicious users continuously reads them.

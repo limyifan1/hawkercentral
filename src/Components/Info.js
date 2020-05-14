@@ -21,6 +21,7 @@ import website_button from "../assets/website_button.png";
 import menu_title from "../assets/info_menu.png";
 import orderleh_title from "../assets/orderleh_title.png";
 import delivery_title from "../assets/info_delivery.png";
+import gradient from "../assets/gradient.png";
 import revieworder from "../assets/info_review_order.png";
 import firebase from "./Firestore";
 import {
@@ -35,8 +36,8 @@ import {
 } from "react-share";
 import Zoom from "@material-ui/core/Zoom";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
-import Fab from '@material-ui/core/Fab';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import Fab from "@material-ui/core/Fab";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
 const analytics = firebase.analytics();
 function onLoad(name, item) {
@@ -65,8 +66,12 @@ function ScrollTop(props) {
   };
 
   return (
-    <Zoom in={trigger} >
-      <div onClick={handleClick} role="presentation" style={{position: 'fixed', bottom: "50px", right: "30px"}}>
+    <Zoom in={trigger}>
+      <div
+        onClick={handleClick}
+        role="presentation"
+        style={{ position: "fixed", bottom: "50px", right: "30px" }}
+      >
         {children}
       </div>
     </Zoom>
@@ -289,6 +294,7 @@ export class Info extends React.Component {
 
   enterDetails() {
     console.log("enterDetails");
+    onLoad("view_menu", this.state.data.name);
     if (this.state.wantToOrder) {
       this.setState({ wantToOrder: false });
     } else {
@@ -357,90 +363,113 @@ export class Info extends React.Component {
           data.push(
             <div>
               <figure
-                class="shadow"
+                class="shadow row"
                 style={{
                   margin: "20px",
-                  paddingLeft: "10px",
-                  paddingTop: "10px",
-                  height: "120px",
+                  minHeight: "100px",
                   backgroundColor: "#f1f1f1",
                   "border-radius": "5px",
                   position: "relative",
+                  display: "flex",
+                  padding: "10px 40px 40px",
                 }}
               >
-                <span
-                  style={{
-                    alignContent: "right",
-                    fontSize: "110%",
-                  }}
-                >
-                  <b>{element ? element.name : null}</b>
-                </span>
-                <div
-                  class="btn-group float-right"
-                  role="group"
-                  aria-label="Basic example"
-                >
-                  <br />
-                  {this.state.data.whatsapp ? (
-                    <div>
-                      <Button
-                        variant="light"
-                        size="sm"
-                        onClick={this.minusItem}
-                        name={i}
-                        className="shadow-sm"
-                        style={{
-                          backgroundColor: "white",
-                          color: "black",
-                          "border-radius": "3px",
-                          margin: "10px",
-                        }}
-                      >
-                        -
-                      </Button>
-                      <span
-                        style={{
-                          margin: "10px",
-                        }}
-                      >
-                        <b>
-                          {this.state.orderData[i] !== undefined
-                            ? this.state.orderData[
-                                JSON.parse(JSON.stringify(i))
-                              ]
-                            : 0}
-                        </b>
-                      </span>
-                      <Button
-                        variant="dark"
-                        size="sm"
-                        onClick={this.addItem}
-                        name={i}
-                        className="shadow-sm"
-                        style={{
-                          backgroundColor: "black",
-                          color: "white",
-                          "border-radius": "3px",
-                          margin: "10px",
-                        }}
-                      >
-                        +
-                      </Button>
+                <div class="row">
+                  <span
+                    style={{
+                      alignContent: "right",
+                      fontSize: "110%",
+                      display: "flex",
+                    }}
+                  >
+                    <b>{element ? element.name : null}</b>
+                  </span>
+                </div>
+                <div class="row">
+                  <div
+                    class="col"
+                    style={{
+                      position: "absolute",
+                      left: "5px",
+                      bottom: "13px",
+                    }}
+                  >
+                    <span
+                      class="shadow badge badge-info m-2"
+                      style={{
+                        backgroundColor: "#b48300",
+                        alignContent: "left",
+                        fontSize: "110%",
+                      }}
+                    >
+                      ${element.price ? element.price : "TBD"}
+                    </span>
+                  </div>
+                  <div
+                    class="col"
+                    style={{
+                      position: "absolute",
+                      left: "10px",
+                      bottom: "10px",
+                    }}
+                  >
+                    <div
+                      class="btn-group float-right"
+                      role="group"
+                      aria-label="Basic example"
+                    >
+                      <br />
+                      {this.state.data.whatsapp ? (
+                        <div>
+                          <Button
+                            variant="light"
+                            size="sm"
+                            onClick={this.minusItem}
+                            name={i}
+                            className="shadow-sm"
+                            style={{
+                              backgroundColor: "white",
+                              color: "black",
+                              "border-radius": "3px",
+                              margin: "10px",
+                            }}
+                          >
+                            -
+                          </Button>
+                          <span
+                            style={{
+                              margin: "10px",
+                            }}
+                          >
+                            <b>
+                              {this.state.orderData[i] !== undefined
+                                ? this.state.orderData[
+                                    JSON.parse(JSON.stringify(i))
+                                  ]
+                                : 0}
+                            </b>
+                          </span>
+                          <Button
+                            variant="dark"
+                            size="sm"
+                            onClick={this.addItem}
+                            name={i}
+                            className="shadow-sm"
+                            style={{
+                              backgroundColor: "black",
+                              color: "white",
+                              "border-radius": "3px",
+                              margin: "10px",
+                            }}
+                          >
+                            +
+                          </Button>
+                        </div>
+                      ) : null}
                     </div>
-                  ) : null}
+                  </div>
                 </div>
                 <br />
-                <span
-                  class="shadow badge badge-info m-2"
-                  style={{
-                    backgroundColor: "#b48300",
-                    alignContent: "left",
-                    fontSize: "110%",
-                  }}
-                >
-                  ${element.price ? element.price : "TBD"}
-                </span>
               </figure>
             </div>
           );
@@ -784,9 +813,9 @@ export class Info extends React.Component {
                       <span>
                         {this.state.data.contact} {" ("}
                         {this.state.data.whatsapp ? (
-                          <span>WhatsApp </span>
+                          <span>WhatsApp{this.state.data.sms || this.state.data.call ? <span>, </span> : null}</span>
                         ) : null}
-                        {this.state.data.sms ? <span>SMS </span> : null}
+                        {this.state.data.sms ? <span>SMS{this.state.data.call ? <span>, </span> : null}</span> : null}
                         {this.state.data.call ? <span>Call </span> : null}
                         {") "} <br />
                         {this.state.data.wechatid ? (
@@ -890,101 +919,151 @@ export class Info extends React.Component {
                         {this.state.data.menu &&
                         this.state.data.menu_combined.length > 0 &&
                         this.state.data.menu_combined[0].name !== "" ? (
-                          <div>
+                          <div style={{zIndex: -999}}>
                             <figure
-                              class="shadow"
+                              class="shadow row"
                               style={{
                                 margin: "20px",
-                                paddingLeft: "10px",
-                                paddingTop: "10px",
-                                height: "120px",
+                                minHeight: "100px",
                                 backgroundColor: "#f1f1f1",
                                 "border-radius": "5px",
                                 position: "relative",
+                                display: "flex",
+                                padding: "10px 40px 40px",
+                                zIndex: 1,
                               }}
                             >
-                              <span
-                                style={{
-                                  alignContent: "right",
-                                  fontSize: "110%",
-                                }}
-                              >
-                                <b>
-                                  {this.state.data.menu_combined[0]
-                                    ? this.state.data.menu_combined[0].name
-                                    : null}
-                                </b>
-                              </span>
-                              <div
-                                class="btn-group float-right"
-                                role="group"
-                                aria-label="Basic example"
-                              >
-                                <br />
-                                {this.state.data.whatsapp ? (
-                                  <div>
-                                    <Button
-                                      variant="light"
-                                      size="sm"
-                                      onClick={this.minusItem}
-                                      name={0} // hardcode 0 to display first menu item
-                                      className="shadow-sm"
-                                      style={{
-                                        backgroundColor: "white",
-                                        color: "black",
-                                        "border-radius": "3px",
-                                        margin: "10px",
-                                      }}
-                                    >
-                                      -
-                                    </Button>
-                                    <span
-                                      style={{
-                                        margin: "10px",
-                                      }}
-                                    >
-                                      <b>
-                                        {this.state.orderData[0] !== undefined
-                                          ? this.state.orderData[0] // hardcode 0 to display first menu item
-                                          : 0}
-                                      </b>
-                                    </span>
-                                    <Button
-                                      variant="dark"
-                                      size="sm"
-                                      onClick={this.addItem}
-                                      name={0} // hardcode 0 to display first menu item
-                                      className="shadow-sm"
-                                      style={{
-                                        backgroundColor: "black",
-                                        color: "white",
-                                        "border-radius": "3px",
-                                        margin: "10px",
-                                      }}
-                                    >
-                                      +
-                                    </Button>
+                              {/* gradient overlay shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
+                              {(!this.state.wantToOrder &&
+                                this.state.data.menu &&
+                                this.state.data.menu_combined.length > 1 &&
+                                this.state.data.menu_combined[1] &&
+                                this.state.data.menu_combined[1].name !== "") ||
+                              (!this.state.wantToOrder &&
+                                this.state.data.menu_combined[1] &&
+                                this.state.data.menu_combined[1].name ===
+                                  "") ? (
+                                <span style={{ height: "0px" }}>
+                                  <img
+                                    src={gradient}
+                                    alt=""
+                                    style={{
+                                      width: "130%",
+                                      height: "150px",
+                                      "border-radius": "5px",
+                                      position: "absolute",
+                                      bottom: "-30px",
+                                      left: "-15px",
+                                      zIndex: "999",
+                                    }}
+                                  />
+                                </span>
+                              ) : null}
+                              <div class="row">
+                                <span
+                                  style={{
+                                    alignContent: "right",
+                                    fontSize: "110%",
+                                    display: "flex",
+                                  }}
+                                >
+                                  <b>
+                                    {this.state.data.menu_combined[0]
+                                      ? this.state.data.menu_combined[0].name
+                                      : null}
+                                  </b>
+                                </span>
+                              </div>
+                              <div class="row">
+                                <div
+                                  class="col"
+                                  style={{
+                                    position: "absolute",
+                                    left: "5px",
+                                    bottom: "13px",
+                                  }}
+                                >
+                                  <span
+                                    class="shadow badge badge-info m-2"
+                                    style={{
+                                      backgroundColor: "#b48300",
+                                      alignContent: "left",
+                                      fontSize: "110%",
+                                    }}
+                                  >
+                                    $
+                                    {this.state.data.menu_combined[0].price
+                                      ? this.state.data.menu_combined[0].price
+                                      : "TBD"}
+                                  </span>
+                                </div>
+                                <div
+                                  class="col"
+                                  style={{
+                                    position: "absolute",
+                                    left: "10px",
+                                    bottom: "10px",
+                                  }}
+                                >
+                                  <div
+                                    class="btn-group float-right"
+                                    role="group"
+                                    aria-label="Basic example"
+                                  >
+                                    <br />
+                                    {this.state.data.whatsapp ? (
+                                      <div>
+                                        <Button
+                                          variant="light"
+                                          size="sm"
+                                          onClick={this.minusItem}
+                                          name={0}
+                                          className="shadow-sm"
+                                          style={{
+                                            backgroundColor: "white",
+                                            color: "black",
+                                            "border-radius": "3px",
+                                            margin: "10px",
+                                          }}
+                                        >
+                                          -
+                                        </Button>
+                                        <span
+                                          style={{
+                                            margin: "10px",
+                                          }}
+                                        >
+                                          <b>
+                                            {this.state.orderData[0] !==
+                                            undefined
+                                              ? this.state.orderData[0] // hardcode 0 to display first menu item
+                                              : 0}
+                                          </b>
+                                        </span>
+                                        <Button
+                                          variant="dark"
+                                          size="sm"
+                                          onClick={this.addItem}
+                                          name={0} // hardcode 0 to display first menu item
+                                          className="shadow-sm"
+                                          style={{
+                                            backgroundColor: "black",
+                                            color: "white",
+                                            "border-radius": "3px",
+                                            margin: "10px",
+                                          }}
+                                        >
+                                          +
+                                        </Button>
+                                      </div>
+                                    ) : null}
                                   </div>
-                                ) : null}
+                                </div>
                               </div>
                               <br />
-                              <span
-                                class="shadow badge badge-info m-2"
-                                style={{
-                                  backgroundColor: "#b48300",
-                                  alignContent: "left",
-                                  fontSize: "110%",
-                                }}
-                              >
-                                $
-                                {this.state.data.menu_combined[0].price
-                                  ? this.state.data.menu_combined[0].price
-                                  : "TBD"}
-                              </span>
                             </figure>
                           </div>
                         ) : null}
-
                         {/* See more button shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
                         {(!this.state.wantToOrder &&
                           this.state.data.menu &&
@@ -992,9 +1071,12 @@ export class Info extends React.Component {
                           this.state.data.menu_combined[1] &&
                           this.state.data.menu_combined[1].name !== "") ||
                         (!this.state.wantToOrder &&
+                          this.state.data.menu &&
+                          this.state.data.menu_combined[0] &&
+                          this.state.data.menu_combined[0].name !== "" &&
                           this.state.data.menu_combined[1] &&
                           this.state.data.menu_combined[1].name === "") ? (
-                          <div>
+                          <div style={{marginTop: "30px"}}>
                             <hr
                               style={{
                                 color: "grey",
@@ -1020,6 +1102,7 @@ export class Info extends React.Component {
                             </div>
                           </div>
                         ) : null}
+
                         {/* Display the rest of the menu if customer clicks Menu / see more */}
                         {this.state.wantToOrder ? (
                           <div>
@@ -1043,6 +1126,7 @@ export class Info extends React.Component {
                                   backgroundColor: "#f1f1f1",
                                   "border-radius": "5px",
                                   position: "relative",
+                                  zIndex: -2,
                                 }}
                               >
                                 <span
@@ -1365,6 +1449,9 @@ export class Info extends React.Component {
                                   width: "300px",
                                 }}
                                 name="Language"
+                                onClick={() =>
+                                  onLoad("place_order", this.state.data.name)
+                                }
                               >
                                 Place order via WhatsApp
                               </Button>

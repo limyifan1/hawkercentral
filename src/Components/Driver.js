@@ -2,7 +2,7 @@ import React from "react";
 import "../App.css";
 import { withRouter } from "react-router-dom";
 import firebase from "./Firestore";
-import { Form, Button, Modal, Spinner } from "react-bootstrap";
+import { Form, Modal, Spinner } from "react-bootstrap";
 import { db } from "./Firestore";
 import driver from "../driver.png";
 import question from "../question.png";
@@ -12,7 +12,9 @@ import summary from "../summary.png";
 import instructions from "../infographic.jpg";
 import Cookies from "universal-cookie";
 import DateTimePicker from "react-datetime-picker";
-
+import Helpers from "../Helpers/helpers";
+import SaveIcon from "@material-ui/icons/Save";
+import Button from "@material-ui/core/Button";
 const cookies = new Cookies();
 const API_KEY = `${process.env.REACT_APP_GKEY}`;
 const analytics = firebase.analytics();
@@ -141,12 +143,38 @@ export class Driver extends React.Component {
       show: false,
       directions: false,
       loadingDir: false,
-      retrievedDir: true,
+      loadingMap: false,
+      retrievedDir: false,
+      retrievedMap: false,
+      regionFrom: "",
+      planningDetails: "",
     };
   }
-  getDirections = () => {
+
+  getMap = async () => {
+    this.setState({ loadingMap: true });
+    var regionFrom = await Helpers.postalPlanningRegion(this.state.postal);
+    var regionTo = await Helpers.postalPlanningRegion(this.state.postal_to);
+    var cost = await Helpers.getPlanningDetails(
+      regionFrom.planningarea,
+      regionTo.planningarea
+    );
+    this.setState({
+      cost: cost,
+      regionFrom: regionFrom,
+      loadingMap: false,
+      retrievedMap: true,
+    });
+  };
+
+  getDirections = async () => {
     this.setState({ loadingDir: true });
-    console.log(this.state.time);
+    var regionFrom = await Helpers.postalPlanningRegion(this.state.postal);
+    var regionTo = await Helpers.postalPlanningRegion(this.state.postal_to);
+    var cost = await Helpers.getPlanningDetails(
+      regionFrom.planningarea,
+      regionTo.planningarea
+    );
     const query =
       "https://fathomless-falls-12833.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?" +
       "mode=driving" +
@@ -165,7 +193,6 @@ export class Driver extends React.Component {
       "&" +
       "key=" +
       API_KEY;
-    console.log(query);
 
     return fetch(query, {
       method: "GET",
@@ -178,32 +205,19 @@ export class Driver extends React.Component {
         return response.json();
       })
       .then((contents) => {
-        console.log(contents);
-        var cost;
-        var distance =
-          contents && contents.routes.length > 0
-            ? contents.routes[0].legs[0].distance.value
-            : 0;
-        if (distance < 5000) {
-          cost = 6;
-        } else if (distance < 10000) {
-          cost = 8;
-        } else if (distance < 15000) {
-          cost = 10;
-        } else if (distance < 20000) {
-          cost = 12;
-        } else if (distance < 25000) {
-          cost = 15;
-        } else {
-          cost = 18;
+        if (cost) {
+          var distance =
+            contents && contents.routes.length > 0
+              ? contents.routes[0].legs[0].distance.value
+              : 0;
+          this.setState({
+            cost: cost,
+            directions: contents,
+            distance: distance,
+            loadingDir: false,
+            retrievedDir: true,
+          });
         }
-        this.setState({
-          directions: contents,
-          cost: cost,
-          distance: distance,
-          loadingDir: false,
-          retrievedDir: true,
-        });
       })
       .catch((error) => {
         console.log("Error:" + error.toString());
@@ -366,6 +380,7 @@ export class Driver extends React.Component {
   };
 
   componentWillMount() {
+    this.getMap();
     onLoad("find_driver");
   }
 
@@ -383,6 +398,7 @@ export class Driver extends React.Component {
     const name = target.name;
     if (name === "postal" && value.toString().length === 6) {
       await this.getPostal(value, "from");
+      await this.getMap();
     }
     if (name === "postal_to" && value.toString().length === 6) {
       await this.getPostal(value, "to");
@@ -469,7 +485,7 @@ export class Driver extends React.Component {
                         color: "orange",
                         backgroundColor: "orange",
                         height: 5,
-                        width: "50%"
+                        width: "50%",
                       }}
                     />
                     Now, everyone can deliver <br /> Find out more: <br />
@@ -522,6 +538,7 @@ export class Driver extends React.Component {
                               placeholder="Enter Postal Code 邮区编号"
                               min="0"
                               required
+                              maxLength="6"
                             ></input>
                           </div>
                         </div>
@@ -800,7 +817,7 @@ export class Driver extends React.Component {
                                 <b>
                                   Arrival Time 预测到达时间 <br />{" "}
                                   <small style={{ color: "grey" }}>
-                                    (Pickup Time + Duration + 15 min):
+                                    (Pickup Time + Duration + 15 min Buffer):
                                   </small>
                                 </b>
                                 <br />
@@ -817,7 +834,7 @@ export class Driver extends React.Component {
                                 <br />
                                 <b>Delivery Cost: </b>
                                 <br />
-                                {"$" + this.state.cost.toString()}
+                                {this.state.cost?"$" + this.state.cost.toString():null}
                               </p>
                             </span>
                           ) : (
@@ -825,8 +842,104 @@ export class Driver extends React.Component {
                           )}
                         </div>
                       )}
-
-                      <br />
+                      {this.state.loadingMap ? (
+                        <div>
+                          <br />
+                          <Spinner class="" animation="grow" />
+                        </div>
+                      ) : (
+                        <div>
+                          {this.state.retrievedMap && this.state.regionFrom.planningarea? (
+                            <span>
+                              <h5 style={{ fontWeight: "bold" }}>
+                                Delivery Fees From {' '}
+                                {this.state.regionFrom.planningarea}:
+                              </h5>
+                              <div class="d-none d-md-inline-block">
+                                <Button
+                                  variant="contained"
+                                  color={"primary"}
+                                  size="large"
+                                  startIcon={<SaveIcon />}
+                                  style={{
+                                    position: "absolute",
+                                    right: "30%",
+                                  }}
+                                  target="blank"
+                                  href={
+                                    "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
+                                    this.state.regionFrom.planningarea
+                                      .replace(/ /g, "")
+                                      .toLowerCase() +
+                                    ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
+                                  }
+                                  download
+                                >
+                                  View Full 全图
+                                </Button>
+                                <img
+                                  src={
+                                    "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
+                                    this.state.regionFrom.planningarea
+                                      .replace(/ /g, "")
+                                      .toLowerCase() +
+                                    ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
+                                  }
+                                  alt="map"
+                                  style={{
+                                    width: "50%",
+                                    height: "auto",
+                                  }}
+                                />
+                              </div>
+                              <div class="d-inline-block d-md-none">
+                                <Button
+                                  variant="contained"
+                                  color={"primary"}
+                                  size="large"
+                                  startIcon={<SaveIcon />}
+                                  target="blank"
+                                  style={{
+                                    position: "absolute",
+                                    right: "5%",
+                                    fontSize: "12px",
+                                    height: "25px",
+                                    // top: "10%"
+                                  }}
+                                  href={
+                                    "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
+                                    this.state.regionFrom.planningarea
+                                      .replace(/ /g, "")
+                                      .toLowerCase() +
+                                    ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
+                                  }
+                                  download
+                                >
+                                  View Full 全图
+                                </Button>
+                                <img
+                                  src={
+                                    "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
+                                    this.state.regionFrom.planningarea
+                                      .replace(/ /g, "")
+                                      .toLowerCase() +
+                                    ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
+                                  }
+                                  alt="map"
+                                  style={{
+                                    width: "100%",
+                                    height: "auto",
+                                  }}
+                                />
+                              </div>
+                            </span>
+                          ) : (
+                            <div>
+                              Map will be loaded after details are given
+                            </div>
+                          )}
+                        </div>
+                      )}
                       <div
                         class="form-check create-title"
                         style={{ textAlign: "center" }}
@@ -870,12 +983,8 @@ export class Driver extends React.Component {
                             </div>
                           ) : (
                             <Button
-                              class="shadow-lg"
-                              style={{
-                                backgroundColor: "#b48300",
-                                borderColor: "#b48300",
-                                fontSize: "25px",
-                              }}
+                              variant="contained"
+                              color={"primary"}
                               type="Submit"
                             >
                               Search (搜索)

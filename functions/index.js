@@ -240,7 +240,6 @@ exports.telegramEdit = functions
             "To: " +
             destination +
             "\n" +
-            "\n" +
             "ETA: " +
             arrival +
             "\n" +

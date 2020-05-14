@@ -370,4 +370,15 @@ const retrieveData = async () => {
     });
 };
 
-retrieveData();
+// retrieveData();
+
+const updateData = () => {
+  db
+    .collection("hawkers")
+    .doc('KOZb6LPpUvtnK6pfj3Pv')
+    .update({
+      opening: "West\nMon-Fri: 10:00AM to 19:00PM\nSat-Sun: 10:00AM to 14:00PM\n\nOthers\nMon-Sun: 10:00AM to 20:30PM"
+    })
+}
+
+updateData()

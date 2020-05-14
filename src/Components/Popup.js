@@ -70,6 +70,7 @@ export class Popup extends React.Component {
               cursor: "pointer",
               marginTop: "12px",
               marginRight: "12px",
+              height: "25px"
             }}
           >
             Delete
@@ -86,6 +87,7 @@ export class Popup extends React.Component {
               fontSize: "12px",
               cursor: "pointer",
               marginTop: "12px",
+              height: "25px"
             }}
           >
             Edit
