@@ -207,15 +207,14 @@ async function getPlanningDetails(from, to) {
     .then(async (d) => {
       return d.data();
     });
-  if(data && data[to]){
+  if (data && data[to]) {
     return data[to].price;
-  }
-  else{
-    return null
+  } else {
+    return null;
   }
 }
 
-function getOneMapToken(){
+function getOneMapToken() {
   return db
     .collection("etc")
     .doc("onemap")
@@ -235,19 +234,33 @@ function getOneMapToken(){
 
 var postalPlanningRegion = async (postal, lat, lng) => {
   try {
-
-    let postal_lat
-    let postal_lon
-    if(!lat || !lng){
-      let postal_addressdetails = await getLatLng(postal);
+    let postal_lat;
+    let postal_lon;
+    let postal_addressdetails;
+    if (!lat || !lng) {
+      postal_addressdetails = await getLatLng(postal);
       postal_lat = postal_addressdetails["LATITUDE"];
-      postal_lon = postal_addressdetails["LONGITUDE"];  
-    }
-    else{
-      postal_lat = lat
-      postal_lon = lng
+      postal_lon = postal_addressdetails["LONGITUDE"];
+    } else {
+      postal_lat = lat;
+      postal_lon = lng;
     }
     var planningarea = await getPlanningArea(postal_lat, postal_lon);
+
+    if (["ORCHARD", "NEWTON"].includes(planningarea)) {
+      planningarea = "Orchardnewton";
+    } else if (
+      ["OUTRAM", "SINGAPORE RIVER", "MUSEUM", "RIVER VALLEY"].includes(planningarea)
+    ) {
+      planningarea = "DHOBY";
+    } else if (
+      ["MARINA SOUTH", "DOWNTOWN CORE", "STRAITS VIEW", "MARINA EAST"].includes(
+        planningarea
+      )
+    ) {
+      planningarea = "DOWNTOWN";
+    }
+    
     let districtpostal = Number(String(postal).slice(0, 2));
     let centrallist =
       ["01", "02", "03", "04", "05", "06", "07", "08", "09"] +
