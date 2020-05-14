@@ -813,49 +813,6 @@ export class Driver extends React.Component {
                         </div>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                        <div class="form-group create-title">
-                          <label for="time">Pickup Date 取食物日期</label>
-                          <DatePicker
-                            class="form-control is-invalid"
-                            dayPlaceholder="dd"
-                            monthPlaceholder="mm"
-                            yearPlaceholder="yyyy"
-                            onChange={this.handleDate}
-                            value={this.state.date}
-                            format="dd/MMM/yyyy"
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                        <div class="form-group create-title">
-                          <label for="time">Pickup Time 取食物时间</label>
-                          <TimePicker
-                            class="form-control is-invalid"
-                            dayPlaceholder="dd"
-                            monthPlaceholder="mm"
-                            yearPlaceholder="yyyy"
-                            hourPlaceholder="hh"
-                            minutePlaceholder="mm"
-                            onChange={this.handleTime}
-                            value={this.state.time}
-                            format="hh:mma"
-                            // minDate={new Date()}
-                            disableClock
-                            required
-                          />
-                          {time_now > this.state.datetime ? (
-                            <span class="badge badge-danger">
-                              Time cannot be less than 1 hour from now
-                              <br />
-                              取食物时间必须至少在1小时后
-                            </span>
-                          ) : null}
-                        </div>
-                      </div>
-                    </div>
                   </div>
                   <img
                     class="d-none d-md-inline-block"
@@ -952,6 +909,48 @@ export class Driver extends React.Component {
                               minlength="8"
                             ></input>
                           </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <div class="form-group create-title">
+                          <label for="time">Pickup Date 取食物日期</label>
+                          <DatePicker
+                            class="form-control is-invalid"
+                            dayPlaceholder="dd"
+                            monthPlaceholder="mm"
+                            yearPlaceholder="yyyy"
+                            onChange={this.handleDate}
+                            value={this.state.date}
+                            format="dd/MMM/yyyy"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <div class="form-group create-title">
+                          <label for="time">Pickup Time 取食物时间</label>
+                          <TimePicker
+                            class="form-control is-invalid"
+                            dayPlaceholder="dd"
+                            monthPlaceholder="mm"
+                            yearPlaceholder="yyyy"
+                            hourPlaceholder="hh"
+                            minutePlaceholder="mm"
+                            onChange={this.handleTime}
+                            value={this.state.time}
+                            format="hh:mma"
+                            disableClock
+                            required
+                          />
+                          {time_now > this.state.datetime ? (
+                            <span class="badge badge-danger">
+                              Time cannot be less than 1 hour from now
+                              <br />
+                              取食物时间必须至少在1小时后
+                            </span>
+                          ) : null}
                         </div>
                       </div>
                     </div>
