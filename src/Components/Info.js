@@ -1126,7 +1126,7 @@ export class Info extends React.Component {
                                   backgroundColor: "#f1f1f1",
                                   "border-radius": "5px",
                                   position: "relative",
-                                  zIndex: -2,
+                                  zIndex: 1,
                                 }}
                               >
                                 <span
