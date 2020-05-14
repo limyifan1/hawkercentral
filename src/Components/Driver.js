@@ -11,10 +11,11 @@ import delivery_address from "../delivery_address.png";
 import summary from "../summary.png";
 import instructions from "../infographic.jpg";
 import Cookies from "universal-cookie";
-import DateTimePicker from "react-datetime-picker";
 import Helpers from "../Helpers/helpers";
-import SaveIcon from "@material-ui/icons/Save";
+import GetApp from "@material-ui/icons/GetApp";
 import Button from "@material-ui/core/Button";
+import DatePicker from "react-date-picker";
+import TimePicker from "react-time-picker";
 const cookies = new Cookies();
 const API_KEY = `${process.env.REACT_APP_GKEY}`;
 const analytics = firebase.analytics();
@@ -136,7 +137,9 @@ export class Driver extends React.Component {
       unit_to: "",
       contact: cookies.get("contact") ? cookies.get("contact") : "",
       contact_to: "",
-      time: time_now,
+      time: time_now.toLocaleTimeString(),
+      date: time_now,
+      datetime: time_now,
       note: cookies.get("note") ? cookies.get("note") : "",
       pickup_option: false,
       submitted: false,
@@ -154,13 +157,17 @@ export class Driver extends React.Component {
   getMap = async () => {
     this.setState({ loadingMap: true });
     var regionFrom = await Helpers.postalPlanningRegion(this.state.postal);
-    var regionTo = await Helpers.postalPlanningRegion(this.state.postal_to);
-    var cost = await Helpers.getPlanningDetails(
-      regionFrom.planningarea,
-      regionTo.planningarea
-    );
+    var regionTo;
+    var cost;
+    if (this.state.postal_to) {
+      regionTo = await Helpers.postalPlanningRegion(this.state.postal_to);
+      cost = await Helpers.getPlanningDetails(
+        regionFrom.planningarea,
+        regionTo.planningarea
+      );
+    }
     this.setState({
-      cost: cost,
+      cost: cost ? cost : null,
       regionFrom: regionFrom,
       loadingMap: false,
       retrievedMap: true,
@@ -189,7 +196,7 @@ export class Driver extends React.Component {
       "destination=" +
       this.state.street_to +
       "&departure_time=" +
-      parseInt(this.state.time.valueOf() / 1000) +
+      parseInt(this.state.datetime.valueOf() / 1000) +
       "&" +
       "key=" +
       API_KEY;
@@ -305,7 +312,7 @@ export class Driver extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     this.setState({ submitting: true });
-    if (this.state.time < time_now) {
+    if (this.state.datetime < time_now) {
       alert(
         "Time cannot be less than 1 hour from now取食物时间必须至少在30分钟后"
       );
@@ -320,7 +327,7 @@ export class Driver extends React.Component {
     cookies.set("unit", this.state.unit, { path: "/" });
     cookies.set("contact", this.state.contact, { path: "/" });
     cookies.set("note", this.state.note, { path: "/" });
-    var arrival = new Date(this.state.time);
+    var arrival = new Date(this.state.datetime);
     arrival.setMinutes(
       arrival.getMinutes() +
         15 +
@@ -351,7 +358,7 @@ export class Driver extends React.Component {
       unit_to: this.state.unit_to,
       contact: this.state.contact,
       contact_to: this.state.contact_to,
-      time: this.state.time,
+      time: this.state.datetime,
       note: this.state.note,
       arrival: arrival,
       duration: this.state.directions.routes[0].legs[0].duration.text,
@@ -365,13 +372,13 @@ export class Driver extends React.Component {
         id: id,
         url: "www.foodleh.app/delivery?id=" + id,
         time:
-          dayName[this.state.time.getDay()] +
+          dayName[this.state.datetime.getDay()] +
           " " +
-          this.state.time.getDate() +
+          this.state.datetime.getDate() +
           " " +
-          monthNames[this.state.time.getMonth()] +
+          monthNames[this.state.datetime.getMonth()] +
           " " +
-          formatAMPM(this.state.time),
+          formatAMPM(this.state.datetime),
         duration: this.state.directions.routes[0].legs[0].duration.text,
         arrival: arrival,
       });
@@ -389,7 +396,35 @@ export class Driver extends React.Component {
   }
 
   handleTime = async (time) => {
-    this.setState({ time: time });
+    this.setState({
+      time: time,
+      datetime: new Date(
+        this.state.date.getMonth() +
+          1 +
+          "/" +
+          this.state.date.getDate() +
+          "/" +
+          this.state.date.getFullYear() +
+          " " +
+          time
+      ),
+    });
+  };
+
+  handleDate = async (date) => {
+    this.setState({
+      date: date,
+      datetime: new Date(
+        date.getMonth() +
+          1 +
+          "/" +
+          date.getDate() +
+          "/" +
+          date.getFullYear() +
+          " " +
+          this.state.time
+      ),
+    });
   };
 
   handleChange = async (event) => {
@@ -428,7 +463,7 @@ export class Driver extends React.Component {
       this.state.directions &&
       this.state.directions.routes.length > 0
     ) {
-      arrival = new Date(this.state.time);
+      arrival = new Date(this.state.datetime);
       arrival.setMinutes(
         arrival.getMinutes() +
           15 +
@@ -502,9 +537,164 @@ export class Driver extends React.Component {
                   </div>
                 </div>
                 <div
-                  class="card shadow row"
+                  class="card row"
                   style={{ width: "100%", padding: "", marginTop: "10px" }}
                 >
+                  <div
+                    class="shadow-lg"
+                    style={{
+                      backgroundColor: "white",
+                      padding: "20px",
+                      alignContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <h5>Check Delivery Rates</h5>
+                    <div class="d-flex flex-row justify-content-center">
+                      <div
+                        class="d-flex p-6 justify-content-center align-items-center"
+                        style={{ padding: "0px 10px" }}
+                      >
+                        <div class="form-group create-title">
+                          <label for="postalcode">Delivery From 出发地点</label>
+                          <div class="input-group">
+                            <input
+                              onChange={this.handleChange.bind(this)}
+                              value={this.state.postal}
+                              type="number"
+                              class={
+                                !this.state.postal
+                                  ? "form-control is-invalid"
+                                  : "form-control"
+                              }
+                              name="postal"
+                              placeholder="Enter Postal Code 邮区编号"
+                              min="0"
+                              required
+                              maxLength="6"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="p-6" style={{ padding: "0px 10px" }}>
+                        <div class="form-group create-title">
+                          <label for="postalcode">Delivery To 送往地点</label>
+                          <div class="input-group">
+                            <input
+                              onChange={this.handleChange.bind(this)}
+                              value={this.state.postal_to}
+                              type="number"
+                              class={
+                                !this.state.postal_to
+                                  ? "form-control is-invalid"
+                                  : "form-control"
+                              }
+                              name="postal_to"
+                              placeholder="Enter Postal Code 邮区编号"
+                              min="0"
+                              required
+                              maxLength="6"
+                              style={{ padding: "0px 10px" }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="d-flex flex-row justify-content-center align-items-center"
+                      style={{ padding: "0px 10px" }}
+                    >
+                      {this.state.loadingDir ? (
+                        <Spinner class="" animation="grow" />
+                      ) : (
+                        <div style={{ fontSize: "14px", textAlign: "left" }}>
+                          {this.state.retrievedDir &&
+                          this.state.directions &&
+                          this.state.directions.routes.length > 0 ? (
+                            <div
+                              class="p-6 d-flex align-items-center"
+                              style={{
+                                padding: "15px",
+                              }}
+                            >
+                              <div>
+                                <b>Duration: </b>
+                                {this.state.directions.routes.length > 0
+                                  ? this.state.directions.routes[0].legs[0]
+                                      .duration.text
+                                  : null}
+                                <br />
+                                <b>Delivery Cost: </b>
+                                {this.state.cost
+                                  ? "$" + this.state.cost.toString()
+                                  : null}
+                              </div>
+                            </div>
+                          ) : null}
+                        </div>
+                      )}
+                      <div class="p-6 d-flex flex-row justify-content-center align-items-center">
+                        {this.state.loadingMap ? (
+                          <div>
+                            <br />
+                            <Spinner class="" animation="grow" />
+                          </div>
+                        ) : (
+                          <div>
+                            {this.state.retrievedMap &&
+                            this.state.regionFrom.planningarea ? (
+                              <span>
+                                <div>
+                                  <img
+                                    src={
+                                      "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
+                                      this.state.regionFrom.planningarea
+                                        .replace(/ /g, "")
+                                        .toLowerCase() +
+                                      ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
+                                    }
+                                    alt="map"
+                                    style={{
+                                      width: "100px",
+                                      height: "auto",
+                                    }}
+                                  />
+                                  <Button
+                                    variant="contained"
+                                    color={"secondary"}
+                                    size="large"
+                                    startIcon={<GetApp />}
+                                    style={{
+                                      fontSize: "10px",
+                                      width: "auto",
+                                      margin: "10px",
+                                      // position: "absolute",
+                                      // right: "40px",
+                                    }}
+                                    target="blank"
+                                    href={
+                                      "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
+                                      this.state.regionFrom.planningarea
+                                        .replace(/ /g, "")
+                                        .toLowerCase() +
+                                      ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
+                                    }
+                                    download
+                                  >
+                                    <div>View Map (全图)</div>
+                                  </Button>
+                                </div>
+                              </span>
+                            ) : (
+                              <div>
+                                Map will be loaded after details are given
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                   <img
                     class="d-none d-md-inline-block"
                     src={store_address}
@@ -626,8 +816,23 @@ export class Driver extends React.Component {
                     <div class="row">
                       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <div class="form-group create-title">
+                          <label for="time">Pickup Date 取食物日期</label>
+                          <DatePicker
+                            class="form-control is-invalid"
+                            dayPlaceholder="dd"
+                            monthPlaceholder="mm"
+                            yearPlaceholder="yyyy"
+                            onChange={this.handleDate}
+                            value={this.state.date}
+                            format="dd/MMM/yyyy"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <div class="form-group create-title">
                           <label for="time">Pickup Time 取食物时间</label>
-                          <DateTimePicker
+                          <TimePicker
                             class="form-control is-invalid"
                             dayPlaceholder="dd"
                             monthPlaceholder="mm"
@@ -636,23 +841,12 @@ export class Driver extends React.Component {
                             minutePlaceholder="mm"
                             onChange={this.handleTime}
                             value={this.state.time}
-                            format="dd/MMM/yyyy hh:mma"
-                            minDate={new Date()}
+                            format="hh:mma"
+                            // minDate={new Date()}
+                            disableClock
                             required
                           />
-                          {/* <input
-                            onChange={this.handleChange}
-                            value={this.state.time}
-                            type="datetime-local"
-                            class={
-                              time_now_plus > this.state.time
-                                ? "form-control is-invalid"
-                                : "form-control"
-                            }
-                            name="time"
-                            placeholder="E.g. #01-01"
-                          ></input> */}
-                          {time_now > this.state.time ? (
+                          {time_now > this.state.datetime ? (
                             <span class="badge badge-danger">
                               Time cannot be less than 1 hour from now
                               <br />
@@ -834,109 +1028,13 @@ export class Driver extends React.Component {
                                 <br />
                                 <b>Delivery Cost: </b>
                                 <br />
-                                {this.state.cost?"$" + this.state.cost.toString():null}
+                                {this.state.cost
+                                  ? "$" + this.state.cost.toString()
+                                  : null}
                               </p>
                             </span>
                           ) : (
                             <div>Fill in details above</div>
-                          )}
-                        </div>
-                      )}
-                      {this.state.loadingMap ? (
-                        <div>
-                          <br />
-                          <Spinner class="" animation="grow" />
-                        </div>
-                      ) : (
-                        <div>
-                          {this.state.retrievedMap && this.state.regionFrom.planningarea? (
-                            <span>
-                              <h5 style={{ fontWeight: "bold" }}>
-                                Delivery Fees From {' '}
-                                {this.state.regionFrom.planningarea}:
-                              </h5>
-                              <div class="d-none d-md-inline-block">
-                                <Button
-                                  variant="contained"
-                                  color={"primary"}
-                                  size="large"
-                                  startIcon={<SaveIcon />}
-                                  style={{
-                                    position: "absolute",
-                                    right: "30%",
-                                  }}
-                                  target="blank"
-                                  href={
-                                    "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
-                                    this.state.regionFrom.planningarea
-                                      .replace(/ /g, "")
-                                      .toLowerCase() +
-                                    ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
-                                  }
-                                  download
-                                >
-                                  View Full 全图
-                                </Button>
-                                <img
-                                  src={
-                                    "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
-                                    this.state.regionFrom.planningarea
-                                      .replace(/ /g, "")
-                                      .toLowerCase() +
-                                    ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
-                                  }
-                                  alt="map"
-                                  style={{
-                                    width: "50%",
-                                    height: "auto",
-                                  }}
-                                />
-                              </div>
-                              <div class="d-inline-block d-md-none">
-                                <Button
-                                  variant="contained"
-                                  color={"primary"}
-                                  size="large"
-                                  startIcon={<SaveIcon />}
-                                  target="blank"
-                                  style={{
-                                    position: "absolute",
-                                    right: "5%",
-                                    fontSize: "12px",
-                                    height: "25px",
-                                    // top: "10%"
-                                  }}
-                                  href={
-                                    "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
-                                    this.state.regionFrom.planningarea
-                                      .replace(/ /g, "")
-                                      .toLowerCase() +
-                                    ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
-                                  }
-                                  download
-                                >
-                                  View Full 全图
-                                </Button>
-                                <img
-                                  src={
-                                    "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
-                                    this.state.regionFrom.planningarea
-                                      .replace(/ /g, "")
-                                      .toLowerCase() +
-                                    ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
-                                  }
-                                  alt="map"
-                                  style={{
-                                    width: "100%",
-                                    height: "auto",
-                                  }}
-                                />
-                              </div>
-                            </span>
-                          ) : (
-                            <div>
-                              Map will be loaded after details are given
-                            </div>
                           )}
                         </div>
                       )}
