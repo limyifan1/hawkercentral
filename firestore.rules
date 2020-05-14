@@ -61,14 +61,12 @@ service cloud.firestore {
     'condition',
     'delivery_detail',
     'menu',
-    'menuitem',
-    'menuprice',
     'docid',
     'wechatid',
     'location',
     'menu_combined',
     'tagsValue',
-    'claps' ]) && fields.size() == 42
+    'claps' ]) && fields.size() == 40
     }
     
     // TODO: Need structure
