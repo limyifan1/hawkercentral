@@ -95,8 +95,6 @@ const handleData = async ({
   condition,
   delivery_detail,
   menu,
-  menuitem,
-  menuprice,
   toggle,
   docid,
   wechatid,
@@ -142,8 +140,6 @@ const handleData = async ({
     condition: condition,
     delivery_detail: delivery_detail,
     menu: menu,
-    menuitem: menuitem,
-    menuprice: menuprice,
     docid: docid,
     wechatid: wechatid,
     location: location,
@@ -225,8 +221,9 @@ export class ListForm extends React.Component {
       condition: "",
       delivery_detail: "",
       menu: false,
-      menuitem: ["", "", "", "", "", "", "", "", "", ""],
-      menuprice: ["", "", "", "", "", "", "", "", "", ""],
+      menu_combined: [{name:"",price:""},{name:"",price:""},{name:"",price:""},
+      {name:"",price:""},{name:"",price:""},{name:"",price:""},{name:"",price:""},
+      {name:"",price:""},{name:"",price:""},{name:"",price:""}],
       wechatid: "",
       tagsValue: [],
       tags: [],
@@ -245,6 +242,7 @@ export class ListForm extends React.Component {
   }
 
   getInitialState() {
+    console.log("getinitialstate");
     const initialState = {
       name: this.props.data.name,
       postal: this.props.data.postal,
@@ -290,8 +288,7 @@ export class ListForm extends React.Component {
       condition: this.props.data.condition,
       delivery_detail: this.props.data.delivery_detail,
       menu: this.props.data.menu,
-      menuitem: this.props.data.menuitem,
-      menuprice: this.props.data.menuprice,
+      menu_combined: this.props.data.menu_combined,
       wechatid: this.props.data.wechatid ? this.props.data.wechatid : "",
     };
 
@@ -360,8 +357,9 @@ export class ListForm extends React.Component {
       cuisineValue: ["cuisine", "categories"],
       region: ["region", "regions"],
       latitude: ["latitude", "location"],
-      menuitem: ["menuitem", "menu_combined"],
-      menuprice: ["menuprice", "menu_combined"],
+      // menuitem: ["menuitem", "menu_combined"],
+      // menuprice: ["menuprice", "menu_combined"],
+      menu_combined: ["menu_combined"],
     };
 
     let edited_fields = [];
@@ -388,12 +386,30 @@ export class ListForm extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     this.getPostal(this.state.postal);
-    let menu_combined = this.state.menuitem.map((item, index) => {
-      return {
-        name: this.state.menuitem[index],
-        price: this.state.menuprice[index],
+    // removing since menu_combined should be ground truth instead of menuitem, menuprice
+    // let menu_combined = this.state.menuitem.map((item, index) => {
+    //   return {
+    //     name: this.state.menuitem[index],
+    //     price: this.state.menuprice[index],
+    //   };
+    // });
+    //
+    // Clean empty fields from menu_combined, menuitem and menuprice before creating/editing, fills up to 10
+    // Guards against blank fields from users clicking "More Menu Items" multiple times and not filling it in
+    let newMenucombined = [];
+    for (let i = 0; i < this.state.menu_combined.length; i = i + 1) {
+      if (this.state.menu_combined[i].name !== "") {
+        newMenucombined.push({
+          name: this.state.menu_combined[i].name,
+          price: this.state.menu_combined[i].price})
       };
-    });
+    }
+    while (newMenucombined.length < 10) {
+      newMenucombined.push({
+        name: "",
+        price: ""
+      });
+    };
 
     let edited_fields = [];
     if (this.props.toggle === "create") {
@@ -443,9 +459,7 @@ export class ListForm extends React.Component {
       condition: this.state.condition,
       delivery_detail: this.state.delivery_detail,
       menu: this.state.menu,
-      menuitem: this.state.menuitem,
-      menu_combined: menu_combined,
-      menuprice: this.state.menuprice,
+      menu_combined: newMenucombined,
       toggle: this.props.toggle,
       docid: this.state.docid,
       wechatid: this.state.wechatid,
@@ -488,33 +502,64 @@ export class ListForm extends React.Component {
       const checked = target.checked;
       this.setState({ [name]: checked });
     } else if (name.slice(0, 8) === "menuitem") {
-      let current = this.state.menuitem;
-      current[parseInt(name.slice(8, 9))] = target.value;
+      // Check if menu_combined already has index to change in case user adds more items, else push it
+      let current = this.state.menu_combined;
+      let idxToChange = parseInt(name.slice(8));
+      while (current.length < idxToChange + 1) {
+        current.push({
+          name:"",
+          price:""
+        });
+      }
+      current[idxToChange].name = target.value;
       this.setState({
-        menuitem: current,
+        menu_combined: current,
       });
     } else if (name.slice(0, 9) === "menuprice") {
-      let current = this.state.menuprice;
-      current[parseInt(name.slice(9, 10))] = target.value;
+      let current = this.state.menu_combined;
+      let idxToChange = parseInt(name.slice(9));
+      while (current.length < idxToChange + 1) {
+        current.push({
+          name:"",
+          price:""
+        });
+      }
+      current[idxToChange].price = target.value;
       this.setState({
-        menuprice: current,
+        menu_combined: current,
       });
     } else {
       this.setState({ [name]: value });
     }
   };
 
-  handleMenu = () => {
-    if (this.state.menu) {
-      this.setState({ menu: false });
-    } else {
-      this.setState({ menu: true });
+  handleMenu = (event) => {
+    const name = event.target.name;
+    // User is displaying first 10 menu item rows
+    if (name === "menu") {
+      if (this.state.menu) {
+        this.setState({ menu: false });
+      } else {
+        this.setState({ menu: true });
+      }
+    } else if (name === "moreMenuItems") {
+      // User adds more menu_combined rows, 5 at a time
+      let newMenucombined = this.state.menu_combined;
+      for (var i = 0; i < 5; i++) {
+        newMenucombined.push({
+          name: "",
+          price: ""
+        });
+      };
+      this.setState({
+        menu_combined: newMenucombined
+      });
     }
   };
 
   handleMenuDisplay = (context) => {
     let data = [];
-    console.log(this.state.menuitem.length);
+    console.log(this.state.menu_combined.length);
     // Push Menu and Price headers
     data.push(
       <div class="form-row">
@@ -531,14 +576,14 @@ export class ListForm extends React.Component {
       </div>
     );
     // Push the number of rows corresponding to number of menu items
-    for (var i = 0; i < this.state.menuitem.length; i++) {
+    for (var i = 0; i < this.state.menu_combined.length; i++) {
       data.push(
         <div>
           <div class="form-row">
             <div class="col-7">
               <input
                 onChange={this.handleChange}
-                value={this.state.menuitem[i]}
+                value={this.state.menu_combined[i].name}
                 name={"menuitem" + i.toString()}
                 type="text"
                 class="form-control"
@@ -555,11 +600,11 @@ export class ListForm extends React.Component {
                     id="basic-addon1"
                   >
                     $
-                                          </span>
+                  </span>
                 </div>
                 <input
                   onChange={this.handleChange}
-                  value={this.state.menuprice[i]}
+                  value={this.state.menu_combined[i].price}
                   name={"menuprice" + i.toString()}
                   type="number"
                   class="form-control"
@@ -1629,7 +1674,24 @@ export class ListForm extends React.Component {
                             <br />
                           </div>
                           {this.state.menu ? (
-                            <p>{this.handleMenuDisplay(context)} </p>
+                            <div>
+                              <p>{this.handleMenuDisplay(context)} </p>
+                              {/* Option to add additional menu items, display only if menu is already shown */}
+                              <div class="create-title">
+                                <Button
+                                  class="shadow-sm"
+                                  style={{
+                                    backgroundColor: "blue",
+                                    borderColor: "blue",
+                                  }}
+                                  onClick={this.handleMenu}
+                                  name="moreMenuItems"
+                                >
+                                  {context.data.create.addmoreitem}
+                                </Button>
+                                <br />
+                              </div>
+                            </div>
                           ) : null}
                           <br />
                           <div class="form-group create-title">
