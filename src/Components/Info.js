@@ -813,9 +813,9 @@ export class Info extends React.Component {
                       <span>
                         {this.state.data.contact} {" ("}
                         {this.state.data.whatsapp ? (
-                          <span>WhatsApp </span>
+                          <span>WhatsApp{this.state.data.sms || this.state.data.call ? <span>, </span> : null}</span>
                         ) : null}
-                        {this.state.data.sms ? <span>SMS </span> : null}
+                        {this.state.data.sms ? <span>SMS{this.state.data.call ? <span>, </span> : null}</span> : null}
                         {this.state.data.call ? <span>Call </span> : null}
                         {") "} <br />
                         {this.state.data.wechatid ? (
