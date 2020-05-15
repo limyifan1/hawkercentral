@@ -1436,9 +1436,9 @@ export class Info extends React.Component {
                               <Button
                                 class="shadow-sm"
                                 href={
-                                  "https://api.whatsapp.com/send?phone=65" +
+                                  "https://wa.me/65" +
                                   this.state.data.contact +
-                                  "&text=" +
+                                  "?text=" +
                                   this.setOrderText()
                                 }
                                 target="blank"
