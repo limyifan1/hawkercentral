@@ -177,15 +177,20 @@ export class SearchAll extends React.Component {
 
       if (this.state.search.length !== 0) {
         filtered = filtered.filter((d) => {
-          return (
-            d.name.toLowerCase().includes(this.state.search.toLowerCase()) ||
-            d.description
-              .toLowerCase()
-              .includes(this.state.search.toLowerCase()) ||
-            d.description_detail
-              .toLowerCase()
-              .includes(this.state.search.toLowerCase())
-          );
+          if(d){
+            return (
+              d.name.toLowerCase().includes(this.state.search.toLowerCase()) ||
+              d.description
+                .toLowerCase()
+                .includes(this.state.search.toLowerCase()) ||
+              d.description_detail
+                .toLowerCase()
+                .includes(this.state.search.toLowerCase())
+            );  
+          }
+          else{
+            return false
+          }
         });
       }
 

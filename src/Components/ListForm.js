@@ -19,6 +19,8 @@ import { LanguageContext } from "./themeContext";
 // const API_KEY = `${process.env.REACT_APP_GKEY}`
 // const API_KEY = `${process.env.REACT_APP_GKEY}`;
 const ONEMAP_KEY = `${process.env.ONEMAP_KEY}`;
+const GKEY = `${process.env.REACT_APP_GKEY}`;
+
 const icon = (
   <div>
     <svg
@@ -86,14 +88,14 @@ const addData = async ({
   condition,
   delivery_detail,
   menu,
-  menuitem,
-  menuprice,
   toggle,
   docid,
   wechatid,
   location,
   menu_combined,
   tagsValue,
+  categories,
+  regions,
 }) => {
   let now = new Date();
   var field = {
@@ -113,7 +115,9 @@ const addData = async ({
     unit: unit,
     delivery: delivery,
     cuisine: cuisine,
+    categories: categories,
     region: region,
+    regions: regions,
     price: price,
     contact: contact,
     call: call,
@@ -129,8 +133,6 @@ const addData = async ({
     condition: condition,
     delivery_detail: delivery_detail,
     menu: menu,
-    menuitem: menuitem,
-    menuprice: menuprice,
     docid: docid,
     wechatid: wechatid,
     location: location,
@@ -231,8 +233,8 @@ export class ListForm extends React.Component {
   }
 
   componentWillMount() {
-    this.getFirestoreData();
-    this.getTags();
+    // this.getFirestoreData();
+    // this.getTags();
     if (this.props.toggle === "edit") {
       this.setState({
         name: this.props.data.name,
@@ -466,14 +468,14 @@ export class ListForm extends React.Component {
       lat +
       "," +
       lng +
-      "&token=" +
-      ONEMAP_KEY;
+      "&token="
     return fetch(url)
       .then(function (response) {
         return response.json();
       })
       .then(
         function (jsonResponse) {
+          console.log(jsonResponse);
           if (
             jsonResponse !== undefined &&
             jsonResponse["GeocodeInfo"] !== undefined
@@ -493,13 +495,13 @@ export class ListForm extends React.Component {
     );
     let params = new URLSearchParams(url.search.slice(1));
     params.append("input", query);
+    params.append("key", GKEY);
 
     var search =
-      "https://fathomless-falls-12833.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?key=AIzaSyD-VLudeXJLkXugSRNCVNY4dySGsiM1AcY&fields=geometry&inputtype=textquery&" +
+      "https://fathomless-falls-12833.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=geometry&inputtype=textquery&" +
       params.toString() +
       "&location=1.3521,103.8198&radius=100000";
 
-    console.log(search);
     return fetch(search)
       .then(function (response) {
         return response.json();
@@ -511,7 +513,7 @@ export class ListForm extends React.Component {
             jsonResponse.candidates &&
             jsonResponse.candidates[0]
           ) {
-            console.log(jsonResponse);
+            console.log(search, jsonResponse.candidates[0].geometry.location);
             return jsonResponse.candidates[0].geometry.location;
           }
         },
@@ -526,26 +528,44 @@ export class ListForm extends React.Component {
     var street;
     var latitude;
     var longitude;
-    if (element.location && element.location.lat) {
+    let result;
+    if (element.address) {
       let places = await this.callPlaces(element.address);
       latitude = places ? places.lat : null;
       longitude = places ? places.lng : null;
-      console.log("Lat Lng: " + latitude, longitude);
-      let result = await this.callLatLng(latitude, longitude);
-      postal = result ? result.POSTALCODE : null;
+      result = await this.callLatLng(latitude, longitude);
+    } else if (
+      element.location &&
+      element.location.lat &&
+      element.location.lon
+    ) {
+      result = await this.callLatLng(
+        element.location.lat,
+        element.location.lon
+      );
+    }
+    if ((!latitude || !longitude || !result || !result.POSTALCODE) && element.location) {
+      result = await this.callLatLng(
+        element.location.lat,
+        element.location.lon
+      );
+    }
 
-      if (postal !== undefined && postal !== null) {
-        let data = await this.callPostal(postal);
-        if (postal !== undefined && data !== undefined) {
-          street = data["ADDRESS"];
-          longitude = data["LONGITUDE"];
-          latitude = data["LATITUDE"];
-          postal = data["POSTAL"] !== "NIL" ? data["POSTAL"] : null;
-        }
+    console.log(element.address, element.location, result);
+
+    postal = result ? result.POSTALCODE : null;
+
+    if (postal !== undefined && postal !== null) {
+      let data = await this.callPostal(postal);
+      if (postal !== undefined && data !== undefined) {
+        street = data["ADDRESS"];
+        longitude = data["LONGITUDE"];
+        latitude = data["LATITUDE"];
+        postal = data["POSTAL"] !== "NIL" ? data["POSTAL"] : null;
       }
     }
 
-    if (latitude && longitude) {
+    if (postal && latitude && longitude) {
       console.log({
         url: images[0] !== undefined ? images[0] : "",
         image2: images[1] !== undefined ? images[1] : "",
@@ -566,7 +586,8 @@ export class ListForm extends React.Component {
           element.description !== undefined
             ? element.description + "\n Contributed by take.sg"
             : "",
-        region: ["Islandwide"],
+        regions: ["Islandwide"],
+        region: [{ label: "Islandwide", value: "islandwide" }],
         price:
           element.delivery_cost !== undefined
             ? "$" + element.delivery_cost
@@ -586,8 +607,6 @@ export class ListForm extends React.Component {
         condition: "",
         delivery_detail: "",
         menu: true,
-        menuitem: [],
-        menuprice: [],
         toggle: "create",
         docid: "",
         wechatid: "",
@@ -595,6 +614,7 @@ export class ListForm extends React.Component {
         menu_combined: element.menus !== undefined ? element.menus : "",
         tagsValue: element.tags !== undefined ? element.tags : "",
         delivery: "",
+        categories: [],
       });
       await addData({
         url: images[0] !== undefined ? images[0] : "",
@@ -616,7 +636,8 @@ export class ListForm extends React.Component {
           element.description !== undefined
             ? element.description + "\n Contributed by take.sg"
             : "",
-        region: ["Islandwide"],
+        regions: ["Islandwide"],
+        region: [{ label: "Islandwide", value: "islandwide" }],
         price:
           element.delivery_cost !== undefined
             ? "$" + element.delivery_cost
@@ -636,8 +657,6 @@ export class ListForm extends React.Component {
         condition: "",
         delivery_detail: "",
         menu: true,
-        menuitem: [],
-        menuprice: [],
         toggle: "create",
         docid: "",
         wechatid: "",
@@ -645,6 +664,7 @@ export class ListForm extends React.Component {
         menu_combined: element.menus !== undefined ? element.menus : "",
         tagsValue: element.tags !== undefined ? element.tags : "",
         delivery: "",
+        categories: [],
       });
     } else {
       console.log(
@@ -658,6 +678,14 @@ export class ListForm extends React.Component {
     console.log("upload started");
     var existing = [];
     await db
+      .collection("hawkers")
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((d) => {
+          existing.push(d.data().name);
+        });
+      });
+    await db
       .collection("development")
       .get()
       .then((snapshot) => {
@@ -665,6 +693,7 @@ export class ListForm extends React.Component {
           existing.push(d.data().name);
         });
       });
+
     fetch(
       "https://fathomless-falls-12833.herokuapp.com/"
     )
@@ -674,61 +703,61 @@ export class ListForm extends React.Component {
       .then(
         (jsonResponse) => {
           jsonResponse.forEach(async (element) => {
-            if (
-              element.address !== undefined &&
-              !existing.includes(element.name)
-            ) {
+            if (!existing.includes(element.name)) {
+              console.log(element.name);
               let images = [];
-              for (let index = 0; index < 6; index++) {
-                if (element.images[index]) {
-                  let image_url =
-                    "https://fathomless-falls-12833.herokuapp.com/" +
-                    element.images[index];
-                  let newName = element.name + index;
-                  var jobs = [];
-                  let job = Jimp.read(image_url)
-                    .then(async (image) => {
-                      image.quality(50);
-                      image.resize(Jimp.AUTO, 750);
-                      image.getBase64(Jimp.AUTO, async (_err, res) => {
-                        const uploadTask = storage
-                          .ref(`/images/${newName}`)
-                          .putString(res, "data_url");
-                        uploadTask.on(
-                          "state_changed",
-                          (snapShot) => {
-                            //takes a snap shot of the process as it is happening
-                            console.log(snapShot);
-                          },
-                          (err) => {
-                            //catches the errors
-                            console.log(err);
-                          },
-                          () => {
-                            // gets the functions from storage refences the image storage in firebase by the children
-                            // gets the download url then sets the image from firebase as the value for the imgUrl key:
-                            storage
-                              .ref("images")
-                              .child(newName)
-                              .getDownloadURL()
-                              .then((fireBaseUrl) => {
-                                console.log(fireBaseUrl);
-                                images.push(fireBaseUrl);
-                              });
-                          }
-                        );
-                      });
-                    })
-                    .catch((e) => {
-                      console.log(e);
-                      return null;
-                    });
-                  jobs.push(job);
-                }
-              }
-              await Promise.all(jobs);
+              // for (let index = 0; index < 6; index++) {
+              //   if (element.images[index]) {
+              //     let image_url =
+              //       "https://fathomless-falls-12833.herokuapp.com/" +
+              //       element.images[index];
+              //     let newName = element.name + index;
+              //     var jobs = [];
+              //     let job = Jimp.read(image_url)
+              //       .then(async (image) => {
+              //         image.quality(50);
+              //         image.resize(Jimp.AUTO, 750);
+              //         image.getBase64(Jimp.AUTO, async (_err, res) => {
+              //           const uploadTask = storage
+              //             .ref(`/images/${newName}`)
+              //             .putString(res, "data_url");
+              //           uploadTask.on(
+              //             "state_changed",
+              //             (snapShot) => {
+              //               //takes a snap shot of the process as it is happening
+              //               console.log(snapShot);
+              //             },
+              //             (err) => {
+              //               //catches the errors
+              //               console.log(err);
+              //             },
+              //             () => {
+              //               // gets the functions from storage refences the image storage in firebase by the children
+              //               // gets the download url then sets the image from firebase as the value for the imgUrl key:
+              //               storage
+              //                 .ref("images")
+              //                 .child(newName)
+              //                 .getDownloadURL()
+              //                 .then((fireBaseUrl) => {
+              //                   console.log(fireBaseUrl);
+              //                   images.push(fireBaseUrl);
+              //                 });
+              //             }
+              //           );
+              //         });
+              //       })
+              //       .catch((e) => {
+              //         console.log(e);
+              //         return null;
+              //       });
+              //     jobs.push(job);
+              //   }
+              // }
+              // if(jobs.length!==0){
+              //   await Promise.all(jobs);
+              // }
               await this.continueUpload(images, element);
-              console.log("Completed");
+              // console.log("Completed");
             }
           });
         },
@@ -814,27 +843,27 @@ export class ListForm extends React.Component {
   };
 
   async getFirestoreData() {
-    let fireData = await this.retrieveData();
+    // let fireData = await this.retrieveData();
     let data_mrt = [];
     let data_cuisine = [];
     let current = new Set();
-    fireData[1].forEach(function (doc) {
-      if (doc.exists) {
-        var d = doc.data();
-        data_cuisine.push(d);
-      }
-    });
-    fireData[0].forEach(function (doc) {
-      if (doc.exists) {
-        var d = doc.data();
-        d.label = d.name;
-        d.value = d.name;
-        if (!current.has(d.name)) {
-          data_mrt.push(d);
-          current.add(d.name);
-        }
-      }
-    });
+    // fireData[1].forEach(function (doc) {
+    //   if (doc.exists) {
+    //     var d = doc.data();
+    //     data_cuisine.push(d);
+    //   }
+    // });
+    // fireData[0].forEach(function (doc) {
+    //   if (doc.exists) {
+    //     var d = doc.data();
+    //     d.label = d.name;
+    //     d.value = d.name;
+    //     if (!current.has(d.name)) {
+    //       data_mrt.push(d);
+    //       current.add(d.name);
+    //     }
+    //   }
+    // });
 
     data_mrt = data_mrt.sort(function (a, b) {
       var x = a.name.toLowerCase();
