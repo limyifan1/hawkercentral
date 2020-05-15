@@ -373,12 +373,25 @@ const retrieveData = async () => {
 // retrieveData();
 
 const updateData = () => {
-  db
-    .collection("hawkers")
-    .doc('KOZb6LPpUvtnK6pfj3Pv')
-    .update({
-      opening: "West\nMon-Fri: 10:00AM to 19:00PM\nSat-Sun: 10:00AM to 14:00PM\n\nOthers\nMon-Sun: 10:00AM to 20:30PM"
-    })
-}
+  db.collection("hawkers").doc("KOZb6LPpUvtnK6pfj3Pv").update({
+    opening:
+      "West\nMon-Fri: 10:00AM to 19:00PM\nSat-Sun: 10:00AM to 14:00PM\n\nOthers\nMon-Sun: 10:00AM to 20:30PM",
+  });
+};
 
-updateData()
+const moveData = () => {
+  db.collection("hawkers")
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach(async (d) => {
+        var data = d.data()
+        data.postal = Number(data.postal)
+        await db.collection("hawkers").add(data).then(snapshot=>{
+          console.log(snapshot.id)
+        })
+      });
+    });
+
+};
+
+moveData();
