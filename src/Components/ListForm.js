@@ -18,12 +18,12 @@ import { withRouter } from "react-router-dom";
 import { LanguageContext } from "./themeContext";
 // const API_KEY = `${process.env.REACT_APP_GKEY}`
 
-import _ from 'lodash';
+import _ from "lodash";
 
 const analytics = firebase.analytics();
 
 function onClick(name) {
-  analytics.logEvent(name)
+  analytics.logEvent(name);
 }
 
 const icon = (
@@ -102,7 +102,7 @@ const handleData = async ({
   menu_combined,
   tagsValue,
   editedFields,
-  originalName
+  originalName,
 }) => {
   let now = new Date();
   var field = {
@@ -164,7 +164,12 @@ const handleData = async ({
   } else if (toggle === "edit") {
     if (editedFields.length > 0) {
       let editedFieldsAndValues = _.pick(field, editedFields);
-      await Helpers.sendEmailToUpdateListing(docid, originalName, "edit", editedFieldsAndValues)
+      await Helpers.sendEmailToUpdateListing(
+        docid,
+        originalName,
+        "edit",
+        editedFieldsAndValues
+      )
         .then((result) => {
           console.log(result);
         })
@@ -221,8 +226,18 @@ export class ListForm extends React.Component {
       condition: "",
       delivery_detail: "",
       menu: false,
-      menuitem: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-      menuprice: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+      menu_combined: [
+        { name: "", price: "" },
+        { name: "", price: "" },
+        { name: "", price: "" },
+        { name: "", price: "" },
+        { name: "", price: "" },
+        { name: "", price: "" },
+        { name: "", price: "" },
+        { name: "", price: "" },
+        { name: "", price: "" },
+        { name: "", price: "" },
+      ],
       wechatid: "",
       tagsValue: [],
       tags: [],
@@ -241,6 +256,7 @@ export class ListForm extends React.Component {
   }
 
   getInitialState() {
+    console.log("getinitialstate");
     const initialState = {
       name: this.props.data.name,
       postal: this.props.data.postal,
@@ -286,8 +302,7 @@ export class ListForm extends React.Component {
       condition: this.props.data.condition,
       delivery_detail: this.props.data.delivery_detail,
       menu: this.props.data.menu,
-      menuitem: this.props.data.menuitem,
-      menuprice: this.props.data.menuprice,
+      menu_combined: this.props.data.menu_combined,
       wechatid: this.props.data.wechatid ? this.props.data.wechatid : "",
     };
 
@@ -356,8 +371,9 @@ export class ListForm extends React.Component {
       cuisineValue: ["cuisine", "categories"],
       region: ["region", "regions"],
       latitude: ["latitude", "location"],
-      menuitem: ["menuitem", "menu_combined"],
-      menuprice: ["menuprice", "menu_combined"],
+      // menuitem: ["menuitem", "menu_combined"],
+      // menuprice: ["menuprice", "menu_combined"],
+      menu_combined: ["menu_combined"],
     };
 
     let edited_fields = [];
@@ -384,12 +400,31 @@ export class ListForm extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     this.getPostal(this.state.postal);
-    let menu_combined = this.state.menuitem.map((item, index) => {
-      return {
-        name: this.state.menuitem[index],
-        price: this.state.menuprice[index],
-      };
-    });
+    // removing since menu_combined should be ground truth instead of menuitem, menuprice
+    // let menu_combined = this.state.menuitem.map((item, index) => {
+    //   return {
+    //     name: this.state.menuitem[index],
+    //     price: this.state.menuprice[index],
+    //   };
+    // });
+    //
+    // Clean empty fields from menu_combined, menuitem and menuprice before creating/editing, fills up to 10
+    // Guards against blank fields from users clicking "More Menu Items" multiple times and not filling it in
+    let newMenucombined = [];
+    for (let i = 0; i < this.state.menu_combined.length; i = i + 1) {
+      if (this.state.menu_combined[i].name !== "") {
+        newMenucombined.push({
+          name: this.state.menu_combined[i].name,
+          price: this.state.menu_combined[i].price,
+        });
+      }
+    }
+    while (newMenucombined.length < 10) {
+      newMenucombined.push({
+        name: "",
+        price: "",
+      });
+    }
 
     let edited_fields = [];
     if (this.props.toggle === "create") {
@@ -439,9 +474,7 @@ export class ListForm extends React.Component {
       condition: this.state.condition,
       delivery_detail: this.state.delivery_detail,
       menu: this.state.menu,
-      menuitem: this.state.menuitem,
-      menu_combined: menu_combined,
-      menuprice: this.state.menuprice,
+      menu_combined: newMenucombined,
       toggle: this.props.toggle,
       docid: this.state.docid,
       wechatid: this.state.wechatid,
@@ -484,28 +517,113 @@ export class ListForm extends React.Component {
       const checked = target.checked;
       this.setState({ [name]: checked });
     } else if (name.slice(0, 8) === "menuitem") {
-      let current = this.state.menuitem;
-      current[parseInt(name.slice(8, 9))] = target.value;
+      // Check if menu_combined already has index to change in case user adds more items, else push it
+      let current = this.state.menu_combined;
+      let idxToChange = parseInt(name.slice(8));
+      while (current.length < idxToChange + 1) {
+        current.push({
+          name: "",
+          price: "",
+        });
+      }
+      current[idxToChange].name = target.value;
       this.setState({
-        menuitem: current,
+        menu_combined: current,
       });
     } else if (name.slice(0, 9) === "menuprice") {
-      let current = this.state.menuprice;
-      current[parseInt(name.slice(9, 10))] = target.value;
+      let current = this.state.menu_combined;
+      let idxToChange = parseInt(name.slice(9));
+      while (current.length < idxToChange + 1) {
+        current.push({
+          name: "",
+          price: "",
+        });
+      }
+      current[idxToChange].price = target.value;
       this.setState({
-        menuprice: current,
+        menu_combined: current,
       });
     } else {
       this.setState({ [name]: value });
     }
   };
 
-  handleMenu = () => {
-    if (this.state.menu) {
-      this.setState({ menu: false });
-    } else {
-      this.setState({ menu: true });
+  handleMenu = (event) => {
+    const name = event.target.name;
+    // User is displaying first 10 menu item rows
+    if (name === "menu") {
+      if (this.state.menu) {
+        this.setState({ menu: false });
+      } else {
+        this.setState({ menu: true });
+      }
+    } else if (name === "moreMenuItems") {
+      // User adds more menu_combined rows, 5 at a time
+      let newMenucombined = this.state.menu_combined;
+      for (var i = 0; i < 5; i++) {
+        newMenucombined.push({
+          name: "",
+          price: "",
+        });
+      }
+      this.setState({
+        menu_combined: newMenucombined,
+      });
     }
+  };
+
+  handleMenuDisplay = (context) => {
+    let data = [];
+    console.log(this.state.menu_combined.length);
+    // Push Menu and Price headers
+    data.push(
+      <div class="form-row">
+        <div class="col-7">
+          <small>{context.data.create.menuitem}</small>
+        </div>
+        <div class="col-5">
+          <small>{context.data.create.price}</small>
+        </div>
+      </div>
+    );
+    // Push the number of rows corresponding to number of menu items
+    for (var i = 0; i < this.state.menu_combined.length; i++) {
+      data.push(
+        <div>
+          <div class="form-row">
+            <div class="col-7">
+              <input
+                onChange={this.handleChange}
+                value={this.state.menu_combined[i].name}
+                name={"menuitem" + i.toString()}
+                type="text"
+                class="form-control"
+                placeholder="E.g. Chicken Rice"
+                maxlength="60"
+              />
+            </div>
+            <div class="col-5">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon1">
+                    $
+                  </span>
+                </div>
+                <input
+                  onChange={this.handleChange}
+                  value={this.state.menu_combined[i].price}
+                  name={"menuprice" + i.toString()}
+                  type="number"
+                  class="form-control"
+                  placeholder="e.g. 4.00"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return data;
   };
 
   handleImageAsFile = (event) => {
@@ -581,7 +699,7 @@ export class ListForm extends React.Component {
     // let current = new Set();
     fireData.forEach(function (doc) {
       if (doc.exists) {
-        console.log(doc.data())
+        console.log(doc.data());
         var d = doc.data();
         data_cuisine.push(d);
       }
@@ -1564,375 +1682,21 @@ export class ListForm extends React.Component {
                           </div>
                           {this.state.menu ? (
                             <div>
-                              <br />
-                              <div class="card shadow">
-                                <div class="card-body">
-                                  <h5 class="card-title create-title">
-                                    {" "}
-                                    {context.data.create.menuitems}
-                                  </h5>
-                                  <div class="form-row">
-                                    <div class="col-7">
-                                      <small>
-                                        {context.data.create.menuitem}
-                                      </small>
-                                      <input
-                                        onChange={this.handleChange}
-                                        value={this.state.menuitem[0]}
-                                        name="menuitem0"
-                                        type="text"
-                                        class="form-control"
-                                        placeholder="E.g. Chicken Rice"
-                                        maxlength="60"
-                                      />
-                                    </div>
-                                    <div class="col-5">
-                                      <small>{context.data.create.price}</small>
-                                      <div class="input-group">
-                                        <div class="input-group-prepend">
-                                          <span
-                                            class="input-group-text"
-                                            id="basic-addon1"
-                                          >
-                                            $
-                                          </span>
-                                        </div>
-                                        <input
-                                          onChange={this.handleChange}
-                                          value={this.state.menuprice[0]}
-                                          name="menuprice0"
-                                          type="number"
-                                          class="form-control"
-                                          placeholder="e.g. 4.00"
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="form-row">
-                                    <div class="col-7">
-                                      <input
-                                        onChange={this.handleChange}
-                                        value={this.state.menuitem[1]}
-                                        name="menuitem1"
-                                        type="text"
-                                        class="form-control"
-                                        placeholder={
-                                          context.data.create
-                                            .placeholdermenuitem
-                                        }
-                                        maxlength="60"
-                                      />
-                                    </div>
-                                    <div class="col-5">
-                                      <div class="input-group">
-                                        <div class="input-group-prepend">
-                                          <span
-                                            class="input-group-text"
-                                            id="basic-addon1"
-                                          >
-                                            $
-                                          </span>
-                                        </div>
-                                        <input
-                                          onChange={this.handleChange}
-                                          value={this.state.menuprice[1]}
-                                          name="menuprice1"
-                                          type="number"
-                                          class="form-control"
-                                          placeholder="e.g. 4.00"
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="form-row">
-                                    <div class="col-7">
-                                      <input
-                                        onChange={this.handleChange}
-                                        value={this.state.menuitem[2]}
-                                        name="menuitem2"
-                                        type="text"
-                                        class="form-control"
-                                        placeholder={
-                                          context.data.create
-                                            .placeholdermenuitem
-                                        }
-                                        maxlength="60"
-                                      />
-                                    </div>
-                                    <div class="col-5">
-                                      <div class="input-group">
-                                        <div class="input-group-prepend">
-                                          <span
-                                            class="input-group-text"
-                                            id="basic-addon1"
-                                          >
-                                            $
-                                          </span>
-                                        </div>
-                                        <input
-                                          onChange={this.handleChange}
-                                          value={this.state.menuprice[2]}
-                                          name="menuprice2"
-                                          type="number"
-                                          class="form-control"
-                                          placeholder="e.g. 4.00"
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="form-row">
-                                    <div class="col-7">
-                                      <input
-                                        onChange={this.handleChange}
-                                        value={this.state.menuitem[3]}
-                                        name="menuitem3"
-                                        type="text"
-                                        class="form-control"
-                                        placeholder={
-                                          context.data.create
-                                            .placeholdermenuitem
-                                        }
-                                        maxlength="60"
-                                      />
-                                    </div>
-                                    <div class="col-5">
-                                      <div class="input-group">
-                                        <div class="input-group-prepend">
-                                          <span
-                                            class="input-group-text"
-                                            id="basic-addon1"
-                                          >
-                                            $
-                                          </span>
-                                        </div>
-                                        <input
-                                          onChange={this.handleChange}
-                                          value={this.state.menuprice[3]}
-                                          name="menuprice3"
-                                          type="number"
-                                          class="form-control"
-                                          placeholder="e.g. 4.00"
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="form-row">
-                                    <div class="col-7">
-                                      <input
-                                        onChange={this.handleChange}
-                                        value={this.state.menuitem[4]}
-                                        name="menuitem4"
-                                        type="text"
-                                        class="form-control"
-                                        placeholder={
-                                          context.data.create
-                                            .placeholdermenuitem
-                                        }
-                                        maxlength="60"
-                                      />
-                                    </div>
-                                    <div class="col-5">
-                                      <div class="input-group">
-                                        <div class="input-group-prepend">
-                                          <span
-                                            class="input-group-text"
-                                            id="basic-addon1"
-                                          >
-                                            $
-                                          </span>
-                                        </div>
-                                        <input
-                                          onChange={this.handleChange}
-                                          value={this.state.menuprice[4]}
-                                          name="menuprice4"
-                                          type="number"
-                                          class="form-control"
-                                          placeholder="e.g. 4.00"
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="form-row">
-                                    <div class="col-7">
-                                      <input
-                                        onChange={this.handleChange}
-                                        value={this.state.menuitem[5]}
-                                        name="menuitem5"
-                                        type="text"
-                                        class="form-control"
-                                        placeholder={
-                                          context.data.create
-                                            .placeholdermenuitem
-                                        }
-                                        maxlength="60"
-                                      />
-                                    </div>
-                                    <div class="col-5">
-                                      <div class="input-group">
-                                        <div class="input-group-prepend">
-                                          <span
-                                            class="input-group-text"
-                                            id="basic-addon1"
-                                          >
-                                            $
-                                          </span>
-                                        </div>
-                                        <input
-                                          onChange={this.handleChange}
-                                          value={this.state.menuprice[5]}
-                                          name="menuprice5"
-                                          type="number"
-                                          class="form-control"
-                                          placeholder="e.g. 4.00"
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="form-row">
-                                    <div class="col-7">
-                                      <input
-                                        onChange={this.handleChange}
-                                        value={this.state.menuitem[6]}
-                                        name="menuitem6"
-                                        type="text"
-                                        class="form-control"
-                                        placeholder={
-                                          context.data.create
-                                            .placeholdermenuitem
-                                        }
-                                        maxlength="60"
-                                      />
-                                    </div>
-                                    <div class="col-5">
-                                      <div class="input-group">
-                                        <div class="input-group-prepend">
-                                          <span
-                                            class="input-group-text"
-                                            id="basic-addon1"
-                                          >
-                                            $
-                                          </span>
-                                        </div>
-                                        <input
-                                          onChange={this.handleChange}
-                                          value={this.state.menuprice[6]}
-                                          name="menuprice6"
-                                          type="number"
-                                          class="form-control"
-                                          placeholder="e.g. 4.00"
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="form-row">
-                                    <div class="col-7">
-                                      <input
-                                        onChange={this.handleChange}
-                                        value={this.state.menuitem[7]}
-                                        name="menuitem7"
-                                        type="text"
-                                        class="form-control"
-                                        placeholder={
-                                          context.data.create
-                                            .placeholdermenuitem
-                                        }
-                                        maxlength="60"
-                                      />
-                                    </div>
-                                    <div class="col-5">
-                                      <div class="input-group">
-                                        <div class="input-group-prepend">
-                                          <span
-                                            class="input-group-text"
-                                            id="basic-addon1"
-                                          >
-                                            $
-                                          </span>
-                                        </div>
-                                        <input
-                                          onChange={this.handleChange}
-                                          value={this.state.menuprice[7]}
-                                          name="menuprice7"
-                                          type="number"
-                                          class="form-control"
-                                          placeholder="e.g. 4.00"
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="form-row">
-                                    <div class="col-7">
-                                      <input
-                                        onChange={this.handleChange}
-                                        value={this.state.menuitem[8]}
-                                        name="menuitem8"
-                                        type="text"
-                                        class="form-control"
-                                        placeholder={
-                                          context.data.create
-                                            .placeholdermenuitem
-                                        }
-                                        maxlength="60"
-                                      />
-                                    </div>
-                                    <div class="col-5">
-                                      <div class="input-group">
-                                        <div class="input-group-prepend">
-                                          <span
-                                            class="input-group-text"
-                                            id="basic-addon1"
-                                          >
-                                            $
-                                          </span>
-                                        </div>
-                                        <input
-                                          onChange={this.handleChange}
-                                          value={this.state.menuprice[8]}
-                                          name="menuprice8"
-                                          type="number"
-                                          class="form-control"
-                                          placeholder="e.g. 4.00"
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="form-row">
-                                    <div class="col-7">
-                                      <input
-                                        onChange={this.handleChange}
-                                        value={this.state.menuitem[9]}
-                                        name="menuitem9"
-                                        type="text"
-                                        class="form-control"
-                                        placeholder={
-                                          context.data.create
-                                            .placeholdermenuitem
-                                        }
-                                        maxlength="60"
-                                      />
-                                    </div>
-                                    <div class="col-5">
-                                      <div class="input-group">
-                                        <div class="input-group-prepend">
-                                          <span
-                                            class="input-group-text"
-                                            id="basic-addon1"
-                                          >
-                                            $
-                                          </span>
-                                        </div>
-                                        <input
-                                          onChange={this.handleChange}
-                                          value={this.state.menuprice[9]}
-                                          name="menuprice9"
-                                          type="number"
-                                          class="form-control"
-                                          placeholder="e.g. 4.00"
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+                              <p>{this.handleMenuDisplay(context)} </p>
+                              {/* Option to add additional menu items, display only if menu is already shown */}
+                              <div class="create-title">
+                                <Button
+                                  class="shadow-sm"
+                                  style={{
+                                    backgroundColor: "blue",
+                                    borderColor: "blue",
+                                  }}
+                                  onClick={this.handleMenu}
+                                  name="moreMenuItems"
+                                >
+                                  {context.data.create.addmoreitem}
+                                </Button>
+                                <br />
                               </div>
                             </div>
                           ) : null}
