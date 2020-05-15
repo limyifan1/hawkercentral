@@ -18,12 +18,12 @@ import { withRouter } from "react-router-dom";
 import { LanguageContext } from "./themeContext";
 // const API_KEY = `${process.env.REACT_APP_GKEY}`
 
-import _ from 'lodash';
+import _ from "lodash";
 
 const analytics = firebase.analytics();
 
 function onClick(name) {
-  analytics.logEvent(name)
+  analytics.logEvent(name);
 }
 
 const icon = (
@@ -102,7 +102,7 @@ const handleData = async ({
   menu_combined,
   tagsValue,
   editedFields,
-  originalName
+  originalName,
 }) => {
   let now = new Date();
   var field = {
@@ -143,7 +143,7 @@ const handleData = async ({
     docid: docid,
     wechatid: wechatid,
     location: location,
-    menu_combined: menu_combined,
+    // menu_combined: menu_combined,
     tagsValue: tagsValue,
   };
   if (toggle === "create") {
@@ -162,18 +162,15 @@ const handleData = async ({
       });
     return id;
   } else if (toggle === "edit") {
-    if (editedFields.length > 0) {
-      let editedFieldsAndValues = _.pick(field, editedFields);
-      await Helpers.sendEmailToUpdateListing(docid, originalName, "edit", editedFieldsAndValues)
-        .then((result) => {
-          console.log(result);
-        })
-        .catch(function (error) {
-          console.error("Error sending email: ", error);
-        });
-    }
-
-    return docid;
+    await db
+      .collection("hawkers")
+      .doc(docid)
+      .update({
+        ...field,
+      })
+      .then((d) => {
+        console.log(d);
+      });
   }
 };
 
@@ -581,7 +578,7 @@ export class ListForm extends React.Component {
     // let current = new Set();
     fireData.forEach(function (doc) {
       if (doc.exists) {
-        console.log(doc.data())
+        console.log(doc.data());
         var d = doc.data();
         data_cuisine.push(d);
       }
