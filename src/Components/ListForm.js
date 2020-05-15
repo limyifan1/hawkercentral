@@ -445,7 +445,7 @@ export class ListForm extends React.Component {
       name: this.state.name,
       cuisine: this.state.cuisineValue,
       categories: this.state.cuisineValue.map((v) => v.label.trim()),
-      postal: Number(this.state.postal),
+      postal: this.state.postal,
       street: this.state.street,
       unit: this.state.unit,
       description: this.state.description,
@@ -1366,7 +1366,7 @@ export class ListForm extends React.Component {
                               <input
                                 onChange={this.handleChange.bind(this)}
                                 value={this.state.postal}
-                                type="number"
+                                type="text"
                                 class="form-control"
                                 name="postal"
                                 placeholder={

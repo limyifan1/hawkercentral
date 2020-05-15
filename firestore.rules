@@ -119,7 +119,7 @@ service cloud.firestore {
       //So are writes, all they need to know is the correct structure to allow these writes, but we validation, we can prevent less garbage data.
       allow create: if isString(request.resource.data.name) // Required Field 
       && isValidPhoneNumber(request.resource.data.contact) // Required Field
-      && isPositiveNumber(request.resource.data.postal) // Required Field
+      // && isPositiveNumber(request.resource.data.postal) // Required Field
       && hasValidFields(request.resource.data.keys()) //This prevents any writes without any of these fields and prevents arbitrary fields from being written.
       //Allow update, TODO: needs validation
       allow update: if true
