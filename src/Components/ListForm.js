@@ -18,12 +18,12 @@ import { withRouter } from "react-router-dom";
 import { LanguageContext } from "./themeContext";
 // const API_KEY = `${process.env.REACT_APP_GKEY}`
 
-import _ from 'lodash';
+import _ from "lodash";
 
 const analytics = firebase.analytics();
 
 function onClick(name) {
-  analytics.logEvent(name)
+  analytics.logEvent(name);
 }
 
 const icon = (
@@ -102,7 +102,7 @@ const handleData = async ({
   menu_combined,
   tagsValue,
   editedFields,
-  originalName
+  originalName,
 }) => {
   let now = new Date();
   var field = {
@@ -164,7 +164,12 @@ const handleData = async ({
   } else if (toggle === "edit") {
     if (editedFields.length > 0) {
       let editedFieldsAndValues = _.pick(field, editedFields);
-      await Helpers.sendEmailToUpdateListing(docid, originalName, "edit", editedFieldsAndValues)
+      await Helpers.sendEmailToUpdateListing(
+        docid,
+        originalName,
+        "edit",
+        editedFieldsAndValues
+      )
         .then((result) => {
           console.log(result);
         })
@@ -221,9 +226,18 @@ export class ListForm extends React.Component {
       condition: "",
       delivery_detail: "",
       menu: false,
-      menu_combined: [{name:"",price:""},{name:"",price:""},{name:"",price:""},
-      {name:"",price:""},{name:"",price:""},{name:"",price:""},{name:"",price:""},
-      {name:"",price:""},{name:"",price:""},{name:"",price:""}],
+      menu_combined: [
+        { name: "", price: "" },
+        { name: "", price: "" },
+        { name: "", price: "" },
+        { name: "", price: "" },
+        { name: "", price: "" },
+        { name: "", price: "" },
+        { name: "", price: "" },
+        { name: "", price: "" },
+        { name: "", price: "" },
+        { name: "", price: "" },
+      ],
       wechatid: "",
       tagsValue: [],
       tags: [],
@@ -330,8 +344,8 @@ export class ListForm extends React.Component {
   callPostal = (postal) => {
     return fetch(
       "https://developers.onemap.sg/commonapi/search?searchVal=" +
-      postal +
-      "&returnGeom=Y&getAddrDetails=Y"
+        postal +
+        "&returnGeom=Y&getAddrDetails=Y"
     )
       .then(function (response) {
         return response.json();
@@ -401,15 +415,16 @@ export class ListForm extends React.Component {
       if (this.state.menu_combined[i].name !== "") {
         newMenucombined.push({
           name: this.state.menu_combined[i].name,
-          price: this.state.menu_combined[i].price})
-      };
+          price: this.state.menu_combined[i].price,
+        });
+      }
     }
     while (newMenucombined.length < 10) {
       newMenucombined.push({
         name: "",
-        price: ""
+        price: "",
       });
-    };
+    }
 
     let edited_fields = [];
     if (this.props.toggle === "create") {
@@ -507,8 +522,8 @@ export class ListForm extends React.Component {
       let idxToChange = parseInt(name.slice(8));
       while (current.length < idxToChange + 1) {
         current.push({
-          name:"",
-          price:""
+          name: "",
+          price: "",
         });
       }
       current[idxToChange].name = target.value;
@@ -520,8 +535,8 @@ export class ListForm extends React.Component {
       let idxToChange = parseInt(name.slice(9));
       while (current.length < idxToChange + 1) {
         current.push({
-          name:"",
-          price:""
+          name: "",
+          price: "",
         });
       }
       current[idxToChange].price = target.value;
@@ -548,11 +563,11 @@ export class ListForm extends React.Component {
       for (var i = 0; i < 5; i++) {
         newMenucombined.push({
           name: "",
-          price: ""
+          price: "",
         });
-      };
+      }
       this.setState({
-        menu_combined: newMenucombined
+        menu_combined: newMenucombined,
       });
     }
   };
@@ -564,14 +579,10 @@ export class ListForm extends React.Component {
     data.push(
       <div class="form-row">
         <div class="col-7">
-          <small>
-            {context.data.create.menuitem}
-          </small>
+          <small>{context.data.create.menuitem}</small>
         </div>
         <div class="col-5">
-          <small>
-            {context.data.create.price}
-          </small>
+          <small>{context.data.create.price}</small>
         </div>
       </div>
     );
@@ -592,13 +603,9 @@ export class ListForm extends React.Component {
               />
             </div>
             <div class="col-5">
-
               <div class="input-group">
                 <div class="input-group-prepend">
-                  <span
-                    class="input-group-text"
-                    id="basic-addon1"
-                  >
+                  <span class="input-group-text" id="basic-addon1">
                     $
                   </span>
                 </div>
@@ -613,9 +620,9 @@ export class ListForm extends React.Component {
               </div>
             </div>
           </div>
-        </div >
+        </div>
       );
-    };
+    }
     return data;
   };
 
@@ -692,7 +699,7 @@ export class ListForm extends React.Component {
     // let current = new Set();
     fireData.forEach(function (doc) {
       if (doc.exists) {
-        console.log(doc.data())
+        console.log(doc.data());
         var d = doc.data();
         data_cuisine.push(d);
       }
@@ -984,8 +991,8 @@ export class ListForm extends React.Component {
                               </div>
                             </span>
                           ) : (
-                                <label for="imageFile1">{icon}</label>
-                              )}
+                            <label for="imageFile1">{icon}</label>
+                          )}
                           <input
                             type="file"
                             class="custom-file-input"
@@ -1033,8 +1040,8 @@ export class ListForm extends React.Component {
                               </div>
                             </span>
                           ) : (
-                                <label for="imageFile2">{icon}</label>
-                              )}
+                            <label for="imageFile2">{icon}</label>
+                          )}
                           <input
                             type="file"
                             class="custom-file-input"
@@ -1082,8 +1089,8 @@ export class ListForm extends React.Component {
                               </div>
                             </span>
                           ) : (
-                                <label for="imageFile3">{icon}</label>
-                              )}
+                            <label for="imageFile3">{icon}</label>
+                          )}
                           <input
                             type="file"
                             class="custom-file-input"
@@ -1133,8 +1140,8 @@ export class ListForm extends React.Component {
                               </div>
                             </span>
                           ) : (
-                                <label for="imageFile4">{icon}</label>
-                              )}
+                            <label for="imageFile4">{icon}</label>
+                          )}
                           <input
                             type="file"
                             class="custom-file-input"
@@ -1182,8 +1189,8 @@ export class ListForm extends React.Component {
                               </div>
                             </span>
                           ) : (
-                                <label for="imageFile5">{icon}</label>
-                              )}
+                            <label for="imageFile5">{icon}</label>
+                          )}
                           <input
                             type="file"
                             class="custom-file-input"
@@ -1231,8 +1238,8 @@ export class ListForm extends React.Component {
                               </div>
                             </span>
                           ) : (
-                                <label for="imageFile6">{icon}</label>
-                              )}
+                            <label for="imageFile6">{icon}</label>
+                          )}
                           <input
                             type="file"
                             class="custom-file-input"
@@ -1808,8 +1815,8 @@ export class ListForm extends React.Component {
                                   aria-hidden="true"
                                 />
                               ) : (
-                                  context.data.create.submit
-                                )}
+                                context.data.create.submit
+                              )}
                             </Button>
                           </div>
                         </div>
