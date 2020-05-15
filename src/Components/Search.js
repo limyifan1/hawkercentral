@@ -61,7 +61,7 @@ export class Search extends React.Component {
     }
 
     const postal = await this.getPostal();
-    if (postal.ADDRESS === "") {
+    if (!postal || postal.ADDRESS === "") {
       alert("Please enter a valid postal code thank you :)");
       return;
     }
