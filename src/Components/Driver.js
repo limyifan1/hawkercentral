@@ -559,7 +559,7 @@ export class Driver extends React.Component {
                       style={{ width: "30%" }}
                     />
                     <img
-                      class="d-inline-block d-none"
+                      class="d-inline-block d-md-none"
                       src={check_rates}
                       alt=""
                       style={{ width: "50%" }}
@@ -771,6 +771,7 @@ export class Driver extends React.Component {
                             }
                             name="street"
                             placeholder="Enter Street Name 街道"
+                            required
                           ></input>
                         </div>
                       </div>
@@ -871,7 +872,6 @@ export class Driver extends React.Component {
                         </div>
                       </div>
                       <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                        {" "}
                         <div class="form-group create-title">
                           <label for="street_to">
                             Street Name 街道<b> (Auto-Filled)</b>
@@ -887,6 +887,7 @@ export class Driver extends React.Component {
                             }
                             name="street_to"
                             placeholder="Enter Street Name 街道"
+                            required
                           ></input>
                         </div>
                       </div>
@@ -909,9 +910,7 @@ export class Driver extends React.Component {
                       </div>
                       <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                         <div class="form-group create-title">
-                          <label for="unit">
-                            Mobile Number 手机号: (Optional)
-                          </label>
+                          <label for="unit">Mobile Number 手机号:</label>
                           <div class="input-group">
                             <div class="input-group-prepend">
                               <span class="input-group-text" id="basic-addon1">
@@ -922,12 +921,17 @@ export class Driver extends React.Component {
                               onChange={this.handleChange}
                               value={this.state.contact_to}
                               type="tel"
-                              class="form-control"
                               name="contact_to"
                               placeholder="9xxxxxxx"
                               maxLength="8"
                               pattern="[8-9]{1}[0-9]{7}"
                               minlength="8"
+                              class={
+                                !this.state.contact_to
+                                  ? "form-control is-invalid"
+                                  : "form-control"
+                              }
+                              required
                             ></input>
                           </div>
                         </div>
