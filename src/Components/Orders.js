@@ -1,13 +1,15 @@
 import React from "react";
 import "../App.css";
 import { withRouter } from "react-router-dom";
-import firebase from "./Firestore";
+import { firebase, uiConfig } from "./Firestore";
 import { Form, Button } from "react-bootstrap";
 import { db } from "./Firestore";
 import queryString from "query-string";
 import { Spinner } from "react-bootstrap";
 import driver from "../driver.png";
 import Cookies from "universal-cookie";
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+
 const cookies = new Cookies();
 
 const analytics = firebase.analytics();
@@ -15,7 +17,6 @@ const analytics = firebase.analytics();
 function onLoad(name) {
   analytics.logEvent(name);
 }
-
 
 export class Orders extends React.Component {
   constructor(props) {
@@ -30,21 +31,23 @@ export class Orders extends React.Component {
   }
 
   componentDidMount() {
-    // Set up Firebase reCAPTCHA 
+    // Set up Firebase reCAPTCHA
     // To apply the default browser preference instead of explicitly setting it.
     firebase.auth().useDeviceLanguage();
     console.log(firebase.auth().languageCode);
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier("recaptcha-container", {
-      //'size': 'invisible',
-      'callback': function (response) {
-        // reCAPTCHA solved, allow signInWithPhoneNumber.
-        //this.handleSubmit.bind(this);
-        console.log("callback called");
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+      "recaptcha-container",
+      {
+        //'size': 'invisible',
+        callback: function (response) {
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+          //this.handleSubmit.bind(this);
+          console.log("callback called");
+        },
       }
-    });
+    );
     console.log(window.recaptchaVerifier);
   }
-
 
   componentWillMount() {
     // onLoad("find_delivery");
@@ -53,7 +56,6 @@ export class Orders extends React.Component {
     // }
   }
 
-
   handleSubmit = async (event) => {
     event.preventDefault();
     //this.setState({ submitted: true });
@@ -61,15 +63,17 @@ export class Orders extends React.Component {
     // Handle Firebase phone number-OTP verification
     var phoneNumber = this.state.hawker_contact;
     var appVerifier = window.recaptchaVerifier;
-    firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+    firebase
+      .auth()
+      .signInWithPhoneNumber(phoneNumber, appVerifier)
       .then(function (confirmationResult) {
         // SMS sent. Prompt user to type the code from the message, then sign the
         // user in with confirmationResult.confirm(code).
         console.log("inside confirmation chunk");
         window.confirmationResult = confirmationResult;
         console.log(window.confirmationResult);
-        
-      }).catch(function (error) {
+      })
+      .catch(function (error) {
         // Error; SMS not sent
         // Reset reCAPTCHA so user can try again
         console.log("error, sms not sent");
@@ -83,6 +87,7 @@ export class Orders extends React.Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
+    this.setState({ [name]: value });
   };
 
   render() {
@@ -105,6 +110,15 @@ export class Orders extends React.Component {
                 style={{ width: "100%", padding: "20px", margin: "20px" }}
               >
                 <div>
+                  <h1>My App</h1>
+                  <p>Please sign-in:</p>
+                  <StyledFirebaseAuth
+                    uiConfig={uiConfig}
+                    firebaseAuth={firebase.auth()}
+                  />
+                </div>
+
+                <div>
                   <Form onSubmit={this.handleSubmit.bind(this)}>
                     <br />
                     <label for="unit">Mobile Number:</label>
@@ -112,7 +126,7 @@ export class Orders extends React.Component {
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1">
                           +65
-                            </span>
+                        </span>
                       </div>
                       <input
                         onChange={this.handleChange}
@@ -137,7 +151,7 @@ export class Orders extends React.Component {
                       type="Submit"
                     >
                       View Your Orders
-                        </Button>
+                    </Button>
                   </Form>
                   <div id="recaptcha-container"></div>
                 </div>

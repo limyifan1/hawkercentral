@@ -28,6 +28,7 @@
     "react-date-picker": "^8.0.1",
     "react-datetime-picker": "3.0.2",
     "react-dom": "16.13.1",
+    "react-firebaseui": "^4.1.0",
     "react-ga": "2.7.0",
     "react-helmet": "6.0.0",
     "react-i18next": "11.4.0",
