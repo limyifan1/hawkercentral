@@ -10,6 +10,7 @@ import store_address from "../store_address.png";
 import delivery_address from "../delivery_address.png";
 import summary from "../summary.png";
 import instructions from "../infographic.jpg";
+import check_rates from "../check-delivry-rates.png";
 import Cookies from "universal-cookie";
 import Helpers from "../Helpers/helpers";
 import GetApp from "@material-ui/icons/GetApp";
@@ -137,7 +138,7 @@ export class Driver extends React.Component {
       unit_to: "",
       contact: cookies.get("contact") ? cookies.get("contact") : "",
       contact_to: "",
-      time: time_now.toLocaleTimeString(),
+      time: time_now.getHours() + ":" + time_now.getMinutes(),
       date: time_now,
       datetime: time_now,
       note: cookies.get("note") ? cookies.get("note") : "",
@@ -362,8 +363,8 @@ export class Driver extends React.Component {
       note: this.state.note,
       arrival: arrival,
       duration: this.state.directions.routes[0].legs[0].duration.text,
-    }).then((id) => {
-      this.sendData({
+    }).then(async (id) => {
+      await this.sendData({
         origin: this.state.street,
         destination: this.state.street_to,
         distance: this.state.directions.routes[0].legs[0].distance.text,
@@ -381,8 +382,9 @@ export class Driver extends React.Component {
           formatAMPM(this.state.datetime),
         duration: this.state.directions.routes[0].legs[0].duration.text,
         arrival: arrival,
+      }).then((d) => {
+        this.setState({ submitted: true, submitting: false });
       });
-      this.setState({ submitted: true, submitting: false });
     });
   };
 
@@ -545,12 +547,27 @@ export class Driver extends React.Component {
                     style={{
                       backgroundColor: "white",
                       padding: "20px",
+                      marginBottom: "20px",
                       alignContent: "center",
                       alignItems: "center",
                     }}
                   >
-                    <h5>Check Delivery Rates</h5>
-                    <div class="d-flex flex-row justify-content-center">
+                    <img
+                      class="d-none d-md-inline-block"
+                      src={check_rates}
+                      alt=""
+                      style={{ width: "30%" }}
+                    />
+                    <img
+                      class="d-inline-block d-none"
+                      src={check_rates}
+                      alt=""
+                      style={{ width: "50%" }}
+                    />
+                    <div
+                      class="d-flex flex-row justify-content-center"
+                      style={{ margin: "10px" }}
+                    >
                       <div
                         class="d-flex p-6 justify-content-center align-items-center"
                         style={{ padding: "0px 10px" }}
@@ -694,7 +711,11 @@ export class Driver extends React.Component {
                         )}
                       </div>
                     </div>
+                    <div style={{ paddingTop: "20px" }}>
+                      <b>↓ To Arrange Delivery 安排送餐添表格 ↓</b>
+                    </div>
                   </div>
+
                   <img
                     class="d-none d-md-inline-block"
                     src={store_address}
@@ -931,6 +952,7 @@ export class Driver extends React.Component {
                       <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                         <div class="form-group create-title">
                           <label for="time">Pickup Time 取食物时间</label>
+                          {this.state.time}
                           <TimePicker
                             class="form-control is-invalid"
                             dayPlaceholder="dd"
@@ -1076,7 +1098,9 @@ export class Driver extends React.Component {
                               }}
                             >
                               Submitted! If found, a driver will contact you
-                              directly.
+                              directly. Driver will use customer mobile no. to
+                              collect order.
+                              成功！若有司机接受，司机会直接通知您。取食物时，司机会提供顾客电话号码。
                             </div>
                           ) : (
                             <Button
