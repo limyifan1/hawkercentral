@@ -52,14 +52,15 @@ const monthNames = [
   "December",
 ];
 
-const updateData = async ({ driver_contact, id, paynow_alternate }) => {
+const updateData = async ({ viewed, driver_contact, id, paynow_alternate }) => {
   let now = new Date();
   var field = {
+    viewed: viewed,
     driver_contact: driver_contact ? driver_contact : "",
     timeaccepted: now,
     paynow_alternate: paynow_alternate ? paynow_alternate : "",
   };
-  await db
+  return db
     .collection("deliveries")
     .doc(id)
     .update(field)
@@ -69,7 +70,6 @@ const updateData = async ({ driver_contact, id, paynow_alternate }) => {
     .catch(function (error) {
       console.error("Error adding document: ", error);
     });
-  return id;
 };
 
 export class Delivery extends React.Component {
@@ -124,57 +124,71 @@ export class Delivery extends React.Component {
       });
   };
 
-  getDoc = async () => {
-    await db
+  getDoc = () => {
+    return db
       .collection("deliveries")
       .doc(this.state.id)
       .get()
       .then(async (snapshot) => {
-        if (snapshot.exists) {
-          this.setState({ data: snapshot.data(), retrieved: true });
-        }
-        onLoad("info_load", snapshot.data().name);
-        if (
-          !snapshot.data().viewed &&
-          !snapshot.data().cancelled &&
-          !snapshot.data().expired
-        ) {
-          await db
-            .collection("deliveries")
-            .doc(this.state.id)
-            .update({ viewed: true })
-            .then(async (d) => {
-              await this.sendData({
-                message_id: snapshot.data().message_id,
-                driver_mobile: this.state.driver_contact,
-                requester_mobile: snapshot.data().contact,
-                customer_mobile: snapshot.data().contact_to,
-                origin: snapshot.data().unit + " " + snapshot.data().street,
-                destination:
-                  snapshot.data().unit_to + " " + snapshot.data().street_to,
-                time:
-                  snapshot.data().time &&
-                  typeof snapshot.data().time !== "string"
-                    ? dayName[snapshot.data().time.toDate().getDay()] +
-                      " " +
-                      snapshot.data().time.toDate().getDate() +
-                      " " +
-                      monthNames[snapshot.data().time.toDate().getMonth()] +
-                      " " +
-                      formatAMPM(snapshot.data().time.toDate())
-                    : null,
-                note: snapshot.data().note,
-                cost: snapshot.data().cost,
-                arrival: snapshot.data().arrival
-              });
-            });
-        }
-        return true;
+        this.setState({ data: snapshot.data(), retrieved: true });
+        return snapshot.data();
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+  // getDoc = () => {
+  //   return db
+  //     .collection("deliveries")
+  //     .doc(this.state.id)
+  //     .get()
+  //     .then(async (snapshot) => {
+  //       if (snapshot.exists) {
+  //         this.setState({ data: snapshot.data(), retrieved: true });
+  //       }
+  //       onLoad("info_load", snapshot.data().name);
+  //       if (
+  //         !snapshot.data().viewed &&
+  //         !snapshot.data().cancelled &&
+  //         !snapshot.data().expired
+  //       ) {
+  //         await db
+  //           .collection("deliveries")
+  //           .doc(this.state.id)
+  //           .update({ viewed: true })
+  //           .then(async (d) => {
+  //             await this.sendData({
+  //               message_id: snapshot.data().message_id,
+  //               driver_mobile: this.state.driver_contact,
+  //               requester_mobile: snapshot.data().contact,
+  //               customer_mobile: snapshot.data().contact_to,
+  //               origin: snapshot.data().unit + " " + snapshot.data().street,
+  //               destination:
+  //                 snapshot.data().unit_to + " " + snapshot.data().street_to,
+  //               time:
+  //                 snapshot.data().time &&
+  //                 typeof snapshot.data().time !== "string"
+  //                   ? dayName[snapshot.data().time.toDate().getDay()] +
+  //                     " " +
+  //                     snapshot.data().time.toDate().getDate() +
+  //                     " " +
+  //                     monthNames[snapshot.data().time.toDate().getMonth()] +
+  //                     " " +
+  //                     formatAMPM(snapshot.data().time.toDate())
+  //                   : null,
+  //               note: snapshot.data().note,
+  //               cost: snapshot.data().cost,
+  //               arrival: snapshot.data().arrival
+  //             });
+  //           });
+  //       }
+  //       return true;
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   cancelData = async (query) => {
     let urls = [
@@ -210,12 +224,12 @@ export class Delivery extends React.Component {
     }
   };
 
-  sendData = async (query) => {
+  sendData = (query) => {
     let urls = [
       "https://asia-east2-hawkercentral.cloudfunctions.net/telegramEdit",
     ];
     try {
-      Promise.all(
+      return Promise.all(
         urls.map((url) =>
           fetch(url, {
             method: "POST",
@@ -237,7 +251,7 @@ export class Delivery extends React.Component {
             })
         )
       ).then((data) => {
-        // window.location.reload();
+        console.log("Message Requested");
       });
     } catch (error) {
       return error;
@@ -250,12 +264,35 @@ export class Delivery extends React.Component {
     cookies.set("driver_contact", this.state.driver_contact, { path: "/" });
     cookies.set("paynow_alternate", this.state.paynow_alternate, { path: "/" });
     cookies.set("payment", this.state.payment, { path: "/" });
-    await this.getDoc().then(async () => {
-      if (!this.state.data.viewed) {
+    await this.getDoc().then(async (data) => {
+      if (!data.viewed && !data.cancelled && !data.expired) {
         await updateData({
+          viewed: true,
           id: this.state.id,
           driver_contact: this.state.driver_contact,
           paynow_alternate: this.state.paynow_alternate,
+        }).then(async (d) => {
+          await this.sendData({
+            message_id: data.message_id,
+            driver_mobile: this.state.driver_contact,
+            requester_mobile: data.contact,
+            customer_mobile: data.contact_to,
+            origin: data.unit + " " + data.street,
+            destination: data.unit_to + " " + data.street_to,
+            time:
+              data.time && typeof data.time !== "string"
+                ? dayName[data.time.toDate().getDay()] +
+                  " " +
+                  data.time.toDate().getDate() +
+                  " " +
+                  monthNames[data.time.toDate().getMonth()] +
+                  " " +
+                  formatAMPM(data.time.toDate())
+                : null,
+            note: data.note,
+            cost: data.cost,
+            arrival: data.arrival,
+          });
         });
       }
     });
