@@ -956,7 +956,6 @@ export class Driver extends React.Component {
                       <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                         <div class="form-group create-title">
                           <label for="time">Pickup Time 取食物时间</label>
-                          {this.state.time}
                           <TimePicker
                             class="form-control is-invalid"
                             dayPlaceholder="dd"
