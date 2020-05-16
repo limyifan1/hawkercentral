@@ -22,6 +22,10 @@ export class Item extends React.Component {
     }
   };
 
+  thumbnail = () => {
+    return `https://images.weserv.nl/?w=178&url=${encodeURIComponent(this.props.pic)}`
+  }
+
   render() {
     return (
       <div>
@@ -52,7 +56,7 @@ export class Item extends React.Component {
                     </div>
                   ) : null}
                   <div style={{ height: "120px" }}>
-                    <img src={this.props.pic} class="card-img-top" alt="" />
+                    <img src={this.thumbnail()} class="card-img-top" alt="" />
                   </div>
                 </div>
               ) : (
