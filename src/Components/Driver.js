@@ -1092,19 +1092,25 @@ export class Driver extends React.Component {
                       ) : (
                         <div>
                           {this.state.submitted ? (
-                            <div
-                              class="shadow-lg"
-                              style={{
-                                backgroundColor: "green",
-                                borderColor: "white",
-                                fontSize: "25px",
-                                color: "white",
-                              }}
-                            >
-                              Submitted! If found, a driver will contact you
-                              directly. Driver will use customer mobile no. to
-                              collect order.
-                              成功！若有司机接受，司机会直接通知您。取食物时，司机会提供顾客电话号码。
+                            <div>
+                              <div
+                                class="shadow-lg"
+                                style={{
+                                  backgroundColor: "green",
+                                  borderColor: "white",
+                                  fontSize: "25px",
+                                  color: "white",
+                                }}
+                              >
+                                Submitted! If found, a driver will contact you
+                                directly. Driver will use customer mobile no. to
+                                collect order.
+                                成功！若有司机接受，司机会直接通知您。取食物时，司机会提供顾客电话号码。
+                              </div>
+                              <h5>
+                                To arrange a new delivery, please refresh the
+                                page.
+                              </h5>
                             </div>
                           ) : (
                             <Button
