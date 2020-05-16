@@ -17,6 +17,7 @@ import GetApp from "@material-ui/icons/GetApp";
 import Button from "@material-ui/core/Button";
 import DatePicker from "react-date-picker";
 import TimePicker from "react-time-picker";
+import queryString from "query-string";
 const cookies = new Cookies();
 const API_KEY = `${process.env.REACT_APP_GKEY}`;
 const analytics = firebase.analytics();
@@ -124,20 +125,20 @@ export class Driver extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      postal: cookies.get("postal") ? cookies.get("postal") : "",
-      postal_to: "",
+      postal: queryString.parse(this.props.location.search).postal ? queryString.parse(this.props.location.search).postal : (cookies.get("postal") ? cookies.get("postal") : ""),
+      postal_to: queryString.parse(this.props.location.search).postal_to ? queryString.parse(this.props.location.search).postal_to : '',
       latitude: "",
       longitude: "",
       latitude_to: "",
       longitude_to: "",
-      street: cookies.get("street") ? cookies.get("street") : "",
-      street_to: "",
+      street: queryString.parse(this.props.location.search).street ? queryString.parse(this.props.location.search).street : (cookies.get("street") ? cookies.get("street") : ""),
+      street_to: queryString.parse(this.props.location.search).street_to ? queryString.parse(this.props.location.search).street_to : '',
       cost: "",
       distance: "",
-      unit: cookies.get("unit") ? cookies.get("unit") : "",
-      unit_to: "",
-      contact: cookies.get("contact") ? cookies.get("contact") : "",
-      contact_to: "",
+      unit: queryString.parse(this.props.location.search).unit ? queryString.parse(this.props.location.search).unit : (cookies.get("unit") ? cookies.get("unit") : ""),
+      unit_to: queryString.parse(this.props.location.search).unit_to ? queryString.parse(this.props.location.search).unit_to : '',
+      contact: queryString.parse(this.props.location.search).contact ? queryString.parse(this.props.location.search).contact : (cookies.get("contact") ? cookies.get("contact") : ""),
+      contact_to: queryString.parse(this.props.location.search).contact_to ? queryString.parse(this.props.location.search).contact_to : '',
       time: time_now.getHours() + ":" + time_now.getMinutes(),
       date: time_now,
       datetime: time_now,
