@@ -18,6 +18,7 @@ import ListForm from "./ListForm";
 import ItemRendered from "./ItemRendered";
 import Driver from "./Driver";
 import Delivery from "./Delivery";
+import Orders from "./Orders";
 import Search from "./Search";
 
 import { db, storage } from "./Firestore";
@@ -38,6 +39,7 @@ export default {
   ItemRendered,
   Driver,
   Delivery,
+  Orders,
   Search,
   db,
   storage,
