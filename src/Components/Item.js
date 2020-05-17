@@ -23,7 +23,7 @@ export class Item extends React.Component {
   };
 
   thumbnail = () => {
-    return `https://images.weserv.nl/?w=178&url=${encodeURIComponent(this.props.pic)}`
+    return `https://images.weserv.nl/?w=250&url=${encodeURIComponent(this.props.pic)}`
   }
 
   render() {
