@@ -1542,7 +1542,7 @@ export class Info extends React.Component {
                       <img
                         alt=""
                         src={whatsapp_icon}
-                        style={{ width: "6.5%", cursor: "pointer" }}
+                        style={{ width: "32px", cursor: "pointer" }}
                       />
                     </a>
                   </span>
