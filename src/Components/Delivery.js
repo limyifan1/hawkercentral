@@ -97,6 +97,9 @@ export class Delivery extends React.Component {
       driver_contact: cookies.get("driver_contact")
         ? cookies.get("driver_contact")
         : "",
+      driver_name: cookies.get("driver_name")
+        ? cookies.get("driver_name")
+        : "",
       payment: cookies.get("payment") ? cookies.get("payment") : "",
       paynow_alternate: cookies.get("paynow_alternate")
         ? cookies.get("paynow_alternate")
@@ -262,6 +265,7 @@ export class Delivery extends React.Component {
     event.preventDefault();
     this.setState({ submitted: true });
     cookies.set("driver_contact", this.state.driver_contact, { path: "/" });
+    cookies.set("driver_name", this.state.driver_name, { path: "/" });
     cookies.set("paynow_alternate", this.state.paynow_alternate, { path: "/" });
     cookies.set("payment", this.state.payment, { path: "/" });
     await this.getDoc().then(async (data) => {
@@ -270,11 +274,13 @@ export class Delivery extends React.Component {
           viewed: true,
           id: this.state.id,
           driver_contact: this.state.driver_contact,
+          driver_name: this.state.driver_name,
           paynow_alternate: this.state.paynow_alternate,
         }).then(async (d) => {
           await this.sendData({
             message_id: data.message_id,
             driver_mobile: this.state.driver_contact,
+            driver_name: this.state.driver_name,
             requester_mobile: data.contact,
             customer_mobile: data.contact_to,
             origin: data.unit + " " + data.street,
@@ -340,6 +346,19 @@ export class Delivery extends React.Component {
                     {!this.state.submitted ? (
                       <Form onSubmit={this.handleSubmit.bind(this)}>
                         <br />
+                        <label for="unit">Your Name:</label>
+                        <div class="input-group">
+                          <input
+                            onChange={this.handleChange}
+                            value={this.state.driver_name}
+                            type="text"
+                            class="form-control"
+                            name="driver_name"
+                            placeholder="e.g. Tan Xiao Ming"
+                            required
+                          ></input>
+                        </div>
+                        <br />
                         <label for="unit">Mobile Number:</label>
                         <div class="input-group">
                           <div class="input-group-prepend">
@@ -364,7 +383,7 @@ export class Delivery extends React.Component {
                               onChange={this.handleChange}
                               type="checkbox"
                               checked={this.state.payment}
-                              value={this.state.payment}
+                              // value={this.state.payment}
                               name="payment"
                               class="form-check-input"
                             ></input>

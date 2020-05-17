@@ -149,7 +149,7 @@ exports.telegramSend = functions
         url +
         "\n (request expires 30 minutes before pickup)";
 
-      let sent = await bot.telegram.sendMessage("@foodlehdelivery", message, {
+      let sent = await bot.telegram.sendMessage("@foodlehdev", message, {
         parse_mode: "HTML",
       });
 
@@ -192,6 +192,7 @@ exports.telegramEdit = functions
       var driver_mobile = req.body.driver_mobile
         ? req.body.driver_mobile
         : null;
+      var driver_name = req.body.driver_name ? req.body.driver_name : null;
       var requester_mobile = req.body.requester_mobile
         ? req.body.requester_mobile
         : null;
@@ -208,13 +209,16 @@ exports.telegramEdit = functions
       await twilio.messages
         .create({
           body:
-            "Driver Accepted司机已接受订单。\n Driver 司机: +65" +
+            "Driver Accepted \n Driver No.: +65" +
             driver_mobile +
-            "\n Cost运送: $" +
+            "\n Name: " +
+            driver_name +
+            "\n Cost: $" +
             cost +
-            "\n Pickup抵达: " +
+            "\n Pickup: " +
             time +
-            "\nDriver will give cust's HP no. 司机会提顾客电话号",
+            "\nDriver will give last 4 digits of cust's HP no.: " +
+            customer_mobile,
           from: "+12015847715",
           to: "+65" + requester_mobile,
         })
@@ -250,7 +254,7 @@ exports.telegramEdit = functions
             "Note: " +
             note +
             "\n" +
-            "Please mention cust's HP no. to collect order (unless stated otherwise)",
+            "Please mention last 4 digits of cust's HP no. to collect order (unless stated otherwise)",
           from: "+12015847715",
           to: "+65" + driver_mobile,
         })
@@ -261,7 +265,7 @@ exports.telegramEdit = functions
 
       var message = "<b>A driver has picked up this order! </b>";
       await bot.telegram
-        .editMessageText("@foodlehdelivery", message_id, "", message, {
+        .editMessageText("@foodlehdev", message_id, "", message, {
           parse_mode: "HTML",
         })
         .then(() => {
@@ -280,7 +284,7 @@ exports.telegramCancel = functions
 
       var message = "<b>The hawker has cancelled this request. </b>";
       await bot.telegram
-        .editMessageText("@foodlehdelivery", message_id, "", message, {
+        .editMessageText("@foodlehdev", message_id, "", message, {
           parse_mode: "HTML",
         })
         .then(() => {
@@ -326,7 +330,7 @@ exports.taskRunner = functions
         const job1 = snapshot.ref.update({ expired: true });
         console.log(message_id + " expired");
         const job2 = bot.telegram.editMessageText(
-          "@foodlehdelivery",
+          "@foodlehdev",
           message_id,
           "",
           message,
