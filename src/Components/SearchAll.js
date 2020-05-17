@@ -10,7 +10,7 @@ import { Spinner } from "react-bootstrap";
 import { db } from "./Firestore";
 import Select from "react-select";
 
-import firebase from "./Firestore";
+import firebase, { geo, geoToPromise } from "./Firestore";
 import Helpers from "../Helpers/helpers";
 import { values as cuisines } from "../Helpers/categories";
 import { LanguageContext } from "./themeContext";
@@ -18,6 +18,9 @@ import Zoom from "@material-ui/core/Zoom";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import Fab from "@material-ui/core/Fab";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import motor from "../assets/motor-delivery.png";
+import bag from "../assets/styrofoam-dabao.png";
+import Button from "@material-ui/core/Button";
 
 const analytics = firebase.analytics();
 
@@ -58,6 +61,27 @@ function ScrollTop(props) {
   );
 }
 
+function distance_calc(lat1, lon1, lat2, lon2) {
+  if (lat1 === lat2 && lon1 === lon2) {
+    return 0;
+  } else {
+    var radlat1 = (Math.PI * lat1) / 180;
+    var radlat2 = (Math.PI * lat2) / 180;
+    var theta = lon1 - lon2;
+    var radtheta = (Math.PI * theta) / 180;
+    var dist =
+      Math.sin(radlat1) * Math.sin(radlat2) +
+      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    if (dist > 1) {
+      dist = 1;
+    }
+    dist = Math.acos(dist);
+    dist = (dist * 180) / Math.PI;
+    dist = dist * 60 * 1.1515;
+    return dist * 1.609344;
+  }
+}
+
 let searchTimer = null;
 
 export class SearchAll extends React.Component {
@@ -69,11 +93,12 @@ export class SearchAll extends React.Component {
       query: "",
       longitude: "",
       latitude: "",
-      distance: "",
-      pickup: "",
-      delivery: "",
+      distance: 5,
+      pickup: false,
+      delivery: false,
       retrieved: false,
       search: "",
+      searchPostal: false,
       cuisineValue: [],
       isCuisineMenuOpen: false,
     };
@@ -108,6 +133,65 @@ export class SearchAll extends React.Component {
       return d;
     });
 
+    this.setState({ data, retrieved: true });
+    window.scrollTo(0, this.context.scrollPosition);
+    this.context.setScrollPosition(0); // reset scrollPosition
+  };
+
+  findDataByPostal = async () => {
+    this.setState({ retrieved: false });
+    const centre = geo.point(
+      Number(this.state.latitude),
+      Number(this.state.longitude)
+    );
+    let data;
+    if (this.state.pickup && !this.state.delivery) {
+      data = await geoToPromise(
+        geo
+          .query("hawkers")
+          .within(centre, Number(this.state.distance), "location")
+      );
+    } else if (!this.state.pickup && this.state.delivery) {
+      // Find both places within a radius and places that
+      // do islandwide delivery, populate an Object keying
+      // by doc id to avoid duplicates, then set data to
+      // Object's valuess
+      const placesById = {};
+
+      // const placesWithinReach = await geoToPromise(
+      //   geo.query("hawkers").within(centre, 10, "location")
+      // );
+      // placesWithinReach.forEach((d) => (placesById[d.id] = d));
+
+      const userRegion = await Helpers.postalPlanningRegion(
+        this.state.query,
+        this.state.latitude,
+        this.state.longitude
+      );
+      const regions = await db
+        .collection("hawkers")
+        .where("regions", "array-contains-any", ["Islandwide", userRegion])
+        .get()
+        .then(Helpers.mapSnapshotToDocs);
+      regions.forEach((d) => (placesById[d.id] = d));
+      data = Object.values(placesById);
+    } else {
+      data = await db
+        .collection("hawkers")
+        .get()
+        .then(Helpers.mapSnapshotToDocs);
+    }
+
+    data = data.map((d) => {
+      if (d.tagsValue !== undefined) {
+        d.tags = d.tagsValue.map((v) => v.trim().toLowerCase());
+        d.menu_list = d.menu_combined.map((v) => v.name.trim().toLowerCase());
+      } else {
+        d.menu_list = [];
+        d.tags = [];
+      }
+      return d;
+    });
     this.setState({ data, retrieved: true });
     window.scrollTo(0, this.context.scrollPosition);
     this.context.setScrollPosition(0); // reset scrollPosition
@@ -173,14 +257,51 @@ export class SearchAll extends React.Component {
     );
   }
 
-  handleChange = (event) => {
+  handleChange = async (event) => {
     const {
       target: { value, name },
     } = event;
-    if (this.clearTimeout) clearTimeout(searchTimer);
-    searchTimer = setTimeout(() => {
-      this.setState({ [name]: value });
-    }, 300);
+    if (name === "search") {
+      if (this.clearTimeout) clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        this.setState({ [name]: value });
+      }, 300);
+    } else {
+      if(value.length === 0){
+        this.retrieveData()
+      }
+      this.setState({ [name]: value, searchPostal: false });
+      if (name === "postal" && value.length === 6) {
+        const latlng = await Helpers.getLatLng(this.state.postal);
+        this.setState({
+          searchPostal: true,
+          latitude: latlng.LATITUDE,
+          longitude: latlng.LONGITUDE,
+        });
+        if (latlng && latlng.LATITUDE && latlng.LONGITUDE) {
+          await this.findDataByPostal();
+        }
+      }
+    }
+  };
+
+  handleToggle = async (event) => {
+    var name = event.currentTarget.name;
+    if (name === "delivery") this.setState({ delivery: true, pickup: false });
+    if (name === "pickup") this.setState({ delivery: false, pickup: true });
+    if(this.state.delivery && name === "delivery") this.setState({ delivery: false });
+    if(this.state.pickup && name === "pickup") this.setState({ pickup: false });
+    if (this.state.searchPostal && this.state.postal.length === 6) {
+      const latlng = await Helpers.getLatLng(this.state.postal);
+      this.setState({
+        searchPostal: true,
+        latitude: latlng.LATITUDE,
+        longitude: latlng.LONGITUDE,
+      });
+      if (latlng && latlng.LATITUDE && latlng.LONGITUDE) {
+        await this.findDataByPostal();
+      }
+    }
   };
 
   render() {
@@ -207,25 +328,61 @@ export class SearchAll extends React.Component {
       }
 
       filtered = filtered.sort((a, b) => b.lastmodified - a.lastmodified);
+      if (this.state.pickup && !this.state.delivery) {
+        filtered = filtered.filter((d) => d.pickup_option);
+      } else if (!this.state.pickup && this.state.delivery) {
+        filtered = filtered.filter((d) => d.delivery_option);
+      }
 
-      result.nearby = filtered.map((data) => {
-        return (
-          <span>
-            <div>
-              <Item
-                promo={data["promo"]}
-                id={data["id"]}
-                name={data["name"]}
-                street={data["street"]}
-                pic={data["url"]}
-                summary={data["description"]}
-                claps={data["claps"]}
-                // distance={data["distance"]}
-              />
-            </div>
-          </span>
-        );
-      });
+      if (this.state.searchPostal) {
+        filtered.forEach((element) => {
+          element.distance = distance_calc(
+            parseFloat(element["latitude"]),
+            parseFloat(element["longitude"]),
+            parseFloat(this.state.latitude),
+            parseFloat(this.state.longitude)
+          ).toString();
+        });
+
+        filtered = filtered.sort((a, b) => a.distance - b.distance);
+
+        result.nearby = filtered.map((data) => {
+          return (
+            <span>
+              <div>
+                <Item
+                  promo={data["promo"]}
+                  id={data["id"]}
+                  name={data["name"]}
+                  street={data["street"]}
+                  pic={data["url"]}
+                  summary={data["description"]}
+                  distance={data["distance"]}
+                  claps={data["claps"]}
+                />
+              </div>
+            </span>
+          );
+        });
+      } else {
+        result.nearby = filtered.map((data) => {
+          return (
+            <span>
+              <div>
+                <Item
+                  promo={data["promo"]}
+                  id={data["id"]}
+                  name={data["name"]}
+                  street={data["street"]}
+                  pic={data["url"]}
+                  summary={data["description"]}
+                  claps={data["claps"]}
+                />
+              </div>
+            </span>
+          );
+        });
+      }
     }
 
     return (
@@ -234,8 +391,10 @@ export class SearchAll extends React.Component {
           <div class="row justify-content-center">
             <LanguageContext.Consumer>
               {(context) => (
-                <div class="col-12 col-sm-10 col-md-6">
-                  <h3 id="back-to-top-anchor">{context.data.search.alllistings}</h3>
+                <div class="col-12 col-sm-6 col-md-6">
+                  <h3 id="back-to-top-anchor">
+                    {context.data.search.alllistings}
+                  </h3>
                 </div>
               )}
             </LanguageContext.Consumer>
@@ -244,7 +403,7 @@ export class SearchAll extends React.Component {
             {
               <LanguageContext.Consumer>
                 {(context) => (
-                  <div class="col-12 col-sm-10 col-md-6">
+                  <div class="col-12 col-sm-6 col-md-6">
                     <input
                       disabled={!this.state.retrieved}
                       class="form-control"
@@ -264,7 +423,137 @@ export class SearchAll extends React.Component {
               </LanguageContext.Consumer>
             }
 
-            <div class="col-12 col-sm-10 col-md-5">{this.cuisineSearch()}</div>
+            <div class="col-12 col-sm-10 col-md-6">{this.cuisineSearch()}</div>
+          </div>
+          <div class="row justify-content-center mt-4">
+            <LanguageContext.Consumer>
+              {(context) => (
+                <div class="col-6 col-sm-6 col-md-6">
+                  <input
+                    onChange={this.handleChange}
+                    value={this.state.postal}
+                    type="text"
+                    pattern="[0-9]{6}"
+                    maxLength={6}
+                    minLength={6}
+                    class="form-control"
+                    name="postal"
+                    placeholder={context.data.search.postalcode}
+                    autoComplete="postal-code"
+                    autoFocus
+                    required
+                    disabled={!this.state.retrieved}
+                    style={{
+                      width: "100%",
+                      height: "38px",
+                      "border-radius": "1rem",
+                    }}
+                  ></input>
+                </div>
+              )}
+            </LanguageContext.Consumer>
+            <div class="col-3 col-xs-3 col-sm-3 col-md-3">
+              <div name="pickup">
+                <LanguageContext.Consumer>
+                  {(context) => (
+                    <Button
+                      variant={"contained"}
+                      // variant="outline-secondary"
+                      onClick={this.handleToggle}
+                      name="pickup"
+                      disabled={!this.state.retrieved}
+                      style={
+                        !this.state.pickup
+                          ? {
+                              backgroundColor: "white",
+                              borderColor: "#b48300",
+                              width: "100%",
+                              height: "38px",
+                              textTransform: "none",
+                            }
+                          : {
+                              backgroundColor: "#b48300",
+                              borderColor: "#b48300",
+                              width: "100%",
+                              height: "38px",
+                              textTransform: "none",
+                            }
+                      }
+                      color={"secondary"}
+                    >
+                      <img
+                        name="pickup"
+                        src={bag}
+                        alt="bag"
+                        style={{ height: "20px" }}
+                      ></img>
+                      <div
+                        name="pickup"
+                        class="d-none d-md-inline-block"
+                        style={
+                          !this.state.pickup
+                            ? { marginLeft: "10px", color: "black" }
+                            : { marginLeft: "10px", color: "white" }
+                        }
+                      >
+                        {context.data.search.self_collect}
+                      </div>
+                    </Button>
+                  )}
+                </LanguageContext.Consumer>
+              </div>
+            </div>
+            <div class="col-3 col-xs-3 col-sm-3 col-md-3">
+              <div name="delivery">
+                <LanguageContext.Consumer>
+                  {(context) => (
+                    <Button
+                      type="submit"
+                      variant={"contained"}
+                      disabled={!this.state.retrieved}
+                      style={
+                        !this.state.delivery
+                          ? {
+                              backgroundColor: "white",
+                              borderColor: "#b48300",
+                              width: "100%",
+                              height: "38px",
+                              textTransform: "none",
+                            }
+                          : {
+                              backgroundColor: "#b48300",
+                              borderColor: "#b48300",
+                              width: "100%",
+                              height: "38px",
+                              textTransform: "none",
+                            }
+                      }
+                      name="delivery"
+                      color={"secondary"}
+                      onClick={this.handleToggle}
+                    >
+                      <img
+                        name="delivery"
+                        src={motor}
+                        alt="motor"
+                        style={{ height: "20px" }}
+                      ></img>{" "}
+                      <div
+                        name="delivery"
+                        class="d-none d-md-inline-block"
+                        style={
+                          !this.state.delivery
+                            ? { marginLeft: "10px", color: "black" }
+                            : { marginLeft: "10px", color: "white" }
+                        }
+                      >
+                        {context.data.search.delivery}
+                      </div>
+                    </Button>
+                  )}
+                </LanguageContext.Consumer>
+              </div>
+            </div>
           </div>
           <div className="row justify-content-center mt-4">
             {this.state.retrieved ? (
