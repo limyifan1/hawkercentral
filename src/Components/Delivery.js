@@ -1,16 +1,21 @@
 import React from "react";
 import "../App.css";
 import { withRouter } from "react-router-dom";
-import firebase from "./Firestore";
+import { firebase, uiConfig } from "./Firestore";
 import { Form, Button } from "react-bootstrap";
 import { db } from "./Firestore";
 import queryString from "query-string";
 import { Spinner } from "react-bootstrap";
 import driver from "../driver.png";
 import Cookies from "universal-cookie";
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 const cookies = new Cookies();
 
 const analytics = firebase.analytics();
+
+function getPhoneNumberFromUserInput() {
+  return document.getElementById('phone-number').value;
+}
 
 function onLoad(name) {
   analytics.logEvent(name);
@@ -94,14 +99,48 @@ export class Delivery extends React.Component {
       cancel: queryString.parse(this.props.location.search).cancel,
       pickup_option: false,
       submitted: false,
+      firebaseUser: null,
       driver_contact: cookies.get("driver_contact")
         ? cookies.get("driver_contact")
+        : "",
+      driver_name: cookies.get("driver_name")
+        ? cookies.get("driver_name")
         : "",
       payment: cookies.get("payment") ? cookies.get("payment") : "",
       paynow_alternate: cookies.get("paynow_alternate")
         ? cookies.get("paynow_alternate")
         : "",
     };
+  }
+
+
+  componentDidMount() {
+    // Set up Firebase reCAPTCHA 
+    // To apply the default browser preference instead of explicitly setting it.
+    firebase.auth().useDeviceLanguage();
+    console.log(firebase.auth().languageCode);
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+      "recaptcha-container",
+      {
+        'size': 'invisible',
+        callback: function (response) {
+          // reCAPTCHA solved
+        },
+      }
+    );
+
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        // User is signed in, set state
+        // More auth information can be obtained here but for verification purposes, we just need to know user signed in
+        this.setState({
+          firebaseUser: user,
+          driver_contact: (user.phoneNumber).slice(3)
+        });
+      } else {
+        // No user is signed in.
+      }
+    }.bind(this));
   }
 
   componentWillMount() {
@@ -137,58 +176,6 @@ export class Delivery extends React.Component {
         console.log(error);
       });
   };
-
-  // getDoc = () => {
-  //   return db
-  //     .collection("deliveries")
-  //     .doc(this.state.id)
-  //     .get()
-  //     .then(async (snapshot) => {
-  //       if (snapshot.exists) {
-  //         this.setState({ data: snapshot.data(), retrieved: true });
-  //       }
-  //       onLoad("info_load", snapshot.data().name);
-  //       if (
-  //         !snapshot.data().viewed &&
-  //         !snapshot.data().cancelled &&
-  //         !snapshot.data().expired
-  //       ) {
-  //         await db
-  //           .collection("deliveries")
-  //           .doc(this.state.id)
-  //           .update({ viewed: true })
-  //           .then(async (d) => {
-  //             await this.sendData({
-  //               message_id: snapshot.data().message_id,
-  //               driver_mobile: this.state.driver_contact,
-  //               requester_mobile: snapshot.data().contact,
-  //               customer_mobile: snapshot.data().contact_to,
-  //               origin: snapshot.data().unit + " " + snapshot.data().street,
-  //               destination:
-  //                 snapshot.data().unit_to + " " + snapshot.data().street_to,
-  //               time:
-  //                 snapshot.data().time &&
-  //                 typeof snapshot.data().time !== "string"
-  //                   ? dayName[snapshot.data().time.toDate().getDay()] +
-  //                     " " +
-  //                     snapshot.data().time.toDate().getDate() +
-  //                     " " +
-  //                     monthNames[snapshot.data().time.toDate().getMonth()] +
-  //                     " " +
-  //                     formatAMPM(snapshot.data().time.toDate())
-  //                   : null,
-  //               note: snapshot.data().note,
-  //               cost: snapshot.data().cost,
-  //               arrival: snapshot.data().arrival
-  //             });
-  //           });
-  //       }
-  //       return true;
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
 
   cancelData = async (query) => {
     let urls = [
@@ -258,10 +245,35 @@ export class Delivery extends React.Component {
     }
   };
 
+
+  handleVerify = async (event) => {
+    event.preventDefault();
+    //cookies.set("driver_contact", this.state.driver_contact, { path: "/" });
+    // Handle Firebase phone number-OTP verification
+    var phoneNumber = getPhoneNumberFromUserInput();
+    var appVerifier = window.recaptchaVerifier;
+    firebase
+      .auth()
+      .signInWithPhoneNumber(phoneNumber, appVerifier)
+      .then(function (confirmationResult) {
+        // SMS sent
+        window.confirmationResult = confirmationResult;
+      })
+      .catch(function (error) {
+        // Error; SMS not sent
+        // Reset reCAPTCHA so user can try again
+        console.log("error, sms not sent");
+      });
+  };
+
   handleSubmit = async (event) => {
     event.preventDefault();
-    this.setState({ submitted: true });
+    this.setState({ 
+      submitted: true,
+      driver_contact: (this.state.firebaseUser.phoneNumber).slice(3)
+     });
     cookies.set("driver_contact", this.state.driver_contact, { path: "/" });
+    cookies.set("driver_name", this.state.driver_name, { path: "/" });
     cookies.set("paynow_alternate", this.state.paynow_alternate, { path: "/" });
     cookies.set("payment", this.state.payment, { path: "/" });
     await this.getDoc().then(async (data) => {
@@ -270,11 +282,13 @@ export class Delivery extends React.Component {
           viewed: true,
           id: this.state.id,
           driver_contact: this.state.driver_contact,
+          driver_name: this.state.driver_name,
           paynow_alternate: this.state.paynow_alternate,
         }).then(async (d) => {
           await this.sendData({
             message_id: data.message_id,
             driver_mobile: this.state.driver_contact,
+            driver_name: this.state.driver_name,
             requester_mobile: data.contact,
             customer_mobile: data.contact_to,
             origin: data.unit + " " + data.street,
@@ -282,12 +296,12 @@ export class Delivery extends React.Component {
             time:
               data.time && typeof data.time !== "string"
                 ? dayName[data.time.toDate().getDay()] +
-                  " " +
-                  data.time.toDate().getDate() +
-                  " " +
-                  monthNames[data.time.toDate().getMonth()] +
-                  " " +
-                  formatAMPM(data.time.toDate())
+                " " +
+                data.time.toDate().getDate() +
+                " " +
+                monthNames[data.time.toDate().getMonth()] +
+                " " +
+                formatAMPM(data.time.toDate())
                 : null,
             note: data.note,
             cost: data.cost,
@@ -306,7 +320,9 @@ export class Delivery extends React.Component {
       const checked = target.checked;
       this.setState({ [name]: checked });
     } else {
-      this.setState({ [name]: value });
+      this.setState({
+        [name]: value,
+      });
     }
   };
 
@@ -336,186 +352,222 @@ export class Delivery extends React.Component {
                 {this.state.cancel ? (
                   <h2>You have successfully cancelled the request</h2>
                 ) : (
-                  <div>
-                    {!this.state.submitted ? (
-                      <Form onSubmit={this.handleSubmit.bind(this)}>
-                        <br />
-                        <label for="unit">Mobile Number:</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">
-                              +65
+                    <div>
+                      {!this.state.submitted ? (
+                        <Form onSubmit={this.handleSubmit.bind(this)}>
+                          <br />
+
+                          {/* <label for="unit">Mobile Number:</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="basic-addon1">
+                                +65
                             </span>
-                          </div>
-                          <input
-                            onChange={this.handleChange}
-                            value={this.state.driver_contact}
-                            type="number"
-                            class="form-control"
-                            name="driver_contact"
-                            placeholder="9xxxxxxx"
-                            required
-                          ></input>
-                        </div>
-                        <br />
-                        <div class="form-check create-title">
-                          <label class="checkbox-inline">
+                            </div>
                             <input
                               onChange={this.handleChange}
-                              type="checkbox"
-                              checked={this.state.payment}
-                              value={this.state.payment}
-                              name="payment"
-                              class="form-check-input"
+                              value={this.state.driver_contact}
+                              type="number"
+                              class="form-control"
+                              name="driver_contact"
+                              placeholder="9xxxxxxx"
+                              required
                             ></input>
-                            Prefer a different PayNow number/UEN?
-                          </label>
+                          </div>
+                          <br /> */}
+
+                          {/* Separate handler for verifying mobile number with OTP */}
+                          {/* Check if user is already logged in with Firebase */}
+                          <div style={{display: this.state.firebaseUser ? "none" : "block"}}>
+                            <div>
+                              <p>Verify Mobile Number</p>
+                              <StyledFirebaseAuth
+                                uiConfig={uiConfig}
+                                firebaseAuth={firebase.auth()}
+                              />
+                            </div>
+                            <div id="recaptcha-container"></div>
+                            <br />
+                          </div>
                           <br />
-                        </div>
-                        {this.state.payment ? (
+                          {this.state.firebaseUser ? (
+                            <div>
+                              <p>Already verified phone number: {this.state.firebaseUser.phoneNumber}</p>
+                            </div>
+                          ) : null}
+
+                          <label for="unit">Your Name:</label>
                           <div class="input-group">
                             <input
                               onChange={this.handleChange}
-                              value={this.state.paynow_alternate}
-                              type="number"
+                              value={this.state.driver_name}
+                              type="text"
                               class="form-control"
-                              name="paynow_alternate"
-                              placeholder="UEN/PayNow Number"
+                              name="driver_name"
+                              placeholder="e.g. Tan Xiao Ming"
+                              required
                             ></input>
                           </div>
-                        ) : null}
-                        <br />
-                        <Button
-                          class="shadow-lg"
-                          style={{
-                            backgroundColor: "green",
-                            borderColor: "green",
-                            fontSize: "25px",
-                          }}
-                          type="Submit"
-                        >
-                          Accept Order
+                          <br />
+                          <div class="form-check create-title">
+                            <label class="checkbox-inline">
+                              <input
+                                onChange={this.handleChange}
+                                type="checkbox"
+                                checked={this.state.payment}
+                                // value={this.state.payment}
+                                name="payment"
+                                class="form-check-input"
+                              ></input>
+                            Prefer a different PayNow number/UEN?
+                          </label>
+                            <br />
+                          </div>
+                          {this.state.payment ? (
+                            <div class="input-group">
+                              <input
+                                onChange={this.handleChange}
+                                value={this.state.paynow_alternate}
+                                type="number"
+                                class="form-control"
+                                name="paynow_alternate"
+                                placeholder="UEN/PayNow Number"
+                              ></input>
+                            </div>
+                          ) : null}
+                          <Button
+                            class="shadow-lg"
+                            disabled={(this.state.firebaseUser === null)}
+                            style={{
+                              backgroundColor: (!(this.state.firebaseUser === null)) ? "green" : "grey",
+                              borderColor: (!(this.state.firebaseUser === null)) ? "green" : "grey",
+                              fontSize: "25px",
+                              cursor: (!(this.state.firebaseUser === null)) ? "pointer" : "not-allowed",
+                            }}
+                            type="Submit"
+                          >
+                            Accept Order
                         </Button>
-                      </Form>
-                    ) : this.state.retrieved ? (
-                      <div>
-                        {!this.state.data.viewed &&
-                        !this.state.data.expired &&
-                        !this.state.data.cancelled ? (
-                          <div>
-                            <br />
-                            <h3>
-                              Congratulations, you got the order!
+                        </Form>
+                      ) : this.state.retrieved ? (
+                        <div>
+                          {!this.state.data.viewed &&
+                            !this.state.data.expired &&
+                            !this.state.data.cancelled ? (
+                              <div>
+                                <br />
+                                <h3>
+                                  Congratulations, you got the order!
                               <br />
-                            </h3>
-                            <br />
-                            <h5>
-                              Please take a screenshot of this page as the
-                              following information will be deleted after
+                                </h3>
+                                <br />
+                                <h5>
+                                  Please take a screenshot of this page as the
+                                  following information will be deleted after
                               refresh.{" "}
-                            </h5>
-                            <br />
-                            <b>Delivery From:</b> {this.state.data.unit}{" "}
-                            <a
-                              href={
-                                "https://maps.google.com/?q=" +
-                                this.state.data.street
-                              }
-                            >
-                              {this.state.data.street}
-                            </a>
-                            <br />
-                            <b>Delivery To:</b> {this.state.data.unit_to}{" "}
-                            <a
-                              href={
-                                "https://maps.google.com/?q=" +
-                                this.state.data.street_to
-                              }
-                            >
-                              {this.state.data.street_to}
-                            </a>
-                            <br />
-                            <b>Hawker Contact:</b> {this.state.data.contact}
-                            <br />
-                            <b>Customer Contact:</b>{" "}
-                            {this.state.data.contact_to}
-                            <br />
-                            {this.state.data.time ? (
-                              <div>
-                                <b>Pickup Time:</b>
-                                {dayName[
-                                  this.state.data.time.toDate().getDay()
-                                ] +
-                                  " " +
-                                  this.state.data.time.toDate().getDate() +
-                                  " " +
-                                  monthNames[
-                                    this.state.data.time.toDate().getMonth()
-                                  ] +
-                                  " " +
-                                  formatAMPM(this.state.data.time.toDate())}
-                              </div>
-                            ) : null}
-                            <b>Note from Requester:</b> {this.state.data.note}
-                            <br />
-                            <b>Distance:</b> {this.state.data.distance}
-                            <br />
-                            {this.state.data.duration ? (
-                              <div>
-                                <b>Est. Duration:</b> {this.state.data.duration}
-                                <br />{" "}
-                              </div>
-                            ) : null}
-                            {this.state.data.arrival ? (
-                              <div>
-                                <b>Est. Arrival Time:</b>{" "}
-                                {this.state.data.arrival}
-                                <br />{" "}
-                              </div>
-                            ) : null}
-                            <b>Estimated Fee:</b> ${this.state.data.cost}
-                            <br /> <br />
-                            <b>
-                              <h4>
-                                Contact the hawker directly to arrange delivery
+                                </h5>
+                                <br />
+                                <b>Delivery From:</b> {this.state.data.unit}{" "}
+                                <a
+                                  href={
+                                    "https://maps.google.com/?q=" +
+                                    this.state.data.street
+                                  }
+                                >
+                                  {this.state.data.street}
+                                </a>
+                                <br />
+                                <b>Delivery To:</b> {this.state.data.unit_to}{" "}
+                                <a
+                                  href={
+                                    "https://maps.google.com/?q=" +
+                                    this.state.data.street_to
+                                  }
+                                >
+                                  {this.state.data.street_to}
+                                </a>
+                                <br />
+                                <b>Hawker Contact:</b> {this.state.data.contact}
+                                <br />
+                                <b>Customer Contact:</b>{" "}
+                                {this.state.data.contact_to}
+                                <br />
+                                {this.state.data.time ? (
+                                  <div>
+                                    <b>Pickup Time:</b>
+                                    {dayName[
+                                      this.state.data.time.toDate().getDay()
+                                    ] +
+                                      " " +
+                                      this.state.data.time.toDate().getDate() +
+                                      " " +
+                                      monthNames[
+                                      this.state.data.time.toDate().getMonth()
+                                      ] +
+                                      " " +
+                                      formatAMPM(this.state.data.time.toDate())}
+                                  </div>
+                                ) : null}
+                                <b>Note from Requester:</b> {this.state.data.note}
+                                <br />
+                                <b>Distance:</b> {this.state.data.distance}
+                                <br />
+                                {this.state.data.duration ? (
+                                  <div>
+                                    <b>Est. Duration:</b> {this.state.data.duration}
+                                    <br />{" "}
+                                  </div>
+                                ) : null}
+                                {this.state.data.arrival ? (
+                                  <div>
+                                    <b>Est. Arrival Time:</b>{" "}
+                                    {this.state.data.arrival}
+                                    <br />{" "}
+                                  </div>
+                                ) : null}
+                                <b>Estimated Fee:</b> ${this.state.data.cost}
+                                <br /> <br />
+                                <b>
+                                  <h4>
+                                    Contact the hawker directly to arrange delivery
                               </h4>
-                            </b>
-                            <br /> <br />
-                            <small>
-                              For technical problems, please email us at
-                              foodleh@outlook.com
+                                </b>
+                                <br /> <br />
+                                <small>
+                                  For technical problems, please email us at
+                                  foodleh@outlook.com
                             </small>
-                          </div>
-                        ) : (
-                          <div>
-                            {this.state.data.viewed ? (
-                              <h3>
-                                <br />
-                                <br />
-                                Sorry, someone has already taken the order
-                                <br />
-                              </h3>
+                              </div>
                             ) : (
-                              <h3>
-                                <br />
-                                <br />
+                              <div>
+                                {this.state.data.viewed ? (
+                                  <h3>
+                                    <br />
+                                    <br />
+                                Sorry, someone has already taken the order
+                                    <br />
+                                  </h3>
+                                ) : (
+                                    <h3>
+                                      <br />
+                                      <br />
                                 Sorry, this order has expired
-                                <br />
-                              </h3>
+                                      <br />
+                                    </h3>
+                                  )}
+                              </div>
                             )}
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div>
-                        <br />
-                        <br />
-                        <h3>Loading</h3>
-                        <Spinner class="" animation="grow" />
-                      </div>
-                    )}
-                  </div>
-                )}
+                        </div>
+                      ) : (
+                            <div>
+                              <br />
+                              <br />
+                              <h3>Loading</h3>
+                              <Spinner class="" animation="grow" />
+                            </div>
+                          )}
+                    </div>
+                  )}
               </div>
             </div>
           </div>
