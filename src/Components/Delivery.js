@@ -1,16 +1,21 @@
 import React from "react";
 import "../App.css";
 import { withRouter } from "react-router-dom";
-import firebase from "./Firestore";
+import { firebase, uiConfig } from "./Firestore";
 import { Form, Button } from "react-bootstrap";
 import { db } from "./Firestore";
 import queryString from "query-string";
 import { Spinner } from "react-bootstrap";
 import driver from "../driver.png";
 import Cookies from "universal-cookie";
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 const cookies = new Cookies();
 
 const analytics = firebase.analytics();
+
+function getPhoneNumberFromUserInput() {
+  return document.getElementById("phone-number").value;
+}
 
 function onLoad(name) {
   analytics.logEvent(name);
@@ -94,17 +99,47 @@ export class Delivery extends React.Component {
       cancel: queryString.parse(this.props.location.search).cancel,
       pickup_option: false,
       submitted: false,
+      firebaseUser: null,
       driver_contact: cookies.get("driver_contact")
         ? cookies.get("driver_contact")
         : "",
-      driver_name: cookies.get("driver_name")
-        ? cookies.get("driver_name")
-        : "",
+      driver_name: cookies.get("driver_name") ? cookies.get("driver_name") : "",
       payment: cookies.get("payment") ? cookies.get("payment") : "",
       paynow_alternate: cookies.get("paynow_alternate")
         ? cookies.get("paynow_alternate")
         : "",
     };
+  }
+
+  componentDidMount() {
+    // Set up Firebase reCAPTCHA
+    // To apply the default browser preference instead of explicitly setting it.
+    firebase.auth().useDeviceLanguage();
+    console.log(firebase.auth().languageCode);
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+      "recaptcha-container",
+      {
+        size: "invisible",
+        callback: function (response) {
+          // reCAPTCHA solved
+        },
+      }
+    );
+
+    firebase.auth().onAuthStateChanged(
+      function (user) {
+        if (user) {
+          // User is signed in, set state
+          // More auth information can be obtained here but for verification purposes, we just need to know user signed in
+          this.setState({
+            firebaseUser: user,
+            driver_contact: user.phoneNumber.slice(3),
+          });
+        } else {
+          // No user is signed in.
+        }
+      }.bind(this)
+    );
   }
 
   componentWillMount() {
@@ -140,58 +175,6 @@ export class Delivery extends React.Component {
         console.log(error);
       });
   };
-
-  // getDoc = () => {
-  //   return db
-  //     .collection("deliveries")
-  //     .doc(this.state.id)
-  //     .get()
-  //     .then(async (snapshot) => {
-  //       if (snapshot.exists) {
-  //         this.setState({ data: snapshot.data(), retrieved: true });
-  //       }
-  //       onLoad("info_load", snapshot.data().name);
-  //       if (
-  //         !snapshot.data().viewed &&
-  //         !snapshot.data().cancelled &&
-  //         !snapshot.data().expired
-  //       ) {
-  //         await db
-  //           .collection("deliveries")
-  //           .doc(this.state.id)
-  //           .update({ viewed: true })
-  //           .then(async (d) => {
-  //             await this.sendData({
-  //               message_id: snapshot.data().message_id,
-  //               driver_mobile: this.state.driver_contact,
-  //               requester_mobile: snapshot.data().contact,
-  //               customer_mobile: snapshot.data().contact_to,
-  //               origin: snapshot.data().unit + " " + snapshot.data().street,
-  //               destination:
-  //                 snapshot.data().unit_to + " " + snapshot.data().street_to,
-  //               time:
-  //                 snapshot.data().time &&
-  //                 typeof snapshot.data().time !== "string"
-  //                   ? dayName[snapshot.data().time.toDate().getDay()] +
-  //                     " " +
-  //                     snapshot.data().time.toDate().getDate() +
-  //                     " " +
-  //                     monthNames[snapshot.data().time.toDate().getMonth()] +
-  //                     " " +
-  //                     formatAMPM(snapshot.data().time.toDate())
-  //                   : null,
-  //               note: snapshot.data().note,
-  //               cost: snapshot.data().cost,
-  //               arrival: snapshot.data().arrival
-  //             });
-  //           });
-  //       }
-  //       return true;
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
 
   cancelData = async (query) => {
     let urls = [
@@ -261,9 +244,32 @@ export class Delivery extends React.Component {
     }
   };
 
+  handleVerify = async (event) => {
+    event.preventDefault();
+    //cookies.set("driver_contact", this.state.driver_contact, { path: "/" });
+    // Handle Firebase phone number-OTP verification
+    var phoneNumber = getPhoneNumberFromUserInput();
+    var appVerifier = window.recaptchaVerifier;
+    firebase
+      .auth()
+      .signInWithPhoneNumber(phoneNumber, appVerifier)
+      .then(function (confirmationResult) {
+        // SMS sent
+        window.confirmationResult = confirmationResult;
+      })
+      .catch(function (error) {
+        // Error; SMS not sent
+        // Reset reCAPTCHA so user can try again
+        console.log("error, sms not sent");
+      });
+  };
+
   handleSubmit = async (event) => {
     event.preventDefault();
-    this.setState({ submitted: true });
+    this.setState({
+      submitted: true,
+      driver_contact: this.state.firebaseUser.phoneNumber.slice(3),
+    });
     cookies.set("driver_contact", this.state.driver_contact, { path: "/" });
     cookies.set("driver_name", this.state.driver_name, { path: "/" });
     cookies.set("paynow_alternate", this.state.paynow_alternate, { path: "/" });
@@ -312,7 +318,9 @@ export class Delivery extends React.Component {
       const checked = target.checked;
       this.setState({ [name]: checked });
     } else {
-      this.setState({ [name]: value });
+      this.setState({
+        [name]: value,
+      });
     }
   };
 
@@ -345,7 +353,7 @@ export class Delivery extends React.Component {
                   <div>
                     {!this.state.submitted ? (
                       <Form onSubmit={this.handleSubmit.bind(this)}>
-                        <br />
+                        {/* <br />
                         <label for="unit">Your Name:</label>
                         <div class="input-group">
                           <input
@@ -357,8 +365,8 @@ export class Delivery extends React.Component {
                             placeholder="e.g. Tan Xiao Ming"
                             required
                           ></input>
-                        </div>
-                        <br />
+                        </div> */}
+                        {/* <br />
                         <label for="unit">Mobile Number:</label>
                         <div class="input-group">
                           <div class="input-group-prepend">
@@ -373,6 +381,47 @@ export class Delivery extends React.Component {
                             class="form-control"
                             name="driver_contact"
                             placeholder="9xxxxxxx"
+                            required
+                          ></input>
+                        </div> */}
+                        <br />
+
+                        {/* Separate handler for verifying mobile number with OTP */}
+                        {/* Check if user is already logged in with Firebase */}
+                        <div
+                          style={{
+                            display: this.state.firebaseUser ? "none" : "block",
+                          }}
+                        >
+                          <div>
+                            <p>Verify Mobile Number</p>
+                            <StyledFirebaseAuth
+                              uiConfig={uiConfig}
+                              firebaseAuth={firebase.auth()}
+                            />
+                          </div>
+                          <div id="recaptcha-container"></div>
+                          <br />
+                        </div>
+                        <br />
+                        {this.state.firebaseUser ? (
+                          <div>
+                            <p>
+                              Already verified phone number:{" "}
+                              {this.state.firebaseUser.phoneNumber}
+                            </p>
+                          </div>
+                        ) : null}
+
+                        <label for="unit">Your Name:</label>
+                        <div class="input-group">
+                          <input
+                            onChange={this.handleChange}
+                            value={this.state.driver_name}
+                            type="text"
+                            class="form-control"
+                            name="driver_name"
+                            placeholder="e.g. Tan Xiao Ming"
                             required
                           ></input>
                         </div>
@@ -403,13 +452,20 @@ export class Delivery extends React.Component {
                             ></input>
                           </div>
                         ) : null}
-                        <br />
                         <Button
                           class="shadow-lg"
+                          disabled={this.state.firebaseUser === null}
                           style={{
-                            backgroundColor: "green",
-                            borderColor: "green",
+                            backgroundColor: !(this.state.firebaseUser === null)
+                              ? "green"
+                              : "grey",
+                            borderColor: !(this.state.firebaseUser === null)
+                              ? "green"
+                              : "grey",
                             fontSize: "25px",
+                            cursor: !(this.state.firebaseUser === null)
+                              ? "pointer"
+                              : "not-allowed",
                           }}
                           type="Submit"
                         >
