@@ -1350,10 +1350,13 @@ export class ListForm extends React.Component {
                               <input
                                 onChange={this.handleChange}
                                 value={this.state.contact}
-                                type="number"
+                                type="tel"
                                 class="form-control"
                                 name="contact"
                                 placeholder="9xxxxxxx"
+                                maxLength="8"
+                                minlength="8"
+                                pattern="[6-9]{1}[0-9]{7}"
                                 required
                               ></input>
                             </div>
