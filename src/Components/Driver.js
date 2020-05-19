@@ -589,6 +589,7 @@ export class Driver extends React.Component {
                               placeholder="Enter Postal Code 邮区编号"
                               min="0"
                               required
+                              autocomplete="postal"
                               maxLength="6"
                             />
                           </div>
@@ -612,6 +613,7 @@ export class Driver extends React.Component {
                               min="0"
                               required
                               maxLength="6"
+                              autocomplete="postal_to"
                               style={{ padding: "0px 10px" }}
                             />
                           </div>
@@ -853,7 +855,7 @@ export class Driver extends React.Component {
                     <div class="row">
                       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <div class="form-group create-title">
-                          <label for="postalcode">Postal Code 邮区编号 </label>
+                          <label for="postal_to">Postal Code 邮区编号 </label>
                           <div class="input-group">
                             <input
                               onChange={this.handleChange.bind(this)}
