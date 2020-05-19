@@ -118,7 +118,7 @@ const addData = async ({
 };
 
 const time_now = new Date();
-time_now.setHours(time_now.getHours() + 1);
+time_now.setMinutes(time_now.getMinutes() + 30)
 // var time_now_plus = time_now.toLocaleString('en-US')
 
 export class Driver extends React.Component {
