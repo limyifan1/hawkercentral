@@ -147,16 +147,16 @@ exports.telegramSend = functions
         "\n" +
         "<b>Click to Accept (first come first serve): </b>" +
         url +
-        "\n (request expires 30 minutes before pickup)";
+        "\n (request expires 15 minutes before pickup)";
 
-      let sent = await bot.telegram.sendMessage("@foodlehdelivery", message, {
+      let sent = await bot.telegram.sendMessage("@foodlehdev", message, {
         parse_mode: "HTML",
       });
 
       await twilio.messages
         .create({
           body:
-            "Request received & expire 30 minutes before pickup.  我们已收到您的要求并在取食物时间的三十分钟前自动取消. To Cancel 马上取消: " +
+            "Request received & expire 15 minutes before pickup.  我们已收到您的要求并在取食物时间的三十分钟前自动取消. To Cancel 马上取消: " +
             cancel +
             ".",
           from: "+12015847715",
@@ -265,7 +265,7 @@ exports.telegramEdit = functions
 
       var message = "<b>A driver has picked up this order! </b>";
       await bot.telegram
-        .editMessageText("@foodlehdelivery", message_id, "", message, {
+        .editMessageText("@foodlehdev", message_id, "", message, {
           parse_mode: "HTML",
         })
         .then(() => {
@@ -284,7 +284,7 @@ exports.telegramCancel = functions
 
       var message = "<b>The hawker has cancelled this request. </b>";
       await bot.telegram
-        .editMessageText("@foodlehdelivery", message_id, "", message, {
+        .editMessageText("@foodlehdev", message_id, "", message, {
           parse_mode: "HTML",
         })
         .then(() => {
@@ -321,7 +321,7 @@ exports.taskRunner = functions
     tasks.forEach((snapshot) => {
       const { message_id } = snapshot.data();
       var expiry = new Date(
-        snapshot.data().time.toDate().getTime() - 30 * 60000
+        snapshot.data().time.toDate().getTime() - 15 * 60000
       );
       var now = new Date();
       console.log(message_id, now - expiry);
@@ -330,7 +330,7 @@ exports.taskRunner = functions
         const job1 = snapshot.ref.update({ expired: true });
         console.log(message_id + " expired");
         const job2 = bot.telegram.editMessageText(
-          "@foodlehdelivery",
+          "@foodlehdev",
           message_id,
           "",
           message,
