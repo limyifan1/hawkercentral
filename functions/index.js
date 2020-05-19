@@ -209,13 +209,13 @@ exports.telegramEdit = functions
       await twilio.messages
         .create({
           body:
-            "Driver Accepted \n Driver No.: +65" +
+            "Driver Accepted \nDriver No.: +65" +
             driver_mobile +
-            "\n Name: " +
+            "\nName: " +
             driver_name +
-            "\n Cost: $" +
+            "\nCost: $" +
             cost +
-            "\n Pickup: " +
+            "\nPickup: " +
             time +
             "\nDriver will give last 4 digits of cust's HP no.: " +
             customer_mobile,
@@ -232,7 +232,7 @@ exports.telegramEdit = functions
           body:
             "Order Confirmed: " +
             time +
-            " \n " +
+            " \n" +
             "Stall: " +
             requester_mobile +
             "\n" +
