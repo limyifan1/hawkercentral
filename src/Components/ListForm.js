@@ -312,7 +312,14 @@ export class ListForm extends React.Component {
   componentWillMount() {
     this.getFirestoreData();
     this.getTags();
-    if (this.props.toggle === "edit") {
+    if (this.props.toggle === "create") {
+      if (localStorage.getItem("createFormData")) {
+        this.setState(JSON.parse(localStorage.getItem("createFormData")));
+      } else {
+        // initialise localStorage for the first time
+        localStorage.setItem("createFormData", JSON.stringify(this.state));
+      }
+    } else if (this.props.toggle === "edit") {
       this.setState(this.getInitialState());
       const initialState = this.getInitialState();
       this.initialState = { ...this.initialState, ...initialState };
@@ -329,6 +336,14 @@ export class ListForm extends React.Component {
     }
   }
 
+  saveStateToLocalStorage(name, value) {
+    if (this.props.toggle === "create") {
+      const storedData = JSON.parse(localStorage.getItem("createFormData"));
+      storedData[name] = value;
+      localStorage.setItem("createFormData", JSON.stringify(storedData));
+    }
+  }
+
   async getPostal(postal) {
     // event.preventDefault();
     let data = await this.callPostal(postal);
@@ -338,6 +353,9 @@ export class ListForm extends React.Component {
         longitude: data["LONGITUDE"],
         latitude: data["LATITUDE"],
       });
+      this.saveStateToLocalStorage("street", data["ADDRESS"]);
+      this.saveStateToLocalStorage("longitude", data["LONGITUDE"]);
+      this.saveStateToLocalStorage("latitude", data["LATITUDE"]);
     }
   }
 
@@ -516,6 +534,7 @@ export class ListForm extends React.Component {
     ) {
       const checked = target.checked;
       this.setState({ [name]: checked });
+      this.saveStateToLocalStorage(name, checked);
     } else if (name.slice(0, 8) === "menuitem") {
       // Check if menu_combined already has index to change in case user adds more items, else push it
       let current = this.state.menu_combined;
@@ -530,6 +549,7 @@ export class ListForm extends React.Component {
       this.setState({
         menu_combined: current,
       });
+      this.saveStateToLocalStorage("menu_combined", current);
     } else if (name.slice(0, 9) === "menuprice") {
       let current = this.state.menu_combined;
       let idxToChange = parseInt(name.slice(9));
@@ -543,8 +563,10 @@ export class ListForm extends React.Component {
       this.setState({
         menu_combined: current,
       });
+      this.saveStateToLocalStorage("menu_combined", current);
     } else {
       this.setState({ [name]: value });
+      this.saveStateToLocalStorage(name, value);
     }
   };
 
@@ -554,8 +576,10 @@ export class ListForm extends React.Component {
     if (name === "menu") {
       if (this.state.menu) {
         this.setState({ menu: false });
+        this.saveStateToLocalStorage("menu", false);
       } else {
         this.setState({ menu: true });
+        this.saveStateToLocalStorage("menu", true);
       }
     } else if (name === "moreMenuItems") {
       // User adds more menu_combined rows, 5 at a time
@@ -569,6 +593,7 @@ export class ListForm extends React.Component {
       this.setState({
         menu_combined: newMenucombined,
       });
+      this.saveStateToLocalStorage("menu_combined", newMenucombined);
     }
   };
 
@@ -684,6 +709,7 @@ export class ListForm extends React.Component {
                 .then((fireBaseUrl) => {
                   // console.log(fireBaseUrl);
                   this.setState({ [name]: fireBaseUrl });
+                  this.saveStateToLocalStorage(name, fireBaseUrl);
                 });
             }
           );
@@ -757,6 +783,7 @@ export class ListForm extends React.Component {
 
   handleMultiChange(option) {
     this.setState((state) => {
+      this.saveStateToLocalStorage("delivery", option);
       return {
         delivery: option,
       };
@@ -765,24 +792,33 @@ export class ListForm extends React.Component {
 
   handleRegionChange(option) {
     this.setState((state) => {
+      const newRegion = option ? option : [];
+      this.saveStateToLocalStorage("region", newRegion);
+
       return {
-        region: option ? option : [],
+        region: newRegion,
       };
     });
   }
 
   handleCuisineChange(option) {
     this.setState((state) => {
+      const newCuisineValue = option ? option : [];
+      this.saveStateToLocalStorage("cuisineValue", newCuisineValue);
+
       return {
-        cuisineValue: option ? option : [],
+        cuisineValue: newCuisineValue,
       };
     });
   }
 
   handleTagsChange(option) {
+    const newTagsValue = option ? option : [];
+    this.saveStateToLocalStorage("tagsValue", newTagsValue);
+
     this.setState((state) => {
       return {
-        tagsValue: option ? option : [],
+        tagsValue: newTagsValue,
       };
     });
   }
@@ -1553,7 +1589,7 @@ export class ListForm extends React.Component {
                                       </label>
                                       <textarea
                                         onChange={this.handleChange}
-                                        value={this.state.deliverydetails}
+                                        value={this.state.delivery_detail}
                                         type="text"
                                         class="form-control"
                                         name="delivery_detail"
