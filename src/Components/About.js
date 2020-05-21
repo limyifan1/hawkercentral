@@ -137,7 +137,7 @@ export class About extends React.Component {
                         (Feel free to send pull requests)
                         <br />
                         <br />
-                        &copy; 2020 Foodleh? by Yi Fan and Cheeps
+                        &copy; 2020 Foodleh? by Yi Fan, Cheeps, and Team
                         <br />
                         <br />
                         <br />
