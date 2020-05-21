@@ -244,7 +244,7 @@ export class ListForm extends React.Component {
       isLoading: false,
     };
 
-    this.initialState = _.cloneDeep(this.state);
+    this.initialState = {};
 
     this.handleRegionChange = this.handleRegionChange.bind(this);
     this.handleMultiChange = this.handleMultiChange.bind(this);
@@ -253,6 +253,7 @@ export class ListForm extends React.Component {
     this.handleCreate = this.handleCreate.bind(this);
     // this.handleImageAsFile = this.handleImageAsFile.bind(this);
     this.handleFireBaseUpload = this.handleFireBaseUpload.bind(this);
+    this.handleClear = this.handleClear.bind(this);
   }
 
   getInitialState() {
@@ -312,11 +313,12 @@ export class ListForm extends React.Component {
   componentWillMount() {
     this.getFirestoreData();
     this.getTags();
+    this.initialState = _.cloneDeep(this.state);
+
     if (this.props.toggle === "create") {
       if (localStorage.getItem("createFormData")) {
         this.setState(JSON.parse(localStorage.getItem("createFormData")));
       } else {
-        // initialise localStorage for the first time
         localStorage.setItem("createFormData", JSON.stringify(this.state));
       }
     } else if (this.props.toggle === "edit") {
@@ -516,6 +518,12 @@ export class ListForm extends React.Component {
       }
     });
   };
+
+  handleClear() {
+    localStorage.setItem("createFormData", JSON.stringify(this.initialState));
+    this.setState(_.cloneDeep(this.initialState));
+    window.scrollTo(0, 0);
+  }
 
   handleChange = (event) => {
     const target = event.target;
@@ -1856,6 +1864,19 @@ export class ListForm extends React.Component {
                               ) : (
                                 context.data.create.submit
                               )}
+                            </Button>
+                            <Button
+                              class="shadow-sm"
+                              style={{
+                                backgroundColor: "#ffffff",
+                                borderColor: "#b48300",
+                                color: "#b48300",
+                                marginLeft: "10px",
+                              }}
+                              onClick={this.handleClear}
+                              disabled={this.state.isLoading}
+                            >
+                              Clear
                             </Button>
                           </div>
                         </div>
