@@ -49,7 +49,7 @@
     "rxjs": "6.5.5",
     "ua-parser-js": "0.7.21",
     "universal-cookie": "4.0.3",
-    "vercel": "^19.0.1"
+    "vercel": "19.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -84,7 +84,7 @@
   "devDependencies": {
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
-    "@loopback/cli": "2.6.0",
+    "@loopback/cli": "2.7.1",
     "eslint": "6.8.0",
     "husky": "4.2.5",
     "prettier": "2.0.5"
