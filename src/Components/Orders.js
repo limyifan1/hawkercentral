@@ -6,11 +6,16 @@ import { Button } from "react-bootstrap";
 import { db } from "./Firestore";
 import queryString from "query-string";
 import Cookies from "universal-cookie";
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 
 const cookies = new Cookies();
 
 const analytics = firebase.analytics();
+
+function onLoad(name, item) {
+  analytics.logEvent(name, { name: item });
+}
+
 const dayName = [
   "Sunday",
   "Monday",
@@ -88,6 +93,7 @@ export class Orders extends React.Component {
             firebaseUser: user,
             hawker_contact: user.phoneNumber.slice(3),
           });
+          onLoad("hawker_dashboard", user.phoneNumber.slice(3));
         } else {
           // No user is signed in.
         }
@@ -104,42 +110,58 @@ export class Orders extends React.Component {
   getDoc = () => {
     return db
       .collection("deliveries")
-      .where("contact", "==", this.state.firebaseUser.phoneNumber.slice(3).toString())
+      .where(
+        "contact",
+        "==",
+        this.state.firebaseUser.phoneNumber.slice(3).toString()
+      )
       .get()
       .then(async (snapshot) => {
         var dataToReturn = [];
         snapshot.forEach((d) => {
-          //dataToReturn.push(d.data());
-          var pickupTime = d.data().time.toDate();
-          var time = dayName[pickupTime.getDay()] + " " +
-            " " + monthNames[pickupTime.getMonth()] + " " +
-            pickupTime.getDate() + " " + formatAMPM(pickupTime);
-          dataToReturn.push(
-            <div style={{textAlign: "left"}}>
-              <br />
-              <b>Driver contact: </b>{d.data().driver_contact}
-              <br />
-              <b>Customer address: </b>{d.data().street_to}
-              <br />
-              <b>Note: </b>{d.data().note}
-              <br />
-              <b>Delivery fee: </b>${d.data().cost}
-              <br />
-              <b>Pickup Time: </b>{time}
-              <hr
-                style={{
-                  color: "#b48300",
-                  backgroundColor: "#b48300",
-                  height: "1px",
-                  borderColor: "#b48300",
-                  width: "100%",
-                  alignItems: "center",
-                }}
-              />
-            </div>
-          );
+          console.log(typeof d.data().time);
+          if (typeof d.data().time !== "string" && d.data().time) {
+            var pickupTime = d.data().time.toDate();
+            var time =
+              dayName[pickupTime.getDay()] +
+              " " +
+              " " +
+              monthNames[pickupTime.getMonth()] +
+              " " +
+              pickupTime.getDate() +
+              " " +
+              formatAMPM(pickupTime);
+            dataToReturn.push(
+              <div style={{ textAlign: "left" }}>
+                <br />
+                <b>Driver contact: </b>
+                {d.data().driver_contact}
+                <br />
+                <b>Customer address: </b>
+                {d.data().street_to}
+                <br />
+                <b>Note: </b>
+                {d.data().note}
+                <br />
+                <b>Delivery fee: </b>${d.data().cost}
+                <br />
+                <b>Pickup Time: </b>
+                {time}
+                <hr
+                  style={{
+                    color: "#b48300",
+                    backgroundColor: "#b48300",
+                    height: "1px",
+                    borderColor: "#b48300",
+                    width: "100%",
+                    alignItems: "center",
+                  }}
+                />
+              </div>
+            );
+          }
         });
-        this.setState({ deliveryData: dataToReturn, });
+        this.setState({ deliveryData: dataToReturn });
         return dataToReturn;
       })
       .catch((error) => {
@@ -167,13 +189,12 @@ export class Orders extends React.Component {
       });
   };
 
-  // After hawker is verified, let them enter dashboard page 
+  // After hawker is verified, let them enter dashboard page
   handleSubmit = async (event) => {
     event.preventDefault();
     this.setState({ submitted: true });
     cookies.set("hawker_contact", this.state.hawker_contact, { path: "/" });
     await this.getDoc().then(async (data) => {});
-
   };
 
   handleChange = (event) => {
@@ -246,10 +267,8 @@ export class Orders extends React.Component {
                   }}
                 >
                   See Your Delivery Requests
-                  </Button>
-                <div>
-                  {this.state.deliveryData}
-                </div>
+                </Button>
+                <div>{this.state.deliveryData}</div>
               </div>
             </div>
           </div>
