@@ -4,10 +4,11 @@
 // License text available at https://opensource.org/licenses/MIT
 const firebase = require("firebase");
 require("firebase/firestore");
-require('firebase/auth');
-require('firebase/storage');
-if (typeof window !== 'undefined') {
-  require('firebase/analytics');
+require("firebase/auth");
+require("firebase/storage");
+
+if (typeof window !== "undefined") {
+  require("firebase/analytics");
 }
 
 const geofirex = require("geofirex");
@@ -58,4 +59,4 @@ module.exports = {
   geo, geoToPromise,
   db, storage, firebase, uiConfig,
   default: firebase,
-}
+};
