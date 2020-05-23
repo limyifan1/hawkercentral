@@ -300,22 +300,19 @@ export class Info extends React.Component {
       text + "\nCustomer phone number: *" + this.state.customerNumber + "*";
     text = text + "\nOrdering from: www.foodleh.app/info?id=" + this.state.id;
 
-    if (this.state.data.name === "Shi De Fu") {
-      const storeData = new URLSearchParams();
-      storeData.append("postal", this.state.data.postal);
-      storeData.append("street", this.state.data.street);
-      storeData.append("unit", this.state.data.unit);
-      storeData.append("contact", this.state.data.contact);
-
-      storeData.append("postal_to", this.state.postal);
-      storeData.append("street_to", this.state.street);
-      storeData.append("unit_to", this.state.unit);
-      storeData.append("contact_to", this.state.customerNumber);
-      var shortenedURL = await shorten(
-        "https://foodleh.app/driver?" + storeData.toString()
-      );
-      text = text + "\n For Hawker, get a driver here: " + shortenedURL;
-    }
+    const storeData = new URLSearchParams();
+    storeData.append("postal", this.state.data.postal);
+    storeData.append("street", this.state.data.street);
+    storeData.append("unit", this.state.data.unit);
+    storeData.append("contact", this.state.data.contact);
+    storeData.append("postal_to", this.state.postal);
+    storeData.append("street_to", this.state.street);
+    storeData.append("unit_to", this.state.unit);
+    storeData.append("contact_to", this.state.customerNumber);
+    var shortenedURL = await shorten(
+      "https://foodleh.app/driver?" + storeData.toString()
+    );
+    text = text + "\n For F&B Owner, request for a driver here: " + shortenedURL;
     return encodeURIComponent(text);
   };
 
