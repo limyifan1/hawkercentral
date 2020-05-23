@@ -22,7 +22,7 @@
     "google-map-react": "1.1.7",
     "immutability-helper": "3.0.2",
     "jimp": "0.10.3",
-    "rc-progress": "2.5.3",
+    "rc-progress": "2.6.1",
     "react": "16.13.1",
     "react-bootstrap": "1.0.1",
     "react-bootstrap-typeahead": "4.2.3",
