@@ -2031,7 +2031,7 @@
     npm-package-arg "^6.1.0"
     write-pkg "^3.1.0"
 
-"@lerna/project@^3.18.0":
+"@lerna/project@^3.21.0":
   version "3.21.0"
   resolved "https://registry.yarnpkg.com/@lerna/project/-/project-3.21.0.tgz#5d784d2d10c561a00f20320bcdb040997c10502d"
   integrity sha512-xT1mrpET2BF11CY32uypV2GPtPVm6Hgtha7D81GQP9iAitk9EccrdNjYGt5UBYASl4CIDXBRxwmTTVGfrCx82A==
@@ -2056,14 +2056,14 @@
   dependencies:
     npmlog "^4.1.2"
 
-"@loopback/cli@2.6.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@loopback/cli/-/cli-2.6.0.tgz#c3b400ebc1052705c899493bda68fd324145886f"
-  integrity sha512-s5H7TiN1Rf+SzaJaWAcZIOwE9y4vCQPzWUDcaRr8cecH7co1FjywXogq24e1tui4f3ZyBDLQo23YDh++FFr20Q==
+"@loopback/cli@2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@loopback/cli/-/cli-2.7.1.tgz#2766777a5bc77ffbdb81b7683254d5036d4f66d4"
+  integrity sha512-QqQM8xuSLiEH6Vm5VGGMNERL0LBb0Mve5YMq/9iX+opuEX0oRxeG1Znrw/aOu+qe4GJSjrmKW9aE3ESCwaxXYQ==
   dependencies:
-    "@lerna/project" "^3.18.0"
+    "@lerna/project" "^3.21.0"
     "@openapi-contrib/openapi-schema-to-json-schema" "^3.0.0"
-    "@phenomnomnominal/tsquery" "^4.0.0"
+    "@phenomnomnominal/tsquery" "^4.1.0"
     camelcase-keys "^6.2.2"
     chalk "^4.0.0"
     change-case "^4.1.1"
@@ -2078,8 +2078,7 @@
     minimist "^1.2.5"
     mkdirp "^1.0.4"
     natural-compare "^1.4.0"
-    p-event "^4.1.0"
-    pacote "^11.1.9"
+    pacote "^11.1.10"
     pluralize "^8.0.0"
     regenerate "^1.4.0"
     semver "^7.3.2"
@@ -2091,15 +2090,16 @@
     swagger2openapi "^6.0.3"
     tabtab "^3.0.2"
     tildify "^2.0.0"
-    ts-morph "^7.0.3"
-    typescript "~3.8.3"
+    ts-morph "^7.1.0"
+    typescript "~3.9.3"
     unicode-10.0.0 "^0.7.5"
     untildify "^4.0.0"
     update-notifier "^4.1.0"
     url-slug "^2.3.1"
     validate-npm-package-name "^3.0.0"
     write-file-atomic "^3.0.3"
-    yeoman-generator "^4.10.0"
+    yeoman-environment "^2.10.2"
+    yeoman-generator "^4.10.1"
 
 "@mapbox/point-geometry@^0.1.0":
   version "0.1.0"
@@ -2115,13 +2115,13 @@
     mkdirp "^0.5.1"
     rimraf "^2.5.2"
 
-"@material-ui/core@4.9.14":
-  version "4.9.14"
-  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-4.9.14.tgz#4388f82cf94554cd3a935774fc12820f3c607a8a"
-  integrity sha512-71oYrOpInx5honJ9GzZlygPjmsFhn7Bui61/SWLJsPTkMnfvuZfU3qVqlEHjXyDsnZ+uKmLAIdsrOYnphJxxXw==
+"@material-ui/core@4.10.0":
+  version "4.10.0"
+  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-4.10.0.tgz#e214e8f7981ff7975a918404b94508418642e463"
+  integrity sha512-yVlHe4b8AaoiTHhCOZeszHZ+T2iHU5DncdMGeNcQaaaO+q/Qrq0hxP3iFzTbgjRWnWwftEVQL668GRxcPJVRaQ==
   dependencies:
     "@babel/runtime" "^7.4.4"
-    "@material-ui/styles" "^4.9.14"
+    "@material-ui/styles" "^4.10.0"
     "@material-ui/system" "^4.9.14"
     "@material-ui/types" "^5.1.0"
     "@material-ui/utils" "^4.9.12"
@@ -2140,10 +2140,10 @@
   dependencies:
     "@babel/runtime" "^7.4.4"
 
-"@material-ui/styles@^4.9.14":
-  version "4.9.14"
-  resolved "https://registry.yarnpkg.com/@material-ui/styles/-/styles-4.9.14.tgz#0a9e93a2bf24e8daa0811411a6f3dabdafbe9a07"
-  integrity sha512-zecwWKgRU2VzdmutNovPB4s5LKI0TWyZKc/AHfPu9iY8tg4UoLjpa4Rn9roYrRfuTbBZHI6b0BXcQ8zkis0nzQ==
+"@material-ui/styles@^4.10.0":
+  version "4.10.0"
+  resolved "https://registry.yarnpkg.com/@material-ui/styles/-/styles-4.10.0.tgz#2406dc23aa358217aa8cc772e6237bd7f0544071"
+  integrity sha512-XPwiVTpd3rlnbfrgtEJ1eJJdFCXZkHxy8TrdieaTvwxNYj42VnnCyFzxYeNW9Lhj4V1oD8YtQ6S5Gie7bZDf7Q==
   dependencies:
     "@babel/runtime" "^7.4.4"
     "@emotion/hash" "^0.8.0"
@@ -2281,7 +2281,7 @@
   dependencies:
     deep-equal "^1.0.1"
 
-"@phenomnomnominal/tsquery@^4.0.0":
+"@phenomnomnominal/tsquery@^4.1.0":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@phenomnomnominal/tsquery/-/tsquery-4.1.0.tgz#9c836d6db829b5127ccc1ffd8e4c2ad08d600071"
   integrity sha512-+i1eqUJODVanUDuTdOPgnjErFg21DKGLstdRXp4LLGcSbO7c+3pwJPkmdSfbkh9gO6xaHJ/5ftSAMqEFJF5cGA==
@@ -3635,7 +3635,7 @@ babel-preset-react-app@^9.1.2:
     babel-plugin-macros "2.8.0"
     babel-plugin-transform-react-remove-prop-types "0.4.24"
 
-babel-runtime@6.x, babel-runtime@^6.23.0, babel-runtime@^6.26.0, babel-runtime@^6.5.0:
+babel-runtime@^6.23.0, babel-runtime@^6.26.0, babel-runtime@^6.5.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
   integrity sha1-llxwWGaOgrVde/4E/yM3vItWR/4=
@@ -10717,13 +10717,6 @@ p-each-series@^1.0.0:
   dependencies:
     p-reduce "^1.0.0"
 
-p-event@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/p-event/-/p-event-4.1.0.tgz#e92bb866d7e8e5b732293b1c8269d38e9982bf8e"
-  integrity sha512-4vAd06GCsgflX4wHN1JqrMzBh/8QZ4j+rzp0cd2scXRwuBEv+QR3wrVA5aLhWDLw4y2WgDKvzWF3CCLmVM1UgA==
-  dependencies:
-    p-timeout "^2.0.1"
-
 p-finally@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/p-finally/-/p-finally-1.0.0.tgz#3fbcfb15b899a44123b34b6dcc18b724336a2cae"
@@ -10800,13 +10793,6 @@ p-retry@^3.0.1:
   dependencies:
     retry "^0.12.0"
 
-p-timeout@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/p-timeout/-/p-timeout-2.0.1.tgz#d8dd1979595d2dc0139e1fe46b8b646cb3cdf038"
-  integrity sha512-88em58dDVB/KzPEx1X0N3LwFfYZPyDc4B6eF38M1rk9VTZMbxXXgjugz8mmwpS9Ox4BDZ+t6t3QP5+/gazweIA==
-  dependencies:
-    p-finally "^1.0.0"
-
 p-try@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-1.0.0.tgz#cbc79cdbaf8fd4228e13f621f2b1a237c1b207b3"
@@ -10827,7 +10813,7 @@ package-json@^6.3.0:
     registry-url "^5.0.0"
     semver "^6.2.0"
 
-pacote@^11.1.9:
+pacote@^11.1.10:
   version "11.1.10"
   resolved "https://registry.yarnpkg.com/pacote/-/pacote-11.1.10.tgz#cbd56a5a60c9cf472bc8ea7ba87112d749655dd4"
   integrity sha512-xJSSSxcHLo1CZJESvIZ2hbC5/5WP2oDHeUeTV2FvVDPOZG7+ixbxnV0n3TkdaUqlbC0RwnwMQ3wkJ/YywYM0Cg==
@@ -12208,13 +12194,12 @@ raw-body@2.4.0:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
-rc-progress@2.6.1:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/rc-progress/-/rc-progress-2.6.1.tgz#2e0babcb3fa48234267b5e6a3f67f14e53032ba6"
-  integrity sha512-GR+rWDv5b61VkGs7SxDvsaJo6vzTZ4j1Z1sX0C3kG4kPli9nUCXurx5jREJ2SllUKLrhesr914DuvBBtXOSr6g==
+rc-progress@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/rc-progress/-/rc-progress-3.0.0.tgz#cea324ce8fc31421cd815d94a4649a8a29f8f8db"
+  integrity sha512-dQv1KU3o6Vay604FMYMF4S0x4GNXAgXf1tbQ1QoxeIeQt4d5fUeB7Ri82YPu+G+aRvH/AtxYAlEcnxyVZ1/4Hw==
   dependencies:
-    babel-runtime "6.x"
-    prop-types "^15.5.8"
+    classnames "^2.2.6"
 
 rc@^1.2.8:
   version "1.2.8"
@@ -14647,7 +14632,7 @@ trim-off-newlines@^1.0.0:
   resolved "https://registry.yarnpkg.com/trim-off-newlines/-/trim-off-newlines-1.0.1.tgz#9f9ba9d9efa8764c387698bcbfeb2c848f11adb3"
   integrity sha1-n5up2e+odkw4dpi8v+sshI8RrbM=
 
-ts-morph@^7.0.3:
+ts-morph@^7.1.0:
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/ts-morph/-/ts-morph-7.1.0.tgz#cba07079a2dd92a7db2830d66f486764bc32a2ae"
   integrity sha512-BXlOdqTnCH5xQQRBHXfrE69/XTdVVEOoQZwZKdUpvbCrTMInilbUZjv9J8TdhekV/gloq2NqMgeQhIzdPZCiDA==
@@ -14767,12 +14752,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@~3.8.3:
-  version "3.8.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
-  integrity sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==
-
-typescript@~3.9.2:
+typescript@~3.9.2, typescript@~3.9.3:
   version "3.9.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.3.tgz#d3ac8883a97c26139e42df5e93eeece33d610b8a"
   integrity sha512-D/wqnB2xzNFIcoBG9FG8cXRDjiqSTbG2wd8DMZeQyJlP1vfTkIxH4GKveWaEBYySKIg+USu+E+EDIR47SqnaMQ==
@@ -15906,7 +15886,7 @@ yargs@^15.3.1:
     y18n "^4.0.0"
     yargs-parser "^18.1.1"
 
-yeoman-environment@^2.9.5:
+yeoman-environment@^2.10.2, yeoman-environment@^2.9.5:
   version "2.10.2"
   resolved "https://registry.yarnpkg.com/yeoman-environment/-/yeoman-environment-2.10.2.tgz#cfd1ffd28787b2058dde449fb8b31c290fab3158"
   integrity sha512-7HuUixYvGO1lVPjOZ0HOweL+WXuX7COEO0V5/R+K6Rsyy+hcl+PHMOcsUQMgq5BAGfRJo9CTt4EkE6iqH+SoQA==
@@ -15931,7 +15911,7 @@ yeoman-environment@^2.9.5:
     untildify "^3.0.3"
     yeoman-generator "^4.8.2"
 
-yeoman-generator@^4.10.0, yeoman-generator@^4.8.2:
+yeoman-generator@^4.10.1, yeoman-generator@^4.8.2:
   version "4.10.1"
   resolved "https://registry.yarnpkg.com/yeoman-generator/-/yeoman-generator-4.10.1.tgz#82853f55856ba14f180ab6c6a70acd89b11c956b"
   integrity sha512-QgbtHSaqBAkyJJM0heQUhT63ubCt34NBFMEBydOBUdAuy8RBvGSzeqVBSZOjdh1tSLrwWXlU3Ck6y14awinF6Q==
