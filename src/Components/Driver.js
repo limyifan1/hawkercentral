@@ -318,18 +318,31 @@ export class Driver extends React.Component {
   async getPostal(postal, direction) {
     // event.preventDefault();
     let data = await this.callPostal(postal);
+    console.log(data);
     if (data !== undefined) {
       if (direction === "to") {
         this.setState({
           street_to: data["ADDRESS"],
           longitude_to: data["LONGITUDE"],
           latitude_to: data["LATITUDE"],
+          invalidPostal_to: false,
         });
       } else {
         this.setState({
           street: data["ADDRESS"],
           longitude: data["LONGITUDE"],
           latitude: data["LATITUDE"],
+          invalidPostal: false,
+        });
+      }
+    } else {
+      if (direction === "to") {
+        this.setState({
+          invalidPostal_to: true,
+        });
+      } else {
+        this.setState({
+          invalidPostal: true,
         });
       }
     }
@@ -414,9 +427,9 @@ export class Driver extends React.Component {
   };
 
   componentWillMount() {
-    if (this.state.postal && this.state.postal_to) {
-      this.getDirections();
+    if (this.state.postal) {
       this.getMap();
+      if (this.state.postal_to) this.getDirections();
     }
     onLoad("find_driver");
   }
@@ -606,7 +619,7 @@ export class Driver extends React.Component {
                             <input
                               onChange={this.handleChange.bind(this)}
                               value={this.state.postal}
-                              type="number"
+                              type="text"
                               class={
                                 !this.state.postal
                                   ? "form-control is-invalid"
@@ -620,6 +633,18 @@ export class Driver extends React.Component {
                               maxLength="6"
                             />
                           </div>
+                          {this.state.invalidPostal ? (
+                            <div
+                              class="badge badge-danger"
+                              style={{ fontSize: "15px" }}
+                            >
+                              Postal Code is invalid
+                            </div>
+                          ) : (
+                            <div>
+                              <br />
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div class="p-6" style={{ padding: "0px 10px" }}>
@@ -629,7 +654,7 @@ export class Driver extends React.Component {
                             <input
                               onChange={this.handleChange.bind(this)}
                               value={this.state.postal_to}
-                              type="number"
+                              type="text"
                               class={
                                 !this.state.postal_to
                                   ? "form-control is-invalid"
@@ -644,6 +669,18 @@ export class Driver extends React.Component {
                               style={{ padding: "0px 10px" }}
                             />
                           </div>
+                          {this.state.invalidPostal_to ? (
+                            <div
+                              class="badge badge-danger"
+                              style={{ fontSize: "15px" }}
+                            >
+                              Postal Code is invalid
+                            </div>
+                          ) : (
+                            <div>
+                              <br />
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -768,7 +805,7 @@ export class Driver extends React.Component {
                             <input
                               onChange={this.handleChange.bind(this)}
                               value={this.state.postal}
-                              type="number"
+                              type="text"
                               class={
                                 !this.state.postal
                                   ? "form-control is-invalid"
@@ -886,7 +923,7 @@ export class Driver extends React.Component {
                             <input
                               onChange={this.handleChange.bind(this)}
                               value={this.state.postal_to}
-                              type="number"
+                              type="text"
                               class={
                                 !this.state.postal_to
                                   ? "form-control is-invalid"
