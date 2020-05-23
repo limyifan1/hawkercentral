@@ -69,7 +69,6 @@ export class Orders extends React.Component {
     // Set up Firebase reCAPTCHA
     // To apply the default browser preference instead of explicitly setting it.
     firebase.auth().useDeviceLanguage();
-    console.log(firebase.auth().languageCode);
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
       "recaptcha-container",
       {
@@ -110,10 +109,8 @@ export class Orders extends React.Component {
       .then(async (snapshot) => {
         var dataToReturn = [];
         snapshot.forEach((d) => {
-          console.log(d.data());
           //dataToReturn.push(d.data());
           var pickupTime = d.data().time.toDate();
-          console.log(pickupTime);
           var time = dayName[pickupTime.getDay()] + " " +
             " " + monthNames[pickupTime.getMonth()] + " " +
             pickupTime.getDate() + " " + formatAMPM(pickupTime);
@@ -173,18 +170,9 @@ export class Orders extends React.Component {
   // After hawker is verified, let them enter dashboard page 
   handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Submitted!");
     this.setState({ submitted: true });
     cookies.set("hawker_contact", this.state.hawker_contact, { path: "/" });
-    await this.getDoc().then(async (data) => {
-      // Display info returned from db query of all deliveries for logged in hawker_contact
-      if (data !== undefined) {
-        console.log("Successfully retrieved deliveries for this hawker");
-        console.log(data);
-      } else {
-        console.log("data is undefined for this hawker");
-      }
-    });
+    await this.getDoc().then(async (data) => {});
 
   };
 
@@ -196,11 +184,6 @@ export class Orders extends React.Component {
   };
 
   render() {
-    {
-      for (let i = 0; i < this.state.deliveryData; i = i + 1) {
-        console.log(this.state.deliveryData[i]);
-      }
-    }
     return (
       <div>
         <div
@@ -266,9 +249,7 @@ export class Orders extends React.Component {
                   </Button>
                 <div>
                   {this.state.deliveryData}
-
                 </div>
-
               </div>
             </div>
           </div>
