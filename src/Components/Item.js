@@ -4,10 +4,13 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import React from "react";
+import { withRouter } from "react-router-dom";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+
+import { LanguageContext } from "./themeContext";
+
 import "../App.css";
 import placeholder from "../placeholder.png";
-import { withRouter } from "react-router-dom";
-import { LanguageContext } from "./themeContext";
 
 export class Item extends React.Component {
   handleClick = async (event) => {
@@ -53,13 +56,14 @@ export class Item extends React.Component {
                   </span>
                 </div>
               ) : null}
-              <div style={{ height: "120px" }}>
-                {this.props.pic ? (
-                  <img src={this.thumbnail()} class="card-img-top" alt="" />
-                ) : (
-                  <img src={placeholder} class="card-img-top" alt="" />
-                )}
-              </div>
+              <LazyLoadImage
+                src={this.props.pic ? this.thumbnail() : placeholder} 
+                placeholderSrc={placeholder}
+                style={{ height: "120px" }}
+                class="card-img-top" 
+                height="120"
+                alt="" 
+              />
               {this.props.promo ? (
                 <div
                   style={{
