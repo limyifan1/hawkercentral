@@ -36,34 +36,30 @@ export class Item extends React.Component {
               style={{ margin: "5px" }}
               onClick={this.handleClick}
             >
-              {this.props.pic ? (
-                <div>
-                  {this.props.distance ? (
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "105px",
-                        right: "5px",
-                        zIndex: "1",
-                      }}
-                    >
-                      <span
-                        class="badge badge-info"
-                        style={{ backgroundColor: "#b48300" }}
-                      >
-                        {this.props.distance.slice(0, 4) + " km away"}
-                      </span>
-                    </div>
-                  ) : null}
-                  <div style={{ height: "120px" }}>
-                    <img src={this.thumbnail()} class="card-img-top" alt="" />
-                  </div>
+              {this.props.distance ? (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "105px",
+                    right: "5px",
+                    zIndex: "1",
+                  }}
+                >
+                  <span
+                    class="badge badge-info"
+                    style={{ backgroundColor: "#b48300" }}
+                  >
+                    {this.props.distance.slice(0, 4) + " km away"}
+                  </span>
                 </div>
-              ) : (
-                <div style={{ height: "120px" }}>
+              ) : null}
+              <div style={{ height: "120px" }}>
+                {this.props.pic ? (
+                  <img src={this.thumbnail()} class="card-img-top" alt="" />
+                ) : (
                   <img src={placeholder} class="card-img-top" alt="" />
-                </div>
-              )}
+                )}
+              </div>
               {this.props.promo ? (
                 <div
                   style={{
