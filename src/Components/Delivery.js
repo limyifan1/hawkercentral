@@ -99,6 +99,7 @@ export class Delivery extends React.Component {
       cancel: queryString.parse(this.props.location.search).cancel,
       pickup_option: false,
       submitted: false,
+      submitting: false,
       firebaseUser: null,
       driver_contact: cookies.get("driver_contact")
         ? cookies.get("driver_contact")
@@ -116,30 +117,33 @@ export class Delivery extends React.Component {
     // To apply the default browser preference instead of explicitly setting it.
     firebase.auth().useDeviceLanguage();
     console.log(firebase.auth().languageCode);
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-      "recaptcha-container",
-      {
-        size: "invisible",
-        callback: function (response) {
-          // reCAPTCHA solved
-        },
-      }
-    );
 
-    firebase.auth().onAuthStateChanged(
-      function (user) {
-        if (user) {
-          // User is signed in, set state
-          // More auth information can be obtained here but for verification purposes, we just need to know user signed in
-          this.setState({
-            firebaseUser: user,
-            driver_contact: user.phoneNumber.slice(3),
-          });
-        } else {
-          // No user is signed in.
+    if (!this.state.cancel) {
+      window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+        "recaptcha-container",
+        {
+          size: "invisible",
+          callback: function (response) {
+            // reCAPTCHA solved
+          },
         }
-      }.bind(this)
-    );
+      );
+
+      firebase.auth().onAuthStateChanged(
+        function (user) {
+          if (user) {
+            // User is signed in, set state
+            // More auth information can be obtained here but for verification purposes, we just need to know user signed in
+            this.setState({
+              firebaseUser: user,
+              driver_contact: user.phoneNumber.slice(3),
+            });
+          } else {
+            // No user is signed in.
+          }
+        }.bind(this)
+      );
+    }
   }
 
   componentWillMount() {
@@ -150,13 +154,18 @@ export class Delivery extends React.Component {
   }
 
   cancelDoc = async () => {
+    this.setState({ loadingCancel: true });
     await db
       .collection("deliveries")
       .doc(this.state.cancel)
       .get()
-      .then(async (snapshot) => {
-        if (snapshot.exists) {
+      .then((snapshot) => {
+        console.log(snapshot.data());
+        if (snapshot.data().viewed === true) {
+          this.setState({ cancel: "denied", loadingCancel: false });
+        } else {
           snapshot.ref.update({ cancelled: true });
+          this.setState({ loadingCancel: false });
           this.cancelData({ message_id: snapshot.data().message_id });
         }
       });
@@ -267,47 +276,55 @@ export class Delivery extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     this.setState({
-      submitted: true,
       driver_contact: this.state.firebaseUser.phoneNumber.slice(3),
+      submitting: true,
     });
     cookies.set("driver_contact", this.state.driver_contact, { path: "/" });
     cookies.set("driver_name", this.state.driver_name, { path: "/" });
     cookies.set("paynow_alternate", this.state.paynow_alternate, { path: "/" });
     cookies.set("payment", this.state.payment, { path: "/" });
-    await this.getDoc().then(async (data) => {
-      if (!data.viewed && !data.cancelled && !data.expired) {
-        await updateData({
-          viewed: true,
-          id: this.state.id,
-          driver_contact: this.state.driver_contact,
-          driver_name: this.state.driver_name,
-          paynow_alternate: this.state.paynow_alternate,
-        }).then(async (d) => {
-          await this.sendData({
-            message_id: data.message_id,
-            driver_mobile: this.state.driver_contact,
+    this.getDoc()
+      .then(async (data) => {
+        if (!data.viewed && !data.cancelled && !data.expired) {
+          await updateData({
+            viewed: true,
+            id: this.state.id,
+            driver_contact: this.state.driver_contact,
             driver_name: this.state.driver_name,
-            requester_mobile: data.contact,
-            customer_mobile: data.contact_to,
-            origin: data.unit + " " + data.street,
-            destination: data.unit_to + " " + data.street_to,
-            time:
-              data.time && typeof data.time !== "string"
-                ? dayName[data.time.toDate().getDay()] +
-                  " " +
-                  data.time.toDate().getDate() +
-                  " " +
-                  monthNames[data.time.toDate().getMonth()] +
-                  " " +
-                  formatAMPM(data.time.toDate())
-                : null,
-            note: data.note,
-            cost: data.cost,
-            arrival: data.arrival,
+            paynow_alternate: this.state.paynow_alternate,
+          }).then(async (d) => {
+            await this.sendData({
+              message_id: data.message_id,
+              driver_mobile: this.state.driver_contact,
+              driver_name: this.state.driver_name,
+              requester_mobile: data.contact,
+              customer_mobile: data.contact_to,
+              origin: data.unit + " " + data.street,
+              destination: data.unit_to + " " + data.street_to,
+              time:
+                data.time && typeof data.time !== "string"
+                  ? dayName[data.time.toDate().getDay()] +
+                    " " +
+                    data.time.toDate().getDate() +
+                    " " +
+                    monthNames[data.time.toDate().getMonth()] +
+                    " " +
+                    formatAMPM(data.time.toDate())
+                  : null,
+              note: data.note,
+              cost: data.cost,
+              arrival: data.arrival,
+              paynow_alternate: this.state.paynow_alternate,
+            });
           });
+        }
+      })
+      .then((d) => {
+        this.setState({
+          submitted: true,
+          submitting: false,
         });
-      }
-    });
+      });
   };
 
   handleChange = (event) => {
@@ -348,7 +365,18 @@ export class Delivery extends React.Component {
                 style={{ width: "100%", padding: "20px", margin: "20px" }}
               >
                 {this.state.cancel ? (
-                  <h2>You have successfully cancelled the request</h2>
+                  this.state.loadingCancel ? (
+                    <div class="d-flex row justify-content-center">
+                      <Spinner class="" animation="grow" />
+                    </div>
+                  ) : this.state.cancel === "denied" ? (
+                    <h2>
+                      A driver has already picked up this order. Please contact
+                      him/her to cancel.
+                    </h2>
+                  ) : (
+                    <h2>You have successfully cancelled the request</h2>
+                  )
                 ) : (
                   <div>
                     {!this.state.submitted ? (
@@ -452,25 +480,32 @@ export class Delivery extends React.Component {
                             ></input>
                           </div>
                         ) : null}
-                        <Button
-                          class="shadow-lg"
-                          disabled={this.state.firebaseUser === null}
-                          style={{
-                            backgroundColor: !(this.state.firebaseUser === null)
-                              ? "green"
-                              : "grey",
-                            borderColor: !(this.state.firebaseUser === null)
-                              ? "green"
-                              : "grey",
-                            fontSize: "25px",
-                            cursor: !(this.state.firebaseUser === null)
-                              ? "pointer"
-                              : "not-allowed",
-                          }}
-                          type="Submit"
-                        >
-                          Accept Order
-                        </Button>
+                        <br />
+                        {this.state.submitting ? (
+                          <Spinner class="" animation="grow" />
+                        ) : (
+                          <Button
+                            class="shadow-lg"
+                            disabled={this.state.firebaseUser === null}
+                            style={{
+                              backgroundColor: !(
+                                this.state.firebaseUser === null
+                              )
+                                ? "green"
+                                : "grey",
+                              borderColor: !(this.state.firebaseUser === null)
+                                ? "green"
+                                : "grey",
+                              fontSize: "25px",
+                              cursor: !(this.state.firebaseUser === null)
+                                ? "pointer"
+                                : "not-allowed",
+                            }}
+                            type="Submit"
+                          >
+                            Accept Order
+                          </Button>
+                        )}
                       </Form>
                     ) : this.state.retrieved ? (
                       <div>
@@ -552,7 +587,8 @@ export class Delivery extends React.Component {
                             <br /> <br />
                             <b>
                               <h4>
-                                Contact the hawker directly to arrange delivery
+                                Contact the hawker directly to arrange delivery.
+                                Provide last 4 digits of customer number.
                               </h4>
                             </b>
                             <br /> <br />
