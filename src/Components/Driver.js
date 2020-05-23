@@ -118,27 +118,51 @@ const addData = async ({
 };
 
 const time_now = new Date();
-time_now.setMinutes(time_now.getMinutes() + 30)
+time_now.setMinutes(time_now.getMinutes() + 30);
 // var time_now_plus = time_now.toLocaleString('en-US')
 
 export class Driver extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      postal: queryString.parse(this.props.location.search).postal ? queryString.parse(this.props.location.search).postal : (cookies.get("postal") ? cookies.get("postal") : ""),
-      postal_to: queryString.parse(this.props.location.search).postal_to ? queryString.parse(this.props.location.search).postal_to : '',
+      postal: queryString.parse(this.props.location.search).postal
+        ? queryString.parse(this.props.location.search).postal
+        : cookies.get("postal")
+        ? cookies.get("postal")
+        : "",
+      postal_to: queryString.parse(this.props.location.search).postal_to
+        ? queryString.parse(this.props.location.search).postal_to
+        : "",
       latitude: "",
       longitude: "",
       latitude_to: "",
       longitude_to: "",
-      street: queryString.parse(this.props.location.search).street ? queryString.parse(this.props.location.search).street : (cookies.get("street") ? cookies.get("street") : ""),
-      street_to: queryString.parse(this.props.location.search).street_to ? queryString.parse(this.props.location.search).street_to : '',
+      street: queryString.parse(this.props.location.search).street
+        ? queryString.parse(this.props.location.search).street
+        : cookies.get("street")
+        ? cookies.get("street")
+        : "",
+      street_to: queryString.parse(this.props.location.search).street_to
+        ? queryString.parse(this.props.location.search).street_to
+        : "",
       cost: "",
       distance: "",
-      unit: queryString.parse(this.props.location.search).unit ? queryString.parse(this.props.location.search).unit : (cookies.get("unit") ? cookies.get("unit") : ""),
-      unit_to: queryString.parse(this.props.location.search).unit_to ? queryString.parse(this.props.location.search).unit_to : '',
-      contact: queryString.parse(this.props.location.search).contact ? queryString.parse(this.props.location.search).contact : (cookies.get("contact") ? cookies.get("contact") : ""),
-      contact_to: queryString.parse(this.props.location.search).contact_to ? queryString.parse(this.props.location.search).contact_to : '',
+      unit: queryString.parse(this.props.location.search).unit
+        ? queryString.parse(this.props.location.search).unit
+        : cookies.get("unit")
+        ? cookies.get("unit")
+        : "",
+      unit_to: queryString.parse(this.props.location.search).unit_to
+        ? queryString.parse(this.props.location.search).unit_to
+        : "",
+      contact: queryString.parse(this.props.location.search).contact
+        ? queryString.parse(this.props.location.search).contact
+        : cookies.get("contact")
+        ? cookies.get("contact")
+        : "",
+      contact_to: queryString.parse(this.props.location.search).contact_to
+        ? queryString.parse(this.props.location.search).contact_to
+        : "",
       time: time_now.getHours() + ":" + time_now.getMinutes(),
       date: time_now,
       datetime: time_now,
@@ -390,7 +414,10 @@ export class Driver extends React.Component {
   };
 
   componentWillMount() {
-    this.getMap();
+    if (this.state.postal && this.state.postal_to) {
+      this.getDirections();
+      this.getMap();
+    }
     onLoad("find_driver");
   }
 
@@ -436,7 +463,7 @@ export class Driver extends React.Component {
     const name = target.name;
     if (name === "postal" && value.toString().length === 6) {
       await this.getPostal(value, "from");
-      await this.getMap();
+      this.getMap();
     }
     if (name === "postal_to" && value.toString().length === 6) {
       await this.getPostal(value, "to");
@@ -718,7 +745,6 @@ export class Driver extends React.Component {
                       <b>↓ To Arrange Delivery 安排送餐添表格 ↓</b>
                     </div>
                   </div>
-
                   <img
                     class="d-none d-md-inline-block"
                     src={store_address}

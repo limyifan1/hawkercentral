@@ -14,11 +14,18 @@ var request = require("request");
 const accountSid = functions.config().twilio.sid;
 const authToken = functions.config().twilio.token;
 const twilio = require("twilio")(accountSid, authToken);
+const BitlyClient = require("bitly").BitlyClient;
+const REACT_APP_BITLY_KEY = functions.config().bitly.key;
+const bitly = new BitlyClient(REACT_APP_BITLY_KEY);
 
 // give us the possibility of manage request properly
 const app = express();
 // Replace BUCKET_NAME
 const bucket = "gs://backup-bucket-hawkercentral";
+const shorten = async (url) => {
+  const d = await bitly.shorten(url);
+  return d.link;
+};
 
 exports.requestOneMap = functions
   .region("asia-east2")
@@ -114,10 +121,12 @@ exports.telegramSend = functions
       var destination = req.body.destination;
       var cost = req.body.cost;
       // var distance = req.body.distance;
-      var url = req.body.url;
+      var url = "https://" + req.body.url;
+      url = await shorten(url);
       var id = req.body.id;
       var time = req.body.time;
-      var cancel = "www.foodleh.app/delivery?cancel=" + id;
+      var cancel = "https://www.foodleh.app/delivery?cancel=" + id;
+      cancel = await shorten(cancel.toString());
       var requester_mobile = req.body.requester_mobile;
       var duration = req.body.duration;
       var arrival = req.body.arrival;
@@ -149,16 +158,16 @@ exports.telegramSend = functions
         url +
         "\n (request expires at pickup time)";
 
-      let sent = await bot.telegram.sendMessage("@foodlehdelivery", message, {
+      let sent = await bot.telegram.sendMessage("@foodlehdev", message, {
         parse_mode: "HTML",
       });
 
       await twilio.messages
         .create({
           body:
-            "Request received & expire at the time of pickup.  To Cancel: " +
+            "Request received & expire at the time of pickup. To Cancel: " +
             cancel +
-            ". Please note if pickup time is too soon, we might not be able to find you a driver. ",
+            ". Pickup times that are too soon may not be assigned driver. ",
           from: "+12015847715",
           to: "+65" + requester_mobile,
         })
@@ -205,24 +214,30 @@ exports.telegramEdit = functions
       var note = req.body.note ? req.body.note : null;
       var cost = req.body.cost ? req.body.cost : null;
       var arrival = req.body.arrival ? req.body.arrival : null;
+      var paynow_alternate = req.body.paynow_alternate
+        ? req.body.paynow_alternate
+        : "Driver No.";
 
       await twilio.messages
         .create({
           body:
-            "Driver Accepted \nDriver No.: +65" +
+            "Driver Found" +
+            "\nCust. : +65" +
+            customer_mobile +
+            "\nDriver: +65" +
             driver_mobile +
             "\nName: " +
             driver_name +
-            "\nCost: $" +
+            "\n$" +
             cost +
             "\nPickup: " +
             time +
-            "\nDriver will give last 4 digits of cust's HP no.: " +
-            customer_mobile,
+            "\nPayto: " +
+            paynow_alternate,
           from: "+12015847715",
           to: "+65" + requester_mobile,
         })
-        .then((message) => console.log(message.sid))
+        .then((message) => console.log(requester_mobile, message.sid))
         .catch((e) => {
           console.log(e);
         });
@@ -230,48 +245,38 @@ exports.telegramEdit = functions
       await twilio.messages
         .create({
           body:
-            "Order Confirmed: " +
-            time +
-            " \n" +
-            "Stall: " +
+            "Stall: +65" +
             requester_mobile +
             "\n" +
-            "Customer: " +
+            "Cust.: +65" +
             customer_mobile +
             "\n" +
-            "From: " +
-            origin +
-            "\n" +
-            "To: " +
-            destination +
-            "\n" +
-            "ETA: " +
-            arrival +
-            "\n" +
-            "Delivery: $" +
+            "Pickup:" +
+            time +
+            "\nDelivery: $" +
             cost +
-            "\n" +
-            "Note: " +
-            note +
-            "\n" +
-            "Please mention last 4 digits of cust's HP no. to collect order (unless stated otherwise)",
+            "\n",
           from: "+12015847715",
           to: "+65" + driver_mobile,
         })
-        .then((message) => console.log(message.sid))
+        .then((message) => console.log(driver_mobile, message.sid))
         .catch((e) => {
           console.log(e);
         });
 
       var message = "<b>A driver has picked up this order! </b>";
       await bot.telegram
-        .editMessageText("@foodlehdelivery", message_id, "", message, {
+        .editMessageText("@foodlehdev", message_id, "", message, {
           parse_mode: "HTML",
         })
-        .then(() => {
+        .then((data) => {
+          console.log(data);
           res.setHeader("Access-Control-Allow-Origin", "*");
           res.status(200).send(message);
           return true;
+        })
+        .catch((e) => {
+          console.log(e);
         });
     });
   });
@@ -284,7 +289,7 @@ exports.telegramCancel = functions
 
       var message = "<b>The hawker has cancelled this request. </b>";
       await bot.telegram
-        .editMessageText("@foodlehdelivery", message_id, "", message, {
+        .editMessageText("@foodlehdev", message_id, "", message, {
           parse_mode: "HTML",
         })
         .then(() => {
@@ -330,7 +335,7 @@ exports.taskRunner = functions
         const job1 = snapshot.ref.update({ expired: true });
         console.log(message_id + " expired");
         const job2 = bot.telegram.editMessageText(
-          "@foodlehdelivery",
+          "@foodlehdev",
           message_id,
           "",
           message,
