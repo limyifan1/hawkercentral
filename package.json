@@ -35,7 +35,7 @@
     "react-helmet": "6.0.0",
     "react-i18next": "11.4.0",
     "react-image-gallery": "1.0.7",
-    "react-lazy-load-image-component": "^1.4.3",
+    "react-lazy-load-image-component": "1.4.3",
     "react-linkify": "1.0.0-alpha",
     "react-multi-carousel": "2.5.5",
     "react-router-dom": "5.2.0",
