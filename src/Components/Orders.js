@@ -2,20 +2,53 @@ import React from "react";
 import "../App.css";
 import { withRouter } from "react-router-dom";
 import { firebase, uiConfig } from "./Firestore";
-import { Form, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { db } from "./Firestore";
 import queryString from "query-string";
-import { Spinner } from "react-bootstrap";
-import driver from "../driver.png";
 import Cookies from "universal-cookie";
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 const cookies = new Cookies();
 
 const analytics = firebase.analytics();
+const dayName = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
-function onLoad(name) {
-  analytics.logEvent(name);
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+function getPhoneNumberFromUserInput() {
+  return document.getElementById("phone-number").value;
+}
+
+function formatAMPM(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  var strTime = hours + ":" + minutes + " " + ampm;
+  return strTime;
 }
 
 export class Orders extends React.Component {
@@ -24,9 +57,11 @@ export class Orders extends React.Component {
     this.state = {
       id: queryString.parse(this.props.location.search).id,
       submitted: false,
+      firebaseUser: null,
       hawker_contact: cookies.get("hawker_contact")
         ? cookies.get("hawker_contact")
         : "",
+      deliveryData: null,
     };
   }
 
@@ -38,17 +73,28 @@ export class Orders extends React.Component {
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
       "recaptcha-container",
       {
-        //'size': 'invisible',
+        size: "invisible",
         callback: function (response) {
-          // reCAPTCHA solved, allow signInWithPhoneNumber.
-          //this.handleSubmit.bind(this);
-          console.log("callback called");
+          // reCAPTCHA solved
         },
       }
     );
-    console.log(window.recaptchaVerifier);
-  }
 
+    firebase.auth().onAuthStateChanged(
+      function (user) {
+        if (user) {
+          // User is signed in, set state
+          // More auth information can be obtained here but for verification purposes, we just need to know user signed in
+          this.setState({
+            firebaseUser: user,
+            hawker_contact: user.phoneNumber.slice(3),
+          });
+        } else {
+          // No user is signed in.
+        }
+      }.bind(this)
+    );
+  }
   componentWillMount() {
     // onLoad("find_delivery");
     // if (this.state.cancel) {
@@ -56,31 +102,90 @@ export class Orders extends React.Component {
     // }
   }
 
-  handleSubmit = async (event) => {
+  getDoc = () => {
+    return db
+      .collection("deliveries")
+      .where("contact", "==", this.state.firebaseUser.phoneNumber.slice(3).toString())
+      .get()
+      .then(async (snapshot) => {
+        var dataToReturn = [];
+        snapshot.forEach((d) => {
+          console.log(d.data());
+          //dataToReturn.push(d.data());
+          var pickupTime = d.data().time.toDate();
+          console.log(pickupTime);
+          var time = dayName[pickupTime.getDay()] + " " +
+            " " + monthNames[pickupTime.getMonth()] + " " +
+            pickupTime.getDate() + " " + formatAMPM(pickupTime);
+          dataToReturn.push(
+            <div style={{textAlign: "left"}}>
+              <br />
+              <b>Driver contact: </b>{d.data().driver_contact}
+              <br />
+              <b>Customer address: </b>{d.data().street_to}
+              <br />
+              <b>Note: </b>{d.data().note}
+              <br />
+              <b>Delivery fee: </b>${d.data().cost}
+              <br />
+              <b>Pickup Time: </b>{time}
+              <hr
+                style={{
+                  color: "#b48300",
+                  backgroundColor: "#b48300",
+                  height: "1px",
+                  borderColor: "#b48300",
+                  width: "100%",
+                  alignItems: "center",
+                }}
+              />
+            </div>
+          );
+        });
+        this.setState({ deliveryData: dataToReturn, });
+        return dataToReturn;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  handleVerify = async (event) => {
     event.preventDefault();
-    //this.setState({ submitted: true });
-    cookies.set("hawker_contact", this.state.hawker_contact, { path: "/" });
+    //cookies.set("driver_contact", this.state.driver_contact, { path: "/" });
     // Handle Firebase phone number-OTP verification
-    var phoneNumber = this.state.hawker_contact;
+    var phoneNumber = getPhoneNumberFromUserInput();
     var appVerifier = window.recaptchaVerifier;
     firebase
       .auth()
       .signInWithPhoneNumber(phoneNumber, appVerifier)
       .then(function (confirmationResult) {
-        // SMS sent. Prompt user to type the code from the message, then sign the
-        // user in with confirmationResult.confirm(code).
-        console.log("inside confirmation chunk");
+        // SMS sent
         window.confirmationResult = confirmationResult;
-        console.log(window.confirmationResult);
       })
       .catch(function (error) {
         // Error; SMS not sent
         // Reset reCAPTCHA so user can try again
         console.log("error, sms not sent");
-        // window.recaptchaVerifier.render().then(widgetId => {
-        //   window.recaptchaVerifier.reset(widgetId);
-        // });
       });
+  };
+
+  // After hawker is verified, let them enter dashboard page 
+  handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log("Submitted!");
+    this.setState({ submitted: true });
+    cookies.set("hawker_contact", this.state.hawker_contact, { path: "/" });
+    await this.getDoc().then(async (data) => {
+      // Display info returned from db query of all deliveries for logged in hawker_contact
+      if (data !== undefined) {
+        console.log("Successfully retrieved deliveries for this hawker");
+        console.log(data);
+      } else {
+        console.log("data is undefined for this hawker");
+      }
+    });
+
   };
 
   handleChange = (event) => {
@@ -91,6 +196,11 @@ export class Orders extends React.Component {
   };
 
   render() {
+    {
+      for (let i = 0; i < this.state.deliveryData; i = i + 1) {
+        console.log(this.state.deliveryData[i]);
+      }
+    }
     return (
       <div>
         <div
@@ -104,57 +214,61 @@ export class Orders extends React.Component {
         >
           <div class="container-fluid col-md-10 content col-xs-offset-2">
             <div class="d-flex row justify-content-center">
-              Hawker Dashboard - Manage All Orders
+              Hawker Dashboard - Manage All Delivery Requests
               <div
                 class="card shadow row"
                 style={{ width: "100%", padding: "20px", margin: "20px" }}
               >
-                <div>
-                  <h1>My App</h1>
-                  <p>Please sign-in:</p>
-                  <StyledFirebaseAuth
-                    uiConfig={uiConfig}
-                    firebaseAuth={firebase.auth()}
-                  />
-                </div>
-
-                <div>
-                  <Form onSubmit={this.handleSubmit.bind(this)}>
-                    <br />
-                    <label for="unit">Mobile Number:</label>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">
-                          +65
-                        </span>
-                      </div>
-                      <input
-                        onChange={this.handleChange}
-                        value={this.state.hawker_contact}
-                        type="number"
-                        class="form-control"
-                        name="hawker_contact"
-                        placeholder="9xxxxxxx"
-                        required
-                      ></input>
-                    </div>
-                    <br />
-
-                    <br />
-                    <Button
-                      class="shadow-lg"
-                      style={{
-                        backgroundColor: "green",
-                        borderColor: "green",
-                        fontSize: "25px",
-                      }}
-                      type="Submit"
-                    >
-                      View Your Orders
-                    </Button>
-                  </Form>
+                {/* Separate handler for verifying mobile number with OTP */}
+                {/* Check if user is already logged in with Firebase */}
+                <div
+                  style={{
+                    display: this.state.firebaseUser ? "none" : "block",
+                  }}
+                >
+                  <div>
+                    <p>Verify Mobile Number</p>
+                    <StyledFirebaseAuth
+                      uiConfig={uiConfig}
+                      firebaseAuth={firebase.auth()}
+                    />
+                  </div>
                   <div id="recaptcha-container"></div>
+                  <br />
                 </div>
+                <br />
+                {this.state.firebaseUser ? (
+                  <div>
+                    <p>
+                      Verified your phone number:{" "}
+                      {this.state.firebaseUser.phoneNumber}
+                    </p>
+                  </div>
+                ) : null}
+                <Button
+                  onClick={this.handleSubmit.bind(this)}
+                  class="shadow-lg"
+                  disabled={this.state.firebaseUser === null}
+                  style={{
+                    backgroundColor: !(this.state.firebaseUser === null)
+                      ? "green"
+                      : "grey",
+                    borderColor: !(this.state.firebaseUser === null)
+                      ? "green"
+                      : "grey",
+                    fontSize: "25px",
+                    cursor: !(this.state.firebaseUser === null)
+                      ? "pointer"
+                      : "not-allowed",
+                  }}
+                >
+                  See Your Delivery Requests
+                  </Button>
+                <div>
+                  {this.state.deliveryData}
+
+                </div>
+
               </div>
             </div>
           </div>
