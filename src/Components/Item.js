@@ -4,10 +4,13 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import React from "react";
+import { withRouter } from "react-router-dom";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+
+import { LanguageContext } from "./themeContext";
+
 import "../App.css";
 import placeholder from "../placeholder.png";
-import { withRouter } from "react-router-dom";
-import { LanguageContext } from "./themeContext";
 
 export class Item extends React.Component {
   handleClick = async (event) => {
@@ -23,7 +26,7 @@ export class Item extends React.Component {
   };
 
   thumbnail = () => {
-    return `https://images.weserv.nl/?w=178&url=${encodeURIComponent(this.props.pic)}`
+    return `https://images.weserv.nl/?w=250&url=${encodeURIComponent(this.props.pic)}`
   }
 
   render() {
@@ -36,34 +39,31 @@ export class Item extends React.Component {
               style={{ margin: "5px" }}
               onClick={this.handleClick}
             >
-              {this.props.pic ? (
-                <div>
-                  {this.props.distance ? (
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "105px",
-                        right: "5px",
-                        zIndex: "1",
-                      }}
-                    >
-                      <span
-                        class="badge badge-info"
-                        style={{ backgroundColor: "#b48300" }}
-                      >
-                        {this.props.distance.slice(0, 4) + " km away"}
-                      </span>
-                    </div>
-                  ) : null}
-                  <div style={{ height: "120px" }}>
-                    <img src={this.thumbnail()} class="card-img-top" alt="" />
-                  </div>
+              {this.props.distance ? (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "105px",
+                    right: "5px",
+                    zIndex: "1",
+                  }}
+                >
+                  <span
+                    class="badge badge-info"
+                    style={{ backgroundColor: "#b48300" }}
+                  >
+                    {this.props.distance.slice(0, 4) + " km away"}
+                  </span>
                 </div>
-              ) : (
-                <div style={{ height: "120px" }}>
-                  <img src={placeholder} class="card-img-top" alt="" />
-                </div>
-              )}
+              ) : null}
+              <LazyLoadImage
+                src={this.props.pic ? this.thumbnail() : placeholder} 
+                placeholderSrc={placeholder}
+                style={{ height: "120px" }}
+                class="card-img-top" 
+                height="120"
+                alt="" 
+              />
               {this.props.promo ? (
                 <div
                   style={{

@@ -58,8 +58,8 @@
     "placeholderdeliverydetails": "E.g. Only deliver to Bukit Batok for orders above $30",
     "step2": "Step 2: Additional Details (Optional)",
     "additional": "Additional Details",
-    "placeholderadditional":"e.g. For a limited time, buy 3 get 1 free and islandwide delivery",
-    "generalpromo":"General Promotion (if any)",
+    "placeholderadditional": "e.g. For a limited time, buy 3 get 1 free and islandwide delivery",
+    "generalpromo": "General Promotion (if any)",
     "discount": "Discount",
     "eightchars": "(8 chars)",
     "placeholderdiscount": "e.g. 10% or $5 off",
@@ -71,8 +71,8 @@
     "menuitem": "Menu Item",
     "menuitems": "Menu Items",
     "placeholdermenuitem": "E.g. Chicken Rice",
-    "additem":"Add Menu Items",
-    "addmoreitem":"More Menu Items",
+    "additem": "Add Menu Items",
+    "addmoreitem": "More Menu Items",
     "price": "Price",
     "contact": "Contact Channels: ",
     "call": "Call",
@@ -90,8 +90,8 @@
     "para_two": "Sounds too good to be true? What's the catch? Boh leh... FoodLeh? is a purely non-profit initiative devised to help local F&B stall owners to be seen online. It’s also a community-based platform where listings can be created and edited by members of the public.",
     "para_three": "\"If we don't give discounts, we're pretty much invisible on the delivery platform\" While that is true of other applications, FoodLeh? doesn't discriminates, with each listing given an equal opportunity to shine based on their proximity to each User. There's no need to eat into profit margins, and best of all, no more steep commissions!",
     "para_four": "Steady lah, time to dabao and save our local F&B stall owners!",
-    "howtouse" : "How to Use",
-    "forappusers" : "(for App Users)",
+    "howtouse": "How to Use",
+    "forappusers": "(for App Users)",
     "appusers": "At the “Home” page, select either \"dabao\" or \"delivery\", and key in your postal code. Start browsing listings! Encourage your favourite businesses during this tough period by giving them a virtual “clap” too!",
     "forfnb": "(for Local F&B businesses)",
     "fnb": "Go to the “Create” page and fill in the form. Voila! All done in a matter of minutes!",
@@ -99,9 +99,12 @@
     "disclaimer": "Disclaimer: FoodLeh? is a crowdsourced hawker directory relying on Singaporeans to share information about our local F&B places. We are co-sharing all our hawker listings data with Take.sg in order to consolidate nonprofit ground-up initiatives for hawkers. Our data is licensed under the Creative Commons License - tldr: Non-commercial use only! While we hope to keep the information on this platform as accurate as possible, there might be inaccuracies due to user entries from time to time. FoodLeh? will not be held liable for any inaccuracies or misrepresentation here, but we continue striving to improve this platform. Contact us at foodleh@outlook.com if you have any suggestions or notice anything we could improve."
   },
   "search": {
-    "alllistings" : "All Listings",
+    "alllistings": "All Listings",
     "prompt": "   Search by Name, Category, Food, Items e.g. Chicken Rice",
     "filterby": "Filter By Cuisine",
-    "nearyouat": "Near You At "
+    "nearyouat": "Near You At ",
+    "postalcode": "Postal Code",
+    "delivery": "Delivery",
+    "self_collect": "Dabao"
   }
 }

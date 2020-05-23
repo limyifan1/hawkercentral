@@ -17,6 +17,7 @@ import GetApp from "@material-ui/icons/GetApp";
 import Button from "@material-ui/core/Button";
 import DatePicker from "react-date-picker";
 import TimePicker from "react-time-picker";
+import queryString from "query-string";
 const cookies = new Cookies();
 const API_KEY = `${process.env.REACT_APP_GKEY}`;
 const analytics = firebase.analytics();
@@ -26,13 +27,13 @@ function onLoad(name) {
 }
 
 const dayName = [
+  "Sunday",
   "Monday",
   "Tuesday",
   "Wednesday",
   "Thursday",
   "Friday",
   "Saturday",
-  "Sunday",
 ];
 
 const monthNames = [
@@ -117,27 +118,27 @@ const addData = async ({
 };
 
 const time_now = new Date();
-time_now.setHours(time_now.getHours() + 1);
+time_now.setMinutes(time_now.getMinutes() + 30)
 // var time_now_plus = time_now.toLocaleString('en-US')
 
 export class Driver extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      postal: cookies.get("postal") ? cookies.get("postal") : "",
-      postal_to: "",
+      postal: queryString.parse(this.props.location.search).postal ? queryString.parse(this.props.location.search).postal : (cookies.get("postal") ? cookies.get("postal") : ""),
+      postal_to: queryString.parse(this.props.location.search).postal_to ? queryString.parse(this.props.location.search).postal_to : '',
       latitude: "",
       longitude: "",
       latitude_to: "",
       longitude_to: "",
-      street: cookies.get("street") ? cookies.get("street") : "",
-      street_to: "",
+      street: queryString.parse(this.props.location.search).street ? queryString.parse(this.props.location.search).street : (cookies.get("street") ? cookies.get("street") : ""),
+      street_to: queryString.parse(this.props.location.search).street_to ? queryString.parse(this.props.location.search).street_to : '',
       cost: "",
       distance: "",
-      unit: cookies.get("unit") ? cookies.get("unit") : "",
-      unit_to: "",
-      contact: cookies.get("contact") ? cookies.get("contact") : "",
-      contact_to: "",
+      unit: queryString.parse(this.props.location.search).unit ? queryString.parse(this.props.location.search).unit : (cookies.get("unit") ? cookies.get("unit") : ""),
+      unit_to: queryString.parse(this.props.location.search).unit_to ? queryString.parse(this.props.location.search).unit_to : '',
+      contact: queryString.parse(this.props.location.search).contact ? queryString.parse(this.props.location.search).contact : (cookies.get("contact") ? cookies.get("contact") : ""),
+      contact_to: queryString.parse(this.props.location.search).contact_to ? queryString.parse(this.props.location.search).contact_to : '',
       time: time_now.getHours() + ":" + time_now.getMinutes(),
       date: time_now,
       datetime: time_now,
@@ -588,6 +589,7 @@ export class Driver extends React.Component {
                               placeholder="Enter Postal Code 邮区编号"
                               min="0"
                               required
+                              autocomplete="postal"
                               maxLength="6"
                             />
                           </div>
@@ -611,6 +613,7 @@ export class Driver extends React.Component {
                               min="0"
                               required
                               maxLength="6"
+                              autocomplete="postal_to"
                               style={{ padding: "0px 10px" }}
                             />
                           </div>
@@ -852,7 +855,7 @@ export class Driver extends React.Component {
                     <div class="row">
                       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <div class="form-group create-title">
-                          <label for="postalcode">Postal Code 邮区编号 </label>
+                          <label for="postal_to">Postal Code 邮区编号 </label>
                           <div class="input-group">
                             <input
                               onChange={this.handleChange.bind(this)}

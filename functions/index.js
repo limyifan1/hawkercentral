@@ -147,7 +147,7 @@ exports.telegramSend = functions
         "\n" +
         "<b>Click to Accept (first come first serve): </b>" +
         url +
-        "\n (request expires 30 minutes before pickup)";
+        "\n (request expires at pickup time)";
 
       let sent = await bot.telegram.sendMessage("@foodlehdelivery", message, {
         parse_mode: "HTML",
@@ -156,9 +156,9 @@ exports.telegramSend = functions
       await twilio.messages
         .create({
           body:
-            "Request received & expire 30 minutes before pickup.  我们已收到您的要求并在取食物时间的三十分钟前自动取消. To Cancel 马上取消: " +
+            "Request received & expire at the time of pickup.  To Cancel: " +
             cancel +
-            ".",
+            ". Please note if pickup time is too soon, we might not be able to find you a driver. ",
           from: "+12015847715",
           to: "+65" + requester_mobile,
         })
@@ -192,6 +192,7 @@ exports.telegramEdit = functions
       var driver_mobile = req.body.driver_mobile
         ? req.body.driver_mobile
         : null;
+      var driver_name = req.body.driver_name ? req.body.driver_name : null;
       var requester_mobile = req.body.requester_mobile
         ? req.body.requester_mobile
         : null;
@@ -208,13 +209,16 @@ exports.telegramEdit = functions
       await twilio.messages
         .create({
           body:
-            "Driver Accepted司机已接受订单。\n Driver 司机: +65" +
+            "Driver Accepted \nDriver No.: +65" +
             driver_mobile +
-            "\n Cost运送: $" +
+            "\nName: " +
+            driver_name +
+            "\nCost: $" +
             cost +
-            "\n Pickup抵达: " +
+            "\nPickup: " +
             time +
-            "\nDriver will give cust's HP no. 司机会提顾客电话号",
+            "\nDriver will give last 4 digits of cust's HP no.: " +
+            customer_mobile,
           from: "+12015847715",
           to: "+65" + requester_mobile,
         })
@@ -228,7 +232,7 @@ exports.telegramEdit = functions
           body:
             "Order Confirmed: " +
             time +
-            " \n " +
+            " \n" +
             "Stall: " +
             requester_mobile +
             "\n" +
@@ -250,7 +254,7 @@ exports.telegramEdit = functions
             "Note: " +
             note +
             "\n" +
-            "Please mention cust's HP no. to collect order (unless stated otherwise)",
+            "Please mention last 4 digits of cust's HP no. to collect order (unless stated otherwise)",
           from: "+12015847715",
           to: "+65" + driver_mobile,
         })
@@ -317,7 +321,7 @@ exports.taskRunner = functions
     tasks.forEach((snapshot) => {
       const { message_id } = snapshot.data();
       var expiry = new Date(
-        snapshot.data().time.toDate().getTime() - 30 * 60000
+        snapshot.data().time.toDate().getTime() - 0 * 60000
       );
       var now = new Date();
       console.log(message_id, now - expiry);
