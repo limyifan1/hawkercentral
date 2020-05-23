@@ -1419,7 +1419,7 @@ export class ListForm extends React.Component {
                                 placeholder={
                                   context.data.create.placeholderpostalcode
                                 }
-                                min="0"
+                                maxLength="6"
                                 required
                               ></input>
                             </div>
