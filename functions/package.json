@@ -18,7 +18,7 @@
     "firebase-functions": "3.6.1",
     "request": "2.88.2",
     "telegraf": "3.38.0",
-    "twilio": "3.43.0"
+    "twilio": "3.43.1"
   },
   "devDependencies": {
     "@firebase/testing": "0.19.5",
