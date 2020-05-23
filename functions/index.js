@@ -158,7 +158,7 @@ exports.telegramSend = functions
         url +
         "\n (request expires at pickup time)";
 
-      let sent = await bot.telegram.sendMessage("@foodlehdev", message, {
+      let sent = await bot.telegram.sendMessage("@foodlehdelivery", message, {
         parse_mode: "HTML",
       });
 
@@ -266,7 +266,7 @@ exports.telegramEdit = functions
 
       var message = "<b>A driver has picked up this order! </b>";
       await bot.telegram
-        .editMessageText("@foodlehdev", message_id, "", message, {
+        .editMessageText("@foodlehdelivery", message_id, "", message, {
           parse_mode: "HTML",
         })
         .then((data) => {
@@ -289,7 +289,7 @@ exports.telegramCancel = functions
 
       var message = "<b>The hawker has cancelled this request. </b>";
       await bot.telegram
-        .editMessageText("@foodlehdev", message_id, "", message, {
+        .editMessageText("@foodlehdelivery", message_id, "", message, {
           parse_mode: "HTML",
         })
         .then(() => {
@@ -335,7 +335,7 @@ exports.taskRunner = functions
         const job1 = snapshot.ref.update({ expired: true });
         console.log(message_id + " expired");
         const job2 = bot.telegram.editMessageText(
-          "@foodlehdev",
+          "@foodlehdelivery",
           message_id,
           "",
           message,
