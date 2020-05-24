@@ -192,6 +192,10 @@ export class Driver extends React.Component {
         regionTo.planningarea
       );
     }
+    if (regionFrom.planningarea === "WESTERN WATER CATCHMENT")
+      regionFrom.planningarea = "JURONG WEST";
+    if (regionFrom.planningarea === "SOUTHERN ISLANDS")
+      regionFrom.planningarea = "BUKIT MERAH";
     this.setState({
       cost: cost ? cost : null,
       regionFrom: regionFrom,
@@ -318,7 +322,6 @@ export class Driver extends React.Component {
   async getPostal(postal, direction) {
     // event.preventDefault();
     let data = await this.callPostal(postal);
-    console.log(data);
     if (data !== undefined) {
       if (direction === "to") {
         this.setState({
@@ -474,6 +477,7 @@ export class Driver extends React.Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
+    this.setState({ [name]: value });
     if (name === "postal" && value.toString().length === 6) {
       await this.getPostal(value, "from");
       this.getMap();
@@ -488,7 +492,6 @@ export class Driver extends React.Component {
     ) {
       this.getDirections();
     }
-    this.setState({ [name]: value });
   };
 
   setShow = () => {
