@@ -192,6 +192,10 @@ export class Driver extends React.Component {
         regionTo.planningarea
       );
     }
+    if (regionFrom.planningarea === "WESTERN WATER CATCHMENT")
+      regionFrom.planningarea = "JURONG WEST";
+    if (regionFrom.planningarea === "SOUTHERN ISLANDS")
+      regionFrom.planningarea = "BUKIT MERAH";
     this.setState({
       cost: cost ? cost : null,
       regionFrom: regionFrom,
@@ -318,7 +322,6 @@ export class Driver extends React.Component {
   async getPostal(postal, direction) {
     // event.preventDefault();
     let data = await this.callPostal(postal);
-    console.log(data);
     if (data !== undefined) {
       if (direction === "to") {
         this.setState({
@@ -474,6 +477,7 @@ export class Driver extends React.Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
+    this.setState({ [name]: value });
     if (name === "postal" && value.toString().length === 6) {
       await this.getPostal(value, "from");
       this.getMap();
@@ -488,7 +492,6 @@ export class Driver extends React.Component {
     ) {
       this.getDirections();
     }
-    this.setState({ [name]: value });
   };
 
   setShow = () => {
@@ -566,7 +569,8 @@ export class Driver extends React.Component {
                         width: "50%",
                       }}
                     />
-                    Now, everyone can deliver <br /> Find out more: <br />
+                    A non-profit community delivery initiative <br /> Click To
+                    Learn How It Works: <br />
                     <img
                       onClick={() => this.setShow()}
                       style={{
@@ -577,6 +581,28 @@ export class Driver extends React.Component {
                       src={question}
                       alt="question"
                     />
+                  </div>
+                  <div style={{ fontSize: "12px" }}>
+                    <span style={{ fontWeight: "bold" }}>Rules:</span> <br />
+                    1. This is a free service to broadcast F&B delivery jobs to
+                    drivers. During peak periods, please send your order at
+                    least 1h in advance for higher chance of finding drivers.
+                    <br />
+                    <br />
+                    2. We cannot guarantee that we can find a driver as we only
+                    broadcast the message for free. If a driver is found, you
+                    will get an SMS with driver contact number. No need to
+                    cancel the request after driver is found.
+                    <br />
+                    <br />
+                    3. As long as there's no SMS with driver contact number,
+                    assume that driver has not been found. You will need to find
+                    drivers from other platforms too. If you find a driver on
+                    another platform, please cancel this request (link in your
+                    initial confirmation SMS).
+                    <br />
+                    <br />
+                    Thank you and all the best!
                   </div>
                 </div>
                 <div
@@ -1145,9 +1171,11 @@ export class Driver extends React.Component {
                           I agree that I am a local F&B looking for a delivery
                           and FoodLeh is not liable for any event not limited to
                           inaccuracies, delays, costs, spillage, accidents,
-                          injuries, food poisoning, etc. FoodLeh is only
-                          responsible for matching the two sides who will assume
-                          all responsibilities.
+                          injuries, food poisoning, etc. I also agree to let
+                          FoodLeh use the provided information to find a driver
+                          with all reasonable means. FoodLeh is only responsible
+                          for matching the two sides who will assume all
+                          responsibilities.
                         </label>
                         <br />
                         <br />

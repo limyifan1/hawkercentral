@@ -172,6 +172,7 @@ async function requestNewOneMapToken() {
 
 async function getPlanningDetails(from, to) {
   // change the naming for start to match those in our files
+  var sentosa = false;
   if (["ORCHARD", "NEWTON"].includes(from)) {
     from = "Orchardnewton";
   } else if (
@@ -184,6 +185,11 @@ async function getPlanningDetails(from, to) {
     )
   ) {
     from = "DOWNTOWN";
+  }
+  if (from === "WESTERN WATER CATCHMENT") from = "JURONG WEST";
+  if (from === "SOUTHERN ISLANDS") {
+    sentosa = true;
+    from = "BUKIT MERAH";
   }
 
   if (["ORCHARD", "NEWTON"].includes(to)) {
@@ -199,6 +205,11 @@ async function getPlanningDetails(from, to) {
   ) {
     to = "DOWNTOWN";
   }
+  if (to === "WESTERN WATER CATCHMENT") to = "JURONG WEST";
+  if (to === "SOUTHERN ISLANDS") {
+    sentosa = true;
+    to = "BUKIT MERAH";
+  }
 
   let data = await db
     .collection("delivery_price")
@@ -208,7 +219,11 @@ async function getPlanningDetails(from, to) {
       return d.data();
     });
   if (data && data[to]) {
-    return data[to].price;
+    var price = data[to].price;
+    if (sentosa) {
+      price = String(Number(price) + 2);
+    }
+    return price;
   } else {
     return null;
   }
@@ -246,11 +261,12 @@ var postalPlanningRegion = async (postal, lat, lng) => {
       postal_lon = lng;
     }
     var planningarea = await getPlanningArea(postal_lat, postal_lon);
-
     if (["ORCHARD", "NEWTON"].includes(planningarea)) {
       planningarea = "Orchardnewton";
     } else if (
-      ["OUTRAM", "SINGAPORE RIVER", "MUSEUM", "RIVER VALLEY"].includes(planningarea)
+      ["OUTRAM", "SINGAPORE RIVER", "MUSEUM", "RIVER VALLEY"].includes(
+        planningarea
+      )
     ) {
       planningarea = "DHOBY";
     } else if (
@@ -260,7 +276,7 @@ var postalPlanningRegion = async (postal, lat, lng) => {
     ) {
       planningarea = "DOWNTOWN";
     }
-    
+
     let districtpostal = Number(String(postal).slice(0, 2));
     let centrallist =
       ["01", "02", "03", "04", "05", "06", "07", "08", "09"] +
