@@ -18,6 +18,7 @@ import ItemRendered from "./ItemRendered";
 import Driver from "./Driver";
 import Delivery from "./Delivery";
 import Orders from "./Orders";
+import Deliveries from "./Deliveries";
 import Search from "./Search";
 
 import { db, storage } from "./Firestore";
@@ -38,6 +39,7 @@ export default {
   Driver,
   Delivery,
   Orders,
+  Deliveries,
   Search,
   db,
   storage,

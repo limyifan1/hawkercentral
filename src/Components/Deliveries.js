@@ -1,3 +1,4 @@
+// This is the dashboard for drivers to track their deliveries. Similar to Orders.js
 import React from "react";
 import "../App.css";
 import { withRouter } from "react-router-dom";
@@ -56,7 +57,7 @@ function formatAMPM(date) {
   return strTime;
 }
 
-export class Orders extends React.Component {
+export class Deliveries extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -111,7 +112,7 @@ export class Orders extends React.Component {
     return db
       .collection("deliveries")
       .where(
-        "contact",
+        "driver_contact",
         "==",
         this.state.firebaseUser.phoneNumber.slice(3).toString()
       )
@@ -139,19 +140,34 @@ export class Orders extends React.Component {
           //   dataToReturn.push(
           //     <div style={{ textAlign: "left" }}>
           //       <br />
-          //       <b>Driver contact: </b>
-          //       {d.data().driver_contact}
+          //       <b>Delivery from: </b>
+          //       {d.data().street}
           //       <br />
-          //       <b>Customer address: </b>
+          //       <b>Delivery to: </b>
           //       {d.data().street_to}
+          //       <br />
+          //       <b>Hawker contact (Pickup): </b>
+          //       {d.data().contact}
+          //       <br />
+          //       <b>Customer contact (Dropoff): </b>
+          //       {d.data().contact_to}
+          //       <br />
+          //       <b>Pickup Time: </b>
+          //       {time}
           //       <br />
           //       <b>Note: </b>
           //       {d.data().note}
           //       <br />
-          //       <b>Delivery fee: </b>${d.data().cost}
+          //       <b>Distance: </b>
+          //       {d.data().distance}
           //       <br />
-          //       <b>Pickup Time: </b>
-          //       {time}
+          //       <b>Est. Duration: </b>
+          //       {d.data().duration}
+          //       <br />
+          //       <b>Est. Arrival Time: </b>
+          //       {d.data().arrival}
+          //       <br />
+          //       <b>Delivery fee: </b>${d.data().cost}
           //       <hr
           //         style={{
           //           color: "#b48300",
@@ -224,32 +240,41 @@ export class Orders extends React.Component {
           pickupTime.getDate() +
           " " +
           monthNames[pickupTime.getMonth()] +
+
           " " +
           formatAMPM(pickupTime);
 
         return (
           <div style={{ textAlign: "left" }}>
             <br />
-            <b>Driver contact: </b>
-            {data.driver_contact}
+            <b>Delivery from: </b>
+            {data.street}
             <br />
-            <b>Customer address: </b>
+            <b>Delivery to: </b>
             {data.street_to}
+            <br />
+            <b>Hawker contact (Pickup): </b>
+            {data.contact}
+            <br />
+            <b>Customer contact (Dropoff): </b>
+            {data.contact_to}
+            <br />
+            <b>Pickup Time: </b>
+            {time}
             <br />
             <b>Note: </b>
             {data.note}
             <br />
-            <b>Delivery fee: </b>${data.cost}
+            <b>Distance: </b>
+            {data.distance}
             <br />
-            {data.paynow_alternate !== "" ? (
-              <div>
-                <b>Alternate PayNow number/UEN: </b>
-                {data.paynow_alternate}
-                <br />
-              </div>
-            ) : null}
-            <b>Pickup Time: </b>
-            {time}
+            <b>Est. Duration: </b>
+            {data.duration}
+            <br />
+            <b>Est. Arrival Time: </b>
+            {data.arrival}
+            <br />
+            <b>Delivery fee: </b>${data.cost}
             <hr
               style={{
                 color: "#b48300",
@@ -266,78 +291,77 @@ export class Orders extends React.Component {
     }
 
 
-
     return (
-      <div>
-        <div
-          class="jumbotron"
-          style={{
-            "padding-top": "70px",
-            "padding-bottom": "240px",
-            height: "100%",
-            "background-color": "white",
-          }}
-        >
-          <div class="container-fluid col-md-10 content col-xs-offset-2">
-            <div class="d-flex row justify-content-center">
-              Hawker Dashboard - Manage All Delivery Requests
+        <div>
+          <div
+            class="jumbotron"
+            style={{
+              "padding-top": "70px",
+              "padding-bottom": "240px",
+              height: "100%",
+              "background-color": "white",
+            }}
+          >
+            <div class="container-fluid col-md-10 content col-xs-offset-2">
+              <div class="d-flex row justify-content-center">
+                Driver Dashboard - Manage All Delivery Jobs
               <div
-                class="card shadow row"
-                style={{ width: "100%", padding: "20px", margin: "20px" }}
-              >
-                {/* Separate handler for verifying mobile number with OTP */}
-                {/* Check if user is already logged in with Firebase */}
-                <div
-                  style={{
-                    display: this.state.firebaseUser ? "none" : "block",
-                  }}
+                  class="card shadow row"
+                  style={{ width: "100%", padding: "20px", margin: "20px" }}
                 >
-                  <div>
-                    <p>Verify Mobile Number</p>
-                    <StyledFirebaseAuth
-                      uiConfig={uiConfig}
-                      firebaseAuth={firebase.auth()}
-                    />
+                  {/* Separate handler for verifying mobile number with OTP */}
+                  {/* Check if user is already logged in with Firebase */}
+                  <div
+                    style={{
+                      display: this.state.firebaseUser ? "none" : "block",
+                    }}
+                  >
+                    <div>
+                      <p>Verify Mobile Number</p>
+                      <StyledFirebaseAuth
+                        uiConfig={uiConfig}
+                        firebaseAuth={firebase.auth()}
+                      />
+                    </div>
+                    <div id="recaptcha-container"></div>
+                    <br />
                   </div>
-                  <div id="recaptcha-container"></div>
                   <br />
-                </div>
-                <br />
-                {this.state.firebaseUser ? (
-                  <div>
-                    <p>
-                      Verified your phone number:{" "}
-                      {this.state.firebaseUser.phoneNumber}
-                    </p>
-                  </div>
-                ) : null}
-                <Button
-                  onClick={this.handleSubmit.bind(this)}
-                  class="shadow-lg"
-                  disabled={this.state.firebaseUser === null}
-                  style={{
-                    backgroundColor: !(this.state.firebaseUser === null)
-                      ? "green"
-                      : "grey",
-                    borderColor: !(this.state.firebaseUser === null)
-                      ? "green"
-                      : "grey",
-                    fontSize: "25px",
-                    cursor: !(this.state.firebaseUser === null)
-                      ? "pointer"
-                      : "not-allowed",
-                  }}
-                >
-                  Click to See Your Delivery Requests
+                  {this.state.firebaseUser ? (
+                    <div>
+                      <p>
+                        Verified your phone number:{" "}
+                        {this.state.firebaseUser.phoneNumber}
+                      </p>
+                    </div>
+                  ) : null}
+                  <Button
+                    onClick={this.handleSubmit.bind(this)}
+                    class="shadow-lg"
+                    disabled={this.state.firebaseUser === null}
+                    style={{
+                      backgroundColor: !(this.state.firebaseUser === null)
+                        ? "green"
+                        : "grey",
+                      borderColor: !(this.state.firebaseUser === null)
+                        ? "green"
+                        : "grey",
+                      fontSize: "25px",
+                      cursor: !(this.state.firebaseUser === null)
+                        ? "pointer"
+                        : "not-allowed",
+                    }}
+                  >
+                    Click to See Your Delivery Jobs
                 </Button>
-                <div>{dataToDisplay}</div>
+                  <div>{dataToDisplay}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div >
-    );
+      );
+    }
   }
-}
 
-export default withRouter(Orders);
+  export default withRouter(Deliveries);
