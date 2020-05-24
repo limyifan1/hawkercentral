@@ -578,6 +578,13 @@ export class Driver extends React.Component {
                       alt="question"
                     />
                   </div>
+                  Disclaimer: This is a free service to broadcast F&B delivery jobs to drivers. During peak periods, please send your order at least 1h in advance for higher chance of finding drivers. 
+<br /><br />
+We cannot guarantee that we can find a driver as we only broadcast the message for free. If a driver is found, you will get an SMS with driver contact number. No need to cancel the request after driver is found.
+<br /><br />
+As long as no SMS with driver contact number, assume that driver has not been found. You will need to find drivers from other platforms too. If you find a driver on another platform, please cancel this request (link in your initial confirmation SMS). 
+<br /><br />
+Thank you and all the best!
                 </div>
                 <div
                   class="card row"
