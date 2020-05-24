@@ -566,7 +566,8 @@ export class Driver extends React.Component {
                         width: "50%",
                       }}
                     />
-                    Now, everyone can deliver <br /> Find out more: <br />
+                    Now, everyone can deliver <br /> Click To Learn How It
+                    Works: <br />
                     <img
                       onClick={() => this.setShow()}
                       style={{
@@ -578,13 +579,27 @@ export class Driver extends React.Component {
                       alt="question"
                     />
                   </div>
-                  Disclaimer: This is a free service to broadcast F&B delivery jobs to drivers. During peak periods, please send your order at least 1h in advance for higher chance of finding drivers. 
-<br /><br />
-We cannot guarantee that we can find a driver as we only broadcast the message for free. If a driver is found, you will get an SMS with driver contact number. No need to cancel the request after driver is found.
-<br /><br />
-As long as no SMS with driver contact number, assume that driver has not been found. You will need to find drivers from other platforms too. If you find a driver on another platform, please cancel this request (link in your initial confirmation SMS). 
-<br /><br />
-Thank you and all the best!
+                  <div style={{ fontSize: "12px" }}>
+                    Disclaimer: This is a free service to broadcast F&B delivery
+                    jobs to drivers. During peak periods, please send your order
+                    at least 1h in advance for higher chance of finding drivers.
+                    <br />
+                    <br />
+                    We cannot guarantee that we can find a driver as we only
+                    broadcast the message for free. If a driver is found, you
+                    will get an SMS with driver contact number. No need to
+                    cancel the request after driver is found.
+                    <br />
+                    <br />
+                    As long as no SMS with driver contact number, assume that
+                    driver has not been found. You will need to find drivers
+                    from other platforms too. If you find a driver on another
+                    platform, please cancel this request (link in your initial
+                    confirmation SMS).
+                    <br />
+                    <br />
+                    Thank you and all the best!
+                  </div>
                 </div>
                 <div
                   class="card row"
@@ -1152,9 +1167,11 @@ Thank you and all the best!
                           I agree that I am a local F&B looking for a delivery
                           and FoodLeh is not liable for any event not limited to
                           inaccuracies, delays, costs, spillage, accidents,
-                          injuries, food poisoning, etc. FoodLeh is only
-                          responsible for matching the two sides who will assume
-                          all responsibilities.
+                          injuries, food poisoning, etc. I also agree to let
+                          FoodLeh use the provided information to find a driver
+                          with all reasonable means. FoodLeh is only responsible
+                          for matching the two sides who will assume all
+                          responsibilities.
                         </label>
                         <br />
                         <br />
