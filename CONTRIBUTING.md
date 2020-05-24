@@ -46,7 +46,6 @@ Current listings won't let you open in a new window, weird for users who usually
 
 #### 1. Code refactoring ([#15][i15])
 
-- Combine SearchAll and Nearby components into a common component
 - Set up assets folder for icons
 - Abstract cuisines values into a common file
 - Use CSS modules instead of inline to make things more modular 

@@ -131,7 +131,6 @@ class App extends React.Component {
               <Route exact path="/" component={Components.Home} />
               {/* <Route exact path="/listing" component={Components.Listing} /> */}
               <Route exact path="/create" component={Components.Create} />
-              <Route exact path="/nearby" component={Components.Nearby} />
               <Route exact path="/info" component={Components.Info} />
               {/* <Route exact path="/news" component={Components.News} /> */}
               <Route exact path="/searchall" component={Components.SearchAll} />

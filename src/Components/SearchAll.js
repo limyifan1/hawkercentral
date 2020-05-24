@@ -84,29 +84,53 @@ function distance_calc(lat1, lon1, lat2, lon2) {
 
 let searchTimer = null;
 
+const searchInitialState = {
+  data: [],
+  query: "",
+  longitude: "",
+  latitude: "",
+  distance: 5,
+  pickup: false,
+  delivery: false,
+  retrieved: false,
+  search: "",
+  searchPostal: false,
+  cuisineValue: [],
+  isCuisineMenuOpen: false,
+}
+
 export class SearchAll extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      data: [],
-      query: "",
-      longitude: "",
-      latitude: "",
-      distance: 5,
-      pickup: false,
-      delivery: false,
-      retrieved: false,
-      search: "",
-      searchPostal: false,
-      cuisineValue: [],
-      isCuisineMenuOpen: false,
+    const queryParams = new URLSearchParams(props.location.search);
+
+    const state = {
+      ...searchInitialState,
+      pickup: queryParams.get("option") === "selfcollect",
+      delivery: queryParams.get("option") === "delivery",
     };
+
+    if (queryParams.get("lng") && queryParams.get("lat")) {
+      state.longitude = queryParams.get("lng");
+      state.latitude = queryParams.get("lat");
+    }
+
+    if (queryParams.get("postal")) {
+      state.postal = queryParams.get("postal");
+      state.searchPostal = true;
+    }
+
+    this.state = state;
   }
 
   componentWillMount() {
     onLoad("searchall_load");
-    this.retrieveData();
+    if (this.state.searchPostal && this.state.latitude && this.state.longitude) {
+      this.findDataByPostal();
+    } else {
+      this.retrieveData();
+    }
     console.log("run");
   }
 
