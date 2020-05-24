@@ -17,6 +17,8 @@ const twilio = require("twilio")(accountSid, authToken);
 const BitlyClient = require("bitly").BitlyClient;
 const REACT_APP_BITLY_KEY = functions.config().bitly.key;
 const bitly = new BitlyClient(REACT_APP_BITLY_KEY);
+const channel1 = functions.config().channel.channel1;
+const channel2 = functions.config().channel.channel2;
 
 // give us the possibility of manage request properly
 const app = express();
@@ -26,6 +28,40 @@ const shorten = async (url) => {
   const d = await bitly.shorten(url);
   return d.link;
 };
+const dayName = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+function formatAMPM(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  var strTime = hours + ":" + minutes + " " + ampm;
+  return strTime;
+}
 
 exports.requestOneMap = functions
   .region("asia-east2")
@@ -158,9 +194,21 @@ exports.telegramSend = functions
         url +
         "\n (request expires at pickup time)";
 
-      let sent = await bot.telegram.sendMessage("@foodlehdelivery", message, {
-        parse_mode: "HTML",
-      });
+      let foodleh_message = await bot.telegram
+        .sendMessage(channel1, message, {
+          parse_mode: "HTML",
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      let deliverysg_message = await bot.telegram
+        .sendMessage(channel2, message, {
+          parse_mode: "HTML",
+        })
+        .catch((e) => {
+          console.log(e);
+        });
 
       await twilio.messages
         .create({
@@ -176,14 +224,19 @@ exports.telegramSend = functions
           console.log(e);
         });
 
-      let message_id = sent.message_id;
+      let foodleh_id = foodleh_message.message_id;
+      let deliverysg_id = deliverysg_message.message_id;
+
       await admin
         .app()
         .firestore()
         .collection("deliveries")
         .doc(id)
         .update({
-          message_id: message_id,
+          message_id: {
+            foodleh: foodleh_id,
+            deliverysg: deliverysg_id,
+          },
         })
         .then(() => {
           res.setHeader("Access-Control-Allow-Origin", "*");
@@ -197,7 +250,10 @@ exports.telegramEdit = functions
   .region("asia-east2")
   .https.onRequest(async (req, res) => {
     return cors(req, res, async () => {
-      var message_id = req.body.message_id ? req.body.message_id : null;
+      var foodleh_id = req.body.foodleh_id ? req.body.foodleh_id : null;
+      var deliverysg_id = req.body.deliverysg_id
+        ? req.body.deliverysg_id
+        : null;
       var driver_mobile = req.body.driver_mobile
         ? req.body.driver_mobile
         : null;
@@ -213,6 +269,7 @@ exports.telegramEdit = functions
         : null;
       var note = req.body.note ? req.body.note : null;
       var cost = req.body.cost ? req.body.cost : null;
+      var duration = req.body.duration ? req.body.duration : null;
       var arrival = req.body.arrival ? req.body.arrival : null;
       var paynow_alternate = req.body.paynow_alternate
         ? req.body.paynow_alternate
@@ -264,20 +321,63 @@ exports.telegramEdit = functions
           console.log(e);
         });
 
-      var message = "<b>A driver has picked up this order! </b>";
-      await bot.telegram
-        .editMessageText("@foodlehdelivery", message_id, "", message, {
+      var message =
+        "<s><b>New Order Received</b> \n" +
+        "<b>From: </b> <a href='https://maps.google.com/?q=" +
+        origin +
+        "'>" +
+        origin +
+        "</a>\n" +
+        "<b>To: </b><a href='https://maps.google.com/?q=" +
+        destination +
+        "'>" +
+        destination +
+        "</a>\n" +
+        "<b>Fee: </b>" +
+        cost +
+        "\n" +
+        "<b>Pickup Time: </b>" +
+        time +
+        "\n" +
+        "<b>Est. Duration: </b>" +
+        duration +
+        "\n" +
+        "<b>Est. Arrival: </b>" +
+        arrival +
+        "\n" +
+        "<b>Click to Accept (first come first serve): </b></s>" +
+        "\n\n<b>Someone Has Accepted This Request</b>"
+      const job1 = bot.telegram
+        .editMessageText(channel1, foodleh_id, "", message, {
           parse_mode: "HTML",
         })
         .then((data) => {
           console.log(data);
-          res.setHeader("Access-Control-Allow-Origin", "*");
-          res.status(200).send(message);
-          return true;
+          return data;
         })
         .catch((e) => {
           console.log(e);
         });
+
+      const job2 = bot.telegram
+        .editMessageText(channel2, deliverysg_id, "", message, {
+          parse_mode: "HTML",
+        })
+        .then((data) => {
+          console.log(data);
+          return data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      const jobs = [];
+      jobs.push(job1);
+      jobs.push(job2);
+      await Promise.all(jobs);
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.status(200).send(message);
+      return true;
     });
   });
 
@@ -285,18 +385,61 @@ exports.telegramCancel = functions
   .region("asia-east2")
   .https.onRequest(async (req, res) => {
     return cors(req, res, async () => {
-      var message_id = req.body.message_id ? req.body.message_id : null;
-
-      var message = "<b>The hawker has cancelled this request. </b>";
+      var data = req.body.data ? req.body.data : null;
+      console.log(data);
+      console.log(data.time);
+      var time =
+        data.time && typeof data.time !== "string"
+          ? dayName[new Date(data.time.seconds * 1000 + 28800 * 1000).getDay()] +
+            " " +
+            new Date(data.time.seconds * 1000 + 28800 * 1000).getDate() +
+            " " +
+            monthNames[new Date(data.time.seconds * 1000 + 28800 * 1000).getMonth()] +
+            " " +
+            formatAMPM(new Date(data.time.seconds * 1000 + 28800 * 1000))
+          : null;
+      var message =
+        "<s><b>New Order Received</b> \n" +
+        "<b>From: </b> <a href='https://maps.google.com/?q=" +
+        data.street +
+        "'>" +
+        data.street +
+        "</a>\n" +
+        "<b>To: </b><a href='https://maps.google.com/?q=" +
+        data.street_to +
+        "'>" +
+        data.street_to +
+        "</a>\n" +
+        "<b>Fee: </b>$" +
+        data.cost +
+        "\n" +
+        "<b>Pickup Time: </b>" +
+        time +
+        "\n" +
+        "<b>Est. Duration: </b>" +
+        data.duration +
+        "\n" +
+        "<b>Est. Arrival: </b>" +
+        data.arrival +
+        "\n" +
+        "<b>Click to Accept (first come first serve): </b></s>" +
+        "\n\n<b>The owner has cancelled this request. </b>"
       await bot.telegram
-        .editMessageText("@foodlehdelivery", message_id, "", message, {
+        .editMessageText(channel1, data.message_id.foodleh, "", message, {
           parse_mode: "HTML",
         })
         .then(() => {
-          res.setHeader("Access-Control-Allow-Origin", "*");
-          res.status(200).send(message);
           return true;
         });
+      await bot.telegram
+        .editMessageText(channel2, data.message_id.deliverysg, "", message, {
+          parse_mode: "HTML",
+        })
+        .then(() => {
+          return true;
+        });
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.status(200).send(message);
     });
   });
 
@@ -324,27 +467,100 @@ exports.taskRunner = functions
 
     // Loop over documents and push job.
     tasks.forEach((snapshot) => {
-      const { message_id } = snapshot.data();
+      const {
+        message_id,
+        contact,
+        contact_to,
+        street_to,
+        street,
+        cost,
+        time,
+        duration,
+        arrival,
+      } = snapshot.data();
       var expiry = new Date(
         snapshot.data().time.toDate().getTime() - 0 * 60000
       );
+      var time_formatted =
+        time && typeof time !== "string"
+          ? dayName[new Date(time.seconds * 1000 + 28800 * 1000).getDay()] +
+            " " +
+            new Date(time.seconds * 1000 + 28800 * 1000).getDate() +
+            " " +
+            monthNames[new Date(time.seconds * 1000 + 28800 * 1000).getMonth()] +
+            " " +
+            formatAMPM(new Date(time.seconds * 1000 + 28800 * 1000))
+          : null;
       var now = new Date();
       console.log(message_id, now - expiry);
       if (now - expiry > 0) {
-        var message = "<b>This request has expired </b>";
+        var message =
+          "<s><b>New Order Received</b> \n" +
+          "<b>From: </b> <a href='https://maps.google.com/?q=" +
+          street +
+          "'>" +
+          street +
+          "</a>\n" +
+          "<b>To: </b><a href='https://maps.google.com/?q=" +
+          street_to +
+          "'>" +
+          street_to +
+          "</a>\n" +
+          "<b>Fee: </b>$" +
+          cost +
+          "\n" +
+          "<b>Pickup Time: </b>" +
+          time_formatted +
+          "\n" +
+          "<b>Est. Duration: </b>" +
+          duration +
+          "\n" +
+          "<b>Est. Arrival: </b>" +
+          arrival +
+          "\n" +
+          "<b>Click to Accept (first come first serve): </b></s>" +
+          "\n\n<b>This request has expired </b>" +
+          "\n (request expires at pickup time)";
         const job1 = snapshot.ref.update({ expired: true });
-        console.log(message_id + " expired");
+        console.log(message_id.foodleh + " expired");
         const job2 = bot.telegram.editMessageText(
-          "@foodlehdelivery",
-          message_id,
+          channel1,
+          message_id.foodleh,
           "",
           message,
           {
             parse_mode: "HTML",
           }
         );
+        const job3 = bot.telegram.editMessageText(
+          channel2,
+          message_id.deliverysg,
+          "",
+          message,
+          {
+            parse_mode: "HTML",
+          }
+        );
+        const job4 = twilio.messages
+          .create({
+            body:
+              "Sorry, your request expired :(" +
+              "\nAddress:" +
+              street_to +
+              "\nCust. No.:+65" +
+              contact_to +
+              "\nPlease submit again or use another platform",
+            from: "+12015847715",
+            to: "+65" + contact,
+          })
+          .then((message) => console.log(contact, message.sid))
+          .catch((e) => {
+            console.log(e);
+          });
         jobs.push(job1);
         jobs.push(job2);
+        jobs.push(job3);
+        jobs.push(job4);
       }
     });
 

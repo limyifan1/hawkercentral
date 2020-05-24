@@ -166,7 +166,7 @@ export class Delivery extends React.Component {
         } else {
           snapshot.ref.update({ cancelled: true });
           this.setState({ loadingCancel: false });
-          this.cancelData({ message_id: snapshot.data().message_id });
+          this.cancelData({ data: snapshot.data() });
         }
       });
   };
@@ -294,7 +294,8 @@ export class Delivery extends React.Component {
             paynow_alternate: this.state.paynow_alternate,
           }).then(async (d) => {
             await this.sendData({
-              message_id: data.message_id,
+              foodleh_id: data.message_id.foodleh,
+              deliverysg_id: data.message_id.deliverysg,
               driver_mobile: this.state.driver_contact,
               driver_name: this.state.driver_name,
               requester_mobile: data.contact,
@@ -314,6 +315,7 @@ export class Delivery extends React.Component {
               note: data.note,
               cost: data.cost,
               arrival: data.arrival,
+              duration: data.duration,
               paynow_alternate: this.state.paynow_alternate,
             });
           });

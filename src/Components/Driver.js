@@ -566,8 +566,8 @@ export class Driver extends React.Component {
                         width: "50%",
                       }}
                     />
-                    Now, everyone can deliver <br /> Click To Learn How It
-                    Works: <br />
+                    A non-profit community delivery initiative <br /> Click To
+                    Learn How It Works: <br />
                     <img
                       onClick={() => this.setShow()}
                       style={{
@@ -592,11 +592,11 @@ export class Driver extends React.Component {
                     cancel the request after driver is found.
                     <br />
                     <br />
-                    3. As long as there's no SMS with driver contact number, assume that
-                    driver has not been found. You will need to find drivers
-                    from other platforms too. If you find a driver on another
-                    platform, please cancel this request (link in your initial
-                    confirmation SMS).
+                    3. As long as there's no SMS with driver contact number,
+                    assume that driver has not been found. You will need to find
+                    drivers from other platforms too. If you find a driver on
+                    another platform, please cancel this request (link in your
+                    initial confirmation SMS).
                     <br />
                     <br />
                     Thank you and all the best!
