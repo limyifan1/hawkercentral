@@ -9,7 +9,6 @@ import Create from "./Create";
 import Listing from "./Listing";
 import Item from "./Item";
 import Results from "./Results";
-import Nearby from "./Nearby";
 import Info from "./Info";
 import About from "./About";
 import Popup from "./Popup";
@@ -30,7 +29,6 @@ export default {
   Listing,
   Item,
   Results,
-  Nearby,
   Info,
   About,
   Popup,

@@ -71,11 +71,10 @@ export class Search extends React.Component {
     search.append("street", postal.ADDRESS);
     search.append("lng", postal.LONGITUDE);
     search.append("lat", postal.LATITUDE);
-    search.append("distance", "5");
     search.append("option", this.props.option);
 
     this.props.history.push({
-      pathname: "/nearby",
+      pathname: "/searchall",
       search: search.toString(),
     });
   };
