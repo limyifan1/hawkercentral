@@ -121,6 +121,7 @@ export class Info extends React.Component {
     };
     this.enterDetails = this.enterDetails.bind(this);
     this.handleCustomerDetails = this.handleCustomerDetails.bind(this);
+    this.updateCustomerDetails = this.updateCustomerDetails.bind(this);
     this.setOrderText = this.setOrderText.bind(this);
     this.formatSummary = this.formatSummary.bind(this);
     this.toggleShouldRememberDetails = this.toggleShouldRememberDetails.bind(this);
@@ -129,6 +130,12 @@ export class Info extends React.Component {
   componentWillMount() {
     this.getDoc();
     console.log("run");
+
+    if (localStorage.getItem("userDetails")) {
+      const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+      this.setState(userDetails);
+      this.setState({ shouldRememberDetails: true });
+    }
   }
 
   getDoc = async () => {
@@ -155,12 +162,28 @@ export class Info extends React.Component {
       });
   };
 
+  updateSavedData(isChecked) {
+    if (!isChecked) {
+      localStorage.clear();
+    } else {
+      const userDetails = {
+        name: this.state.name,
+        customerNumber: this.state.customerNumber,
+        postal: this.state.postal,
+        unit: this.state.unit,
+        street: this.state.street
+      };
+      localStorage.setItem("userDetails", JSON.stringify(userDetails));
+    }
+  }
+
   toggleShouldRememberDetails(event) {
     const isChecked = event.target.checked;
     this.setState({ shouldRememberDetails: isChecked });
+    this.updateSavedData(isChecked);
   }
 
-  handleCustomerDetails = async (event) => {
+  updateCustomerDetails = async(event) => {
     const inputValue = event.target.value;
     const inputField = event.target.name;
     if (inputField === "name") {
@@ -199,6 +222,13 @@ export class Info extends React.Component {
         await this.getPostal(inputValue);
       }
     }
+  }
+
+  handleCustomerDetails = async (event) => {
+    await this.updateCustomerDetails(event)
+      .then(() => {
+        this.updateSavedData(this.state.shouldRememberDetails);
+      });
   };
 
   async getPostal(postal) {
