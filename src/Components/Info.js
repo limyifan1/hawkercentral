@@ -312,7 +312,8 @@ export class Info extends React.Component {
     var shortenedURL = await shorten(
       "https://foodleh.app/driver?" + storeData.toString()
     );
-    text = text + "\n For F&B Owner, request for a driver here: " + shortenedURL;
+    text =
+      text + "\n For F&B Owner, request for a driver here: " + shortenedURL;
     return encodeURIComponent(text);
   };
 
@@ -406,7 +407,17 @@ export class Info extends React.Component {
                       display: "flex",
                     }}
                   >
-                    <b>{element ? element.name : null}</b>
+                    {/* <b>{element ? element.name : null}</b> */}
+                    <b>
+                      {element ? (
+                        <span>
+                          {element.name}
+                          {element && element.description ? (
+                            <span> ({element.description})</span>
+                          ) : null}
+                        </span>
+                      ) : null}
+                    </b>
                   </span>
                 </div>
                 <div class="row">
@@ -1009,9 +1020,24 @@ export class Info extends React.Component {
                                   }}
                                 >
                                   <b>
-                                    {this.state.data.menu_combined[0]
-                                      ? this.state.data.menu_combined[0].name
-                                      : null}
+                                    {this.state.data.menu_combined[0] ? (
+                                      <span>
+                                        {this.state.data.menu_combined[0].name}
+                                        {this.state.data.menu_combined[0] &&
+                                        this.state.data.menu_combined[0]
+                                          .description ? (
+                                          <span>
+                                            {" "}
+                                            (
+                                            {
+                                              this.state.data.menu_combined[0]
+                                                .description
+                                            }
+                                            )
+                                          </span>
+                                        ) : null}
+                                      </span>
+                                    ) : null}
                                   </b>
                                 </span>
                               </div>
