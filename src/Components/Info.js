@@ -7,7 +7,7 @@ import React from "react";
 import "../App.css";
 import "react-multi-carousel/lib/styles.css";
 import queryString from "query-string";
-import { Button, Spinner, Form } from "react-bootstrap";
+import { Button, Spinner, Form, Popover, OverlayTrigger } from "react-bootstrap";
 import { db } from "./Firestore";
 import ImageGallery from "react-image-gallery";
 import Component from "./index";
@@ -87,6 +87,14 @@ function ScrollTop(props) {
   );
 }
 
+const popover = (
+  <Popover>
+    <Popover.Content>
+      Your details will only be stored in your browser!
+    </Popover.Content>
+  </Popover>
+);
+
 export class Info extends React.Component {
   constructor(props) {
     super(props);
@@ -109,11 +117,13 @@ export class Info extends React.Component {
       activePhoto: 1,
       hasReviewEditMessage: false,
       hasReviewDeleteMessage: false,
+      shouldRememberDetails: false,
     };
     this.enterDetails = this.enterDetails.bind(this);
     this.handleCustomerDetails = this.handleCustomerDetails.bind(this);
     this.setOrderText = this.setOrderText.bind(this);
     this.formatSummary = this.formatSummary.bind(this);
+    this.toggleShouldRememberDetails = this.toggleShouldRememberDetails.bind(this);
   }
 
   componentWillMount() {
@@ -144,6 +154,11 @@ export class Info extends React.Component {
         console.log(error);
       });
   };
+
+  toggleShouldRememberDetails(event) {
+    const isChecked = event.target.checked;
+    this.setState({ shouldRememberDetails: isChecked });
+  }
 
   handleCustomerDetails = async (event) => {
     const inputValue = event.target.value;
@@ -1468,7 +1483,6 @@ export class Info extends React.Component {
                                     placeholder=""
                                   ></input>
                                 </div> */}
-
                                 <div class="form-group create-title">
                                   <label for="address">Comments</label>
                                   <input
@@ -1482,6 +1496,20 @@ export class Info extends React.Component {
                                     }}
                                     placeholder="No chilli etc, leave blank if nil"
                                   ></input>
+                                </div>
+                                <div class="form-group create-title">
+                                  <OverlayTrigger trigger={["hover", "focus"]} placement="top" overlay={popover}>
+                                    <label for="remember">Remember me?</label>
+                                  </OverlayTrigger>
+                                    <input
+                                      name="shouldRememberDetails"
+                                      type="checkbox"
+                                      checked={this.state.shouldRememberDetails}
+                                      onChange={this.toggleShouldRememberDetails}
+                                      style={{
+                                        marginLeft: "10px",
+                                      }}
+                                    ></input>
                                 </div>
                                 <Button
                                   class="shadow-sm"
