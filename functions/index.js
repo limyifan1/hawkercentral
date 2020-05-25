@@ -19,6 +19,7 @@ const REACT_APP_BITLY_KEY = functions.config().bitly.key;
 const bitly = new BitlyClient(REACT_APP_BITLY_KEY);
 const channel1 = functions.config().channel.channel1;
 const channel2 = functions.config().channel.channel2;
+const takesgurl = functions.config().sync.takesgurl;
 
 // give us the possibility of manage request properly
 const app = express();
@@ -346,7 +347,7 @@ exports.telegramEdit = functions
         arrival +
         "\n" +
         "<b>Click to Accept (first come first serve): </b></s>" +
-        "\n\n<b>Someone Has Accepted This Request</b>"
+        "\n\n<b>Someone Has Accepted This Request</b>";
       const job1 = bot.telegram
         .editMessageText(channel1, foodleh_id, "", message, {
           parse_mode: "HTML",
@@ -390,11 +391,15 @@ exports.telegramCancel = functions
       console.log(data.time);
       var time =
         data.time && typeof data.time !== "string"
-          ? dayName[new Date(data.time.seconds * 1000 + 28800 * 1000).getDay()] +
+          ? dayName[
+              new Date(data.time.seconds * 1000 + 28800 * 1000).getDay()
+            ] +
             " " +
             new Date(data.time.seconds * 1000 + 28800 * 1000).getDate() +
             " " +
-            monthNames[new Date(data.time.seconds * 1000 + 28800 * 1000).getMonth()] +
+            monthNames[
+              new Date(data.time.seconds * 1000 + 28800 * 1000).getMonth()
+            ] +
             " " +
             formatAMPM(new Date(data.time.seconds * 1000 + 28800 * 1000))
           : null;
@@ -423,7 +428,7 @@ exports.telegramCancel = functions
         data.arrival +
         "\n" +
         "<b>Click to Accept (first come first serve): </b></s>" +
-        "\n\n<b>The owner has cancelled this request. </b>"
+        "\n\n<b>The owner has cancelled this request. </b>";
       await bot.telegram
         .editMessageText(channel1, data.message_id.foodleh, "", message, {
           parse_mode: "HTML",
@@ -487,7 +492,9 @@ exports.taskRunner = functions
             " " +
             new Date(time.seconds * 1000 + 28800 * 1000).getDate() +
             " " +
-            monthNames[new Date(time.seconds * 1000 + 28800 * 1000).getMonth()] +
+            monthNames[
+              new Date(time.seconds * 1000 + 28800 * 1000).getMonth()
+            ] +
             " " +
             formatAMPM(new Date(time.seconds * 1000 + 28800 * 1000))
           : null;
@@ -566,6 +573,78 @@ exports.taskRunner = functions
 
     // Execute all jobs concurrently
     return await Promise.all(jobs);
+  });
+
+exports.takesgSync = functions
+  .region("asia-east2")
+  .runWith({ memory: "2GB" })
+  .pubsub.schedule("every 24 hours")
+  .onRun(async (context) => {
+    var take_keys = [];
+    var take_data = [];
+
+    const url = takesgurl;
+
+    await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((json) => {
+        json.forEach((d) => {
+          take_keys.push(d.phone);
+          take_data.push(d);
+        });
+        return json;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    await admin
+      .app()
+      .firestore()
+      .collection("hawkers")
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach(async (d) => {
+          var data_contact = "65" + d.data().contact;
+          // var hasTakesgDescription = d
+          //   .data()
+          //   .description_detail.includes("Contributed by take.sg");
+          var inTakesg = take_keys.includes(data_contact);
+          if (inTakesg) {
+            var index = take_keys.indexOf(data_contact);
+            var data = take_data[index];
+            d.ref
+              .update({
+                description_detail: data.description
+                  ? data.description + "\n Contributed by take.sg"
+                  : "",
+                name: data.name,
+                price: data.delivery_cost ? "$" + data.delivery_cost : "",
+                website: data.reference ? data.reference : "",
+                menu_combined: data.menus ? data.menus : "",
+                tagsValue: data.tags ? data.tags : "",
+              })
+              .then((d) => {
+                console.log("Updated: " + data.name);
+                return true;
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }
+        });
+        return true;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   });
 
 // var admin = require("firebase-admin");
