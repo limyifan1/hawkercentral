@@ -300,8 +300,10 @@ export class Delivery extends React.Component {
               driver_name: this.state.driver_name,
               requester_mobile: data.contact,
               customer_mobile: data.contact_to,
-              origin: data.unit + " " + data.street,
-              destination: data.unit_to + " " + data.street_to,
+              // origin: data.unit + " " + data.street,
+              // destination: data.unit_to + " " + data.street_to,
+              origin: data.street,
+              destination: data.street_to,
               time:
                 data.time && typeof data.time !== "string"
                   ? dayName[data.time.toDate().getDay()] +
