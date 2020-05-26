@@ -3,7 +3,7 @@ import "../App.css";
 import { withRouter } from "react-router-dom";
 import firebase from "./Firestore";
 import { Form, Modal, Spinner } from "react-bootstrap";
-import { db } from "./Firestore";
+import { db, uiConfig  } from "./Firestore";
 import driver from "../driver.png";
 import question from "../question.png";
 import store_address from "../store_address.png";
@@ -18,6 +18,7 @@ import Button from "@material-ui/core/Button";
 import DatePicker from "react-date-picker";
 import TimePicker from "react-time-picker";
 import queryString from "query-string";
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 const cookies = new Cookies();
 const API_KEY = `${process.env.REACT_APP_GKEY}`;
 const analytics = firebase.analytics();
@@ -50,6 +51,10 @@ const monthNames = [
   "November",
   "December",
 ];
+
+function getPhoneNumberFromUserInput() {
+  return document.getElementById("phone-number").value;
+}
 
 function formatAMPM(date) {
   var hours = date.getHours();
@@ -125,11 +130,12 @@ export class Driver extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      firebaseUser: null,
       postal: queryString.parse(this.props.location.search).postal
         ? queryString.parse(this.props.location.search).postal
         : cookies.get("postal")
-        ? cookies.get("postal")
-        : "",
+          ? cookies.get("postal")
+          : "",
       postal_to: queryString.parse(this.props.location.search).postal_to
         ? queryString.parse(this.props.location.search).postal_to
         : "",
@@ -140,8 +146,8 @@ export class Driver extends React.Component {
       street: queryString.parse(this.props.location.search).street
         ? queryString.parse(this.props.location.search).street
         : cookies.get("street")
-        ? cookies.get("street")
-        : "",
+          ? cookies.get("street")
+          : "",
       street_to: queryString.parse(this.props.location.search).street_to
         ? queryString.parse(this.props.location.search).street_to
         : "",
@@ -150,16 +156,16 @@ export class Driver extends React.Component {
       unit: queryString.parse(this.props.location.search).unit
         ? queryString.parse(this.props.location.search).unit
         : cookies.get("unit")
-        ? cookies.get("unit")
-        : "",
+          ? cookies.get("unit")
+          : "",
       unit_to: queryString.parse(this.props.location.search).unit_to
         ? queryString.parse(this.props.location.search).unit_to
         : "",
       contact: queryString.parse(this.props.location.search).contact
         ? queryString.parse(this.props.location.search).contact
         : cookies.get("contact")
-        ? cookies.get("contact")
-        : "",
+          ? cookies.get("contact")
+          : "",
       contact_to: queryString.parse(this.props.location.search).contact_to
         ? queryString.parse(this.props.location.search).contact_to
         : "",
@@ -264,8 +270,8 @@ export class Driver extends React.Component {
   callPostal = (postal) => {
     return fetch(
       "https://developers.onemap.sg/commonapi/search?searchVal=" +
-        postal +
-        "&returnGeom=Y&getAddrDetails=Y"
+      postal +
+      "&returnGeom=Y&getAddrDetails=Y"
     )
       .then(function (response) {
         return response.json();
@@ -372,8 +378,8 @@ export class Driver extends React.Component {
     var arrival = new Date(this.state.datetime);
     arrival.setMinutes(
       arrival.getMinutes() +
-        15 +
-        this.state.directions.routes[0].legs[0].duration.value / 60
+      15 +
+      this.state.directions.routes[0].legs[0].duration.value / 60
     );
     arrival =
       dayName[arrival.getDay()] +
@@ -438,21 +444,69 @@ export class Driver extends React.Component {
   }
 
   componentDidMount() {
-    // this.setState({time: time_now})
+    // Set up Firebase reCAPTCHA
+    // To apply the default browser preference instead of explicitly setting it.
+    firebase.auth().useDeviceLanguage();
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+      "recaptcha-container",
+      {
+        size: "invisible",
+        callback: function (response) {
+          // reCAPTCHA solved
+        },
+      }
+    );
+
+    firebase.auth().onAuthStateChanged(
+      function (user) {
+        if (user) {
+          // User is signed in, set state
+          // More auth information can be obtained here but for verification purposes, we just need to know user signed in
+          this.setState({
+            firebaseUser: user,
+            contact: user.phoneNumber.slice(3),
+          });
+          onLoad("hawker_dashboard", user.phoneNumber.slice(3));
+        } else {
+          // No user is signed in.
+        }
+      }.bind(this)
+    );
   }
+
+  handleVerify = async (event) => {
+    event.preventDefault();
+    //cookies.set("driver_contact", this.state.driver_contact, { path: "/" });
+    // Handle Firebase phone number-OTP verification
+    var phoneNumber = getPhoneNumberFromUserInput();
+    var appVerifier = window.recaptchaVerifier;
+    firebase
+      .auth()
+      .signInWithPhoneNumber(phoneNumber, appVerifier)
+      .then(function (confirmationResult) {
+        // SMS sent
+        window.confirmationResult = confirmationResult;
+      })
+      .catch(function (error) {
+        // Error; SMS not sent
+        // Reset reCAPTCHA so user can try again
+        console.log("error, sms not sent");
+      });
+  };
+
 
   handleTime = async (time) => {
     this.setState({
       time: time,
       datetime: new Date(
         this.state.date.getMonth() +
-          1 +
-          "/" +
-          this.state.date.getDate() +
-          "/" +
-          this.state.date.getFullYear() +
-          " " +
-          time
+        1 +
+        "/" +
+        this.state.date.getDate() +
+        "/" +
+        this.state.date.getFullYear() +
+        " " +
+        time
       ),
     });
   };
@@ -462,13 +516,13 @@ export class Driver extends React.Component {
       date: date,
       datetime: new Date(
         date.getMonth() +
-          1 +
-          "/" +
-          date.getDate() +
-          "/" +
-          date.getFullYear() +
-          " " +
-          this.state.time
+        1 +
+        "/" +
+        date.getDate() +
+        "/" +
+        date.getFullYear() +
+        " " +
+        this.state.time
       ),
     });
   };
@@ -512,8 +566,8 @@ export class Driver extends React.Component {
       arrival = new Date(this.state.datetime);
       arrival.setMinutes(
         arrival.getMinutes() +
-          15 +
-          this.state.directions.routes[0].legs[0].duration.value / 60
+        15 +
+        this.state.directions.routes[0].legs[0].duration.value / 60
       );
     }
     return (
@@ -667,10 +721,10 @@ export class Driver extends React.Component {
                               Postal Code is invalid
                             </div>
                           ) : (
-                            <div>
-                              <br />
-                            </div>
-                          )}
+                              <div>
+                                <br />
+                              </div>
+                            )}
                         </div>
                       </div>
                       <div class="p-6" style={{ padding: "0px 10px" }}>
@@ -703,10 +757,10 @@ export class Driver extends React.Component {
                               Postal Code is invalid
                             </div>
                           ) : (
-                            <div>
-                              <br />
-                            </div>
-                          )}
+                              <div>
+                                <br />
+                              </div>
+                            )}
                         </div>
                       </div>
                     </div>
@@ -717,32 +771,32 @@ export class Driver extends React.Component {
                       {this.state.loadingDir ? (
                         <Spinner class="" animation="grow" />
                       ) : (
-                        <div style={{ fontSize: "14px", textAlign: "left" }}>
-                          {this.state.retrievedDir &&
-                          this.state.directions &&
-                          this.state.directions.routes.length > 0 ? (
-                            <div
-                              class="p-6 d-flex align-items-center"
-                              style={{
-                                padding: "15px",
-                              }}
-                            >
-                              <div>
-                                <b>Duration: </b>
-                                {this.state.directions.routes.length > 0
-                                  ? this.state.directions.routes[0].legs[0]
-                                      .duration.text
-                                  : null}
-                                <br />
-                                <b>Delivery Cost: </b>
-                                {this.state.cost
-                                  ? "$" + this.state.cost.toString()
-                                  : null}
-                              </div>
-                            </div>
-                          ) : null}
-                        </div>
-                      )}
+                          <div style={{ fontSize: "14px", textAlign: "left" }}>
+                            {this.state.retrievedDir &&
+                              this.state.directions &&
+                              this.state.directions.routes.length > 0 ? (
+                                <div
+                                  class="p-6 d-flex align-items-center"
+                                  style={{
+                                    padding: "15px",
+                                  }}
+                                >
+                                  <div>
+                                    <b>Duration: </b>
+                                    {this.state.directions.routes.length > 0
+                                      ? this.state.directions.routes[0].legs[0]
+                                        .duration.text
+                                      : null}
+                                    <br />
+                                    <b>Delivery Cost: </b>
+                                    {this.state.cost
+                                      ? "$" + this.state.cost.toString()
+                                      : null}
+                                  </div>
+                                </div>
+                              ) : null}
+                          </div>
+                        )}
                       <div class="p-6 d-flex flex-row justify-content-center align-items-center">
                         {this.state.loadingMap ? (
                           <div>
@@ -750,424 +804,459 @@ export class Driver extends React.Component {
                             <Spinner class="" animation="grow" />
                           </div>
                         ) : (
-                          <div>
-                            {this.state.retrievedMap &&
-                            this.state.regionFrom.planningarea ? (
-                              <span>
-                                <div>
-                                  <img
-                                    src={
-                                      "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
-                                      this.state.regionFrom.planningarea
-                                        .replace(/ /g, "")
-                                        .toLowerCase() +
-                                      ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
-                                    }
-                                    alt="map"
-                                    style={{
-                                      width: "100px",
-                                      height: "auto",
-                                    }}
-                                  />
-                                  <Button
-                                    variant="contained"
-                                    color={"secondary"}
-                                    size="large"
-                                    startIcon={<GetApp />}
-                                    style={{
-                                      fontSize: "10px",
-                                      width: "auto",
-                                      margin: "10px",
-                                      // position: "absolute",
-                                      // right: "40px",
-                                    }}
-                                    target="blank"
-                                    href={
-                                      "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
-                                      this.state.regionFrom.planningarea
-                                        .replace(/ /g, "")
-                                        .toLowerCase() +
-                                      ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
-                                    }
-                                    download
-                                  >
-                                    <div>View Map (全图)</div>
-                                  </Button>
-                                </div>
-                              </span>
-                            ) : (
-                              <div>
-                                Map will be loaded after details are given
-                              </div>
-                            )}
-                          </div>
-                        )}
+                            <div>
+                              {this.state.retrievedMap &&
+                                this.state.regionFrom.planningarea ? (
+                                  <span>
+                                    <div>
+                                      <img
+                                        src={
+                                          "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
+                                          this.state.regionFrom.planningarea
+                                            .replace(/ /g, "")
+                                            .toLowerCase() +
+                                          ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
+                                        }
+                                        alt="map"
+                                        style={{
+                                          width: "100px",
+                                          height: "auto",
+                                        }}
+                                      />
+                                      <Button
+                                        variant="contained"
+                                        color={"secondary"}
+                                        size="large"
+                                        startIcon={<GetApp />}
+                                        style={{
+                                          fontSize: "10px",
+                                          width: "auto",
+                                          margin: "10px",
+                                          // position: "absolute",
+                                          // right: "40px",
+                                        }}
+                                        target="blank"
+                                        href={
+                                          "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
+                                          this.state.regionFrom.planningarea
+                                            .replace(/ /g, "")
+                                            .toLowerCase() +
+                                          ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
+                                        }
+                                        download
+                                      >
+                                        <div>View Map (全图)</div>
+                                      </Button>
+                                    </div>
+                                  </span>
+                                ) : (
+                                  <div>
+                                    Map will be loaded after details are given
+                                  </div>
+                                )}
+                            </div>
+                          )}
                       </div>
                     </div>
                     <div style={{ paddingTop: "20px" }}>
                       <b>↓ To Arrange Delivery 安排送餐添表格 ↓</b>
                     </div>
-                  </div>
-                  <img
-                    class="d-none d-md-inline-block"
-                    src={store_address}
-                    alt=""
-                    style={{ width: "40%" }}
-                  />
-                  <img
-                    class="d-inline-block d-md-none"
-                    src={store_address}
-                    alt=""
-                    style={{ width: "80%" }}
-                  />
-                  <div style={{ padding: "20px" }}>
-                    <div class="row">
-                      {" "}
-                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                        {" "}
-                        <div class="form-group create-title">
-                          <label for="postalcode">Postal Code 邮区编号</label>
-                          <div class="input-group">
-                            <input
-                              onChange={this.handleChange.bind(this)}
-                              value={this.state.postal}
-                              type="text"
-                              class={
-                                !this.state.postal
-                                  ? "form-control is-invalid"
-                                  : "form-control"
-                              }
-                              name="postal"
-                              placeholder="Enter Postal Code 邮区编号"
-                              min="0"
-                              required
-                              maxLength="6"
-                            ></input>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                        {" "}
-                        <div class="form-group create-title">
-                          <label for="street">
-                            Street Name 街道<b> (Auto-Filled)</b>
-                          </label>
-                          <input
-                            onChange={this.handleChange}
-                            value={this.state.street}
-                            type="text"
-                            class={
-                              !this.state.street
-                                ? "form-control is-invalid"
-                                : "form-control"
-                            }
-                            name="street"
-                            placeholder="Enter Street Name 街道"
-                            required
-                          ></input>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="form-group create-title">
-                          <label for="unit">Unit # 门牌</label>
-                          <input
-                            onChange={this.handleChange}
-                            value={this.state.unit}
-                            type="text"
-                            class="form-control"
-                            name="unit"
-                            placeholder="E.g. #01-01"
-                          ></input>
-                        </div>
-                      </div>
-                      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="form-group create-title">
-                          <label for="unit">Mobile Number 手机号: </label>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text" id="basic-addon1">
-                                +65
-                              </span>
-                            </div>
-                            <input
-                              onChange={this.handleChange}
-                              value={this.state.contact}
-                              type="tel"
-                              class={
-                                !this.state.contact
-                                  ? "form-control is-invalid"
-                                  : "form-control"
-                              }
-                              name="contact"
-                              placeholder="9xxxxxxx"
-                              maxLength="8"
-                              minlength="8"
-                              pattern="[8-9]{1}[0-9]{7}"
-                              required
-                            ></input>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                        <div class="form-group create-title">
-                          <label for="note">
-                            Note To Driver 司机启示 (Optional, max 40 char)
-                          </label>
-                          <input
-                            onChange={this.handleChange}
-                            value={this.state.note}
-                            type="text"
-                            class="form-control"
-                            name="note"
-                            placeholder="E.g. Collect order number 3"
-                            maxLength="40"
-                          ></input>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <img
-                    class="d-none d-md-inline-block"
-                    src={delivery_address}
-                    alt=""
-                    style={{ width: "40%" }}
-                  />
-                  <img
-                    class="d-inline-block d-md-none"
-                    src={delivery_address}
-                    alt=""
-                    style={{ width: "80%" }}
-                  />
-                  <div style={{ padding: "20px" }}>
-                    <div class="row">
-                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                        <div class="form-group create-title">
-                          <label for="postal_to">Postal Code 邮区编号 </label>
-                          <div class="input-group">
-                            <input
-                              onChange={this.handleChange.bind(this)}
-                              value={this.state.postal_to}
-                              type="text"
-                              class={
-                                !this.state.postal_to
-                                  ? "form-control is-invalid"
-                                  : "form-control"
-                              }
-                              name="postal_to"
-                              placeholder="Enter Postal Code 邮区编号"
-                              min="0"
-                              required
-                            ></input>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                        <div class="form-group create-title">
-                          <label for="street_to">
-                            Street Name 街道<b> (Auto-Filled)</b>
-                          </label>
-                          <input
-                            onChange={this.handleChange}
-                            value={this.state.street_to}
-                            type="text"
-                            class={
-                              !this.state.street_to
-                                ? "form-control is-invalid"
-                                : "form-control"
-                            }
-                            name="street_to"
-                            placeholder="Enter Street Name 街道"
-                            required
-                          ></input>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      {" "}
-                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                        {" "}
-                        <div class="form-group create-title">
-                          <label for="unit">Unit # 门牌</label>
-                          <input
-                            onChange={this.handleChange}
-                            value={this.state.unit_to}
-                            type="text"
-                            class="form-control"
-                            name="unit_to"
-                            placeholder="E.g. #01-01"
-                          ></input>
-                        </div>
-                      </div>
-                      <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                        <div class="form-group create-title">
-                          <label for="unit">Mobile Number 手机号:</label>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text" id="basic-addon1">
-                                +65
-                              </span>
-                            </div>
-                            <input
-                              onChange={this.handleChange}
-                              value={this.state.contact_to}
-                              type="tel"
-                              name="contact_to"
-                              placeholder="9xxxxxxx"
-                              maxLength="8"
-                              pattern="[8-9]{1}[0-9]{7}"
-                              minlength="8"
-                              class={
-                                !this.state.contact_to
-                                  ? "form-control is-invalid"
-                                  : "form-control"
-                              }
-                              required
-                            ></input>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="form-group create-title">
-                          <label for="time">Pickup Date 取食物日期</label>
-                          <DatePicker
-                            class="form-control is-invalid"
-                            dayPlaceholder="dd"
-                            monthPlaceholder="mm"
-                            yearPlaceholder="yyyy"
-                            onChange={this.handleDate}
-                            value={this.state.date}
-                            format="dd/MMM/yyyy"
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="form-group create-title">
-                          <label for="time">Pickup Time 取食物时间</label>
-                          <TimePicker
-                            class="form-control is-invalid"
-                            dayPlaceholder="dd"
-                            monthPlaceholder="mm"
-                            yearPlaceholder="yyyy"
-                            hourPlaceholder="hh"
-                            minutePlaceholder="mm"
-                            onChange={this.handleTime}
-                            value={this.state.time}
-                            format="hh:mma"
-                            disableClock
-                            required
-                          />
-                          {time_now > this.state.datetime ? (
-                            <span class="badge badge-danger">
-                              Time cannot be less than 1 hour from now
-                              <br />
-                              取食物时间必须至少在1小时后
-                            </span>
-                          ) : null}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    {/* Check if user is already logged in with Firebase */}
+                <div
+                  style={{
+                    display: this.state.firebaseUser ? "none" : "block",
+                  }}
+                >
                   <br />
-                  <div>
-                    <div
-                      class="shadow-lg"
-                      style={{
-                        backgroundColor: "white",
-                        padding: "20px",
-                      }}
-                    >
+                  <div style={{color:"red"}}>
+                    <p><b>Verify Mobile Number with OTP: </b>To prevent scams, this MUST be your legitimate phone number as an F&B owner. It will be the contact number given to drivers who accept your request.
+                      We will not hesitate to track you and make a police report if you submit a fake request to harass others.
+                      </p>
+                    <StyledFirebaseAuth
+                      uiConfig={uiConfig}
+                      firebaseAuth={firebase.auth()}
+                    />
+                  </div>
+                  <div id="recaptcha-container"></div>
+                  <br />
+                </div>
+                <br />
+                    {this.state.firebaseUser ? (
+                      <div style={{color: "green"}}>
+                        <p>
+                          <b>Verified your phone number:{" "}
+                          {this.state.firebaseUser.phoneNumber}</b>
+                        </p>
+                      </div>
+                    ) : null}
+                  </div>
+                  {this.state.firebaseUser !== null ? (
+                    <div>
                       <img
                         class="d-none d-md-inline-block"
-                        src={summary}
-                        alt=""
-                        style={{ width: "20%" }}
-                      />
-                      <img
-                        class="d-inline-block d-md-none"
-                        src={summary}
+                        src={store_address}
                         alt=""
                         style={{ width: "40%" }}
                       />
-                      {this.state.loadingDir ? (
-                        <div>
-                          <br />
-                          <Spinner class="" animation="grow" />
+                      <img
+                        class="d-inline-block d-md-none"
+                        src={store_address}
+                        alt=""
+                        style={{ width: "80%" }}
+                      />
+                      <div style={{ padding: "20px" }}>
+                        <div class="row">
+                          {" "}
+                          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            {" "}
+                            <div class="form-group create-title">
+                              <label for="postalcode">Postal Code 邮区编号</label>
+                              <div class="input-group">
+                                <input
+                                  onChange={this.handleChange.bind(this)}
+                                  value={this.state.postal}
+                                  type="text"
+                                  class={
+                                    !this.state.postal
+                                      ? "form-control is-invalid"
+                                      : "form-control"
+                                  }
+                                  name="postal"
+                                  placeholder="Enter Postal Code 邮区编号"
+                                  min="0"
+                                  required
+                                  maxLength="6"
+                                ></input>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                            {" "}
+                            <div class="form-group create-title">
+                              <label for="street">
+                                Street Name 街道<b> (Auto-Filled)</b>
+                              </label>
+                              <input
+                                onChange={this.handleChange}
+                                value={this.state.street}
+                                type="text"
+                                class={
+                                  !this.state.street
+                                    ? "form-control is-invalid"
+                                    : "form-control"
+                                }
+                                name="street"
+                                placeholder="Enter Street Name 街道"
+                                required
+                              ></input>
+                            </div>
+                          </div>
                         </div>
-                      ) : (
-                        <div>
-                          {this.state.retrievedDir &&
-                          this.state.directions &&
-                          this.state.directions.routes.length > 0 ? (
-                            <span>
-                              <p
-                                style={{
-                                  textAlign: "center",
-                                  fontSize: "20px",
-                                }}
-                              >
-                                <b>Distance 距离 (Google Maps): </b>
-                                <br />
-                                {this.state.directions.routes.length > 0
-                                  ? this.state.directions.routes[0].legs[0]
-                                      .distance.text
-                                  : null}
-                                <br />
-                                <b>Est. Duration 预测行程时间: </b>
-                                <br />
-                                {this.state.directions.routes.length > 0
-                                  ? this.state.directions.routes[0].legs[0]
-                                      .duration.text
-                                  : null}
-                                <br />
-                                <b>
-                                  Arrival Time 预测到达时间 <br />{" "}
-                                  <small style={{ color: "grey" }}>
-                                    (Pickup Time + Duration + 15 min Buffer):
-                                  </small>
-                                </b>
-                                <br />
-                                {this.state.directions.routes.length > 0
-                                  ? dayName[arrival.getDay()] +
-                                    " " +
-                                    arrival.getDate() +
-                                    " " +
-                                    monthNames[arrival.getMonth()] +
-                                    " " +
-                                    formatAMPM(arrival)
-                                  : null}
-
-                                <br />
-                                <b>Delivery Cost: </b>
-                                <br />
-                                {this.state.cost
-                                  ? "$" + this.state.cost.toString()
-                                  : null}
-                              </p>
-                            </span>
+                        <div class="row">
+                          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <div class="form-group create-title">
+                              <label for="unit">Unit # 门牌</label>
+                              <input
+                                onChange={this.handleChange}
+                                value={this.state.unit}
+                                type="text"
+                                class="form-control"
+                                name="unit"
+                                placeholder="E.g. #01-01"
+                              ></input>
+                            </div>
+                          </div>
+                          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            Mobile Number 手机号: 
+                            <br />
+                            <div style={{color: "green", margin: "10px"}}>
+                            <b>{this.state.firebaseUser.phoneNumber.slice(3)}</b>
+                            </div>
+                            {/* <div class="form-group create-title">
+                              <label for="unit">Mobile Number 手机号: </label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="basic-addon1">
+                                    +65
+                              </span>
+                                </div>
+                                <input
+                                  onChange={this.handleChange}
+                                  value={this.state.contact}
+                                  type="tel"
+                                  class={
+                                    !this.state.contact
+                                      ? "form-control is-invalid"
+                                      : "form-control"
+                                  }
+                                  name="contact"
+                                  placeholder="9xxxxxxx"
+                                  maxLength="8"
+                                  minlength="8"
+                                  pattern="[8-9]{1}[0-9]{7}"
+                                  required
+                                ></input>
+                              </div>
+                            </div> */}
+                          </div>
+                          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <div class="form-group create-title">
+                              <label for="note">
+                                Note To Driver 司机启示 (Optional, max 40 char)
+                          </label>
+                              <input
+                                onChange={this.handleChange}
+                                value={this.state.note}
+                                type="text"
+                                class="form-control"
+                                name="note"
+                                placeholder="E.g. Collect order number 3"
+                                maxLength="40"
+                              ></input>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <img
+                        class="d-none d-md-inline-block"
+                        src={delivery_address}
+                        alt=""
+                        style={{ width: "40%" }}
+                      />
+                      <img
+                        class="d-inline-block d-md-none"
+                        src={delivery_address}
+                        alt=""
+                        style={{ width: "80%" }}
+                      />
+                      <div style={{ padding: "20px" }}>
+                        <div class="row">
+                          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            <div class="form-group create-title">
+                              <label for="postal_to">Postal Code 邮区编号 </label>
+                              <div class="input-group">
+                                <input
+                                  onChange={this.handleChange.bind(this)}
+                                  value={this.state.postal_to}
+                                  type="text"
+                                  class={
+                                    !this.state.postal_to
+                                      ? "form-control is-invalid"
+                                      : "form-control"
+                                  }
+                                  name="postal_to"
+                                  placeholder="Enter Postal Code 邮区编号"
+                                  min="0"
+                                  required
+                                ></input>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                            <div class="form-group create-title">
+                              <label for="street_to">
+                                Street Name 街道<b> (Auto-Filled)</b>
+                              </label>
+                              <input
+                                onChange={this.handleChange}
+                                value={this.state.street_to}
+                                type="text"
+                                class={
+                                  !this.state.street_to
+                                    ? "form-control is-invalid"
+                                    : "form-control"
+                                }
+                                name="street_to"
+                                placeholder="Enter Street Name 街道"
+                                required
+                              ></input>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          {" "}
+                          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            {" "}
+                            <div class="form-group create-title">
+                              <label for="unit">Unit # 门牌</label>
+                              <input
+                                onChange={this.handleChange}
+                                value={this.state.unit_to}
+                                type="text"
+                                class="form-control"
+                                name="unit_to"
+                                placeholder="E.g. #01-01"
+                              ></input>
+                            </div>
+                          </div>
+                          <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                            <div class="form-group create-title">
+                              <label for="unit">Mobile Number 手机号:</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="basic-addon1">
+                                    +65
+                              </span>
+                                </div>
+                                <input
+                                  onChange={this.handleChange}
+                                  value={this.state.contact_to}
+                                  type="tel"
+                                  name="contact_to"
+                                  placeholder="9xxxxxxx"
+                                  maxLength="8"
+                                  pattern="[8-9]{1}[0-9]{7}"
+                                  minlength="8"
+                                  class={
+                                    !this.state.contact_to
+                                      ? "form-control is-invalid"
+                                      : "form-control"
+                                  }
+                                  required
+                                ></input>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <div class="form-group create-title">
+                              <label for="time">Pickup Date 取食物日期</label>
+                              <DatePicker
+                                class="form-control is-invalid"
+                                dayPlaceholder="dd"
+                                monthPlaceholder="mm"
+                                yearPlaceholder="yyyy"
+                                onChange={this.handleDate}
+                                value={this.state.date}
+                                format="dd/MMM/yyyy"
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <div class="form-group create-title">
+                              <label for="time">Pickup Time 取食物时间</label>
+                              <TimePicker
+                                class="form-control is-invalid"
+                                dayPlaceholder="dd"
+                                monthPlaceholder="mm"
+                                yearPlaceholder="yyyy"
+                                hourPlaceholder="hh"
+                                minutePlaceholder="mm"
+                                onChange={this.handleTime}
+                                value={this.state.time}
+                                format="hh:mma"
+                                disableClock
+                                required
+                              />
+                              {time_now > this.state.datetime ? (
+                                <span class="badge badge-danger">
+                                  Time cannot be less than 1 hour from now
+                                  <br />
+                              取食物时间必须至少在1小时后
+                                </span>
+                              ) : null}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <br />
+                      <div>
+                        <div
+                          class="shadow-lg"
+                          style={{
+                            backgroundColor: "white",
+                            padding: "20px",
+                          }}
+                        >
+                          <img
+                            class="d-none d-md-inline-block"
+                            src={summary}
+                            alt=""
+                            style={{ width: "20%" }}
+                          />
+                          <img
+                            class="d-inline-block d-md-none"
+                            src={summary}
+                            alt=""
+                            style={{ width: "40%" }}
+                          />
+                          {this.state.loadingDir ? (
+                            <div>
+                              <br />
+                              <Spinner class="" animation="grow" />
+                            </div>
                           ) : (
-                            <div>Fill in details above</div>
-                          )}
-                        </div>
-                      )}
-                      <div
-                        class="form-check create-title"
-                        style={{ textAlign: "center" }}
-                      >
-                        <label class="checkbox-inline">
-                          <input
-                            onChange={this.handleChange}
-                            type="checkbox"
-                            checked={this.state.pickup_option}
-                            value={this.state.pickup_option}
-                            name="pickup_option"
-                            class="form-check-input"
-                            required
-                          ></input>
+                              <div>
+                                {this.state.retrievedDir &&
+                                  this.state.directions &&
+                                  this.state.directions.routes.length > 0 ? (
+                                    <span>
+                                      <p
+                                        style={{
+                                          textAlign: "center",
+                                          fontSize: "20px",
+                                        }}
+                                      >
+                                        <b>Distance 距离 (Google Maps): </b>
+                                        <br />
+                                        {this.state.directions.routes.length > 0
+                                          ? this.state.directions.routes[0].legs[0]
+                                            .distance.text
+                                          : null}
+                                        <br />
+                                        <b>Est. Duration 预测行程时间: </b>
+                                        <br />
+                                        {this.state.directions.routes.length > 0
+                                          ? this.state.directions.routes[0].legs[0]
+                                            .duration.text
+                                          : null}
+                                        <br />
+                                        <b>
+                                          Arrival Time 预测到达时间 <br />{" "}
+                                          <small style={{ color: "grey" }}>
+                                            (Pickup Time + Duration + 15 min Buffer):
+                                  </small>
+                                        </b>
+                                        <br />
+                                        {this.state.directions.routes.length > 0
+                                          ? dayName[arrival.getDay()] +
+                                          " " +
+                                          arrival.getDate() +
+                                          " " +
+                                          monthNames[arrival.getMonth()] +
+                                          " " +
+                                          formatAMPM(arrival)
+                                          : null}
+
+                                        <br />
+                                        <b>Delivery Cost: </b>
+                                        <br />
+                                        {this.state.cost
+                                          ? "$" + this.state.cost.toString()
+                                          : null}
+                                      </p>
+                                    </span>
+                                  ) : (
+                                    <div>Fill in details above</div>
+                                  )}
+                              </div>
+                            )}
+                          <div
+                            class="form-check create-title"
+                            style={{ textAlign: "center" }}
+                          >
+                            <label class="checkbox-inline">
+                              <input
+                                onChange={this.handleChange}
+                                type="checkbox"
+                                checked={this.state.pickup_option}
+                                value={this.state.pickup_option}
+                                name="pickup_option"
+                                class="form-check-input"
+                                required
+                              ></input>
                           I agree that I am a local F&B looking for a delivery
                           and FoodLeh is not liable for any event not limited to
                           inaccuracies, delays, costs, spillage, accidents,
@@ -1177,50 +1266,50 @@ export class Driver extends React.Component {
                           for matching the two sides who will assume all
                           responsibilities.
                         </label>
-                        <br />
-                        <br />
-                      </div>
-                      {this.state.submitting ? (
-                        <Spinner class="" animation="grow" />
-                      ) : (
-                        <div>
-                          {this.state.submitted ? (
-                            <div>
-                              <div
-                                class="shadow-lg"
-                                style={{
-                                  backgroundColor: "green",
-                                  borderColor: "white",
-                                  fontSize: "25px",
-                                  color: "white",
-                                }}
-                              >
-                                Submitted! If found, a driver will contact you
-                                directly. Driver will use customer mobile no. to
-                                collect order.
-                                成功！若有司机接受，司机会直接通知您。取食物时，司机会提供顾客电话号码。
-                              </div>
-                              <h5>
-                                To arrange a new delivery, please refresh the
-                                page.
-                              </h5>
-                            </div>
+                            <br />
+                            <br />
+                          </div>
+                          {this.state.submitting ? (
+                            <Spinner class="" animation="grow" />
                           ) : (
-                            <Button
-                              variant="contained"
-                              color={"primary"}
-                              type="Submit"
-                            >
-                              Search (搜索)
-                            </Button>
-                          )}
-                        </div>
-                      )}
+                              <div>
+                                {this.state.submitted ? (
+                                  <div>
+                                    <div
+                                      class="shadow-lg"
+                                      style={{
+                                        backgroundColor: "green",
+                                        borderColor: "white",
+                                        fontSize: "25px",
+                                        color: "white",
+                                      }}
+                                    >
+                                      Submitted! If found, a driver will contact you
+                                      directly. Driver will use customer mobile no. to
+                                      collect order.
+                                      成功！若有司机接受，司机会直接通知您。取食物时，司机会提供顾客电话号码。
+                              </div>
+                                    <h5>
+                                      To arrange a new delivery, please refresh the
+                                      page.
+                              </h5>
+                                  </div>
+                                ) : (
+                                    <Button
+                                      variant="contained"
+                                      color={"primary"}
+                                      type="Submit"
+                                    >
+                                      Search (搜索)
+                                    </Button>
+                                  )}
+                              </div>
+                            )}
 
-                      <br />
-                      <br />
-                      <small>
-                        {" "}
+                          <br />
+                          <br />
+                          <small>
+                            {" "}
                         Disclaimer: FoodLeh is only responsible for broadcasting
                         deliveries to potential drivers and is not responsible
                         for any inaccuracies, misrepresentation, damage, delay,
@@ -1228,8 +1317,10 @@ export class Driver extends React.Component {
                         if you have any suggestions or notice anything we could
                         improve!
                       </small>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ) : null}
                 </div>
               </div>
             </div>
