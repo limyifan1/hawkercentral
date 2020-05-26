@@ -150,6 +150,47 @@ const cors = require("cors")({
   origin: true,
 });
 
+exports.telegramDevSend = functions
+  .region("asia-east2")
+  .https.onRequest(async (req, res) => {
+    return cors(req, res, async () => {
+      var origin = req.body.origin;
+      var destination = req.body.destination;
+      var cost = req.body.cost;
+      var time = req.body.time;
+      var requester_mobile = req.body.requester_mobile;
+      var message =
+        "<b>New Order Received</b> \n" +
+        "<b>From: </b> <a href='https://maps.google.com/?q=" +
+        origin +
+        "'>" +
+        origin +
+        "</a>\n" +
+        "<b>To: </b><a href='https://maps.google.com/?q=" +
+        destination +
+        "'>" +
+        destination +
+        "</a>\n" +
+        "<b>Fee: </b>" +
+        cost +
+        "\n" +
+        "<b>Pickup Time: </b>" +
+        time +
+        "\n" +
+        "<b>Point of Contact: </b>" +
+        requester_mobile +
+        "\n";
+
+      let foodleh_message = await bot.telegram
+        .sendMessage("@foodlehxcoenterprise", message, {
+          parse_mode: "HTML",
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    });
+  });
+
 exports.telegramSend = functions
   .region("asia-east2")
   .https.onRequest(async (req, res) => {
