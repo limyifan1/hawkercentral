@@ -226,13 +226,39 @@ export class Orders extends React.Component {
           monthNames[pickupTime.getMonth()] +
           " " +
           formatAMPM(pickupTime);
-
+        let now = new Date();
+        // if (now.is) {
+        //   console.log("pickup time has passed")
+        // }
         return (
           <div style={{ textAlign: "left" }}>
             <br />
-            <b>Driver contact: </b>
-            {data.driver_contact}
+            <div>
+            {data.driver_contact !== "" ? (
+              <div style={{color: "green"}}>
+                <b>Driver Accepted!</b>
+              </div>
+            ) : (
+              <div style={{color: "red"}}>
+                <b>No Driver Yet</b>
+              </div>
+            )}
+
+
+            {data.cancelled === true ? (
+              <div style={{color: "red"}}>
+                <b>You Cancelled</b> {data.driver_contact !== "" ? (<b>(Please Inform Driver)</b>) : null}
+              </div>
+            ) : null}
+            </div>
             <br />
+            {data.driver_contact !== "" ? (
+              <div>
+                <b>Driver contact: </b>
+                {data.driver_contact}
+                <br />
+              </div>
+            ) : null}
             <b>Customer address: </b>
             {data.street_to}
             <br />
