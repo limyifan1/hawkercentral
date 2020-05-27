@@ -724,7 +724,7 @@ export class Info extends React.Component {
                   class="card shadow"
                   style={{
                     color: "black",
-                    backgroundColor: "white",
+                    backgroundColor: "red",
                     width: "100%",
                   }}
                 >
@@ -733,16 +733,18 @@ export class Info extends React.Component {
                       class="card-title"
                       style={{
                         fontSize: "13px",
-                        margin: "0px",
+                        margin: "10px",
                       }}
                     >
                       {this.state.hasReviewEditMessage ? (
-                        <p style={{ margin: "0px" }}>
+                        <p style={{ margin: "10px", fontSize: "30px", color: "white", lineHeight:"25px"
+                      }}>
                           Your edit(s) will be reflected once they have been
                           reviewed. Thank you for your patience!
                         </p>
                       ) : (
-                        <p style={{ margin: "0px" }}>
+                        <p style={{ margin: "10px", fontSize: "30px", color: "white", lineHeight:"25px"
+                      }}>
                           This listing will be deleted once your request has
                           been reviewed. Thank you for your patience!
                         </p>
