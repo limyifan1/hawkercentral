@@ -134,7 +134,7 @@ class App extends React.Component {
 
   componentWillMount(){
     const pageName = getPage()
-    if (pageName) this.getDoc()
+    if (pageName && pageName !== "www") this.getDoc()
   }
 
   getDoc = async () => {
