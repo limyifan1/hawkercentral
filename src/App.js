@@ -127,7 +127,8 @@ class App extends React.Component {
       setScrollPosition: this.setScrollPosition,
       pageName: "",
       pageData: {},
-      css: {}
+      css: {},
+      retrieved: false
     };
   }
 

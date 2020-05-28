@@ -100,7 +100,11 @@ const InfoMenu = (props) => {
         </div>
       </Navbar.Brand>
       <Navbar.Toggle />
-      <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end" style={{marginRight: "60px"}}>
+      <Navbar.Collapse
+        id="basic-navbar-nav"
+        className="justify-content-end"
+        style={{ marginRight: "60px" }}
+      >
         <LanguageContext.Consumer>
           {({ data, language, toggleLanguage }) => (
             <Button
@@ -1022,8 +1026,8 @@ export class Page extends React.Component {
           style={{
             paddingTop: "56px",
             width: "100vw",
-            // paddingLeft: "0px",
-            // paddingRight: "0px",
+            paddingLeft: "15px",
+            paddingRight: "15px",
           }}
         >
           {this.state.hasReviewEditMessage ||

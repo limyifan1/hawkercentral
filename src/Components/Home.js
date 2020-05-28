@@ -18,6 +18,7 @@ import chinese_i_want from "../chinese-iwant.png";
 import chinese_delivery from "../chinese_delivery_2.png";
 import chinese_self_collect from "../chinese_dabao_2.png";
 import { LanguageContext } from "./themeContext";
+import { TelegramIcon } from "react-share";
 
 import "./Home.css";
 import { Line } from "rc-progress";
@@ -118,12 +119,13 @@ export class Home extends React.PureComponent {
                     />
                   </a>
                   <a href="https://t.me/foodleh" target="blank">
-                    <img
+                    <TelegramIcon size={32} round={true} style={{ margin: "10px" }}/>
+                    {/* <img
                       class="img-fluid"
                       style={{ width: "30px", margin: "10px" }}
                       alt="telegram"
-                      src={telegram}
-                    />
+                      src={TelegramIcon}
+                    /> */}
                   </a>
                 </div>
               </div>
