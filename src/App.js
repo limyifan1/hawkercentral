@@ -134,7 +134,7 @@ class App extends React.Component {
 
   componentWillMount(){
     const pageName = getPage()
-    if (pageName && pageName !== "www") this.getDoc()
+    if (pageName && pageName !== "www" && pageName !== "foodleh") this.getDoc()
   }
 
   getDoc = async () => {
@@ -157,7 +157,7 @@ class App extends React.Component {
         window.location.reload(true);
         console.log(error);
       });
-
+    console.log(pageName)
     await db
       .collection("hawkers")
       .doc(docid)
@@ -189,7 +189,7 @@ class App extends React.Component {
         <Router>
           <LanguageContext.Provider value={this.state}>
             <div className="App">
-              {this.state.pageName ? (
+              {this.state.pageName && this.state.pageName !== "www" && this.state.pageName !== "foodleh"? (
                   <CartContext.Provider value={this.state}>
                     <Route
                       exact
