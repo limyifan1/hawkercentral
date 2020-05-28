@@ -119,7 +119,11 @@ export class Home extends React.PureComponent {
                     />
                   </a>
                   <a href="https://t.me/foodleh" target="blank">
-                    <TelegramIcon size={32} round={true} style={{ margin: "10px" }}/>
+                    <TelegramIcon
+                      size={32}
+                      round={true}
+                      style={{ margin: "10px" }}
+                    />
                     {/* <img
                       class="img-fluid"
                       style={{ width: "30px", margin: "10px" }}
@@ -266,12 +270,17 @@ export class Home extends React.PureComponent {
                       />
                     </a>
                     <a href="https://t.me/foodleh" target="blank">
-                      <img
-                        class="img-fluid"
-                        style={{ width: "30px", margin: "10px" }}
-                        alt="telegram"
-                        src={telegram}
+                      <TelegramIcon
+                        size={32}
+                        round={true}
+                        style={{ margin: "10px" }}
                       />
+                      {/* <img
+                      class="img-fluid"
+                      style={{ width: "30px", margin: "10px" }}
+                      alt="telegram"
+                      src={TelegramIcon}
+                    /> */}
                     </a>
                     <br />
                     <br />
