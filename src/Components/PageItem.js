@@ -11,18 +11,12 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import "../App.css";
 import placeholder from "../placeholder.png";
+import { CartContext } from "./themeContext";
 
 export class PageItem extends React.Component {
   handleClick = async (event) => {
     event.preventDefault();
-    console.log(window.pageYOffset);
-    this.context.setScrollPosition(window.pageYOffset);
-    if (this.props.name) {
-      this.props.history.push({
-        pathname: "/info",
-        search: "?id=" + this.props.id,
-      });
-    }
+    this.context.addProduct(this.props.index);
   };
 
   thumbnail = () => {
@@ -36,8 +30,19 @@ export class PageItem extends React.Component {
 
     return (
       <div class="page-card" style={{ margin: "10px" }}>
-        <div class="card shadow page-card">
-          <div class="row page-card" style={{ padding: "0px 15px" }}>
+        <div
+          class="card shadow page-card"
+          style={{
+            paddingLeft: "15px",
+            paddingRight: "0px !important",
+          }}
+        >
+          <div
+            class="row page-card"
+            style={{
+              paddingRight: "0px !important",
+            }}
+          >
             <div class="col-5 col-xs-3 col-sm-3 col-md-5 fill page-card">
               <LazyLoadImage
                 src={this.props.pic ? this.thumbnail() : placeholder}
@@ -48,21 +53,52 @@ export class PageItem extends React.Component {
             </div>
             <div
               class="col-7 col-xs-9 col-sm-9 col-md-7 card-text page-card"
-              style={{ padding: "10px" }}
+              style={{
+                padding: "10px",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
               <div class="card-block">
-                <h4 class="card-title">{this.props.name} </h4>
-                <h6 class="card-subtitle mb-2 text-muted">
-                  {this.props.summary}
-                </h6>
-                <p class="card-text item-title">${this.props.price}</p>
+                <h4
+                  class="card-title d-flex align-items-center"
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <span>
+                    <span style={{ color: menu_color }}>
+                      {this.props.quantity ? this.props.quantity + " x " : null}
+                    </span>
+                    {this.props.name}
+                  </span>
+                </h4>
+                {this.props.summary ? (
+                  <h6
+                    class="card-subtitle mb-2 text-muted small d-flex justify-content-center"
+                    style={{ marginBottom: "0px" }}
+                  >
+                    {this.props.summary}
+                  </h6>
+                ) : null}
+                <p
+                  class="card-text item-title d-flex align-items-center justify-content-center"
+                  style={{ marginBottom: "5px", fontSize: "20px" }}
+                >
+                  ${this.props.price}
+                </p>
                 <div
-                  href="#"
                   class="btn btn-primary"
-                  style={{ backgroundColor: menu_color, borderColor: menu_color}}
+                  style={{
+                    backgroundColor: menu_color,
+                    borderColor: menu_color,
+                  }}
+                  onClick={this.handleClick}
                 >
                   Add To Cart
                 </div>
+                {this.context.cartProducts}
               </div>
             </div>
           </div>
@@ -71,4 +107,5 @@ export class PageItem extends React.Component {
     );
   }
 }
+PageItem.contextType = CartContext;
 export default withRouter(PageItem);

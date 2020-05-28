@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 import CartProduct from "./PageCartProduct";
 // import { formatPrice } from '../../services/util';
 import { CartContext } from "./themeContext";
-
+import PageConfirm from "./PageConfirm";
 import "./style.scss";
 
 class PageCart extends Component {
@@ -116,26 +116,18 @@ class PageCart extends Component {
   render() {
     // let context = this.context;
     // console.log(context);
-    const {
-      //   cartTotal,
-      //   cartProducts,
-      removeProduct,
-      changeProductQuantity,
-    } = this.props;
-    const cartProducts = [];
-    const cartTotal = {
-      productQuantity: 0,
-    };
+    const { cartTotal, cartProducts, pageData } = this.context;
 
     const products = cartProducts.map((p) => {
-      return (
-        <CartProduct
-          product={p}
-          removeProduct={removeProduct}
-          changeProductQuantity={changeProductQuantity}
-          key={p.id}
-        />
-      );
+      if (p.quantity > 0) {
+        return (
+          <CartProduct
+            product={p}
+            img={pageData.menu_combined[p.index].image}
+          />
+        );
+      }
+      return null;
     });
 
     let classes = ["float-cart"];
@@ -145,7 +137,7 @@ class PageCart extends Component {
     }
 
     return (
-      <div className={classes.join(" ")}>
+      <span className={classes.join(" ")}>
         {/* If cart open, show close (x) button */}
         {this.state.isOpen && (
           <div
@@ -162,14 +154,18 @@ class PageCart extends Component {
             onClick={() => this.openFloatCart()}
             className="bag bag--float-cart-closed"
           >
-            <span className="bag__quantity">{cartTotal.productQuantity}</span>
+            <span className="bag__quantity">
+              {this.context.cartTotal.productQuantity}
+            </span>
           </span>
         )}
 
         <div className="float-cart__content">
           <div className="float-cart__header">
             <span className="bag">
-              <span className="bag__quantity">{cartTotal.productQuantity}</span>
+              <span className="bag__quantity">
+                {this.context.cartTotal.productQuantity}
+              </span>
             </span>
             <span className="header-title">Cart</span>
           </div>
@@ -185,32 +181,22 @@ class PageCart extends Component {
           </div>
 
           <div className="float-cart__footer">
-            <div className="sub">SUBTOTAL</div>
-            <div className="sub-price">
-              <p className="sub-price__val">
-                {`${cartTotal.currencyFormat} ${
-                  (cartTotal.totalPrice, cartTotal.currencyId)
-                }`}
-              </p>
-              <small className="sub-price__installment">
-                {!!cartTotal.installments && (
-                  <span>
-                    {`OR UP TO ${cartTotal.installments} x ${
-                      cartTotal.currencyFormat
-                    } ${
-                      (cartTotal.totalPrice / cartTotal.installments,
-                      cartTotal.currencyId)
-                    }`}
-                  </span>
-                )}
-              </small>
+            <div class="row">
+              <div className="sub">SUBTOTAL</div>
+              <div className="sub-price">
+                <p className="sub-price__val">${`${cartTotal.totalPrice}`}</p>
+              </div>
             </div>
-            <div onClick={() => this.proceedToCheckout()} className="buy-btn">
+            <div class="row">
+              <div className="sub">DELIVERY FEES NOT INCLUDED</div>
+            </div>
+            {/* <div onClick={() => this.proceedToCheckout()} className="buy-btn">
               Checkout
-            </div>
+            </div> */}
+            <PageConfirm />
           </div>
         </div>
-      </div>
+      </span>
     );
   }
 }

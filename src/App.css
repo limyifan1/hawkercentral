@@ -81,8 +81,8 @@ button:focus {
 
 .card-img-left {
   object-fit: cover;
-  width: 100%;
-  min-height: 100%;
+  width: 300px;
+  height: 200px;
 }
 
 .fill {
@@ -96,7 +96,7 @@ button:focus {
 
 .card-title {
   line-height: 1em;
-  height: 35px; 
+  height: 55px; 
   overflow: hidden; 
   /* height: 34px; */
   font-size: large;
@@ -106,7 +106,7 @@ button:focus {
 
 .card-subtitle {
   line-height: 1em;
-  height: 34px; 
+  height: 26px; 
   overflow: hidden;
   word-break: break-word !important;
 }
@@ -167,7 +167,7 @@ button:focus {
   }
   .page-card {
     width: 300px !important;
-    height: 250px;
+    height: 200px;
   }
   .right-items {
     padding-top: 5%;
@@ -214,7 +214,7 @@ button:focus {
   }
   .page-card {
     width: 300px !important;
-    height: 250px;
+    height: 200px;
   }
   .right-items {
     padding-top: 5%;
@@ -261,7 +261,7 @@ button:focus {
   }
   .page-card {
     width: 500px !important;
-    height: 250px;
+    height: 200px;
   }
   .hashtag {
     width: 60%;
@@ -308,8 +308,7 @@ button:focus {
   }
   .page-card {
     width: 500px !important;
-    height: 180px;
-    margin-bottom: 30px;
+    height: 200px;
   }
   .right-items {
     padding-top: 5%;
@@ -359,7 +358,7 @@ button:focus {
   .page-card {
     width: 500px !important;
     height: 180px;
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
   }
   .right-items {
     padding-top: 0px;
@@ -413,7 +412,7 @@ button:focus {
   .page-card {
     width: 320px !important;
     height: 180px;
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
   }
   /* .fill {
     display: flex;
@@ -476,7 +475,7 @@ button:focus {
   .page-card {
     width: 600px !important;
     height: 250px;
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
   }
   .right-items {
     padding-top: 5%;

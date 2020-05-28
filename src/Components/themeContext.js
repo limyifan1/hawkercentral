@@ -2,7 +2,7 @@ import React from "react";
 
 export const languages = {
   en: "en",
-  zh: "zh"
+  zh: "zh",
 };
 
 // const { Provider, Consumer } = React.createContext();
@@ -47,8 +47,12 @@ export const LanguageContext = React.createContext({
 });
 
 export const CartContext = React.createContext({
-  cart: 0, // default value
-  total: 0
+  cartProducts: [],
+  cartTotal: {
+    productQuantity: 0,
+    totalPrice: 0,
+  },
+  addProduct: () => {},
 });
 
 // const { Provider, Consumer } = React.createContext();

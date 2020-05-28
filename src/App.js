@@ -78,10 +78,12 @@ const getPage = () => {
   let isDev = host.includes("localhost");
   let splitHost = host.split(".");
   let pageName;
+  let hostName;
   if ((isDev && splitHost.length === 2) || (!isDev && splitHost.length === 3)) {
     pageName = splitHost[0];
+    hostName = splitHost[splitHost.length];
   }
-  return pageName;
+  return { pageName: pageName, hostName: hostName };
 };
 
 class App extends React.Component {
@@ -110,6 +112,63 @@ class App extends React.Component {
       }
     };
 
+    this.addProduct = (productIndex) => {
+      let findElement;
+      this.state.cartProducts.forEach((element, index) => {
+        if (element.index === productIndex) findElement = { element, index };
+      });
+      if (findElement) {
+        const newElement = findElement.element;
+        newElement.quantity += 1;
+        this.state.cartProducts[findElement.index] = newElement;
+      } else {
+        this.state.cartProducts.push({
+          index: productIndex,
+          quantity: 1,
+        });
+      }
+      var newPageData = this.state.pageData;
+      newPageData.menu_combined[productIndex].quantity = newPageData
+        .menu_combined[productIndex].quantity
+        ? (newPageData.menu_combined[productIndex].quantity += 1)
+        : (newPageData.menu_combined[productIndex].quantity = 1);
+      this.setState({
+        cartTotal: {
+          productQuantity: this.state.cartTotal.productQuantity + 1,
+          totalPrice:
+            this.state.cartTotal.totalPrice +
+            Number(this.state.pageData.menu_combined[productIndex].price),
+        },
+        pageData: newPageData,
+      });
+    };
+
+    this.removeProduct = (productIndex) => {
+      let findElement;
+      this.state.cartProducts.forEach((element, index) => {
+        if (element.index === productIndex) findElement = { element, index };
+      });
+      if (findElement) {
+        const newElement = findElement.element;
+        newElement.quantity -= 1;
+        this.state.cartProducts[findElement.index] = newElement;
+      }
+      var newPageData = this.state.pageData;
+      newPageData.menu_combined[productIndex].quantity = newPageData
+        .menu_combined[productIndex].quantity
+        ? (newPageData.menu_combined[productIndex].quantity -= 1)
+        : (newPageData.menu_combined[productIndex].quantity = 0);
+      this.setState({
+        cartTotal: {
+          productQuantity: this.state.cartTotal.productQuantity - 1,
+          totalPrice:
+            this.state.cartTotal.totalPrice -
+            Number(this.state.pageData.menu_combined[productIndex].price),
+        },
+        pageData: newPageData,
+      });
+    };
+
     this.setScrollPosition = (pos) => {
       console.log("setScrollPosition");
       this.setState({
@@ -122,24 +181,34 @@ class App extends React.Component {
     this.state = {
       language: cookies.get("language"), // TODO: check why this is hardcoded
       toggleLanguage: this.toggleLanguage,
+      addProduct: this.addProduct,
+      removeProduct: this.removeProduct,
       data: cookies.get("language") === "en" ? en : zh,
       scrollPosition: 0, // tracks scroll position of Search page
       setScrollPosition: this.setScrollPosition,
       pageName: "",
+      hostName: "",
       pageData: {},
       css: {},
-      retrieved: false
+      retrieved: false,
+      cartProducts: [],
+      cartTotal: {
+        productQuantity: 0,
+        totalPrice: 0,
+      },
     };
   }
 
-  componentWillMount(){
-    const pageName = getPage()
-    if (pageName && pageName !== "www" && pageName !== "foodleh") this.getDoc()
+  componentWillMount() {
+    const pageName = getPage().pageName;
+    if (pageName && pageName !== "www" && pageName !== "foodleh") this.getDoc();
   }
 
   getDoc = async () => {
-    const pageName = getPage()
-    this.setState({pageName: pageName })
+    const domain = getPage();
+    const pageName = domain.pageName;
+    const hostName = domain.hostName;
+    this.setState({ pageName: pageName, hostName: hostName });
     const docid = await db
       .collection("pages")
       .doc(pageName)
@@ -157,7 +226,6 @@ class App extends React.Component {
         window.location.reload(true);
         console.log(error);
       });
-    console.log(pageName)
     await db
       .collection("hawkers")
       .doc(docid)
@@ -183,29 +251,31 @@ class App extends React.Component {
     // The ThemedButton button inside the ThemeProvider
     // uses the theme from state while the one outside uses
     // the default dark theme
-    console.log(this.state.pageName);
     return (
       <ThemeProvider theme={theme}>
         <Router>
           <LanguageContext.Provider value={this.state}>
             <div className="App">
-              {this.state.pageName && this.state.pageName !== "www" && this.state.pageName !== "foodleh"? (
-                  <CartContext.Provider value={this.state}>
-                    <Route
-                      exact
-                      path="/"
-                      render={() => (
-                        <Components.Page pageName={this.state.pageName} />
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/about"
-                      render={() => (
-                        <Components.PageAbout pageName={this.state.pageName} />
-                      )}
-                    />
-                  </CartContext.Provider>
+              {this.state.pageName &&
+              this.state.pageName !== "www" &&
+              this.state.pageName !== "foodleh" &&
+              this.state.hostName !== "sh" ? (
+                <CartContext.Provider value={this.state}>
+                  <Route
+                    exact
+                    path="/"
+                    render={() => (
+                      <Components.Page pageName={this.state.pageName} />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/about"
+                    render={() => (
+                      <Components.PageAbout pageName={this.state.pageName} />
+                    )}
+                  />
+                </CartContext.Provider>
               ) : (
                 <div>
                   <Components.Menu />

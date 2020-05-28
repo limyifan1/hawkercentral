@@ -35,7 +35,7 @@
     display: inline-block;
     vertical-align: middle;
     margin-right: 15px;
-    background-image: url('../assets/cart.svg');
+    background-image: url("../assets/cart.svg");
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -104,7 +104,7 @@
       transition: background-color 0.2s, opacity 0.2s;
 
       &::before {
-        content: '';
+        content: "";
         width: 90%;
         height: 2px;
         background-color: rgba(0, 0, 0, 0.2);
@@ -188,9 +188,9 @@
         background-color: #000;
         width: 25px;
         height: 25px;
-        
+
         &:disabled {
-          opacity: .2;
+          opacity: 0.2;
         }
       }
     }
@@ -207,7 +207,7 @@
     background-color: #1b1a20;
 
     &::before {
-      content: '';
+      content: "";
       width: 100%;
       height: 20px;
       display: block;
@@ -261,7 +261,6 @@
   }
 }
 
-
 /* MAC scrollbar para desktop*/
 @media screen and (min-width: 640px) {
   .float-cart__content::-webkit-scrollbar {
@@ -281,13 +280,13 @@
   overflow-y: scroll;
 }
 
-@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url("https://fonts.googleapis.com/css?family=Roboto");
 
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -296,7 +295,7 @@ body {
 body {
   margin: 0;
   color: #1b1a20;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 main {
@@ -345,7 +344,6 @@ main {
     .float-cart {
       width: 100%;
       right: -100%;
-
       &--open {
         right: 0;
       }

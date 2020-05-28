@@ -10,7 +10,6 @@ import i_want from "../i_want.jpeg";
 import fb from "../fb.png";
 import insta from "../insta.png";
 import email from "../email.png";
-import telegram from "../telegram.webp";
 import Cookies from "universal-cookie";
 import delivery from "../delivery_2.png";
 import self_collect from "../dabao_2.png";
