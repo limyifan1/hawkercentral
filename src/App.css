@@ -80,9 +80,9 @@ button:focus {
 }
 
 .card-img-left {
-  object-fit: cover;
-  width: 300px;
-  height: 200px;
+  /* object-fit: cover; */
+  width: auto !important;
+  height: 200px !important;
 }
 
 .fill {
@@ -90,8 +90,10 @@ button:focus {
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  max-height: 250px;
-  max-width: 100px;
+  /* max-height: 250px;
+  max-width: 100px; */
+  min-height: 100px;
+  min-width: 100px;
 }
 
 .card-title {
@@ -411,8 +413,8 @@ button:focus {
   }
   .page-card {
     width: 320px !important;
-    height: 180px;
-    /* margin-bottom: 30px; */
+    height: 200px;
+    margin-bottom: 30px;
   }
   /* .fill {
     display: flex;

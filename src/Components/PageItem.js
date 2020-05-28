@@ -31,19 +31,19 @@ export class PageItem extends React.Component {
     return (
       <div class="page-card" style={{ margin: "10px" }}>
         <div
-          class="card shadow page-card"
+          class="card shadow"
           style={{
-            paddingLeft: "15px",
+            paddingLeft: "0px !important",
             paddingRight: "0px !important",
           }}
         >
           <div
-            class="row page-card"
+            class="row"
             style={{
               paddingRight: "0px !important",
             }}
           >
-            <div class="col-5 col-xs-3 col-sm-3 col-md-5 fill page-card">
+            <div class="col-5 col-xs-3 col-sm-3 col-md-5 fill">
               <LazyLoadImage
                 src={this.props.pic ? this.thumbnail() : placeholder}
                 placeholderSrc={placeholder}
@@ -52,7 +52,7 @@ export class PageItem extends React.Component {
               />
             </div>
             <div
-              class="col-7 col-xs-9 col-sm-9 col-md-7 card-text page-card"
+              class="col-7 col-xs-9 col-sm-9 col-md-7 card-text"
               style={{
                 padding: "10px",
                 alignItems: "center",
