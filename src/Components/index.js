@@ -20,6 +20,10 @@ import Delivery from "./Delivery";
 import Orders from "./Orders";
 import Deliveries from "./Deliveries";
 import Search from "./Search";
+import Page from "./Page";
+import PageAbout from "./PageAbout";
+import PageItem from "./PageItem";
+import PageCart from "./PageCart";
 
 import { db, storage } from "./Firestore";
 
@@ -41,6 +45,10 @@ export default {
   Orders,
   Deliveries,
   Search,
+  Page,
+  PageAbout,
+  PageItem,
+  PageCart,
   db,
   storage,
 };

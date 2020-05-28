@@ -7,7 +7,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
-import { LanguageContext } from "./themeContext";
+// import { LanguageContext } from "./themeContext";
 
 import "../App.css";
 import placeholder from "../placeholder.png";
@@ -56,13 +56,13 @@ export class PageItem extends React.Component {
                   {this.props.summary}
                 </h6>
                 <p class="card-text item-title">${this.props.price}</p>
-                <a
+                <div
                   href="#"
                   class="btn btn-primary"
                   style={{ backgroundColor: menu_color, borderColor: menu_color}}
                 >
                   Add To Cart
-                </a>
+                </div>
               </div>
             </div>
           </div>

@@ -6,7 +6,7 @@
 import React from "react";
 import "../App.css";
 import "react-multi-carousel/lib/styles.css";
-import queryString from "query-string";
+// import queryString from "query-string";
 import {
   Button,
   Spinner,
@@ -49,7 +49,7 @@ import { BitlyClient } from "bitly";
 import { Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { LanguageContext } from "./themeContext";
-import name from "../logo-header-nologo.png";
+// import name from "../logo-header-nologo.png";
 import logo from "../foodleh.png";
 const REACT_APP_BITLY_KEY = `${process.env.REACT_APP_BITLY_KEY}`;
 const bitly = new BitlyClient(REACT_APP_BITLY_KEY, {});
@@ -177,8 +177,8 @@ const InfoMenu = (props) => {
 };
 
 function ScrollTop(props) {
-  const { children, window, css } = props;
-  const menu_color = props && props.css ? props.css.menu_color : null;
+  const { children, window } = props;
+  // const menu_color = props && props.css ? props.css.menu_color : null;
   // Note that you normally won't need to set the window ref as useScrollTrigger
   // will default to window.
   // This is only being set here because the demo is in an iframe.

@@ -215,21 +215,6 @@ class PageCart extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  cartProducts: state.cart.products,
-  newProduct: state.cart.productToAdd,
-  productToRemove: state.cart.productToRemove,
-  productToChange: state.cart.productToChange,
-  cartTotal: state.total.data,
-});
-
-// export default connect(mapStateToProps, {
-//   loadCart,
-//   updateCart,
-//   removeProduct,
-//   changeProductQuantity,
-// })(FloatCart);
-
 PageCart.contextType = CartContext;
 
 export default PageCart;

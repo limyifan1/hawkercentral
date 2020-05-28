@@ -226,7 +226,7 @@ export class Orders extends React.Component {
           monthNames[pickupTime.getMonth()] +
           " " +
           formatAMPM(pickupTime);
-        let now = new Date();
+        // let now = new Date();
         // if (now.is) {
         //   console.log("pickup time has passed")
         // }

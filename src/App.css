@@ -10,8 +10,9 @@
   margin-left: auto;
 }
 
-body { 
+html, body { 
   overflow-x: hidden;
+  width: 100%;
 }
 
 button {
@@ -356,7 +357,7 @@ button:focus {
     height: 250px;
   }
   .page-card {
-    width: 100px !important;
+    width: 500px !important;
     height: 180px;
     margin-bottom: 30px;
   }
