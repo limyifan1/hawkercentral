@@ -6,29 +6,29 @@
 import React from "react";
 import "../App.css";
 import "react-multi-carousel/lib/styles.css";
-import queryString from "query-string";
+// import queryString from "query-string";
 import {
   Button,
-  Spinner,
+  // Spinner,
   Form,
   Popover,
   OverlayTrigger,
 } from "react-bootstrap";
 import { db } from "./Firestore";
-import ImageGallery from "react-image-gallery";
+// import ImageGallery from "react-image-gallery";
 import Component from "./index";
 import Clap from "./Clap";
 import Linkify from "react-linkify";
 import { withRouter } from "react-router-dom";
 import update from "immutability-helper";
 import whatsapp_icon from "../assets/whatsapp_icon.png";
-import whatsapp_button from "../assets/whatsapp_button.png";
-import menu_button from "../assets/menu_button.png";
-import website_button from "../assets/website_button.png";
-import menu_title from "../assets/info_menu.png";
-import orderleh_title from "../assets/orderleh_title.png";
+// import whatsapp_button from "../assets/whatsapp_button.png";
+// import menu_button from "../assets/menu_button.png";
+// import website_button from "../assets/website_button.png";
+// import menu_title from "../assets/info_menu.png";
+// import orderleh_title from "../assets/orderleh_title.png";
 import delivery_title from "../assets/info_delivery.png";
-import gradient from "../assets/gradient.png";
+// import gradient from "../assets/gradient.png";
 import revieworder from "../assets/info_review_order.png";
 import firebase from "./Firestore";
 import {
@@ -49,7 +49,7 @@ import { BitlyClient } from "bitly";
 import { Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { LanguageContext } from "./themeContext";
-import name from "../logo-header-nologo.png";
+// import name from "../logo-header-nologo.png";
 import logo from "../foodleh.png";
 import { CartContext } from "./themeContext";
 
@@ -155,8 +155,8 @@ const InfoMenu = (props) => {
 };
 
 function ScrollTop(props) {
-  const { children, window, css } = props;
-  const menu_color = props && props.css ? props.css.menu_color : null;
+  const { children, window } = props;
+  // const menu_color = props && props.css ? props.css.menu_color : null;
   // Note that you normally won't need to set the window ref as useScrollTrigger
   // will default to window.
   // This is only being set here because the demo is in an iframe.
@@ -951,14 +951,13 @@ export class Page extends React.Component {
     let regions = [];
     let photos = [];
     console.log(this.context.pageData);
-    let link = "https://wa.me/65" + this.context.pageData.contact;
+    // let link = "https://wa.me/65" + this.context.pageData.contact;
     if (this.state.retrieved) {
       if (this.context.pageData.categories) {
         this.context.pageData.categories.forEach((element) => {
           cuisine.push(<span class="badge badge-info">{element}</span>);
         });
       }
-      console.log(this.context.pageData.tagsValue);
       if (this.context.pageData.tagsValue) {
         this.context.pageData.tagsValue.forEach((element) => {
           cuisine.push(<span class="badge badge-secondary">{element}</span>);
