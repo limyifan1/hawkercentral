@@ -41,6 +41,22 @@ class FullScreenDialog extends Component {
         this.context && this.context.pageData
           ? new Array(this.context.pageData.menu_combined.length).fill(0)
           : [],
+      data: [],
+      totalPrice: 0.0,
+      wantToOrder: false,
+      name: "",
+      unit: "",
+      street: "",
+      postal: "",
+      notes: "",
+      customerNumber: "",
+      deliveryTime: "",
+      galleryOpened: false,
+      retrieved: false,
+      activePhoto: 1,
+      hasReviewEditMessage: false,
+      hasReviewDeleteMessage: false,
+      shouldRememberDetails: false,
     };
     this.setOrderText = this.setOrderText.bind(this);
     this.handleCustomerDetails = this.handleCustomerDetails.bind(this);

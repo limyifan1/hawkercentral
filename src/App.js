@@ -81,7 +81,7 @@ const getPage = () => {
   let hostName;
   if ((isDev && splitHost.length === 2) || (!isDev && splitHost.length === 3)) {
     pageName = splitHost[0];
-    hostName = splitHost[splitHost.length];
+    hostName = splitHost[splitHost.length - 1];
   }
   return { pageName: pageName, hostName: hostName };
 };
@@ -201,7 +201,16 @@ class App extends React.Component {
 
   componentWillMount() {
     const pageName = getPage().pageName;
-    if (pageName && pageName !== "www" && pageName !== "foodleh") this.getDoc();
+    const hostName = getPage().hostName;
+    if (
+      pageName &&
+      pageName !== "www" &&
+      pageName !== "foodleh" &&
+      hostName !== "sh" &&
+      hostName !== "now" &&
+      hostName !== "now.sh"
+    )
+      this.getDoc();
   }
 
   getDoc = async () => {
@@ -259,7 +268,9 @@ class App extends React.Component {
               {this.state.pageName &&
               this.state.pageName !== "www" &&
               this.state.pageName !== "foodleh" &&
-              this.state.hostName !== "sh" ? (
+              this.state.hostName !== "sh" &&
+              this.state.hostName !== "now" &&
+              this.state.hostName !== "now.sh" ? (
                 <CartContext.Provider value={this.state}>
                   <Route
                     exact

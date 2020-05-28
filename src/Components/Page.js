@@ -134,7 +134,7 @@ const InfoMenu = (props) => {
             </LanguageContext.Consumer>
           </Nav.Link>
         </div>
-        <Nav.Item>
+        {/* <Nav.Item>
           <Nav.Link
             href="#about"
             as={Link}
@@ -147,7 +147,7 @@ const InfoMenu = (props) => {
               {({ data }) => data.menu.aboutlabel}
             </LanguageContext.Consumer>
           </Nav.Link>
-        </Nav.Item>
+        </Nav.Item> */}
       </Navbar.Collapse>
       <Navbar.Brand style={{ color: menu_font_color }}>
         <Component.PageCart />
@@ -1025,8 +1025,8 @@ export class Page extends React.Component {
           style={{
             paddingTop: "56px",
             width: "100vw",
-            paddingLeft: "15px",
-            paddingRight: "15px",
+            paddingLeft: "0px",
+            paddingRight: "0px",
           }}
         >
           {this.state.hasReviewEditMessage ||
