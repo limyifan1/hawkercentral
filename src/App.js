@@ -13,10 +13,10 @@ import Components from "./Components";
 import Cookies from "universal-cookie";
 import en from "./assets/translations/en.json";
 import zh from "./assets/translations/zh.json";
-import { LanguageContext } from "./Components/themeContext";
+import { LanguageContext, CartContext } from "./Components/themeContext";
 import { Helmet } from "react-helmet";
 import { ThemeProvider } from "@material-ui/styles";
-
+import { db } from "./Components/Firestore";
 import { createMuiTheme } from "@material-ui/core/styles";
 
 const theme = createMuiTheme({
@@ -73,6 +73,17 @@ function SeoHelmet() {
   );
 }
 
+const getPage = () => {
+  let host = window.location.host;
+  let isDev = host.includes("localhost");
+  let splitHost = host.split(".");
+  let pageName;
+  if ((isDev && splitHost.length === 2) || (!isDev && splitHost.length === 3)) {
+    pageName = splitHost[0];
+  }
+  return pageName;
+};
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -114,35 +125,113 @@ class App extends React.Component {
       data: cookies.get("language") === "en" ? en : zh,
       scrollPosition: 0, // tracks scroll position of Search page
       setScrollPosition: this.setScrollPosition,
+      pageName: "",
+      pageData: {},
+      css: {}
     };
   }
+
+  componentWillMount(){
+    const pageName = getPage()
+    if (pageName) this.getDoc()
+  }
+
+  getDoc = async () => {
+    const pageName = getPage()
+    this.setState({pageName: pageName })
+    const docid = await db
+      .collection("pages")
+      .doc(pageName)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists) {
+          // After querying db for data, initialize orderData if menu info is available
+          this.setState(snapshot.data());
+          return snapshot.data().docid;
+        }
+        //   onLoad("info_load", snapshot.data().name);
+        return true;
+      })
+      .catch((error) => {
+        window.location.reload(true);
+        console.log(error);
+      });
+
+    await db
+      .collection("hawkers")
+      .doc(docid)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists) {
+          // After querying db for data, initialize orderData if menu info is available
+          this.setState({
+            pageData: snapshot.data(),
+            retrieved: true,
+            orderData: new Array(snapshot.data().menu_combined.length).fill(0),
+          });
+        }
+        console.log("Fetched successfully!");
+        return true;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   render() {
     // The ThemedButton button inside the ThemeProvider
     // uses the theme from state while the one outside uses
     // the default dark theme
+    console.log(this.state.pageName);
     return (
       <ThemeProvider theme={theme}>
         <Router>
           <LanguageContext.Provider value={this.state}>
             <div className="App">
-              <Components.Menu />
-              <SeoHelmet />
-              <Route exact path="/" component={Components.Home} />
-              {/* <Route exact path="/listing" component={Components.Listing} /> */}
-              <Route exact path="/create" component={Components.Create} />
-              <Route exact path="/info" component={Components.Info} />
-              {/* <Route exact path="/news" component={Components.News} /> */}
-              <Route exact path="/searchall" component={Components.SearchAll} />
-              <Route exact path="/about" component={Components.About} />
-              <Route exact path="/driver" component={Components.Driver} />
-              <Route exact path="/delivery" component={Components.Delivery} />
-              <Route exact path="/orders" component={Components.Orders} />
-              <Route
-                exact
-                path="/deliveries"
-                component={Components.Deliveries}
-              />
+              {this.state.pageName ? (
+                  <CartContext.Provider value={this.state}>
+                    <Route
+                      exact
+                      path="/"
+                      render={() => (
+                        <Components.Page pageName={this.state.pageName} />
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/about"
+                      render={() => (
+                        <Components.PageAbout pageName={this.state.pageName} />
+                      )}
+                    />
+                  </CartContext.Provider>
+              ) : (
+                <div>
+                  <Components.Menu />
+                  <SeoHelmet />
+                  <Route exact path="/" component={Components.Home} />
+                  <Route exact path="/create" component={Components.Create} />
+                  <Route exact path="/info" component={Components.Info} />
+                  <Route
+                    exact
+                    path="/searchall"
+                    component={Components.SearchAll}
+                  />
+                  <Route exact path="/about" component={Components.About} />
+                  <Route exact path="/driver" component={Components.Driver} />
+                  <Route
+                    exact
+                    path="/delivery"
+                    component={Components.Delivery}
+                  />
+                  <Route exact path="/orders" component={Components.Orders} />
+                  <Route
+                    exact
+                    path="/deliveries"
+                    component={Components.Deliveries}
+                  />
+                </div>
+              )}
               <script src="/__/firebase/7.14.1/firebase-app.js"></script>
               <script src="/__/firebase/7.14.1/firebase-analytics.js"></script>
               <script src="/__/firebase/init.js"></script>

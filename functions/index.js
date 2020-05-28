@@ -188,6 +188,8 @@ exports.telegramDevSend = functions
         .catch((e) => {
           console.log(e);
         });
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.status(200).send(foodleh_message);
     });
   });
 

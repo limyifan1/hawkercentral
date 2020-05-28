@@ -46,6 +46,11 @@ export const LanguageContext = React.createContext({
   toggleLanguage: () => {},
 });
 
+export const CartContext = React.createContext({
+  cart: 0, // default value
+  total: 0
+});
+
 // const { Provider, Consumer } = React.createContext();
 
 // class ThemeContextProvider extends Component {
