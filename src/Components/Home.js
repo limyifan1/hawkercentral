@@ -38,7 +38,7 @@ function getMobileOperatingSystem() {
     return "Windows Phone";
   }
 
-  if (/android/i.test(userAgent)) {
+  if (/android/i.test(userAgent) && typeof Android !== "undefined") {
     return "Android";
   }
 
@@ -49,9 +49,10 @@ function getMobileOperatingSystem() {
   return "unknown";
 }
 
-function openNewWindow() {
-  window.open("https://foodleh.app");
-}
+// function openNewWindow() {
+//   window.open("https://foodleh.app");
+// }
+
 export class Home extends React.PureComponent {
   state = {
     data: [],
