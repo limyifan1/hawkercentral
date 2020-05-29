@@ -98,7 +98,7 @@ button:focus {
 
 .card-title {
   line-height: 1em;
-  height: 55px; 
+  height: 38px; 
   overflow: hidden; 
   /* height: 34px; */
   font-size: large;
@@ -107,6 +107,23 @@ button:focus {
 }
 
 .card-subtitle {
+  line-height: 1em;
+  /* height: 26px;  */
+  overflow: hidden;
+  word-break: break-word !important;
+}
+
+.card-page-title {
+  line-height: 1em;
+  height: 55px; 
+  overflow: hidden; 
+  /* height: 34px; */
+  font-size: large;
+  font-weight: bold;
+  word-break: break-word !important;
+}
+
+.card-page-subtitle {
   line-height: 1em;
   height: 26px; 
   overflow: hidden;
