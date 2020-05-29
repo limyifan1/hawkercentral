@@ -46,6 +46,11 @@ function getMobileOperatingSystem() {
 
   return "unknown";
 }
+
+function openNewWindow(){
+  window.open("https://foodleh.app")
+}
+
 function onLoad(name) {
   analytics.logEvent(name);
 }
@@ -645,7 +650,7 @@ export class SearchAll extends React.Component {
                 message={
                   <div>
                     If you're using our Android App please go to{" "}
-                    <a href="https://www.foodleh.app" target="blank">www.foodleh.app</a> instead{" "}
+                    <span onClick={()=>openNewWindow()} style={{color: "blue", textDecoration: "underline"}}>www.foodleh.app</span> instead{" "}
                   </div>
                 }
                 action={
