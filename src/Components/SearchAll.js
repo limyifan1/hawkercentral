@@ -46,9 +46,9 @@ function getMobileOperatingSystem() {
   return "unknown";
 }
 
-function openNewWindow() {
-  window.open("https://foodleh.app", "_system");
-}
+// function openNewWindow() {
+//   window.open("https://foodleh.app", "_system");
+// }
 
 function onLoad(name) {
   analytics.logEvent(name);
@@ -648,14 +648,8 @@ export class SearchAll extends React.Component {
                 // onClose={this.handleClose}
                 message={
                   <div style={{ fontSize: "30px" }}>
-                    If you're using our Android App please use browser to visit{" "}
-                    <span
-                      style={{ color: "blue", textDecoration: "underlined" }}
-                      onClick={openNewWindow}
-                    >
-                      foodleh.app
-                    </span>{" "}
-                    instead
+                    Android App is no longer working. Please use browser and
+                    visit <b>www.foodleh.app</b> instead.
                   </div>
                 }
                 action={

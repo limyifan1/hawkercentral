@@ -49,17 +49,13 @@ function getMobileOperatingSystem() {
   return "unknown";
 }
 
-function openNewWindow() {
-  window.open("https://foodleh.app", '_system');
-}
-
 export class Home extends React.PureComponent {
   state = {
     data: [],
     option: "",
     retrieved: false,
     count: 500,
-    open: true
+    open: true,
   };
 
   componentWillMount() {
@@ -112,7 +108,7 @@ export class Home extends React.PureComponent {
       <div class="container-fluid" className="home">
         <div class="jumbotron row">
           <div class="container">
-          {getMobileOperatingSystem() === "Android" ? (
+            {getMobileOperatingSystem() === "Android" ? (
               <Snackbar
                 anchorOrigin={{
                   vertical: "bottom",
@@ -122,15 +118,9 @@ export class Home extends React.PureComponent {
                 // autoHideDuration={10000}
                 // onClose={this.handleClose}
                 message={
-                  <div style={{fontSize: "30px"}}>
-                    If you're using our Android App please use browser to visit{" "}
-                    <span
-                      style={{ color: "blue", textDecoration: "underlined" }}
-                      onClick={openNewWindow}
-                    >
-                      foodleh.app
-                    </span>{" "}
-                    instead
+                  <div style={{ fontSize: "30px" }}>
+                    Android App is no longer working. Please use browser and
+                    visit <b>www.foodleh.app</b> instead.
                   </div>
                 }
                 action={
