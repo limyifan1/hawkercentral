@@ -22,7 +22,7 @@
     "google-map-react": "1.1.7",
     "immutability-helper": "3.0.2",
     "jimp": "0.12.1",
-    "node-sass": "^4.14.1",
+    "node-sass": "4.14.1",
     "rc-progress": "3.0.0",
     "react": "16.13.1",
     "react-bootstrap": "1.0.1",
