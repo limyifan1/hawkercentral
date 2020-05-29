@@ -38,7 +38,7 @@ function getMobileOperatingSystem() {
     return "Windows Phone";
   }
 
-  if (/android/i.test(userAgent) && typeof Android !== "undefined") {
+  if (/android/i.test(userAgent) && /version/i.test(userAgent)) {
     return "Android";
   }
 
