@@ -231,17 +231,17 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    // const pageName = getPage().pageName;
-    // const hostName = getPage().hostName;
-    // if (
-    //   pageName &&
-    //   pageName !== "www" &&
-    //   pageName !== "foodleh" &&
-    //   hostName !== "sh" &&
-    //   hostName !== "now" &&
-    //   hostName !== "now.sh"
-    // )
-    //   this.getDoc();
+    const pageName = getPage().pageName;
+    const hostName = getPage().hostName;
+    if (
+      pageName &&
+      pageName !== "www" &&
+      pageName !== "foodleh" &&
+      hostName !== "sh" &&
+      hostName !== "now" &&
+      hostName !== "now.sh"
+    )
+      this.getDoc();
   }
 
   getDoc = async () => {
