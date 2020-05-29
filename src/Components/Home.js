@@ -10,7 +10,6 @@ import i_want from "../i_want.jpeg";
 import fb from "../fb.png";
 import insta from "../insta.png";
 import email from "../email.png";
-import telegram from "../telegram.webp";
 import Cookies from "universal-cookie";
 import delivery from "../delivery_2.png";
 import self_collect from "../dabao_2.png";
@@ -119,7 +118,11 @@ export class Home extends React.PureComponent {
                     />
                   </a>
                   <a href="https://t.me/foodleh" target="blank">
-                    <TelegramIcon size={32} round={true} style={{ margin: "10px" }}/>
+                    <TelegramIcon
+                      size={32}
+                      round={true}
+                      style={{ margin: "10px" }}
+                    />
                     {/* <img
                       class="img-fluid"
                       style={{ width: "30px", margin: "10px" }}
@@ -266,12 +269,17 @@ export class Home extends React.PureComponent {
                       />
                     </a>
                     <a href="https://t.me/foodleh" target="blank">
-                      <img
-                        class="img-fluid"
-                        style={{ width: "30px", margin: "10px" }}
-                        alt="telegram"
-                        src={telegram}
+                      <TelegramIcon
+                        size={32}
+                        round={true}
+                        style={{ margin: "10px" }}
                       />
+                      {/* <img
+                      class="img-fluid"
+                      style={{ width: "30px", margin: "10px" }}
+                      alt="telegram"
+                      src={TelegramIcon}
+                    /> */}
                     </a>
                     <br />
                     <br />

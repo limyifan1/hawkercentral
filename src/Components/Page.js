@@ -17,8 +17,6 @@ import {
 import { db } from "./Firestore";
 // import ImageGallery from "react-image-gallery";
 import Component from "./index";
-import Clap from "./Clap";
-import Linkify from "react-linkify";
 import { withRouter } from "react-router-dom";
 import update from "immutability-helper";
 import whatsapp_icon from "../assets/whatsapp_icon.png";
@@ -136,7 +134,7 @@ const InfoMenu = (props) => {
             </LanguageContext.Consumer>
           </Nav.Link>
         </div>
-        <Nav.Item>
+        {/* <Nav.Item>
           <Nav.Link
             href="#about"
             as={Link}
@@ -149,7 +147,7 @@ const InfoMenu = (props) => {
               {({ data }) => data.menu.aboutlabel}
             </LanguageContext.Consumer>
           </Nav.Link>
-        </Nav.Item>
+        </Nav.Item> */}
       </Navbar.Collapse>
       <Navbar.Brand style={{ color: menu_font_color }}>
         <Component.PageCart />
@@ -842,7 +840,6 @@ export class Page extends React.Component {
     if (this.context.pageData.menu_combined) {
       let data = [];
       this.context.pageData.menu_combined.forEach((element, i) => {
-        console.log(without_first_item);
         // If without_first_item, condition should be (element.name && element.price && i !== 0)) [1]
         // Else condition should only be (element.name && element.price) [2]
         let toPush = true;
@@ -856,11 +853,13 @@ export class Page extends React.Component {
         if (toPush) {
           data.push(
             <Component.PageItem
+              quantity={element["quantity"]}
               name={element["name"]}
               price={element["price"]}
               pic={element["image"]}
               summary={element["description"]}
               css={this.context.css}
+              index={i}
             />
           );
         }
@@ -1026,8 +1025,8 @@ export class Page extends React.Component {
           style={{
             paddingTop: "56px",
             width: "100vw",
-            paddingLeft: "15px",
-            paddingRight: "15px",
+            paddingLeft: "0px",
+            paddingRight: "0px",
           }}
         >
           {this.state.hasReviewEditMessage ||
@@ -1189,178 +1188,12 @@ export class Page extends React.Component {
             <div className="row justify-content-center mt-4">
               {this.getMenu(0)}
             </div>
-            <div class="row">
-              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <div
-                  class="container"
-                  style={{ textAlign: "left", paddingTop: "10px" }}
-                >
-                  <br />
-                  {/* Custom button display: menu, website, message */}
-                  <div></div>
-                  <br />
-                  <br />
-                  <Component.Popup
-                    data={this.context.pageData}
-                    id={this.state.id}
-                    onSubmitEdit={this.showReviewEditMessage}
-                    onSubmitDelete={this.showReviewDeleteMessage}
-                  />
-                  <br />
-                  {this.context.pageData.promo ? (
-                    <div
-                      class="card shadow"
-                      style={{
-                        color: "black",
-                        backgroundColor: "white",
-                        height: "35px",
-                      }}
-                    >
-                      <span class="card-body">
-                        <div
-                          class="card-title"
-                          style={{
-                            position: "absolute",
-                            top: "6px",
-                            fontSize: "13px",
-                          }}
-                        >
-                          <b>{this.context.pageData.promo}</b>:{" "}
-                          {this.context.pageData.condition &&
-                          this.context.pageData.condition.length > 40
-                            ? this.context.pageData.condition.slice(0, 40) +
-                              "..."
-                            : this.context.pageData.condition}
-                        </div>
-                      </span>
-                    </div>
-                  ) : null}
-                  <br />
-                  <Clap
-                    collection={"hawkers"}
-                    id={this.state.id}
-                    claps={this.context.pageData.claps}
-                  />
-                  {this.context.pageData.description ? (
-                    <div>
-                      <br />
-                      <h6 style={{ marginBottom: "0px" }}>
-                        <b>Brief Description</b>
-                      </h6>
-                    </div>
-                  ) : null}
-                  <Linkify>
-                    {this.context.pageData.description ? (
-                      <p style={{ marginBottom: "20px" }}>
-                        {this.context.pageData.description}
-                      </p>
-                    ) : null}
-                    {this.context.pageData.description_detail &&
-                    this.context.pageData.description_detail !== "" &&
-                    this.context.pageData.description_detail !== undefined ? (
-                      <div>
-                        <h6 style={{ marginBottom: "0px" }}>
-                          <b>Detailed Description</b>
-                        </h6>
-                        <p
-                          style={{
-                            "white-space": "pre-line",
-                            marginBottom: "20px",
-                          }}
-                        >
-                          {this.context.pageData.description_detail}
-                        </p>
-                      </div>
-                    ) : null}
-                  </Linkify>
-                  {/* {Menu appears if menu data is present and whatsapp is not present} */}
-                  {this.context.pageData.menu &&
-                  !this.context.pageData.whatsapp ? (
-                    <div>
-                      <h6 style={{ marginBottom: "0px" }}>
-                        <b>Menu Items</b>
-                      </h6>
-                      <p>{this.getMenu(false)} </p>
-                      <br></br>
-                    </div>
-                  ) : null}
-                  {this.context.pageData.delivery_detail ? (
-                    <div>
-                      <h6 style={{ marginBottom: "0px" }}>
-                        <b>Details Regarding Delivery</b>
-                      </h6>
-                      <Linkify>
-                        <p
-                          style={{
-                            "white-space": "pre-line",
-                            marginBottom: "20px",
-                          }}
-                        >
-                          {this.context.pageData.delivery_detail}
-                        </p>
-                      </Linkify>
-                    </div>
-                  ) : null}
-                  {this.context.pageData.price ? (
-                    <div>
-                      <h6 style={{ marginBottom: "0px" }}>
-                        <b>Delivery Fees</b>
-                      </h6>
-                      <p
-                        style={{
-                          "white-space": "pre-line",
-                          marginBottom: "20px",
-                        }}
-                      >
-                        {this.context.pageData.price}
-                      </p>
-                    </div>
-                  ) : null}
-                  {this.context.pageData.opening ? (
-                    <div>
-                      <h6 style={{ marginBottom: "0px" }}>
-                        <b>Opening Hours</b>
-                      </h6>
-                      <p
-                        style={{
-                          "white-space": "pre-line",
-                          marginBottom: "20px",
-                        }}
-                      >
-                        {this.context.pageData.opening}
-                      </p>
-                    </div>
-                  ) : null}
-                  {/* <p style={{ marginBottom: "20px" }}>
-                    {this.context.pageData.website ? (
-                      this.context.pageData.website.slice(0, 4) === "http" ? (
-                        <a href={this.context.pageData.website}>Website Link</a>
-                      ) : (
-                        <a href={"https://" + this.context.pageData.website}>
-                          Website Link
-                        </a>
-                      )
-                    ) : null}
-                  </p> */}
-                  <p style={{ color: "grey" }}>
-                    <small>
-                      Are you the owner? Email foodleh@outlook.com for
-                      enquiries.{" "}
-                    </small>
-                  </p>
-                  <ScrollTop>
-                    <Fab
-                      color="primary"
-                      size="small"
-                      aria-label="scroll back to top"
-                    >
-                      <KeyboardArrowUpIcon />
-                    </Fab>
-                  </ScrollTop>
-                </div>
-              </div>
-            </div>
           </div>
+          <ScrollTop>
+            <Fab color="primary" size="small" aria-label="scroll back to top">
+              <KeyboardArrowUpIcon />
+            </Fab>
+          </ScrollTop>
         </div>
       </div>
     );
