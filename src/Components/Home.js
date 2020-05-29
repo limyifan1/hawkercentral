@@ -111,7 +111,7 @@ export class Home extends React.PureComponent {
       <div class="container-fluid" className="home">
         <div class="jumbotron row">
           <div class="container">
-            {getMobileOperatingSystem() ? (
+            {getMobileOperatingSystem() ==="Android" ? (
               <Snackbar
                 anchorOrigin={{
                   vertical: "bottom",
