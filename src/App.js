@@ -67,6 +67,9 @@ function SeoHelmet() {
       <meta name="og:image" content={image_url} />
       <meta name="keywords" content={keywords} />
       {/* Facebook meta tags */}
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={url} />
+      <meta property="og:image" content={image_url} />
       <meta property="fb:pages" content="108930167461424"></meta>
       <meta property="ia:markup_url" content={url}></meta>
     </Helmet>
@@ -92,6 +95,9 @@ function PersonalHelmet(props) {
       <meta name="og:image" content={image_url} />
       <meta name="keywords" content={keywords} />
       {/* Facebook meta tags */}
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={url} />
+      <meta property="og:image" content={image_url} />
       <meta property="fb:pages" content="108930167461424"></meta>
       <meta property="ia:markup_url" content={url}></meta>
     </Helmet>
