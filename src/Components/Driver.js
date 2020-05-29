@@ -3,7 +3,7 @@ import "../App.css";
 import { withRouter } from "react-router-dom";
 import firebase from "./Firestore";
 import { Form, Modal, Spinner } from "react-bootstrap";
-import { db, uiConfig  } from "./Firestore";
+import { db, uiConfig } from "./Firestore";
 import driver from "../driver.png";
 import question from "../question.png";
 import store_address from "../store_address.png";
@@ -19,6 +19,7 @@ import DatePicker from "react-date-picker";
 import TimePicker from "react-time-picker";
 import queryString from "query-string";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import { LanguageContext } from "./themeContext";
 const cookies = new Cookies();
 const API_KEY = `${process.env.REACT_APP_GKEY}`;
 const analytics = firebase.analytics();
@@ -362,7 +363,13 @@ export class Driver extends React.Component {
     this.setState({ submitting: true });
     if (this.state.datetime < time_now) {
       alert(
-        "Time cannot be less than 1 hour from now取食物时间必须至少在30分钟后"
+        <LanguageContext.Consumer>
+          {(context) => (
+            <div>
+              {context.data.driver.timelimit}
+            </div>
+          )}
+        </LanguageContext.Consumer>
       );
     }
     if (!this.state.retrievedDir) {
@@ -604,313 +611,90 @@ export class Driver extends React.Component {
           }}
         >
           <div class="align-items-center" style={{ width: "100%" }}></div>
-
-          <Form onSubmit={this.handleSubmit.bind(this)}>
-            <div class="container-fluid col-md-10 content col-xs-offset-2">
-              <div class="d-flex row justify-content-center">
-                <img
-                  src={driver}
-                  alt=""
-                  style={{ width: "100%", height: "100%" }}
-                />
-                <div class="row" style={{ marginTop: "10px" }}>
-                  <div style={{ padding: "10px", width: "100%" }}>
-                    <hr
-                      style={{
-                        color: "orange",
-                        backgroundColor: "orange",
-                        height: 5,
-                        width: "50%",
-                      }}
+          <LanguageContext.Consumer>
+            {(context) => (
+              <Form onSubmit={this.handleSubmit.bind(this)}>
+                <div class="container-fluid col-md-10 content col-xs-offset-2">
+                  <div class="d-flex row justify-content-center">
+                    <img
+                      src={driver}
+                      alt=""
+                      style={{ width: "100%", height: "100%" }}
                     />
+                    <div class="row" style={{ marginTop: "10px" }}>
+                      <div style={{ padding: "10px", width: "100%" }}>
+                        <hr
+                          style={{
+                            color: "orange",
+                            backgroundColor: "orange",
+                            height: 5,
+                            width: "50%",
+                          }}
+                        />
                     A non-profit community delivery initiative <br /> Click To
                     Learn How It Works: <br />
-                    <img
-                      onClick={() => this.setShow()}
-                      style={{
-                        cursor: "pointer",
-                        height: "40px",
-                        width: "34px",
-                      }}
-                      src={question}
-                      alt="question"
-                    />
-                  </div>
-                  <div style={{ fontSize: "12px" }}>
-                    <span style={{ fontWeight: "bold" }}>Rules:</span> <br />
-                    1. This is a free service to broadcast F&B delivery jobs to
-                    drivers. During peak periods, please send your order at
-                    least 1h in advance for higher chance of finding drivers.
-                    <br />
-                    <br />
-                    2. We cannot guarantee that we can find a driver as we only
-                    broadcast the message for free. If a driver is found, you
-                    will get an SMS with driver contact number. No need to
-                    cancel the request after driver is found.
-                    <br />
-                    <br />
-                    3. As long as there's no SMS with driver contact number,
-                    assume that driver has not been found. You will need to find
-                    drivers from other platforms too. If you find a driver on
-                    another platform, please cancel this request (link in your
-                    initial confirmation SMS).
-                    <br />
-                    <br />
-                    Thank you and all the best!
-                  </div>
-                </div>
-                <div
-                  class="card row"
-                  style={{ width: "100%", padding: "", marginTop: "10px" }}
-                >
-                  <div
-                    class="shadow-lg"
-                    style={{
-                      backgroundColor: "white",
-                      padding: "20px",
-                      marginBottom: "20px",
-                      alignContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      class="d-none d-md-inline-block"
-                      src={check_rates}
-                      alt=""
-                      style={{ width: "30%" }}
-                    />
-                    <img
-                      class="d-inline-block d-md-none"
-                      src={check_rates}
-                      alt=""
-                      style={{ width: "50%" }}
-                    />
+                        <img
+                          onClick={() => this.setShow()}
+                          style={{
+                            cursor: "pointer",
+                            height: "40px",
+                            width: "34px",
+                          }}
+                          src={question}
+                          alt="question"
+                        />
+                      </div>
+                      <div style={{ fontSize: "12px" }}>
+                        <span style={{ fontWeight: "bold"}}>{context.data.driver.rules}</span> <br />
+                        {context.data.driver.rules1}
+                        <br />
+                        <br />
+                        {context.data.driver.rules2}
+                        <br />
+                        <br />
+                        {context.data.driver.rules3}
+                        <br />
+                        <br />
+                        {context.data.driver.thankyou}
+                      </div>
+                    </div>
                     <div
-                      class="d-flex flex-row justify-content-center"
-                      style={{ margin: "10px" }}
+                      class="card row"
+                      style={{ width: "100%", padding: "", marginTop: "10px" }}
                     >
                       <div
-                        class="d-flex p-6 justify-content-center align-items-center"
-                        style={{ padding: "0px 10px" }}
+                        class="shadow-lg"
+                        style={{
+                          backgroundColor: "white",
+                          padding: "20px",
+                          marginBottom: "20px",
+                          alignContent: "center",
+                          alignItems: "center",
+                        }}
                       >
-                        <div class="form-group create-title">
-                          <label for="postalcode">Delivery From 出发地点</label>
-                          <div class="input-group">
-                            <input
-                              onChange={this.handleChange.bind(this)}
-                              value={this.state.postal}
-                              type="text"
-                              class={
-                                !this.state.postal
-                                  ? "form-control is-invalid"
-                                  : "form-control"
-                              }
-                              name="postal"
-                              placeholder="Enter Postal Code 邮区编号"
-                              min="0"
-                              required
-                              autocomplete="postal"
-                              maxLength="6"
-                            />
-                          </div>
-                          {this.state.invalidPostal ? (
-                            <div
-                              class="badge badge-danger"
-                              style={{ fontSize: "15px" }}
-                            >
-                              Postal Code is invalid
-                            </div>
-                          ) : (
-                              <div>
-                                <br />
-                              </div>
-                            )}
-                        </div>
-                      </div>
-                      <div class="p-6" style={{ padding: "0px 10px" }}>
-                        <div class="form-group create-title">
-                          <label for="postalcode">Delivery To 送往地点</label>
-                          <div class="input-group">
-                            <input
-                              onChange={this.handleChange.bind(this)}
-                              value={this.state.postal_to}
-                              type="text"
-                              class={
-                                !this.state.postal_to
-                                  ? "form-control is-invalid"
-                                  : "form-control"
-                              }
-                              name="postal_to"
-                              placeholder="Enter Postal Code 邮区编号"
-                              min="0"
-                              required
-                              maxLength="6"
-                              autocomplete="postal_to"
-                              style={{ padding: "0px 10px" }}
-                            />
-                          </div>
-                          {this.state.invalidPostal_to ? (
-                            <div
-                              class="badge badge-danger"
-                              style={{ fontSize: "15px" }}
-                            >
-                              Postal Code is invalid
-                            </div>
-                          ) : (
-                              <div>
-                                <br />
-                              </div>
-                            )}
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="d-flex flex-row justify-content-center align-items-center"
-                      style={{ padding: "0px 10px" }}
-                    >
-                      {this.state.loadingDir ? (
-                        <Spinner class="" animation="grow" />
-                      ) : (
-                          <div style={{ fontSize: "14px", textAlign: "left" }}>
-                            {this.state.retrievedDir &&
-                              this.state.directions &&
-                              this.state.directions.routes.length > 0 ? (
-                                <div
-                                  class="p-6 d-flex align-items-center"
-                                  style={{
-                                    padding: "15px",
-                                  }}
-                                >
-                                  <div>
-                                    <b>Duration: </b>
-                                    {this.state.directions.routes.length > 0
-                                      ? this.state.directions.routes[0].legs[0]
-                                        .duration.text
-                                      : null}
-                                    <br />
-                                    <b>Delivery Cost: </b>
-                                    {this.state.cost
-                                      ? "$" + this.state.cost.toString()
-                                      : null}
-                                  </div>
-                                </div>
-                              ) : null}
-                          </div>
-                        )}
-                      <div class="p-6 d-flex flex-row justify-content-center align-items-center">
-                        {this.state.loadingMap ? (
-                          <div>
-                            <br />
-                            <Spinner class="" animation="grow" />
-                          </div>
-                        ) : (
-                            <div>
-                              {this.state.retrievedMap &&
-                                this.state.regionFrom.planningarea ? (
-                                  <span>
-                                    <div>
-                                      <img
-                                        src={
-                                          "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
-                                          this.state.regionFrom.planningarea
-                                            .replace(/ /g, "")
-                                            .toLowerCase() +
-                                          ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
-                                        }
-                                        alt="map"
-                                        style={{
-                                          width: "100px",
-                                          height: "auto",
-                                        }}
-                                      />
-                                      <Button
-                                        variant="contained"
-                                        color={"secondary"}
-                                        size="large"
-                                        startIcon={<GetApp />}
-                                        style={{
-                                          fontSize: "10px",
-                                          width: "auto",
-                                          margin: "10px",
-                                          // position: "absolute",
-                                          // right: "40px",
-                                        }}
-                                        target="blank"
-                                        href={
-                                          "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
-                                          this.state.regionFrom.planningarea
-                                            .replace(/ /g, "")
-                                            .toLowerCase() +
-                                          ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
-                                        }
-                                        download
-                                      >
-                                        <div>View Map (全图)</div>
-                                      </Button>
-                                    </div>
-                                  </span>
-                                ) : (
-                                  <div>
-                                    Map will be loaded after details are given
-                                  </div>
-                                )}
-                            </div>
-                          )}
-                      </div>
-                    </div>
-                    <div style={{ paddingTop: "20px" }}>
-                      <b>↓ To Arrange Delivery 安排送餐添表格 ↓</b>
-                    </div>
-                    {/* Check if user is already logged in with Firebase */}
-                <div
-                  style={{
-                    display: this.state.firebaseUser ? "none" : "block",
-                  }}
-                >
-                  <br />
-                  <div style={{color:"red"}}>
-                    <p><b>Verify Mobile Number with OTP: </b>To prevent scams, this MUST be your legitimate phone number as an F&B owner. It will be the contact number given to drivers who accept your request.
-                      We will not hesitate to track you and make a police report if you submit a fake request to harass others.
-                      </p>
-                    <StyledFirebaseAuth
-                      uiConfig={uiConfig}
-                      firebaseAuth={firebase.auth()}
-                    />
-                  </div>
-                  <div id="recaptcha-container"></div>
-                  <br />
-                </div>
-                <br />
-                    {this.state.firebaseUser ? (
-                      <div style={{color: "green"}}>
-                        <p>
-                          <b>Verified your phone number:{" "}
-                          {this.state.firebaseUser.phoneNumber}</b>
-                        </p>
-                      </div>
-                    ) : null}
-                  </div>
-                  {this.state.firebaseUser !== null ? (
-                    <div>
-                      <img
-                        class="d-none d-md-inline-block"
-                        src={store_address}
-                        alt=""
-                        style={{ width: "40%" }}
-                      />
-                      <img
-                        class="d-inline-block d-md-none"
-                        src={store_address}
-                        alt=""
-                        style={{ width: "80%" }}
-                      />
-                      <div style={{ padding: "20px" }}>
-                        <div class="row">
-                          {" "}
-                          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                            {" "}
+
+                        <img
+                          class="d-none d-md-inline-block"
+                          src={check_rates}
+                          alt=""
+                          style={{ width: "30%" }}
+                        />
+                        <img
+                          class="d-inline-block d-md-none"
+                          src={check_rates}
+                          alt=""
+                          style={{ width: "50%" }}
+                        />
+                        <div
+                          class="d-flex flex-row justify-content-center"
+                          style={{ margin: "10px" }}
+                        >
+                          <div
+                            class="d-flex p-6 justify-content-center align-items-center"
+                            style={{ padding: "0px 10px" }}
+                          >
                             <div class="form-group create-title">
-                              <label for="postalcode">Postal Code 邮区编号</label>
+                              <label for="postalcode">{context.data.driver.deliveryfrom}</label>
                               <div class="input-group">
                                 <input
                                   onChange={this.handleChange.bind(this)}
@@ -922,57 +706,274 @@ export class Driver extends React.Component {
                                       : "form-control"
                                   }
                                   name="postal"
-                                  placeholder="Enter Postal Code 邮区编号"
+                                  placeholder={context.data.driver.placeholderpostalcode}
+                                  min="0"
+                                  required
+                                  autocomplete="postal"
+                                  maxLength="6"
+                                />
+                              </div>
+                              {this.state.invalidPostal ? (
+                                <div
+                                  class="badge badge-danger"
+                                  style={{ fontSize: "15px" }}
+                                >
+                                  Postal Code is invalid
+                                </div>
+                              ) : (
+                                  <div>
+                                    <br />
+                                  </div>
+                                )}
+                            </div>
+                          </div>
+                          <div class="p-6" style={{ padding: "0px 10px" }}>
+                            <div class="form-group create-title">
+                              <label for="postalcode">{context.data.driver.deliveryto}</label>
+                              <div class="input-group">
+                                <input
+                                  onChange={this.handleChange.bind(this)}
+                                  value={this.state.postal_to}
+                                  type="text"
+                                  class={
+                                    !this.state.postal_to
+                                      ? "form-control is-invalid"
+                                      : "form-control"
+                                  }
+                                  name="postal_to"
+                                  placeholder={context.data.driver.placeholderpostalcode}
                                   min="0"
                                   required
                                   maxLength="6"
-                                ></input>
+                                  autocomplete="postal_to"
+                                  style={{ padding: "0px 10px" }}
+                                />
                               </div>
-                            </div>
-                          </div>
-                          <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                            {" "}
-                            <div class="form-group create-title">
-                              <label for="street">
-                                Street Name 街道<b> (Auto-Filled)</b>
-                              </label>
-                              <input
-                                onChange={this.handleChange}
-                                value={this.state.street}
-                                type="text"
-                                class={
-                                  !this.state.street
-                                    ? "form-control is-invalid"
-                                    : "form-control"
-                                }
-                                name="street"
-                                placeholder="Enter Street Name 街道"
-                                required
-                              ></input>
+                              {this.state.invalidPostal_to ? (
+                                <div
+                                  class="badge badge-danger"
+                                  style={{ fontSize: "15px" }}
+                                >
+                                  Postal Code is invalid
+                                </div>
+                              ) : (
+                                  <div>
+                                    <br />
+                                  </div>
+                                )}
                             </div>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                            <div class="form-group create-title">
-                              <label for="unit">Unit # 门牌</label>
-                              <input
-                                onChange={this.handleChange}
-                                value={this.state.unit}
-                                type="text"
-                                class="form-control"
-                                name="unit"
-                                placeholder="E.g. #01-01"
-                              ></input>
-                            </div>
+                        <div
+                          class="d-flex flex-row justify-content-center align-items-center"
+                          style={{ padding: "0px 10px" }}
+                        >
+                          {this.state.loadingDir ? (
+                            <Spinner class="" animation="grow" />
+                          ) : (
+                              <div style={{ fontSize: "14px", textAlign: "left" }}>
+                                {this.state.retrievedDir &&
+                                  this.state.directions &&
+                                  this.state.directions.routes.length > 0 ? (
+                                    <div
+                                      class="p-6 d-flex align-items-center"
+                                      style={{
+                                        padding: "15px",
+                                      }}
+                                    >
+                                      <div>
+                                        <b>Duration: </b>
+                                        {this.state.directions.routes.length > 0
+                                          ? this.state.directions.routes[0].legs[0]
+                                            .duration.text
+                                          : null}
+                                        <br />
+                                        <b>Delivery Cost: </b>
+                                        {this.state.cost
+                                          ? "$" + this.state.cost.toString()
+                                          : null}
+                                      </div>
+                                    </div>
+                                  ) : null}
+                              </div>
+                            )}
+                          <div class="p-6 d-flex flex-row justify-content-center align-items-center">
+                            {this.state.loadingMap ? (
+                              <div>
+                                <br />
+                                <Spinner class="" animation="grow" />
+                              </div>
+                            ) : (
+                                <div>
+                                  {this.state.retrievedMap &&
+                                    this.state.regionFrom.planningarea ? (
+                                      <span>
+                                        <div>
+                                          <img
+                                            src={
+                                              "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
+                                              this.state.regionFrom.planningarea
+                                                .replace(/ /g, "")
+                                                .toLowerCase() +
+                                              ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
+                                            }
+                                            alt="map"
+                                            style={{
+                                              width: "100px",
+                                              height: "auto",
+                                            }}
+                                          />
+                                          <Button
+                                            variant="contained"
+                                            color={"secondary"}
+                                            size="large"
+                                            startIcon={<GetApp />}
+                                            style={{
+                                              fontSize: "10px",
+                                              width: "auto",
+                                              margin: "10px",
+                                              // position: "absolute",
+                                              // right: "40px",
+                                            }}
+                                            target="blank"
+                                            href={
+                                              "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
+                                              this.state.regionFrom.planningarea
+                                                .replace(/ /g, "")
+                                                .toLowerCase() +
+                                              ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
+                                            }
+                                            download
+                                          >
+                                            <div>{context.data.driver.viewmap}</div>
+                                          </Button>
+                                        </div>
+                                      </span>
+                                    ) : (
+                                      <div>
+                                        {context.data.driver.mapwillload}
+                                      </div>
+                                    )}
+                                </div>
+                              )}
                           </div>
-                          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                            Mobile Number 手机号: 
-                            <br />
-                            <div style={{color: "green", margin: "10px"}}>
-                            <b>{this.state.firebaseUser.phoneNumber.slice(3)}</b>
+                        </div>
+                        <div style={{ paddingTop: "20px" }}>
+                          <b>{context.data.driver.arrangedelivery}</b>
+                        </div>
+                        {/* Check if user is already logged in with Firebase */}
+                        <div
+                          style={{
+                            display: this.state.firebaseUser ? "none" : "block",
+                          }}
+                        >
+                          <br />
+                          <div style={{ color: "red" }}>
+                            <p><b>Verify Mobile Number with OTP: </b>To prevent scams, this MUST be your legitimate phone number as an F&B owner. It will be the contact number given to drivers who accept your request.
+                      We will not hesitate to track you and make a police report if you submit a fake request to harass others.
+                      </p>
+                            <StyledFirebaseAuth
+                              uiConfig={uiConfig}
+                              firebaseAuth={firebase.auth()}
+                            />
+                          </div>
+                          <div id="recaptcha-container"></div>
+                          <br />
+                        </div>
+                        <br />
+                        {this.state.firebaseUser ? (
+                          <div style={{ color: "green" }}>
+                            <p>
+                              <b>{context.data.driver.verified}{" "}
+                                {this.state.firebaseUser.phoneNumber}</b>
+                            </p>
+                          </div>
+                        ) : null}
+
+                      </div>
+                      {this.state.firebaseUser !== null ? (
+                        <div>
+                          <img
+                            class="d-none d-md-inline-block"
+                            src={store_address}
+                            alt=""
+                            style={{ width: "40%" }}
+                          />
+                          <img
+                            class="d-inline-block d-md-none"
+                            src={store_address}
+                            alt=""
+                            style={{ width: "80%" }}
+                          />
+                          <div style={{ padding: "20px" }}>
+                            <div class="row">
+                              {" "}
+                              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                {" "}
+                                <div class="form-group create-title">
+                                  <label for="postalcode">{context.data.driver.postalcode}</label>
+                                  <div class="input-group">
+                                    <input
+                                      onChange={this.handleChange.bind(this)}
+                                      value={this.state.postal}
+                                      type="text"
+                                      class={
+                                        !this.state.postal
+                                          ? "form-control is-invalid"
+                                          : "form-control"
+                                      }
+                                      name="postal"
+                                      placeholder={context.data.driver.placeholderpostalcode}
+                                      min="0"
+                                      required
+                                      maxLength="6"
+                                    ></input>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                {" "}
+                                <div class="form-group create-title">
+                                  <label for="street">
+                                    {context.data.create.streetname}<b> {context.data.create.autofill}</b>
+                                  </label>
+                                  <input
+                                    onChange={this.handleChange}
+                                    value={this.state.street}
+                                    type="text"
+                                    class={
+                                      !this.state.street
+                                        ? "form-control is-invalid"
+                                        : "form-control"
+                                    }
+                                    name="street"
+                                    placeholder={context.data.create.placeholderstreetname}
+                                    required
+                                  ></input>
+                                </div>
+                              </div>
                             </div>
-                            {/* <div class="form-group create-title">
+                            <div class="row">
+                              <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group create-title">
+                                  <label for="unit">{context.data.create.unit}</label>
+                                  <input
+                                    onChange={this.handleChange}
+                                    value={this.state.unit}
+                                    type="text"
+                                    class="form-control"
+                                    name="unit"
+                                    placeholder={context.data.create.placeholderunit}
+                                  ></input>
+                                </div>
+                              </div>
+                              <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                {context.data.driver.mobilenumber}:
+                            <br />
+                                <div style={{ color: "green", margin: "10px" }}>
+                                  <b>{this.state.firebaseUser.phoneNumber.slice(3)}</b>
+                                </div>
+                                {/* <div class="form-group create-title">
                               <label for="unit">Mobile Number 手机号: </label>
                               <div class="input-group">
                                 <div class="input-group-prepend">
@@ -998,318 +999,328 @@ export class Driver extends React.Component {
                                 ></input>
                               </div>
                             </div> */}
-                          </div>
-                          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                            <div class="form-group create-title">
-                              <label for="note">
-                                Note To Driver 司机启示 (Optional, max 40 char)
-                          </label>
-                              <input
-                                onChange={this.handleChange}
-                                value={this.state.note}
-                                type="text"
-                                class="form-control"
-                                name="note"
-                                placeholder="E.g. Collect order number 3"
-                                maxLength="40"
-                              ></input>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <img
-                        class="d-none d-md-inline-block"
-                        src={delivery_address}
-                        alt=""
-                        style={{ width: "40%" }}
-                      />
-                      <img
-                        class="d-inline-block d-md-none"
-                        src={delivery_address}
-                        alt=""
-                        style={{ width: "80%" }}
-                      />
-                      <div style={{ padding: "20px" }}>
-                        <div class="row">
-                          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                            <div class="form-group create-title">
-                              <label for="postal_to">Postal Code 邮区编号 </label>
-                              <div class="input-group">
-                                <input
-                                  onChange={this.handleChange.bind(this)}
-                                  value={this.state.postal_to}
-                                  type="text"
-                                  class={
-                                    !this.state.postal_to
-                                      ? "form-control is-invalid"
-                                      : "form-control"
-                                  }
-                                  name="postal_to"
-                                  placeholder="Enter Postal Code 邮区编号"
-                                  min="0"
-                                  required
-                                ></input>
                               </div>
-                            </div>
-                          </div>
-                          <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                            <div class="form-group create-title">
-                              <label for="street_to">
-                                Street Name 街道<b> (Auto-Filled)</b>
-                              </label>
-                              <input
-                                onChange={this.handleChange}
-                                value={this.state.street_to}
-                                type="text"
-                                class={
-                                  !this.state.street_to
-                                    ? "form-control is-invalid"
-                                    : "form-control"
-                                }
-                                name="street_to"
-                                placeholder="Enter Street Name 街道"
-                                required
-                              ></input>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          {" "}
-                          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                            {" "}
-                            <div class="form-group create-title">
-                              <label for="unit">Unit # 门牌</label>
-                              <input
-                                onChange={this.handleChange}
-                                value={this.state.unit_to}
-                                type="text"
-                                class="form-control"
-                                name="unit_to"
-                                placeholder="E.g. #01-01"
-                              ></input>
-                            </div>
-                          </div>
-                          <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                            <div class="form-group create-title">
-                              <label for="unit">Mobile Number 手机号:</label>
-                              <div class="input-group">
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text" id="basic-addon1">
-                                    +65
-                              </span>
+                              {/* <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div class="form-group create-title">
+                                  <label for="note">
+                                    {context.data.driver.drivernote}
+                                  </label>
+                                  <input
+                                    onChange={this.handleChange}
+                                    value={this.state.note}
+                                    type="text"
+                                    class="form-control"
+                                    name="note"
+                                    placeholder={context.data.driver.placeholderdrivernote}
+                                    maxLength="40"
+                                  ></input>
                                 </div>
-                                <input
-                                  onChange={this.handleChange}
-                                  value={this.state.contact_to}
-                                  type="tel"
-                                  name="contact_to"
-                                  placeholder="9xxxxxxx"
-                                  maxLength="8"
-                                  pattern="[8-9]{1}[0-9]{7}"
-                                  minlength="8"
-                                  class={
-                                    !this.state.contact_to
-                                      ? "form-control is-invalid"
-                                      : "form-control"
-                                  }
-                                  required
-                                ></input>
-                              </div>
+                              </div> */}
                             </div>
                           </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                            <div class="form-group create-title">
-                              <label for="time">Pickup Date 取食物日期</label>
-                              <DatePicker
-                                class="form-control is-invalid"
-                                dayPlaceholder="dd"
-                                monthPlaceholder="mm"
-                                yearPlaceholder="yyyy"
-                                onChange={this.handleDate}
-                                value={this.state.date}
-                                format="dd/MMM/yyyy"
-                                required
-                              />
-                            </div>
-                          </div>
-                          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                            <div class="form-group create-title">
-                              <label for="time">Pickup Time 取食物时间</label>
-                              <TimePicker
-                                class="form-control is-invalid"
-                                dayPlaceholder="dd"
-                                monthPlaceholder="mm"
-                                yearPlaceholder="yyyy"
-                                hourPlaceholder="hh"
-                                minutePlaceholder="mm"
-                                onChange={this.handleTime}
-                                value={this.state.time}
-                                format="hh:mma"
-                                disableClock
-                                required
-                              />
-                              {time_now > this.state.datetime ? (
-                                <span class="badge badge-danger">
-                                  Time cannot be less than 1 hour from now
-                                  <br />
-                              取食物时间必须至少在1小时后
-                                </span>
-                              ) : null}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <br />
-                      <div>
-                        <div
-                          class="shadow-lg"
-                          style={{
-                            backgroundColor: "white",
-                            padding: "20px",
-                          }}
-                        >
                           <img
                             class="d-none d-md-inline-block"
-                            src={summary}
-                            alt=""
-                            style={{ width: "20%" }}
-                          />
-                          <img
-                            class="d-inline-block d-md-none"
-                            src={summary}
+                            src={delivery_address}
                             alt=""
                             style={{ width: "40%" }}
                           />
-                          {this.state.loadingDir ? (
-                            <div>
-                              <br />
-                              <Spinner class="" animation="grow" />
-                            </div>
-                          ) : (
-                              <div>
-                                {this.state.retrievedDir &&
-                                  this.state.directions &&
-                                  this.state.directions.routes.length > 0 ? (
-                                    <span>
-                                      <p
-                                        style={{
-                                          textAlign: "center",
-                                          fontSize: "20px",
-                                        }}
-                                      >
-                                        <b>Distance 距离 (Google Maps): </b>
-                                        <br />
-                                        {this.state.directions.routes.length > 0
-                                          ? this.state.directions.routes[0].legs[0]
-                                            .distance.text
-                                          : null}
-                                        <br />
-                                        <b>Est. Duration 预测行程时间: </b>
-                                        <br />
-                                        {this.state.directions.routes.length > 0
-                                          ? this.state.directions.routes[0].legs[0]
-                                            .duration.text
-                                          : null}
-                                        <br />
-                                        <b>
-                                          Arrival Time 预测到达时间 <br />{" "}
-                                          <small style={{ color: "grey" }}>
-                                            (Pickup Time + Duration + 15 min Buffer):
-                                  </small>
-                                        </b>
-                                        <br />
-                                        {this.state.directions.routes.length > 0
-                                          ? dayName[arrival.getDay()] +
-                                          " " +
-                                          arrival.getDate() +
-                                          " " +
-                                          monthNames[arrival.getMonth()] +
-                                          " " +
-                                          formatAMPM(arrival)
-                                          : null}
-
-                                        <br />
-                                        <b>Delivery Cost: </b>
-                                        <br />
-                                        {this.state.cost
-                                          ? "$" + this.state.cost.toString()
-                                          : null}
-                                      </p>
-                                    </span>
-                                  ) : (
-                                    <div>Fill in details above</div>
-                                  )}
-                              </div>
-                            )}
-                          <div
-                            class="form-check create-title"
-                            style={{ textAlign: "center" }}
-                          >
-                            <label class="checkbox-inline">
-                              <input
-                                onChange={this.handleChange}
-                                type="checkbox"
-                                checked={this.state.pickup_option}
-                                value={this.state.pickup_option}
-                                name="pickup_option"
-                                class="form-check-input"
-                                required
-                              ></input>
-                          I agree that I am a local F&B looking for a delivery
-                          and FoodLeh is not liable for any event not limited to
-                          inaccuracies, delays, costs, spillage, accidents,
-                          injuries, food poisoning, etc. I also agree to let
-                          FoodLeh use the provided information to find a driver
-                          with all reasonable means. FoodLeh is only responsible
-                          for matching the two sides who will assume all
-                          responsibilities.
-                        </label>
-                            <br />
-                            <br />
-                          </div>
-                          {this.state.submitting ? (
-                            <Spinner class="" animation="grow" />
-                          ) : (
-                              <div>
-                                {this.state.submitted ? (
-                                  <div>
-                                    <div
-                                      class="shadow-lg"
-                                      style={{
-                                        backgroundColor: "green",
-                                        borderColor: "white",
-                                        fontSize: "25px",
-                                        color: "white",
-                                      }}
-                                    >
-                                      Submitted! If found, a driver will contact you
-                                      directly. Driver will use customer mobile no. to
-                                      collect order.
-                                      成功！若有司机接受，司机会直接通知您。取食物时，司机会提供顾客电话号码。
-                              </div>
-                                    <h5>
-                                      To arrange a new delivery, please refresh the
-                                      page.
-                              </h5>
+                          <img
+                            class="d-inline-block d-md-none"
+                            src={delivery_address}
+                            alt=""
+                            style={{ width: "80%" }}
+                          />
+                          <div style={{ padding: "20px" }}>
+                            <div class="row">
+                              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group create-title">
+                                  <label for="postal_to">{context.data.driver.postalcode}</label>
+                                  <div class="input-group">
+                                    <input
+                                      onChange={this.handleChange.bind(this)}
+                                      value={this.state.postal_to}
+                                      type="text"
+                                      class={
+                                        !this.state.postal_to
+                                          ? "form-control is-invalid"
+                                          : "form-control"
+                                      }
+                                      name="postal_to"
+                                      placeholder={context.data.driver.placeholderpostalcode}
+                                      min="0"
+                                      required
+                                    ></input>
                                   </div>
-                                ) : (
-                                    <Button
-                                      variant="contained"
-                                      color={"primary"}
-                                      type="Submit"
-                                    >
-                                      Search (搜索)
-                                    </Button>
-                                  )}
+                                </div>
                               </div>
-                            )}
+                              <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                <div class="form-group create-title">
+                                  <label for="street_to">
+                                    {context.data.create.streetname}<b> {context.data.create.autofill}</b>
+                                  </label>
+                                  <input
+                                    onChange={this.handleChange}
+                                    value={this.state.street_to}
+                                    type="text"
+                                    class={
+                                      !this.state.street_to
+                                        ? "form-control is-invalid"
+                                        : "form-control"
+                                    }
+                                    name="street_to"
+                                    placeholder={context.data.create.placeholderstreetname}
+                                    required
+                                  ></input>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              {" "}
+                              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                {" "}
+                                <div class="form-group create-title">
+                                  <label for="unit">{context.data.create.unit}</label>
+                                  <input
+                                    onChange={this.handleChange}
+                                    value={this.state.unit_to}
+                                    type="text"
+                                    class="form-control"
+                                    name="unit_to"
+                                    placeholder={context.data.create.placeholderunit}
+                                  ></input>
+                                </div>
+                              </div>
+                              <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                <div class="form-group create-title">
+                                  <label for="unit">{context.data.driver.mobilenumber}:</label>
+                                  <div class="input-group">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text" id="basic-addon1">
+                                        +65
+                              </span>
+                                    </div>
+                                    <input
+                                      onChange={this.handleChange}
+                                      value={this.state.contact_to}
+                                      type="tel"
+                                      name="contact_to"
+                                      placeholder="9xxxxxxx"
+                                      maxLength="8"
+                                      pattern="[8-9]{1}[0-9]{7}"
+                                      minlength="8"
+                                      class={
+                                        !this.state.contact_to
+                                          ? "form-control is-invalid"
+                                          : "form-control"
+                                      }
+                                      required
+                                    ></input>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group create-title">
+                                  <label for="time">{context.data.driver.pickupdate}</label>
+                                  <DatePicker
+                                    class="form-control is-invalid"
+                                    dayPlaceholder="dd"
+                                    monthPlaceholder="mm"
+                                    yearPlaceholder="yyyy"
+                                    onChange={this.handleDate}
+                                    value={this.state.date}
+                                    format="dd/MMM/yyyy"
+                                    required
+                                  />
+                                </div>
+                              </div>
+                              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                <div class="form-group create-title">
+                                  <label for="time">{context.data.driver.pickuptime}</label>
+                                  <TimePicker
+                                    class="form-control is-invalid"
+                                    dayPlaceholder="dd"
+                                    monthPlaceholder="mm"
+                                    yearPlaceholder="yyyy"
+                                    hourPlaceholder="hh"
+                                    minutePlaceholder="mm"
+                                    onChange={this.handleTime}
+                                    value={this.state.time}
+                                    format="hh:mma"
+                                    disableClock
+                                    required
+                                  />
+                                  {time_now > this.state.datetime ? (
+                                    <span class="badge badge-danger">
+                                      <LanguageContext.Consumer>
+                                        {(context) => (
+                                          <div>
+                                            {context.data.driver.timelimit}
+                                          </div>
+                                        )}
+                                      </LanguageContext.Consumer>
+                                    </span>
+                                  ) : null}
+                                </div>
+                              </div>
+                              <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                                <div class="form-group create-title">
+                                  <label for="note">
+                                    {context.data.driver.drivernote}
+                                  </label>
+                                  <input
+                                    onChange={this.handleChange}
+                                    value={this.state.note}
+                                    type="text"
+                                    class="form-control"
+                                    name="note"
+                                    placeholder={context.data.driver.placeholderdrivernote}
+                                    maxLength="40"
+                                  ></input>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <br />
+                          <div>
+                            <div
+                              class="shadow-lg"
+                              style={{
+                                backgroundColor: "white",
+                                padding: "20px",
+                              }}
+                            >
+                              <img
+                                class="d-none d-md-inline-block"
+                                src={summary}
+                                alt=""
+                                style={{ width: "20%" }}
+                              />
+                              <img
+                                class="d-inline-block d-md-none"
+                                src={summary}
+                                alt=""
+                                style={{ width: "40%" }}
+                              />
+                              {this.state.loadingDir ? (
+                                <div>
+                                  <br />
+                                  <Spinner class="" animation="grow" />
+                                </div>
+                              ) : (
+                                  <div>
+                                    {this.state.retrievedDir &&
+                                      this.state.directions &&
+                                      this.state.directions.routes.length > 0 ? (
+                                        <span>
+                                          <p
+                                            style={{
+                                              textAlign: "center",
+                                              fontSize: "20px",
+                                            }}
+                                          >
+                                            <b>{context.data.driver.distance} (Google Maps): </b>
+                                            <br />
+                                            {this.state.directions.routes.length > 0
+                                              ? this.state.directions.routes[0].legs[0]
+                                                .distance.text
+                                              : null}
+                                            <br />
+                                            <b>{context.data.driver.estduration}: </b>
+                                            <br />
+                                            {this.state.directions.routes.length > 0
+                                              ? this.state.directions.routes[0].legs[0]
+                                                .duration.text
+                                              : null}
+                                            <br />
+                                            <b>
+                                              {context.data.driver.estarrival} <br />{" "}
+                                              <small style={{ color: "grey" }}>
+                                                (Pickup Time + Duration + 15 min Buffer):
+                                  </small>
+                                            </b>
+                                            <br />
+                                            {this.state.directions.routes.length > 0
+                                              ? dayName[arrival.getDay()] +
+                                              " " +
+                                              arrival.getDate() +
+                                              " " +
+                                              monthNames[arrival.getMonth()] +
+                                              " " +
+                                              formatAMPM(arrival)
+                                              : null}
 
-                          <br />
-                          <br />
-                          <small>
-                            {" "}
+                                            <br />
+                                            <b>Delivery Cost: </b>
+                                            <br />
+                                            {this.state.cost
+                                              ? "$" + this.state.cost.toString()
+                                              : null}
+                                          </p>
+                                        </span>
+                                      ) : (
+                                        <div>{context.data.driver.fillindetails}</div>
+                                      )}
+                                  </div>
+                                )}
+                              <div
+                                class="form-check create-title"
+                                style={{ textAlign: "center" }}
+                              >
+                                <label class="checkbox-inline">
+                                  <input
+                                    onChange={this.handleChange}
+                                    type="checkbox"
+                                    checked={this.state.pickup_option}
+                                    value={this.state.pickup_option}
+                                    name="pickup_option"
+                                    class="form-check-input"
+                                    required
+                                  ></input>
+                                  {context.data.driver.iagree}
+                        </label>
+                                <br />
+                                <br />
+                              </div>
+                              {this.state.submitting ? (
+                                <Spinner class="" animation="grow" />
+                              ) : (
+                                  <div>
+                                    {this.state.submitted ? (
+                                      <div>
+                                        <div
+                                          class="shadow-lg"
+                                          style={{
+                                            backgroundColor: "green",
+                                            borderColor: "white",
+                                            fontSize: "25px",
+                                            color: "white",
+                                          }}
+                                        >
+                                          {context.data.driver.submitted}
+                                        </div>
+                                        <h5>
+                                          To arrange a new delivery, please refresh the
+                                          page.
+                              </h5>
+                                      </div>
+                                    ) : (
+                                        <Button
+                                          variant="contained"
+                                          color={"primary"}
+                                          type="Submit"
+                                        >
+                                          {context.data.menu.searchlabel}
+                                        </Button>
+                                      )}
+                                  </div>
+                                )}
+
+                              <br />
+                              <br />
+                              <small>
+                                {" "}
                         Disclaimer: FoodLeh is only responsible for broadcasting
                         deliveries to potential drivers and is not responsible
                         for any inaccuracies, misrepresentation, damage, delay,
@@ -1317,14 +1328,16 @@ export class Driver extends React.Component {
                         if you have any suggestions or notice anything we could
                         improve!
                       </small>
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      ) : null}
                     </div>
-                  ) : null}
+                  </div>
                 </div>
-              </div>
-            </div>
-          </Form>
+              </Form>
+            )}
+          </LanguageContext.Consumer>
         </div>
       </div>
     );
