@@ -49,9 +49,9 @@ function getMobileOperatingSystem() {
   return "unknown";
 }
 
-// function openNewWindow() {
-//   window.open("https://foodleh.app");
-// }
+function openNewWindow() {
+  window.open("https://foodleh.app", '_system');
+}
 
 export class Home extends React.PureComponent {
   state = {
@@ -92,8 +92,8 @@ export class Home extends React.PureComponent {
     this.setState({ option: HOME_DELIVERY_OPTION });
   };
 
-  handleClose = () => {
-    // event.preventDefault();
+  handleClose = (event) => {
+    event.preventDefault();
     this.setState({ open: false });
   };
 
@@ -112,18 +112,25 @@ export class Home extends React.PureComponent {
       <div class="container-fluid" className="home">
         <div class="jumbotron row">
           <div class="container">
-            {getMobileOperatingSystem() ==="Android" ? (
+          {getMobileOperatingSystem() === "Android" ? (
               <Snackbar
                 anchorOrigin={{
                   vertical: "bottom",
                   horizontal: "left",
                 }}
                 open={this.state.open}
-                autoHideDuration={10000}
-                onClose={() => this.handleClose()}
+                // autoHideDuration={10000}
+                // onClose={this.handleClose}
                 message={
-                  <div>
-                    If you're using our Android App please use browser to visit <b>foodleh.app</b> instead
+                  <div style={{fontSize: "30px"}}>
+                    If you're using our Android App please use browser to visit{" "}
+                    <span
+                      style={{ color: "blue", textDecoration: "underlined" }}
+                      onClick={openNewWindow}
+                    >
+                      foodleh.app
+                    </span>{" "}
+                    instead
                   </div>
                 }
                 action={
@@ -132,7 +139,7 @@ export class Home extends React.PureComponent {
                       size="small"
                       aria-label="close"
                       color="inherit"
-                      onClick={() => this.handleClose()}
+                      onClick={this.handleClose}
                     >
                       <CloseIcon fontSize="small" />
                     </IconButton>

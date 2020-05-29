@@ -21,8 +21,34 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import motor from "../assets/motor-delivery.png";
 import bag from "../assets/styrofoam-dabao.png";
 import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 const analytics = firebase.analytics();
+
+function getMobileOperatingSystem() {
+  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+  // Windows Phone must come first because its UA also contains "Android"
+  if (/windows phone/i.test(userAgent)) {
+    return "Windows Phone";
+  }
+
+  if (/android/i.test(userAgent) && /version/i.test(userAgent)) {
+    return "Android";
+  }
+
+  // iOS detection from: http://stackoverflow.com/a/9039885/177710
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    return "iOS";
+  }
+  return "unknown";
+}
+
+function openNewWindow() {
+  window.open("https://foodleh.app", "_system");
+}
 
 function onLoad(name) {
   analytics.logEvent(name);
@@ -109,6 +135,7 @@ export class SearchAll extends React.Component {
       ...searchInitialState,
       pickup: queryParams.get("option") === "selfcollect",
       delivery: queryParams.get("option") === "delivery",
+      open: true,
     };
 
     if (queryParams.get("lng") && queryParams.get("lat")) {
@@ -241,6 +268,11 @@ export class SearchAll extends React.Component {
       this.setState({ isCuisineMenuOpen: false });
       this.retrieveData();
     }
+  };
+
+  handleClose = (event) => {
+    event.preventDefault();
+    this.setState({ open: false });
   };
 
   cuisineSearch() {
@@ -605,6 +637,41 @@ export class SearchAll extends React.Component {
                 <KeyboardArrowUpIcon />
               </Fab>
             </ScrollTop>
+            {getMobileOperatingSystem() === "Android" ? (
+              <Snackbar
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                open={this.state.open}
+                // autoHideDuration={10000}
+                // onClose={this.handleClose}
+                message={
+                  <div style={{ fontSize: "30px" }}>
+                    If you're using our Android App please use browser to visit{" "}
+                    <span
+                      style={{ color: "blue", textDecoration: "underlined" }}
+                      onClick={openNewWindow}
+                    >
+                      foodleh.app
+                    </span>{" "}
+                    instead
+                  </div>
+                }
+                action={
+                  <React.Fragment>
+                    <IconButton
+                      size="small"
+                      aria-label="close"
+                      color="inherit"
+                      onClick={this.handleClose}
+                    >
+                      <CloseIcon fontSize="small" />
+                    </IconButton>
+                  </React.Fragment>
+                }
+              />
+            ) : null}
           </div>
         </div>
       </div>
