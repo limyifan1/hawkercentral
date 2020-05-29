@@ -21,9 +21,31 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import motor from "../assets/motor-delivery.png";
 import bag from "../assets/styrofoam-dabao.png";
 import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 const analytics = firebase.analytics();
 
+function getMobileOperatingSystem() {
+  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+  // Windows Phone must come first because its UA also contains "Android"
+  if (/windows phone/i.test(userAgent)) {
+    return "Windows Phone";
+  }
+
+  if (/android/i.test(userAgent)) {
+    return "Android";
+  }
+
+  // iOS detection from: http://stackoverflow.com/a/9039885/177710
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    return "iOS";
+  }
+
+  return "unknown";
+}
 function onLoad(name) {
   analytics.logEvent(name);
 }
@@ -97,7 +119,7 @@ const searchInitialState = {
   searchPostal: false,
   cuisineValue: [],
   isCuisineMenuOpen: false,
-}
+};
 
 export class SearchAll extends React.Component {
   constructor(props) {
@@ -109,6 +131,7 @@ export class SearchAll extends React.Component {
       ...searchInitialState,
       pickup: queryParams.get("option") === "selfcollect",
       delivery: queryParams.get("option") === "delivery",
+      open: true,
     };
 
     if (queryParams.get("lng") && queryParams.get("lat")) {
@@ -126,7 +149,11 @@ export class SearchAll extends React.Component {
 
   componentWillMount() {
     onLoad("searchall_load");
-    if (this.state.searchPostal && this.state.latitude && this.state.longitude) {
+    if (
+      this.state.searchPostal &&
+      this.state.latitude &&
+      this.state.longitude
+    ) {
       this.findDataByPostal();
     } else {
       this.retrieveData();
@@ -137,6 +164,11 @@ export class SearchAll extends React.Component {
   getData(val) {
     this.setState({ data: val });
   }
+
+  handleClose = () => {
+    // event.preventDefault();
+    this.setState({ open: false });
+  };
 
   retrieveData = async () => {
     this.setState({ retrieved: false });
@@ -291,8 +323,8 @@ export class SearchAll extends React.Component {
         this.setState({ [name]: value });
       }, 300);
     } else {
-      if(value.length === 0){
-        this.retrieveData()
+      if (value.length === 0) {
+        this.retrieveData();
       }
       this.setState({ [name]: value, searchPostal: false });
       if (name === "postal" && value.length === 6) {
@@ -313,8 +345,10 @@ export class SearchAll extends React.Component {
     var name = event.currentTarget.name;
     if (name === "delivery") this.setState({ delivery: true, pickup: false });
     if (name === "pickup") this.setState({ delivery: false, pickup: true });
-    if(this.state.delivery && name === "delivery") this.setState({ delivery: false });
-    if(this.state.pickup && name === "pickup") this.setState({ pickup: false });
+    if (this.state.delivery && name === "delivery")
+      this.setState({ delivery: false });
+    if (this.state.pickup && name === "pickup")
+      this.setState({ pickup: false });
     if (this.state.searchPostal && this.state.postal.length === 6) {
       const latlng = await Helpers.getLatLng(this.state.postal);
       this.setState({
@@ -599,6 +633,35 @@ export class SearchAll extends React.Component {
                 <KeyboardArrowUpIcon />
               </Fab>
             </ScrollTop>
+            {getMobileOperatingSystem() === "Android" ? (
+              <Snackbar
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                open={this.state.open}
+                autoHideDuration={10000}
+                onClose={() => this.handleClose()}
+                message={
+                  <div>
+                    If you're using our Android App please go to{" "}
+                    <a href="https://www.foodleh.app" target="blank">www.foodleh.app</a> instead{" "}
+                  </div>
+                }
+                action={
+                  <React.Fragment>
+                    <IconButton
+                      size="small"
+                      aria-label="close"
+                      color="inherit"
+                      onClick={() => this.handleClose()}
+                    >
+                      <CloseIcon fontSize="small" />
+                    </IconButton>
+                  </React.Fragment>
+                }
+              />
+            ) : null}
           </div>
         </div>
       </div>
