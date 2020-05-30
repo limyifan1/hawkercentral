@@ -135,8 +135,8 @@ export class Driver extends React.Component {
       postal: queryString.parse(this.props.location.search).postal
         ? queryString.parse(this.props.location.search).postal
         : cookies.get("postal")
-          ? cookies.get("postal")
-          : "",
+        ? cookies.get("postal")
+        : "",
       postal_to: queryString.parse(this.props.location.search).postal_to
         ? queryString.parse(this.props.location.search).postal_to
         : "",
@@ -147,8 +147,8 @@ export class Driver extends React.Component {
       street: queryString.parse(this.props.location.search).street
         ? queryString.parse(this.props.location.search).street
         : cookies.get("street")
-          ? cookies.get("street")
-          : "",
+        ? cookies.get("street")
+        : "",
       street_to: queryString.parse(this.props.location.search).street_to
         ? queryString.parse(this.props.location.search).street_to
         : "",
@@ -157,16 +157,16 @@ export class Driver extends React.Component {
       unit: queryString.parse(this.props.location.search).unit
         ? queryString.parse(this.props.location.search).unit
         : cookies.get("unit")
-          ? cookies.get("unit")
-          : "",
+        ? cookies.get("unit")
+        : "",
       unit_to: queryString.parse(this.props.location.search).unit_to
         ? queryString.parse(this.props.location.search).unit_to
         : "",
       contact: queryString.parse(this.props.location.search).contact
         ? queryString.parse(this.props.location.search).contact
         : cookies.get("contact")
-          ? cookies.get("contact")
-          : "",
+        ? cookies.get("contact")
+        : "",
       contact_to: queryString.parse(this.props.location.search).contact_to
         ? queryString.parse(this.props.location.search).contact_to
         : "",
@@ -271,8 +271,8 @@ export class Driver extends React.Component {
   callPostal = (postal) => {
     return fetch(
       "https://developers.onemap.sg/commonapi/search?searchVal=" +
-      postal +
-      "&returnGeom=Y&getAddrDetails=Y"
+        postal +
+        "&returnGeom=Y&getAddrDetails=Y"
     )
       .then(function (response) {
         return response.json();
@@ -364,11 +364,7 @@ export class Driver extends React.Component {
     if (this.state.datetime < time_now) {
       alert(
         <LanguageContext.Consumer>
-          {(context) => (
-            <div>
-              {context.data.driver.timelimit}
-            </div>
-          )}
+          {(context) => <div>{context.data.driver.timelimit}</div>}
         </LanguageContext.Consumer>
       );
     }
@@ -385,8 +381,8 @@ export class Driver extends React.Component {
     var arrival = new Date(this.state.datetime);
     arrival.setMinutes(
       arrival.getMinutes() +
-      15 +
-      this.state.directions.routes[0].legs[0].duration.value / 60
+        15 +
+        this.state.directions.routes[0].legs[0].duration.value / 60
     );
     arrival =
       dayName[arrival.getDay()] +
@@ -501,19 +497,18 @@ export class Driver extends React.Component {
       });
   };
 
-
   handleTime = async (time) => {
     this.setState({
       time: time,
       datetime: new Date(
         this.state.date.getMonth() +
-        1 +
-        "/" +
-        this.state.date.getDate() +
-        "/" +
-        this.state.date.getFullYear() +
-        " " +
-        time
+          1 +
+          "/" +
+          this.state.date.getDate() +
+          "/" +
+          this.state.date.getFullYear() +
+          " " +
+          time
       ),
     });
   };
@@ -523,13 +518,13 @@ export class Driver extends React.Component {
       date: date,
       datetime: new Date(
         date.getMonth() +
-        1 +
-        "/" +
-        date.getDate() +
-        "/" +
-        date.getFullYear() +
-        " " +
-        this.state.time
+          1 +
+          "/" +
+          date.getDate() +
+          "/" +
+          date.getFullYear() +
+          " " +
+          this.state.time
       ),
     });
   };
@@ -573,8 +568,8 @@ export class Driver extends React.Component {
       arrival = new Date(this.state.datetime);
       arrival.setMinutes(
         arrival.getMinutes() +
-        15 +
-        this.state.directions.routes[0].legs[0].duration.value / 60
+          15 +
+          this.state.directions.routes[0].legs[0].duration.value / 60
       );
     }
     return (
@@ -631,8 +626,8 @@ export class Driver extends React.Component {
                             width: "50%",
                           }}
                         />
-                    A non-profit community delivery initiative <br /> Click To
-                    Learn How It Works: <br />
+                        A non-profit community delivery initiative <br /> Click
+                        To Learn How It Works: <br />
                         <img
                           onClick={() => this.setShow()}
                           style={{
@@ -645,7 +640,10 @@ export class Driver extends React.Component {
                         />
                       </div>
                       <div style={{ fontSize: "12px" }}>
-                        <span style={{ fontWeight: "bold"}}>{context.data.driver.rules}</span> <br />
+                        <span style={{ fontWeight: "bold" }}>
+                          {context.data.driver.rules}
+                        </span>{" "}
+                        <br />
                         {context.data.driver.rules1}
                         <br />
                         <br />
@@ -672,7 +670,6 @@ export class Driver extends React.Component {
                           alignItems: "center",
                         }}
                       >
-
                         <img
                           class="d-none d-md-inline-block"
                           src={check_rates}
@@ -694,7 +691,9 @@ export class Driver extends React.Component {
                             style={{ padding: "0px 10px" }}
                           >
                             <div class="form-group create-title">
-                              <label for="postalcode">{context.data.driver.deliveryfrom}</label>
+                              <label for="postalcode">
+                                {context.data.driver.deliveryfrom}
+                              </label>
                               <div class="input-group">
                                 <input
                                   onChange={this.handleChange.bind(this)}
@@ -706,7 +705,9 @@ export class Driver extends React.Component {
                                       : "form-control"
                                   }
                                   name="postal"
-                                  placeholder={context.data.driver.placeholderpostalcode}
+                                  placeholder={
+                                    context.data.driver.placeholderpostalcode
+                                  }
                                   min="0"
                                   required
                                   autocomplete="postal"
@@ -721,15 +722,17 @@ export class Driver extends React.Component {
                                   Postal Code is invalid
                                 </div>
                               ) : (
-                                  <div>
-                                    <br />
-                                  </div>
-                                )}
+                                <div>
+                                  <br />
+                                </div>
+                              )}
                             </div>
                           </div>
                           <div class="p-6" style={{ padding: "0px 10px" }}>
                             <div class="form-group create-title">
-                              <label for="postalcode">{context.data.driver.deliveryto}</label>
+                              <label for="postalcode">
+                                {context.data.driver.deliveryto}
+                              </label>
                               <div class="input-group">
                                 <input
                                   onChange={this.handleChange.bind(this)}
@@ -741,7 +744,9 @@ export class Driver extends React.Component {
                                       : "form-control"
                                   }
                                   name="postal_to"
-                                  placeholder={context.data.driver.placeholderpostalcode}
+                                  placeholder={
+                                    context.data.driver.placeholderpostalcode
+                                  }
                                   min="0"
                                   required
                                   maxLength="6"
@@ -757,10 +762,10 @@ export class Driver extends React.Component {
                                   Postal Code is invalid
                                 </div>
                               ) : (
-                                  <div>
-                                    <br />
-                                  </div>
-                                )}
+                                <div>
+                                  <br />
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -771,32 +776,34 @@ export class Driver extends React.Component {
                           {this.state.loadingDir ? (
                             <Spinner class="" animation="grow" />
                           ) : (
-                              <div style={{ fontSize: "14px", textAlign: "left" }}>
-                                {this.state.retrievedDir &&
-                                  this.state.directions &&
-                                  this.state.directions.routes.length > 0 ? (
-                                    <div
-                                      class="p-6 d-flex align-items-center"
-                                      style={{
-                                        padding: "15px",
-                                      }}
-                                    >
-                                      <div>
-                                        <b>Duration: </b>
-                                        {this.state.directions.routes.length > 0
-                                          ? this.state.directions.routes[0].legs[0]
-                                            .duration.text
-                                          : null}
-                                        <br />
-                                        <b>Delivery Cost: </b>
-                                        {this.state.cost
-                                          ? "$" + this.state.cost.toString()
-                                          : null}
-                                      </div>
-                                    </div>
-                                  ) : null}
-                              </div>
-                            )}
+                            <div
+                              style={{ fontSize: "14px", textAlign: "left" }}
+                            >
+                              {this.state.retrievedDir &&
+                              this.state.directions &&
+                              this.state.directions.routes.length > 0 ? (
+                                <div
+                                  class="p-6 d-flex align-items-center"
+                                  style={{
+                                    padding: "15px",
+                                  }}
+                                >
+                                  <div>
+                                    <b>Duration: </b>
+                                    {this.state.directions.routes.length > 0
+                                      ? this.state.directions.routes[0].legs[0]
+                                          .duration.text
+                                      : null}
+                                    <br />
+                                    <b>Delivery Cost: </b>
+                                    {this.state.cost
+                                      ? "$" + this.state.cost.toString()
+                                      : null}
+                                  </div>
+                                </div>
+                              ) : null}
+                            </div>
+                          )}
                           <div class="p-6 d-flex flex-row justify-content-center align-items-center">
                             {this.state.loadingMap ? (
                               <div>
@@ -804,58 +811,56 @@ export class Driver extends React.Component {
                                 <Spinner class="" animation="grow" />
                               </div>
                             ) : (
-                                <div>
-                                  {this.state.retrievedMap &&
-                                    this.state.regionFrom.planningarea ? (
-                                      <span>
-                                        <div>
-                                          <img
-                                            src={
-                                              "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
-                                              this.state.regionFrom.planningarea
-                                                .replace(/ /g, "")
-                                                .toLowerCase() +
-                                              ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
-                                            }
-                                            alt="map"
-                                            style={{
-                                              width: "100px",
-                                              height: "auto",
-                                            }}
-                                          />
-                                          <Button
-                                            variant="contained"
-                                            color={"secondary"}
-                                            size="large"
-                                            startIcon={<GetApp />}
-                                            style={{
-                                              fontSize: "10px",
-                                              width: "auto",
-                                              margin: "10px",
-                                              // position: "absolute",
-                                              // right: "40px",
-                                            }}
-                                            target="blank"
-                                            href={
-                                              "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
-                                              this.state.regionFrom.planningarea
-                                                .replace(/ /g, "")
-                                                .toLowerCase() +
-                                              ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
-                                            }
-                                            download
-                                          >
-                                            <div>{context.data.driver.viewmap}</div>
-                                          </Button>
-                                        </div>
-                                      </span>
-                                    ) : (
-                                      <div>
-                                        {context.data.driver.mapwillload}
-                                      </div>
-                                    )}
-                                </div>
-                              )}
+                              <div>
+                                {this.state.retrievedMap &&
+                                this.state.regionFrom.planningarea ? (
+                                  <span>
+                                    <div>
+                                      <img
+                                        src={
+                                          "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
+                                          this.state.regionFrom.planningarea
+                                            .replace(/ /g, "")
+                                            .toLowerCase() +
+                                          ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
+                                        }
+                                        alt="map"
+                                        style={{
+                                          width: "100px",
+                                          height: "auto",
+                                        }}
+                                      />
+                                      <Button
+                                        variant="contained"
+                                        color={"secondary"}
+                                        size="large"
+                                        startIcon={<GetApp />}
+                                        style={{
+                                          fontSize: "10px",
+                                          width: "auto",
+                                          margin: "10px",
+                                          // position: "absolute",
+                                          // right: "40px",
+                                        }}
+                                        target="blank"
+                                        href={
+                                          "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
+                                          this.state.regionFrom.planningarea
+                                            .replace(/ /g, "")
+                                            .toLowerCase() +
+                                          ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
+                                        }
+                                        download
+                                      >
+                                        <div>{context.data.driver.viewmap}</div>
+                                      </Button>
+                                    </div>
+                                  </span>
+                                ) : (
+                                  <div>{context.data.driver.mapwillload}</div>
+                                )}
+                              </div>
+                            )}
                           </div>
                         </div>
                         <div style={{ paddingTop: "20px" }}>
@@ -869,9 +874,14 @@ export class Driver extends React.Component {
                         >
                           <br />
                           <div style={{ color: "red" }}>
-                            <p><b>Verify Mobile Number with OTP: </b>To prevent scams, this MUST be your legitimate phone number as an F&B owner. It will be the contact number given to drivers who accept your request.
-                      We will not hesitate to track you and make a police report if you submit a fake request to harass others.
-                      </p>
+                            <p>
+                              <b>Verify Mobile Number with OTP: </b>To prevent
+                              scams, this MUST be your legitimate phone number
+                              as an F&B owner. It will be the contact number
+                              given to drivers who accept your request. We will
+                              not hesitate to track you and make a police report
+                              if you submit a fake request to harass others.
+                            </p>
                             <StyledFirebaseAuth
                               uiConfig={uiConfig}
                               firebaseAuth={firebase.auth()}
@@ -884,12 +894,13 @@ export class Driver extends React.Component {
                         {this.state.firebaseUser ? (
                           <div style={{ color: "green" }}>
                             <p>
-                              <b>{context.data.driver.verified}{" "}
-                                {this.state.firebaseUser.phoneNumber}</b>
+                              <b>
+                                {context.data.driver.verified}{" "}
+                                {this.state.firebaseUser.phoneNumber}
+                              </b>
                             </p>
                           </div>
                         ) : null}
-
                       </div>
                       {this.state.firebaseUser !== null ? (
                         <div>
@@ -911,7 +922,9 @@ export class Driver extends React.Component {
                               <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 {" "}
                                 <div class="form-group create-title">
-                                  <label for="postalcode">{context.data.driver.postalcode}</label>
+                                  <label for="postalcode">
+                                    {context.data.driver.postalcode}
+                                  </label>
                                   <div class="input-group">
                                     <input
                                       onChange={this.handleChange.bind(this)}
@@ -923,7 +936,10 @@ export class Driver extends React.Component {
                                           : "form-control"
                                       }
                                       name="postal"
-                                      placeholder={context.data.driver.placeholderpostalcode}
+                                      placeholder={
+                                        context.data.driver
+                                          .placeholderpostalcode
+                                      }
                                       min="0"
                                       required
                                       maxLength="6"
@@ -935,7 +951,8 @@ export class Driver extends React.Component {
                                 {" "}
                                 <div class="form-group create-title">
                                   <label for="street">
-                                    {context.data.create.streetname}<b> {context.data.create.autofill}</b>
+                                    {context.data.create.streetname}
+                                    <b> {context.data.create.autofill}</b>
                                   </label>
                                   <input
                                     onChange={this.handleChange}
@@ -947,7 +964,9 @@ export class Driver extends React.Component {
                                         : "form-control"
                                     }
                                     name="street"
-                                    placeholder={context.data.create.placeholderstreetname}
+                                    placeholder={
+                                      context.data.create.placeholderstreetname
+                                    }
                                     required
                                   ></input>
                                 </div>
@@ -956,22 +975,30 @@ export class Driver extends React.Component {
                             <div class="row">
                               <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-group create-title">
-                                  <label for="unit">{context.data.create.unit}</label>
+                                  <label for="unit">
+                                    {context.data.create.unit}
+                                  </label>
                                   <input
                                     onChange={this.handleChange}
                                     value={this.state.unit}
                                     type="text"
                                     class="form-control"
                                     name="unit"
-                                    placeholder={context.data.create.placeholderunit}
+                                    placeholder={
+                                      context.data.create.placeholderunit
+                                    }
                                   ></input>
                                 </div>
                               </div>
                               <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 {context.data.driver.mobilenumber}:
-                            <br />
+                                <br />
                                 <div style={{ color: "green", margin: "10px" }}>
-                                  <b>{this.state.firebaseUser.phoneNumber.slice(3)}</b>
+                                  <b>
+                                    {this.state.firebaseUser.phoneNumber.slice(
+                                      3
+                                    )}
+                                  </b>
                                 </div>
                                 {/* <div class="form-group create-title">
                               <label for="unit">Mobile Number 手机号: </label>
@@ -1034,7 +1061,9 @@ export class Driver extends React.Component {
                             <div class="row">
                               <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group create-title">
-                                  <label for="postal_to">{context.data.driver.postalcode}</label>
+                                  <label for="postal_to">
+                                    {context.data.driver.postalcode}
+                                  </label>
                                   <div class="input-group">
                                     <input
                                       onChange={this.handleChange.bind(this)}
@@ -1046,7 +1075,10 @@ export class Driver extends React.Component {
                                           : "form-control"
                                       }
                                       name="postal_to"
-                                      placeholder={context.data.driver.placeholderpostalcode}
+                                      placeholder={
+                                        context.data.driver
+                                          .placeholderpostalcode
+                                      }
                                       min="0"
                                       required
                                     ></input>
@@ -1056,7 +1088,8 @@ export class Driver extends React.Component {
                               <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                                 <div class="form-group create-title">
                                   <label for="street_to">
-                                    {context.data.create.streetname}<b> {context.data.create.autofill}</b>
+                                    {context.data.create.streetname}
+                                    <b> {context.data.create.autofill}</b>
                                   </label>
                                   <input
                                     onChange={this.handleChange}
@@ -1068,7 +1101,9 @@ export class Driver extends React.Component {
                                         : "form-control"
                                     }
                                     name="street_to"
-                                    placeholder={context.data.create.placeholderstreetname}
+                                    placeholder={
+                                      context.data.create.placeholderstreetname
+                                    }
                                     required
                                   ></input>
                                 </div>
@@ -1079,25 +1114,34 @@ export class Driver extends React.Component {
                               <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 {" "}
                                 <div class="form-group create-title">
-                                  <label for="unit">{context.data.create.unit}</label>
+                                  <label for="unit">
+                                    {context.data.create.unit}
+                                  </label>
                                   <input
                                     onChange={this.handleChange}
                                     value={this.state.unit_to}
                                     type="text"
                                     class="form-control"
                                     name="unit_to"
-                                    placeholder={context.data.create.placeholderunit}
+                                    placeholder={
+                                      context.data.create.placeholderunit
+                                    }
                                   ></input>
                                 </div>
                               </div>
                               <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                                 <div class="form-group create-title">
-                                  <label for="unit">{context.data.driver.mobilenumber}:</label>
+                                  <label for="unit">
+                                    {context.data.driver.mobilenumber}:
+                                  </label>
                                   <div class="input-group">
                                     <div class="input-group-prepend">
-                                      <span class="input-group-text" id="basic-addon1">
+                                      <span
+                                        class="input-group-text"
+                                        id="basic-addon1"
+                                      >
                                         +65
-                              </span>
+                                      </span>
                                     </div>
                                     <input
                                       onChange={this.handleChange}
@@ -1122,7 +1166,9 @@ export class Driver extends React.Component {
                             <div class="row">
                               <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-group create-title">
-                                  <label for="time">{context.data.driver.pickupdate}</label>
+                                  <label for="time">
+                                    {context.data.driver.pickupdate}
+                                  </label>
                                   <DatePicker
                                     class="form-control is-invalid"
                                     dayPlaceholder="dd"
@@ -1137,7 +1183,9 @@ export class Driver extends React.Component {
                               </div>
                               <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                 <div class="form-group create-title">
-                                  <label for="time">{context.data.driver.pickuptime}</label>
+                                  <label for="time">
+                                    {context.data.driver.pickuptime}
+                                  </label>
                                   <TimePicker
                                     class="form-control is-invalid"
                                     dayPlaceholder="dd"
@@ -1175,7 +1223,9 @@ export class Driver extends React.Component {
                                     type="text"
                                     class="form-control"
                                     name="note"
-                                    placeholder={context.data.driver.placeholderdrivernote}
+                                    placeholder={
+                                      context.data.driver.placeholderdrivernote
+                                    }
                                     maxLength="40"
                                   ></input>
                                 </div>
@@ -1209,61 +1259,70 @@ export class Driver extends React.Component {
                                   <Spinner class="" animation="grow" />
                                 </div>
                               ) : (
-                                  <div>
-                                    {this.state.retrievedDir &&
-                                      this.state.directions &&
-                                      this.state.directions.routes.length > 0 ? (
-                                        <span>
-                                          <p
-                                            style={{
-                                              textAlign: "center",
-                                              fontSize: "20px",
-                                            }}
-                                          >
-                                            <b>{context.data.driver.distance} (Google Maps): </b>
-                                            <br />
-                                            {this.state.directions.routes.length > 0
-                                              ? this.state.directions.routes[0].legs[0]
-                                                .distance.text
-                                              : null}
-                                            <br />
-                                            <b>{context.data.driver.estduration}: </b>
-                                            <br />
-                                            {this.state.directions.routes.length > 0
-                                              ? this.state.directions.routes[0].legs[0]
-                                                .duration.text
-                                              : null}
-                                            <br />
-                                            <b>
-                                              {context.data.driver.estarrival} <br />{" "}
-                                              <small style={{ color: "grey" }}>
-                                                (Pickup Time + Duration + 15 min Buffer):
-                                  </small>
-                                            </b>
-                                            <br />
-                                            {this.state.directions.routes.length > 0
-                                              ? dayName[arrival.getDay()] +
-                                              " " +
-                                              arrival.getDate() +
-                                              " " +
-                                              monthNames[arrival.getMonth()] +
-                                              " " +
-                                              formatAMPM(arrival)
-                                              : null}
+                                <div>
+                                  {this.state.retrievedDir &&
+                                  this.state.directions &&
+                                  this.state.directions.routes.length > 0 ? (
+                                    <span>
+                                      <p
+                                        style={{
+                                          textAlign: "center",
+                                          fontSize: "20px",
+                                        }}
+                                      >
+                                        <b>
+                                          {context.data.driver.distance} (Google
+                                          Maps):{" "}
+                                        </b>
+                                        <br />
+                                        {this.state.directions.routes.length > 0
+                                          ? this.state.directions.routes[0]
+                                              .legs[0].distance.text
+                                          : null}
+                                        <br />
+                                        <b>
+                                          {context.data.driver.estduration}:{" "}
+                                        </b>
+                                        <br />
+                                        {this.state.directions.routes.length > 0
+                                          ? this.state.directions.routes[0]
+                                              .legs[0].duration.text
+                                          : null}
+                                        <br />
+                                        <b>
+                                          {context.data.driver.estarrival}{" "}
+                                          <br />{" "}
+                                          <small style={{ color: "grey" }}>
+                                            (Pickup Time + Duration + 15 min
+                                            Buffer):
+                                          </small>
+                                        </b>
+                                        <br />
+                                        {this.state.directions.routes.length > 0
+                                          ? dayName[arrival.getDay()] +
+                                            " " +
+                                            arrival.getDate() +
+                                            " " +
+                                            monthNames[arrival.getMonth()] +
+                                            " " +
+                                            formatAMPM(arrival)
+                                          : null}
 
-                                            <br />
-                                            <b>Delivery Cost: </b>
-                                            <br />
-                                            {this.state.cost
-                                              ? "$" + this.state.cost.toString()
-                                              : null}
-                                          </p>
-                                        </span>
-                                      ) : (
-                                        <div>{context.data.driver.fillindetails}</div>
-                                      )}
-                                  </div>
-                                )}
+                                        <br />
+                                        <b>Delivery Cost: </b>
+                                        <br />
+                                        {this.state.cost
+                                          ? "$" + this.state.cost.toString()
+                                          : null}
+                                      </p>
+                                    </span>
+                                  ) : (
+                                    <div>
+                                      {context.data.driver.fillindetails}
+                                    </div>
+                                  )}
+                                </div>
+                              )}
                               <div
                                 class="form-check create-title"
                                 style={{ textAlign: "center" }}
@@ -1279,55 +1338,56 @@ export class Driver extends React.Component {
                                     required
                                   ></input>
                                   {context.data.driver.iagree}
-                        </label>
+                                </label>
                                 <br />
                                 <br />
                               </div>
                               {this.state.submitting ? (
                                 <Spinner class="" animation="grow" />
                               ) : (
-                                  <div>
-                                    {this.state.submitted ? (
-                                      <div>
-                                        <div
-                                          class="shadow-lg"
-                                          style={{
-                                            backgroundColor: "green",
-                                            borderColor: "white",
-                                            fontSize: "25px",
-                                            color: "white",
-                                          }}
-                                        >
-                                          {context.data.driver.submitted}
-                                        </div>
-                                        <h5>
-                                          To arrange a new delivery, please refresh the
-                                          page.
-                              </h5>
+                                <div>
+                                  {this.state.submitted ? (
+                                    <div>
+                                      <div
+                                        class="shadow-lg"
+                                        style={{
+                                          backgroundColor: "green",
+                                          borderColor: "white",
+                                          fontSize: "25px",
+                                          color: "white",
+                                        }}
+                                      >
+                                        {context.data.driver.submitted}
                                       </div>
-                                    ) : (
-                                        <Button
-                                          variant="contained"
-                                          color={"primary"}
-                                          type="Submit"
-                                        >
-                                          {context.data.menu.searchlabel}
-                                        </Button>
-                                      )}
-                                  </div>
-                                )}
+                                      <h5>
+                                        To arrange a new delivery, please
+                                        refresh the page.
+                                      </h5>
+                                    </div>
+                                  ) : (
+                                    <Button
+                                      variant="contained"
+                                      color={"primary"}
+                                      type="Submit"
+                                    >
+                                      {context.data.menu.searchlabel}
+                                    </Button>
+                                  )}
+                                </div>
+                              )}
 
                               <br />
                               <br />
                               <small>
                                 {" "}
-                        Disclaimer: FoodLeh is only responsible for broadcasting
-                        deliveries to potential drivers and is not responsible
-                        for any inaccuracies, misrepresentation, damage, delay,
-                        losses or otherwise. Contact us at foodleh@outlook.com
-                        if you have any suggestions or notice anything we could
-                        improve!
-                      </small>
+                                Disclaimer: FoodLeh is only responsible for
+                                broadcasting deliveries to potential drivers and
+                                is not responsible for any inaccuracies,
+                                misrepresentation, damage, delay, losses or
+                                otherwise. Contact us at foodleh@outlook.com if
+                                you have any suggestions or notice anything we
+                                could improve!
+                              </small>
                             </div>
                           </div>
                         </div>
