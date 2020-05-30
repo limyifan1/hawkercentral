@@ -275,7 +275,7 @@ class FullScreenDialog extends Component {
     return (
       <div>
         <div onClick={this.handleClickOpen} className="buy-btn">
-          Checkout
+          Order via WhatsApp
         </div>
         <Dialog
           fullScreen
@@ -293,7 +293,7 @@ class FullScreenDialog extends Component {
                 <CloseIcon />
               </IconButton>
               <Typography variant="h6" style={{ flex: 1 }}>
-                Checkout
+                Order via WhatsApp
               </Typography>
               {/* <Button autoFocus color="inherit" onClick={this.handleClose}>
                 save
