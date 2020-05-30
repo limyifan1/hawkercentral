@@ -40,7 +40,7 @@ export class Menu extends React.Component {
       <Navbar
         bg="light"
         variant="light"
-        style={{ position: "fixed", width: "100%", zIndex: "9999" }}
+        style={{ position: "fixed", width: "100%", zIndex: "100" }}
       >
         <Navbar.Brand as={Link} to="/" style={{ color: "#B48300" }}>
           <img

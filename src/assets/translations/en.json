@@ -131,7 +131,9 @@
     "submitted": "Submitted! If found, a driver will contact you directly. Driver will use customer mobile no. to collect order. Pls pay driver EOD (End of Day).",
     "pickupdate": "Pickup Date",
     "pickuptime": "Pickup Time",
+    "deliverycost": "Delivery Cost",
     "fillindetails": "Fill in details above",
-    "iagree": "I agree that I am a local F&B looking for a delivery and FoodLeh is not liable for any event not limited to inaccuracies, delays, costs, spillage, accidents, injuries, food poisoning, etc. I also agree to let FoodLeh use the provided information to find a driver with all reasonable means. FoodLeh is only responsible for matching the two sides who will assume all responsibilities."
+    "iagree": "I agree that I am a local F&B looking for a delivery and FoodLeh is not liable for any event not limited to inaccuracies, delays, costs, spillage, accidents, injuries, food poisoning, etc. I also agree to let FoodLeh use the provided information to find a driver with all reasonable means. FoodLeh is only responsible for matching the two sides who will assume all responsibilities.",
+    "confirm": "Confirm Request"
   }
 }

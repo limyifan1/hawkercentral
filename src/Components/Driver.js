@@ -20,9 +20,25 @@ import TimePicker from "react-time-picker";
 import queryString from "query-string";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { LanguageContext } from "./themeContext";
+import Dialog from "@material-ui/core/Dialog";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import CloseIcon from "@material-ui/icons/Close";
+import Slide from "@material-ui/core/Slide";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Divider from "@material-ui/core/Divider";
+
 const cookies = new Cookies();
 const API_KEY = `${process.env.REACT_APP_GKEY}`;
 const analytics = firebase.analytics();
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 function onLoad(name) {
   analytics.logEvent(name);
@@ -573,6 +589,16 @@ export class Driver extends React.Component {
     this.setState({ show: false });
   };
 
+  handleClickOpen = (event) => {
+    event.preventDefault();
+    this.setState({ open: true });
+  };
+
+  handleClose = (event) => {
+    event.preventDefault();
+    this.setState({ open: false });
+  };
+
   render() {
     var arrival;
     if (
@@ -623,7 +649,165 @@ export class Driver extends React.Component {
           <div class="align-items-center" style={{ width: "100%" }}></div>
           <LanguageContext.Consumer>
             {(context) => (
-              <Form onSubmit={this.handleSubmit.bind(this)}>
+              <Form onSubmit={this.handleClickOpen.bind(this)}>
+                <Dialog
+                  fullScreen
+                  open={this.state.open}
+                  onClose={this.handleClose}
+                  TransitionComponent={Transition}
+                >
+                  <AppBar
+                    style={{
+                      position: "relative",
+                      backgroundColor: "white",
+                    }}
+                  >
+                    <Toolbar>
+                      <IconButton
+                        edge="start"
+                        onClick={this.handleClose}
+                        aria-label="close"
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                      <Typography
+                        variant="h6"
+                        style={{ flex: 1, color: "black" }}
+                      >
+                        {context.data.driver.confirm}
+                      </Typography>
+                    </Toolbar>
+                    <List component="nav" aria-label="mailbox folders">
+                      <ListItem divider>
+                        <ListItemText
+                          style={{ color: "black" }}
+                          primary={context.data.driver.deliveryfrom}
+                          secondary={
+                            this.state.street + " " + this.state.postal
+                          }
+                        />
+                      </ListItem>
+                      <ListItem divider>
+                        <ListItemText
+                          style={{ color: "black" }}
+                          primary={context.data.driver.deliveryto}
+                          secondary={
+                            this.state.street_to + " " + this.state.postal_to
+                          }
+                        />
+                      </ListItem>
+                      <ListItem divider>
+                        <ListItemText
+                          style={{ color: "black" }}
+                          primary={context.data.driver.mobilenumber}
+                          secondary={this.state.contact_to}
+                        />
+                      </ListItem>
+                      <ListItem divider>
+                        <ListItemText
+                          style={{ color: "black" }}
+                          primary={context.data.driver.pickuptime}
+                          secondary={
+                            dayName[this.state.datetime.getDay()] +
+                            " " +
+                            this.state.datetime.getDate() +
+                            " " +
+                            monthNames[this.state.datetime.getMonth()] +
+                            " " +
+                            formatAMPM(this.state.datetime)
+                          }
+                        />
+                      </ListItem>
+                      <ListItem divider>
+                        <ListItemText
+                          style={{ color: "black" }}
+                          primary={context.data.driver.drivernote}
+                          secondary={this.state.note}
+                        />
+                      </ListItem>
+                      <ListItem divider>
+                        <ListItemText
+                          style={{ color: "black" }}
+                          primary={context.data.driver.deliverycost}
+                          secondary={"$" + this.state.cost}
+                        />
+                      </ListItem>
+                    </List>
+                    <div
+                      class="row d-flex justify-content-center align-items-center"
+                      style={{ margin: "10px" }}
+                    >
+                      {this.state.submitting ? (
+                        <div style={{ color: "black" }}>
+                          Loading...
+                          <Spinner animation="grow" />
+                        </div>
+                      ) : this.state.status === "succeeded" ? (
+                        <div>
+                          {this.state.submitted ? (
+                            <div>
+                              <div
+                                class="shadow-lg"
+                                style={{
+                                  backgroundColor: "green",
+                                  borderColor: "white",
+                                  fontSize: "25px",
+                                  color: "white",
+                                }}
+                              >
+                                {context.data.driver.submitted}
+                              </div>
+                              <h5 style={{ color: "black" }}>
+                                To arrange a new delivery, please refresh the
+                                page.
+                              </h5>
+                            </div>
+                          ) : (
+                            <Button
+                              variant="contained"
+                              color={"primary"}
+                              type="Submit"
+                              style={{ justifyContent: "center" }}
+                            >
+                              {context.data.menu.searchlabel}
+                            </Button>
+                          )}
+                        </div>
+                      ) : (
+                        <div>
+                          {this.state.submitted ? (
+                            <div>
+                              <div
+                                class="shadow-lg"
+                                style={{
+                                  backgroundColor: "red",
+                                  borderColor: "white",
+                                  fontSize: "25px",
+                                  color: "white",
+                                }}
+                              >
+                                ERROR PLEASE SUBMIT AGAIN
+                              </div>
+                              <h5>
+                                To arrange a new delivery, please refresh the
+                                page.
+                              </h5>
+                            </div>
+                          ) : (
+                            <Button
+                              variant="contained"
+                              color={"primary"}
+                              type="Submit"
+                              onClick={this.handleSubmit.bind(this)}
+                            >
+                              {context.data.menu.searchlabel}
+                            </Button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </AppBar>
+                </Dialog>
                 <div class="container-fluid col-md-10 content col-xs-offset-2">
                   <div class="d-flex row justify-content-center">
                     <img
@@ -804,13 +988,13 @@ export class Driver extends React.Component {
                                   }}
                                 >
                                   <div>
-                                    <b>Duration: </b>
+                                    <b>{context.data.driver.estduration}: </b>
                                     {this.state.directions.routes.length > 0
                                       ? this.state.directions.routes[0].legs[0]
                                           .duration.text
                                       : null}
                                     <br />
-                                    <b>Delivery Cost: </b>
+                                    <b>{context.data.driver.deliverycost}:</b>
                                     {this.state.cost
                                       ? "$" + this.state.cost.toString()
                                       : null}
@@ -1325,7 +1509,9 @@ export class Driver extends React.Component {
                                           : null}
 
                                         <br />
-                                        <b>Delivery Cost: </b>
+                                        <b>
+                                          {context.data.driver.deliverycost}:{" "}
+                                        </b>
                                         <br />
                                         {this.state.cost
                                           ? "$" + this.state.cost.toString()
@@ -1358,70 +1544,13 @@ export class Driver extends React.Component {
                                 <br />
                                 <br />
                               </div>
-                              {this.state.submitting ? (
-                                <Spinner class="" animation="grow" />
-                              ) : this.state.status === "succeeded" ? (
-                                <div>
-                                  {this.state.submitted ? (
-                                    <div>
-                                      <div
-                                        class="shadow-lg"
-                                        style={{
-                                          backgroundColor: "green",
-                                          borderColor: "white",
-                                          fontSize: "25px",
-                                          color: "white",
-                                        }}
-                                      >
-                                        {context.data.driver.submitted}
-                                      </div>
-                                      <h5>
-                                        To arrange a new delivery, please
-                                        refresh the page.
-                                      </h5>
-                                    </div>
-                                  ) : (
-                                    <Button
-                                      variant="contained"
-                                      color={"primary"}
-                                      type="Submit"
-                                    >
-                                      {context.data.menu.searchlabel}
-                                    </Button>
-                                  )}
-                                </div>
-                              ) : (
-                                <div>
-                                  {this.state.submitted ? (
-                                    <div>
-                                      <div
-                                        class="shadow-lg"
-                                        style={{
-                                          backgroundColor: "red",
-                                          borderColor: "white",
-                                          fontSize: "25px",
-                                          color: "white",
-                                        }}
-                                      >
-                                        ERROR PLEASE SUBMIT AGAIN
-                                      </div>
-                                      <h5>
-                                        To arrange a new delivery, please
-                                        refresh the page.
-                                      </h5>
-                                    </div>
-                                  ) : (
-                                    <Button
-                                      variant="contained"
-                                      color={"primary"}
-                                      type="Submit"
-                                    >
-                                      {context.data.menu.searchlabel}
-                                    </Button>
-                                  )}
-                                </div>
-                              )}
-
+                              <Button
+                                variant="contained"
+                                color={"primary"}
+                                type="Submit"
+                              >
+                                {context.data.driver.confirm}
+                              </Button>
                               <br />
                               <br />
                               <small>
