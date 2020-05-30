@@ -8,11 +8,11 @@ import "../App.css";
 import "react-multi-carousel/lib/styles.css";
 // import queryString from "query-string";
 import {
-  Button,
+  // Button,
   // Spinner,
-  Form,
-  Popover,
-  OverlayTrigger,
+  // Form,
+  // Popover,
+  // OverlayTrigger,
 } from "react-bootstrap";
 import { db } from "./Firestore";
 // import ImageGallery from "react-image-gallery";
@@ -25,9 +25,9 @@ import whatsapp_icon from "../assets/whatsapp_icon.png";
 // import website_button from "../assets/website_button.png";
 // import menu_title from "../assets/info_menu.png";
 // import orderleh_title from "../assets/orderleh_title.png";
-import delivery_title from "../assets/info_delivery.png";
+// import delivery_title from "../assets/info_delivery.png";
 // import gradient from "../assets/gradient.png";
-import revieworder from "../assets/info_review_order.png";
+// import revieworder from "../assets/info_review_order.png";
 import firebase from "./Firestore";
 import {
   FacebookShareButton,
@@ -44,9 +44,9 @@ import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import Fab from "@material-ui/core/Fab";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import { BitlyClient } from "bitly";
-import { Navbar, Nav } from "react-bootstrap";
+import { Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { LanguageContext } from "./themeContext";
+// import { LanguageContext } from "./themeContext";
 // import name from "../logo-header-nologo.png";
 import logo from "../foodleh.png";
 import { CartContext } from "./themeContext";
@@ -195,14 +195,6 @@ function ScrollTop(props) {
     </Zoom>
   );
 }
-
-const popover = (
-  <Popover>
-    <Popover.Content>
-      Your details will only be stored in your browser!
-    </Popover.Content>
-  </Popover>
-);
 
 export class Page extends React.Component {
   constructor(props) {
