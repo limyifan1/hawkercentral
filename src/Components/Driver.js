@@ -130,6 +130,7 @@ time_now.setMinutes(time_now.getMinutes() + 30);
 export class Driver extends React.Component {
   constructor(props) {
     super(props);
+    console.log(queryString.parse(this.props.location.search).note);
     this.state = {
       firebaseUser: null,
       postal: queryString.parse(this.props.location.search).postal
@@ -173,7 +174,11 @@ export class Driver extends React.Component {
       time: time_now.getHours() + ":" + time_now.getMinutes(),
       date: time_now,
       datetime: time_now,
-      note: cookies.get("note") ? cookies.get("note") : "",
+      note: queryString.parse(this.props.location.search).note
+      ? queryString.parse(this.props.location.search).note
+      : cookies.get("note")
+      ? cookies.get("note")
+      : "",
       pickup_option: false,
       submitted: false,
       show: false,
