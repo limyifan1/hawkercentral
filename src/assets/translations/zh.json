@@ -134,6 +134,8 @@
     "deliverycost": "送货费",
     "fillindetails": "请输入以上资料",
     "iagree": "我是本地餐饮业者，想找司机来给顾客送食物。若有任何遗失，Foodleh? 将不会承担任何的法律责任。这包括司机迟到，任何费用，意外等。我同意 FoodLeh 用以上资料帮忙传播给司机。",
-    "confirm": "确定资料" 
+    "confirm": "确定资料",
+    "review": "审查资料",
+    "clicktosearch": "点击确认"
   }
 }

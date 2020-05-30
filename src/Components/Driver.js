@@ -193,10 +193,10 @@ export class Driver extends React.Component {
       date: time_now,
       datetime: time_now,
       note: queryString.parse(this.props.location.search).note
-      ? queryString.parse(this.props.location.search).note
-      : cookies.get("note")
-      ? cookies.get("note")
-      : "",
+        ? queryString.parse(this.props.location.search).note
+        : cookies.get("note")
+        ? cookies.get("note")
+        : "",
       pickup_option: false,
       submitted: false,
       show: false,
@@ -805,7 +805,7 @@ export class Driver extends React.Component {
                               type="Submit"
                               onClick={this.handleSubmit.bind(this)}
                             >
-                              {context.data.menu.searchlabel}
+                              {context.data.driver.clicktosearch}
                             </Button>
                           )}
                         </div>
@@ -1554,7 +1554,7 @@ export class Driver extends React.Component {
                                 color={"primary"}
                                 type="Submit"
                               >
-                                {context.data.driver.confirm}
+                                {context.data.driver.review}
                               </Button>
                               <br />
                               <br />
