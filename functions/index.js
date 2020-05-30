@@ -211,7 +211,7 @@ exports.telegramSend = functions
       var duration = req.body.duration;
       var arrival = req.body.arrival;
       var message =
-        "<b>New Order Received</b> \n" +
+        "<b>New Order Received from <a href='www.foodleh.app'>FoodLeh</a></b> \n" +
         "<b>From: </b> <a href='https://maps.google.com/?q=" +
         origin +
         "'>" +
@@ -366,7 +366,7 @@ exports.telegramEdit = functions
         });
 
       var message =
-        "<s><b>New Order Received</b> \n" +
+        "<s><b>New Order Received from <a href='www.foodleh.app'>FoodLeh</a></b> \n" +
         "<b>From: </b> <a href='https://maps.google.com/?q=" +
         origin +
         "'>" +
@@ -377,7 +377,7 @@ exports.telegramEdit = functions
         "'>" +
         destination +
         "</a>\n" +
-        "<b>Fee: </b>" +
+        "<b>Fee: </b>$" +
         cost +
         "\n" +
         "<b>Pickup Time: </b>" +
@@ -447,7 +447,7 @@ exports.telegramCancel = functions
             formatAMPM(new Date(data.time.seconds * 1000 + 28800 * 1000))
           : null;
       var message =
-        "<s><b>New Order Received</b> \n" +
+        "<s><b>New Order Received from <a href='www.foodleh.app'>FoodLeh</a></b> \n" +
         "<b>From: </b> <a href='https://maps.google.com/?q=" +
         data.street +
         "'>" +
@@ -545,7 +545,7 @@ exports.taskRunner = functions
       console.log(message_id, now - expiry);
       if (now - expiry > 0) {
         var message =
-          "<s><b>New Order Received</b> \n" +
+          "<s><b>New Order Received from <a href='www.foodleh.app'>FoodLeh</a></b> \n" +
           "<b>From: </b> <a href='https://maps.google.com/?q=" +
           street +
           "'>" +
