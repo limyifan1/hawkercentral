@@ -5,6 +5,7 @@
 
 const functions = require("firebase-functions");
 const firestore = require("@google-cloud/firestore");
+const fetch = require("node-fetch");
 const client = new firestore.v1.FirestoreAdminClient();
 const { Telegraf } = require("telegraf");
 var admin = require("firebase-admin");
@@ -202,11 +203,15 @@ exports.telegramSend = functions
       var cost = req.body.cost;
       // var distance = req.body.distance;
       var url = "https://" + req.body.url;
-      url = await shorten(url);
+      url = await shorten(url).catch((e) => {
+        console.log(e);
+      });
       var id = req.body.id;
       var time = req.body.time;
       var cancel = "https://www.foodleh.app/delivery?cancel=" + id;
-      cancel = await shorten(cancel.toString());
+      cancel = await shorten(cancel.toString()).catch((e) => {
+        console.log(e);
+      });
       var requester_mobile = req.body.requester_mobile;
       var duration = req.body.duration;
       var arrival = req.body.arrival;
@@ -286,6 +291,9 @@ exports.telegramSend = functions
           res.setHeader("Access-Control-Allow-Origin", "*");
           res.status(200).send(message);
           return true;
+        })
+        .catch((e) => {
+          console.log(e);
         });
     });
   });
@@ -478,6 +486,9 @@ exports.telegramCancel = functions
         })
         .then(() => {
           return true;
+        })
+        .catch((e) => {
+          console.log(e);
         });
       await bot.telegram
         .editMessageText(channel2, data.message_id.deliverysg, "", message, {
@@ -485,6 +496,9 @@ exports.telegramCancel = functions
         })
         .then(() => {
           return true;
+        })
+        .catch((e) => {
+          console.log(e);
         });
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.status(200).send(message);
@@ -571,26 +585,24 @@ exports.taskRunner = functions
           "<b>Click to Accept (first come first serve): </b></s>" +
           "\n\n<b>This request has expired </b>" +
           "\n (request expires at pickup time)";
-        const job1 = snapshot.ref.update({ expired: true });
+        const job1 = snapshot.ref.update({ expired: true }).catch((e) => {
+          console.log(e);
+        });
         console.log(message_id.foodleh + " expired");
-        const job2 = bot.telegram.editMessageText(
-          channel1,
-          message_id.foodleh,
-          "",
-          message,
-          {
+        const job2 = bot.telegram
+          .editMessageText(channel1, message_id.foodleh, "", message, {
             parse_mode: "HTML",
-          }
-        );
-        const job3 = bot.telegram.editMessageText(
-          channel2,
-          message_id.deliverysg,
-          "",
-          message,
-          {
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+        const job3 = bot.telegram
+          .editMessageText(channel2, message_id.deliverysg, "", message, {
             parse_mode: "HTML",
-          }
-        );
+          })
+          .catch((e) => {
+            console.log(e);
+          });
         const job4 = twilio.messages
           .create({
             body:
@@ -673,6 +685,7 @@ exports.takesgSync = functions
                 website: data.reference ? data.reference : "",
                 menu_combined: data.menus ? data.menus : "",
                 tagsValue: data.tags ? data.tags : "",
+                menu: true,
               })
               .then((d) => {
                 console.log("Updated: " + data.name);
