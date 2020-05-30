@@ -31,6 +31,8 @@ jobs:
         run: npm ci --ignore-scripts
         env:
           CI: true
+      - name: Rebuild Sass
+        run: npm rebuild node-sass
       - name: Build project
         run: npm run build
       - name: Run tests
