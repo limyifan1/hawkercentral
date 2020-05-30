@@ -106,5 +106,32 @@
     "postalcode": "Postal Code",
     "delivery": "Delivery",
     "self_collect": "Dabao"
+  },
+  "driver": {
+    "rules": "Rules of Use:",
+    "rules1": "1. This is a free service to broadcast F&B delivery jobs to drivers. During peak periods, please send your order at least 1h in advance for higher chance of finding drivers.",
+    "rules2": "2. We cannot guarantee that we can find a driver as we only broadcast the message for free. If a driver is found, you will get an SMS with driver contact number. No need to cancel the request after driver is found.",
+    "rules3": "3. As long as there's no SMS with driver contact number, assume that driver has not been found. You will need to find drivers from other platforms too. If you find a driver on another platform, please cancel this request (link in your initial confirmation SMS).",
+    "thankyou": "Thank you and all the best!",
+    "timelimit": "Time cannot be less than 30min from now",
+    "deliveryfrom": "Delivery From",
+    "deliveryto": "Delivery To",
+    "viewmap": "View Map",
+    "mapwillload": "Map will be loaded after details are given",
+    "arrangedelivery": "↓ To Arrange Delivery ↓",
+    "mobilenumber": "Mobile Number",
+    "drivernote": "Note To Driver (Max 40 char. If NA, driver will use customer phone # as identifier)",
+    "placeholderdrivernote": "E.g. Collect order number 3",
+    "postalcode": "Postal Code",
+    "placeholderpostalcode": "Enter Postal Code",
+    "verified": "Verified your phone number:",
+    "distance": "Distance",
+    "estduration": "Est. Duration",
+    "estarrival": "Arrival Time",
+    "submitted": "Submitted! If found, a driver will contact you directly. Driver will use customer mobile no. to collect order. Pls pay driver EOD (End of Day).",
+    "pickupdate": "Pickup Date",
+    "pickuptime": "Pickup Time",
+    "fillindetails": "Fill in details above",
+    "iagree": "I agree that I am a local F&B looking for a delivery and FoodLeh is not liable for any event not limited to inaccuracies, delays, costs, spillage, accidents, injuries, food poisoning, etc. I also agree to let FoodLeh use the provided information to find a driver with all reasonable means. FoodLeh is only responsible for matching the two sides who will assume all responsibilities."
   }
 }
