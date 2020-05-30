@@ -70,6 +70,7 @@ function formatAMPM(date) {
 
 const addData = async ({
   postal,
+  postal_to,
   latitude,
   longitude,
   latitude_to,
@@ -90,6 +91,7 @@ const addData = async ({
   let now = new Date();
   var field = {
     postal: postal,
+    postal_to: postal_to,
     latitude: latitude,
     longitude: longitude,
     latitude_to: latitude_to,
@@ -189,6 +191,7 @@ export class Driver extends React.Component {
       retrievedMap: false,
       regionFrom: "",
       planningDetails: "",
+      status: "",
     };
   }
 
@@ -297,12 +300,12 @@ export class Driver extends React.Component {
       );
   };
 
-  sendData = async (query) => {
+  sendData = (query) => {
     let urls = [
       "https://asia-east2-hawkercentral.cloudfunctions.net/telegramSend",
     ];
     try {
-      Promise.all(
+      return Promise.all(
         urls.map((url) =>
           fetch(url, {
             method: "POST",
@@ -313,7 +316,7 @@ export class Driver extends React.Component {
             body: JSON.stringify(query),
           })
             .then((response) => {
-              return response.json();
+              return response;
             })
             .then((data) => {
               return data;
@@ -324,7 +327,7 @@ export class Driver extends React.Component {
             })
         )
       ).then((data) => {
-        // window.location.reload();
+        return data[0];
       });
     } catch (error) {
       return error;
@@ -365,7 +368,7 @@ export class Driver extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    this.setState({ submitting: true });
+    this.setState({ submitting: true, status: "sending" });
     if (this.state.datetime < time_now) {
       alert(
         <LanguageContext.Consumer>
@@ -438,7 +441,19 @@ export class Driver extends React.Component {
         duration: this.state.directions.routes[0].legs[0].duration.text,
         arrival: arrival,
       }).then((d) => {
-        this.setState({ submitted: true, submitting: false });
+        if (d && d.status && d.status === 200) {
+          this.setState({
+            submitted: true,
+            submitting: false,
+            status: "succeeded",
+          });
+        } else {
+          this.setState({
+            submitted: true,
+            submitting: false,
+            status: "failed",
+          });
+        }
       });
     });
   };
@@ -1086,6 +1101,7 @@ export class Driver extends React.Component {
                                       }
                                       min="0"
                                       required
+                                      maxLength="6"
                                     ></input>
                                   </div>
                                 </div>
@@ -1349,7 +1365,7 @@ export class Driver extends React.Component {
                               </div>
                               {this.state.submitting ? (
                                 <Spinner class="" animation="grow" />
-                              ) : (
+                              ) : this.state.status === "succeeded" ? (
                                 <div>
                                   {this.state.submitted ? (
                                     <div>
@@ -1363,6 +1379,36 @@ export class Driver extends React.Component {
                                         }}
                                       >
                                         {context.data.driver.submitted}
+                                      </div>
+                                      <h5>
+                                        To arrange a new delivery, please
+                                        refresh the page.
+                                      </h5>
+                                    </div>
+                                  ) : (
+                                    <Button
+                                      variant="contained"
+                                      color={"primary"}
+                                      type="Submit"
+                                    >
+                                      {context.data.menu.searchlabel}
+                                    </Button>
+                                  )}
+                                </div>
+                              ) : (
+                                <div>
+                                  {this.state.submitted ? (
+                                    <div>
+                                      <div
+                                        class="shadow-lg"
+                                        style={{
+                                          backgroundColor: "red",
+                                          borderColor: "white",
+                                          fontSize: "25px",
+                                          color: "white",
+                                        }}
+                                      >
+                                        ERROR PLEASE SUBMIT AGAIN
                                       </div>
                                       <h5>
                                         To arrange a new delivery, please
