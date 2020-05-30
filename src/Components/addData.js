@@ -373,10 +373,7 @@ const retrieveData = async () => {
 // retrieveData();
 
 const updateData = () => {
-  db.collection("hawkers").doc("KOZb6LPpUvtnK6pfj3Pv").update({
-    opening:
-      "West\nMon-Fri: 10:00AM to 19:00PM\nSat-Sun: 10:00AM to 14:00PM\n\nOthers\nMon-Sun: 10:00AM to 20:30PM",
-  });
+  db.collection("hawkers").doc("").update({});
 };
 
 const moveData = () => {
@@ -384,14 +381,59 @@ const moveData = () => {
     .get()
     .then((snapshot) => {
       snapshot.forEach(async (d) => {
-        var data = d.data()
-        data.postal = Number(data.postal)
-        await db.collection("hawkers").add(data).then(snapshot=>{
-          console.log(snapshot.id)
-        })
+        var data = d.data();
+        data.postal = Number(data.postal);
+        await db
+          .collection("hawkers")
+          .add(data)
+          .then((snapshot) => {
+            console.log(snapshot.id);
+          });
       });
     });
-
 };
 
-moveData();
+// moveData();
+
+const sendData = async () => {
+  const query = {
+    origin: "Blk 512 Woodlands Drive 14, Singapore 730512",
+    destination: "Blk 510 Choa Chu Kang Street 51, Singapore 680510",
+    cost: "$10",
+    time: "5:30PM",
+    requester_mobile: "+6591111111",
+  };
+  let urls = [
+    "https://asia-east2-hawkercentral.cloudfunctions.net/telegramDevSend",
+  ];
+  try {
+    Promise.all(
+      urls.map((url) =>
+        fetch(url, {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(query),
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            return data;
+          })
+          .catch((error) => {
+            console.log(error);
+            return error;
+          })
+      )
+    ).then((data) => {
+      // window.location.reload();
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
+updateData();

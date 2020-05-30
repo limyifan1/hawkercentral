@@ -18,6 +18,9 @@ import chinese_delivery from "../chinese_delivery_2.png";
 import chinese_self_collect from "../chinese_dabao_2.png";
 import { LanguageContext } from "./themeContext";
 import { TelegramIcon } from "react-share";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 import "./Home.css";
 import { Line } from "rc-progress";
@@ -27,12 +30,32 @@ const cookies = new Cookies();
 const SELF_COLLECT_OPTION = "selfcollect";
 const HOME_DELIVERY_OPTION = "delivery";
 
+function getMobileOperatingSystem() {
+  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+  // Windows Phone must come first because its UA also contains "Android"
+  if (/windows phone/i.test(userAgent)) {
+    return "Windows Phone";
+  }
+
+  if (/android/i.test(userAgent) && /version/i.test(userAgent)) {
+    return "Android";
+  }
+
+  // iOS detection from: http://stackoverflow.com/a/9039885/177710
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    return "iOS";
+  }
+  return "unknown";
+}
+
 export class Home extends React.PureComponent {
   state = {
     data: [],
     option: "",
     retrieved: false,
     count: 500,
+    open: true,
   };
 
   componentWillMount() {
@@ -65,6 +88,11 @@ export class Home extends React.PureComponent {
     this.setState({ option: HOME_DELIVERY_OPTION });
   };
 
+  handleClose = (event) => {
+    event.preventDefault();
+    this.setState({ open: false });
+  };
+
   render() {
     let languageContext = this.context;
     console.log("home is rendering");
@@ -80,6 +108,35 @@ export class Home extends React.PureComponent {
       <div class="container-fluid" className="home">
         <div class="jumbotron row">
           <div class="container">
+            {getMobileOperatingSystem() === "Android" ? (
+              <Snackbar
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                open={this.state.open}
+                // autoHideDuration={10000}
+                // onClose={this.handleClose}
+                message={
+                  <div style={{ fontSize: "30px" }}>
+                    Android App is no longer working. Please use browser and
+                    visit <b>www.foodleh.app</b> instead.
+                  </div>
+                }
+                action={
+                  <React.Fragment>
+                    <IconButton
+                      size="small"
+                      aria-label="close"
+                      color="inherit"
+                      onClick={this.handleClose}
+                    >
+                      <CloseIcon fontSize="small" />
+                    </IconButton>
+                  </React.Fragment>
+                }
+              />
+            ) : null}
             <div class="row">
               <div class="col">
                 <img
@@ -360,23 +417,6 @@ export class Home extends React.PureComponent {
           </div>
           <br />
         </div>
-        {/* <Carousel
-          responsive={responsive}
-          ssr={true}
-          infinite={true}
-          // partialVisible={true}
-          swipeable={true}
-          draggable={true}
-          minimumTouchDrag={0}
-          transitionDuration={0}
-          slidesToSlide={1}
-          arrows={false}
-          autoPlay={true}
-          centerMode={true}
-          autoPlaySpeed={2000}
-        >
-          {result.all}
-        </Carousel> */}
       </div>
     );
   }
