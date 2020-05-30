@@ -120,7 +120,7 @@
     "mapwillload": "输入邮政编码后 会显示送货费",
     "arrangedelivery": "↓ 安排送餐 - 请添表格 ↓",
     "mobilenumber": "手机号码",
-    "drivernote": "司机启示  (选填, 限40字，若无，顾客手机号码将是司机的识别码)",
+    "drivernote": "司机启示  (限40字，若无，顾客手机号码将是司机的识别码)",
     "placeholderdrivernote": "如：订单号码 3号",
     "postalcode": "邮政编码",
     "placeholderpostalcode": "输入邮政编码",

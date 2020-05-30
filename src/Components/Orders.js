@@ -7,10 +7,19 @@ import { db } from "./Firestore";
 import queryString from "query-string";
 import Cookies from "universal-cookie";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import { BitlyClient } from "bitly";
+const REACT_APP_BITLY_KEY = `${process.env.REACT_APP_BITLY_KEY}`;
+const bitly = new BitlyClient(REACT_APP_BITLY_KEY, {});
 
 const cookies = new Cookies();
 
 const analytics = firebase.analytics();
+
+const shorten = (url) => {
+  return bitly.shorten(url).then((d) => {
+    return d.link;
+  });
+};
 
 function onLoad(name, item) {
   analytics.logEvent(name, { name: item });
@@ -122,7 +131,9 @@ export class Orders extends React.Component {
           console.log(typeof d.data().time);
           // Push entire entry if firebase data is valid, sort and format before rendering
           if (typeof d.data().time !== "string" && d.data().time) {
-            dataToReturn.push(d.data());
+            var data = d.data()
+            data.id = d.id
+            dataToReturn.push(data)
           }
 
           // if (typeof d.data().time !== "string" && d.data().time) {
@@ -194,6 +205,13 @@ export class Orders extends React.Component {
       });
   };
 
+  // When hawker clicks resubmit link, format shortened URL from urlData value of button clicked
+  handleResubmit = async (event) => {
+    event.preventDefault();
+    var shortenedURL = await shorten(event.target.value);
+    window.location = shortenedURL;
+  };
+
   // After hawker is verified, let them enter dashboard page
   handleSubmit = async (event) => {
     event.preventDefault();
@@ -226,33 +244,78 @@ export class Orders extends React.Component {
           monthNames[pickupTime.getMonth()] +
           " " +
           formatAMPM(pickupTime);
+        const storeData = new URLSearchParams();
+        storeData.append("postal", data.postal);
+        storeData.append("street", data.street);
+        storeData.append("unit", data.unit);
+        storeData.append("contact", data.contact);
+        storeData.append("postal_to", data.postal_to);
+        storeData.append("street_to", data.street_to);
+        storeData.append("unit_to", data.unit_to);
+        storeData.append("contact_to", data.contact_to);
+        storeData.append("note", data.note);
+        var urlData = "https://foodleh.app/driver?" + storeData.toString();
+        //var shortenedURL = shorten(urlData);
         // let now = new Date();
         // if (now.is) {
         //   console.log("pickup time has passed")
         // }
         return (
           <div style={{ textAlign: "left" }}>
-            <br />
             <div>
-            {data.driver_contact !== "" ? (
-              <div style={{color: "green"}}>
-                <b>Driver Accepted!</b>
-              </div>
-            ) : (
-              <div style={{color: "red"}}>
-                <b>No Driver Yet</b>
-              </div>
-            )}
-
-
-            {data.cancelled === true ? (
-              <div style={{color: "red"}}>
-                <b>You Cancelled</b> {data.driver_contact !== "" ? (<b>(Please Inform Driver)</b>) : null}
+              {data.viewed === true ? (
+                <div style={{ color: "green" }}>
+                  <b>Driver Accepted!</b>
+                  <br />
+                </div>
+              ) : (
+                  <div style={{ color: "red" }}>
+                    <b>No Driver Yet</b>
+                    <br />
+                  </div>
+                )}
+              {data.cancelled === true ? (
+                <div style={{ color: "red" }}>
+                  <b>You Cancelled</b> {data.viewed === true ? (<b>(Please Inform Driver)</b>) : null}
+                  <br />
+                </div>
+              ) : null}
+              {data.expired === true ? (
+                <div style={{ color: "red" }}>
+                  <b>Request Expired</b>
+                  <br />
+                </div>
+              ) : null}
+            </div>
+            {/* CANCEL option if request is 1. not cancelled, not expired, and no driver yet */}
+            {data.cancelled !== true && data.expired !== true && data.viewed === false ? (
+              <div>
+                <a
+                  href={
+                    "https://www.foodleh.app/delivery?cancel=" +
+                    data.id
+                  }
+                >
+                  Cancel this Delivery Request
+                <br />
+                </a>
               </div>
             ) : null}
-            </div>
-            <br />
-            {data.driver_contact !== "" ? (
+
+            {/* RESUBMIT option if request is 1. cancelled or 2. expired. Pass urlData via button value */}
+            {data.cancelled === true || data.expired === true ? (
+              <div>
+                <button 
+                  onClick={this.handleResubmit.bind(this)}
+                  value={urlData}> 
+                  Resubmit this Delivery Request?
+                </button>
+                <br />
+                <br />
+              </div>
+            ) : <br />}
+
+            {data.viewed === true ? (
               <div>
                 <b>Driver contact: </b>
                 {data.driver_contact}
@@ -356,6 +419,7 @@ export class Orders extends React.Component {
                 >
                   Click to See Your Delivery Requests
                 </Button>
+                <br />
                 <div>{dataToDisplay}</div>
               </div>
             </div>
