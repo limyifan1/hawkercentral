@@ -50,6 +50,11 @@ import { LanguageContext } from "./themeContext";
 // import name from "../logo-header-nologo.png";
 import logo from "../foodleh.png";
 import { CartContext } from "./themeContext";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import Typography from "@material-ui/core/Typography";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const REACT_APP_BITLY_KEY = `${process.env.REACT_APP_BITLY_KEY}`;
 const bitly = new BitlyClient(REACT_APP_BITLY_KEY, {});
@@ -98,7 +103,7 @@ const InfoMenu = (props) => {
         </div>
       </Navbar.Brand>
       <Navbar.Toggle />
-      <Navbar.Collapse
+      {/* <Navbar.Collapse
         id="basic-navbar-nav"
         className="justify-content-end"
         style={{ marginRight: "60px" }}
@@ -147,8 +152,8 @@ const InfoMenu = (props) => {
               {({ data }) => data.menu.aboutlabel}
             </LanguageContext.Consumer>
           </Nav.Link>
-        </Nav.Item> */}
-      </Navbar.Collapse>
+        </Nav.Item> 
+      </Navbar.Collapse> */}
       <Navbar.Brand style={{ color: menu_font_color }}>
         <Component.PageCart />
       </Navbar.Brand>
@@ -413,252 +418,6 @@ export class Page extends React.Component {
         >
           <TwitterIcon size={32} round={true} />
         </TwitterShareButton>{" "}
-      </div>
-    );
-  };
-
-  getDeliveryDetail = () => {
-    return (
-      <div>
-        {/* Display the menu */}
-        <div>
-          <Form onSubmit={this.handleSubmit.bind(this)}>
-            <div>
-              <br />
-              <img alt="" src={revieworder} style={{ width: "60%" }} />
-            </div>
-            <div>
-              <figure
-                class="shadow"
-                style={{
-                  margin: "20px",
-                  paddingLeft: "10px",
-                  paddingTop: "10px",
-                  backgroundColor: "#f1f1f1",
-                  "border-radius": "5px",
-                  position: "relative",
-                  zIndex: 1,
-                }}
-              >
-                <figcaption>
-                  <hr
-                    style={{
-                      color: "#b48300",
-                      backgroundColor: "#b48300",
-                      height: "1px",
-                      borderColor: "#b48300",
-                      width: "100%",
-                      alignItems: "center",
-                    }}
-                  />
-                  <div
-                    style={{
-                      textAlign: "right",
-                      paddingBottom: "10px",
-                      paddingRight: "15px",
-                      fontSize: "110%",
-                    }}
-                  >
-                    <b>
-                      $
-                      {this.state.totalPrice !== undefined
-                        ? this.state.totalPrice.toFixed(2)
-                        : "0.00"}
-                    </b>
-                  </div>
-                  <div
-                    style={{
-                      color: "red",
-                      paddingBottom: "10px",
-                      paddingRight: "15px",
-                    }}
-                  >
-                    <b>*Delivery fees may apply</b>
-                  </div>
-                </figcaption>
-              </figure>
-            </div>
-            <br />
-            <div>
-              <img alt="" src={delivery_title} style={{ width: "60%" }} />
-              <div class="form-group create-title">
-                <label for="name">Name</label>
-                <input
-                  onChange={this.handleCustomerDetails}
-                  value={this.state.name}
-                  type="text"
-                  class="form-control"
-                  name="name"
-                  style={{ borderColor: "#b48300" }}
-                  placeholder="We don't store your info!"
-                ></input>
-              </div>
-
-              <div class="form-group create-title">
-                <label for="unit">Mobile Number: </label>
-                <div class="input-group mb-12">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">
-                      +65
-                    </span>
-                  </div>
-                  <input
-                    onChange={this.handleCustomerDetails}
-                    value={this.state.customerNumber}
-                    type="tel"
-                    class={
-                      !this.state.customerNumber
-                        ? "form-control is-invalid"
-                        : "form-control"
-                    }
-                    name="customerNumber"
-                    placeholder=" 9xxxxxxx"
-                    maxLength="8"
-                    minlength="8"
-                    pattern="[8-9]{1}[0-9]{7}"
-                    style={{
-                      borderColor: "#b48300",
-                      "border-radius": "5px",
-                    }}
-                    required
-                  ></input>
-                </div>
-              </div>
-
-              <div class="form-group create-title">
-                <label for="address">Delivery Day/Time</label>
-                <input
-                  onChange={this.handleCustomerDetails}
-                  value={this.state.deliveryTime}
-                  type="text"
-                  class="form-control"
-                  name="deliveryTime"
-                  style={{ borderColor: "#b48300" }}
-                  placeholder="Eg Thursday 7 May 12.30pm"
-                ></input>
-              </div>
-
-              <div>
-                <div class="row">
-                  {" "}
-                  <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    {" "}
-                    <div class="form-group create-title">
-                      <label for="postalcode">Postal Code</label>
-                      <div class="input-group">
-                        <input
-                          onChange={this.handleCustomerDetails}
-                          value={this.state.postal}
-                          type="text"
-                          class={
-                            !this.state.postal
-                              ? "form-control is-invalid"
-                              : "form-control"
-                          }
-                          name="postal"
-                          placeholder="Enter Postal Code"
-                          maxLength="6"
-                          required
-                        ></input>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    {" "}
-                    <div class="form-group create-title">
-                      <label for="unit">Unit #</label>
-                      <input
-                        onChange={this.handleCustomerDetails}
-                        value={this.state.unit}
-                        type="text"
-                        class="form-control"
-                        name="unit"
-                        placeholder="E.g. 01-01"
-                      ></input>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="form-group create-title">
-                      <label for="street">
-                        Street Name<b> (Auto-Filled)</b>
-                      </label>
-                      <input
-                        onChange={this.handleCustomerDetails}
-                        value={this.state.street}
-                        type="text"
-                        class={
-                          !this.state.street
-                            ? "form-control is-invalid"
-                            : "form-control"
-                        }
-                        name="street"
-                        placeholder="Enter Street Name"
-                      ></input>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group create-title">
-                <label for="address">Comments</label>
-                <input
-                  onChange={this.handleCustomerDetails}
-                  value={this.state.notes}
-                  type="text"
-                  class="form-control"
-                  name="notes"
-                  style={{
-                    borderColor: "#b48300",
-                  }}
-                  placeholder="No chilli etc, leave blank if nil"
-                ></input>
-              </div>
-              <div class="form-group create-title">
-                <OverlayTrigger
-                  trigger={["hover", "focus"]}
-                  placement="top"
-                  overlay={popover}
-                >
-                  <label for="remember">Remember me?</label>
-                </OverlayTrigger>
-                <input
-                  name="shouldRememberDetails"
-                  type="checkbox"
-                  checked={this.state.shouldRememberDetails}
-                  onChange={this.toggleShouldRememberDetails}
-                  style={{
-                    marginLeft: "10px",
-                  }}
-                ></input>
-              </div>
-              <Button
-                class="shadow-sm"
-                // href={
-                //   "https://wa.me/65" +
-                //   this.context.pageData.contact +
-                //   "?text=" +
-                //   this.setOrderText()
-                // }
-                // target="blank"
-                type="Submit"
-                style={{
-                  backgroundColor: "#B48300",
-                  borderColor: "#B48300",
-                  fontSize: "20px",
-                  width: "300px",
-                }}
-                name="Language"
-                onClick={() =>
-                  onLoad("place_order", this.context.pageData.name)
-                }
-              >
-                Place order via WhatsApp
-              </Button>
-              <br />
-            </div>
-          </Form>
-        </div>
       </div>
     );
   };
@@ -1024,56 +783,16 @@ export class Page extends React.Component {
           class="container-fluid"
           style={{
             paddingTop: "56px",
-            width: "100vw",
+            width: "100%",
             paddingLeft: "0px",
             paddingRight: "0px",
+            margin: "0px 0px",
           }}
         >
-          {this.state.hasReviewEditMessage ||
-          this.state.hasReviewDeleteMessage ? (
-            <div
-              class="row"
-              style={{
-                marginTop: "20px",
-                marginBottom: "20px",
-              }}
-            >
-              <div
-                class="card shadow"
-                style={{
-                  color: "black",
-                  backgroundColor: "white",
-                  width: "100%",
-                }}
-              >
-                <span class="card-body">
-                  <div
-                    class="card-title"
-                    style={{
-                      fontSize: "13px",
-                      margin: "0px",
-                    }}
-                  >
-                    {this.state.hasReviewEditMessage ? (
-                      <p style={{ margin: "0px" }}>
-                        Your edit(s) will be reflected once they have been
-                        reviewed. Thank you for your patience!
-                      </p>
-                    ) : (
-                      <p style={{ margin: "0px" }}>
-                        This listing will be deleted once your request has been
-                        reviewed. Thank you for your patience!
-                      </p>
-                    )}
-                  </div>
-                </span>
-              </div>
-            </div>
-          ) : null}
           <div>
             {this.context.pageData.url ? (
               <div
-                class="container-fluid row align-items-center"
+                class="container-fluid row align-items-center no-gutters"
                 style={{
                   background:
                     "linear-gradient(rgba(0,0,0,0.5), rgba(255,255,255,0.3)), url(" +
@@ -1185,8 +904,87 @@ export class Page extends React.Component {
                 }}
               ></div>
             )}
-            <div className="row justify-content-center mt-4">
-              {this.getMenu(0)}
+            <div
+              className="row justify-content-center"
+              style={{ margin: "0px 5%" }}
+            >
+              <div className="row justify-content-center align-items-center mt-4">
+                <ExpansionPanel
+                  // expanded={expanded === "panel1"}
+                  // onChange={handleChange("panel1")}
+                  style={{ width: "100%" }}
+                >
+                  <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1bh-content"
+                    id="panel1bh-header"
+                    style={{ backgroundColor: "#FFFAFA" }}
+                  >
+                    <Typography
+                      style={{
+                        flexBasis: "33.33%",
+                        flexShrink: 0,
+                        color: "black",
+                      }}
+                    >
+                      About
+                    </Typography>
+                    <Typography
+                      style={{
+                        flexBasis: "66.66%",
+                        flexShrink: 0,
+                        color: "grey",
+                        textAlign: "right",
+                      }}
+                    >
+                      See More
+                    </Typography>
+                  </ExpansionPanelSummary>
+                  <ExpansionPanelDetails>
+                    <Typography>{this.context.about}</Typography>
+                  </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel
+                  // expanded={expanded === "panel1"}
+                  // onChange={handleChange("panel1")}
+                  style={{ width: "100%" }}
+                >
+                  <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1bh-content"
+                    id="panel1bh-header"
+                    style={{ backgroundColor: "#FFFAFA" }}
+                  >
+                    <Typography
+                      style={{
+                        flexBasis: "33.33%",
+                        flexShrink: 0,
+                        color: "black",
+                      }}
+                    >
+                      Delivery
+                    </Typography>
+                    <Typography
+                      style={{
+                        flexBasis: "66.66%",
+                        flexShrink: 0,
+                        color: "grey",
+                        textAlign: "right",
+                      }}
+                    >
+                      See More
+                    </Typography>
+                  </ExpansionPanelSummary>
+                  <ExpansionPanelDetails>
+                    <Typography>
+                      {this.context.pageData.delivery_detail}
+                    </Typography>
+                  </ExpansionPanelDetails>
+                </ExpansionPanel>
+              </div>
+              <div className="row justify-content-center align-items-center mt-4">
+                {this.getMenu(0)}
+              </div>
             </div>
           </div>
           <ScrollTop>

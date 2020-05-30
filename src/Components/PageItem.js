@@ -29,7 +29,7 @@ export class PageItem extends React.Component {
     var menu_color = this.props ? this.props.css.menu_color : null;
 
     return (
-      <div class="page-card" style={{ margin: "10px" }}>
+      <div class="page-card">
         <div
           class="card shadow"
           style={{
@@ -38,9 +38,12 @@ export class PageItem extends React.Component {
           }}
         >
           <div
-            class="row"
+            class="row no-gutters"
             style={{
+              paddingLeft: "0px !important",
               paddingRight: "0px !important",
+              marginLeft: "0px !important",
+              marginRight: "0px !important",
             }}
           >
             <div class="col-5 col-xs-3 col-sm-3 col-md-5 fill">

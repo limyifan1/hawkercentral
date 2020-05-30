@@ -3,12 +3,12 @@
   color: "grey" !important;
 } */
 
-.container-fluid {
-  /* padding-right: 15px;
-  padding-left: 15px; */
+/* .container-fluid {
+  padding-right: 15px;
+  padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
-}
+} */
 
 html, body { 
   overflow-x: hidden;
@@ -185,8 +185,8 @@ button:focus {
     height: 250px;
   }
   .page-card {
-    width: 300px !important;
-    height: 200px;
+    width: 30% !important;
+    margin: 10px 20px;
   }
   .right-items {
     padding-top: 5%;
@@ -232,8 +232,8 @@ button:focus {
     height: 250px;
   }
   .page-card {
-    width: 300px !important;
-    height: 200px;
+    width: 30% !important;
+    margin: 10px 20px;
   }
   .right-items {
     padding-top: 5%;
@@ -279,8 +279,8 @@ button:focus {
     height: 250px;
   }
   .page-card {
-    width: 500px !important;
-    height: 200px;
+    width: 40% !important;
+    margin: 10px 20px;
   }
   .hashtag {
     width: 60%;
@@ -326,8 +326,8 @@ button:focus {
     height: 250px;
   }
   .page-card {
-    width: 500px !important;
-    height: 200px;
+    width: 40% !important;
+    margin: 10px 20px;
   }
   .right-items {
     padding-top: 5%;
@@ -375,9 +375,8 @@ button:focus {
     height: 250px;
   }
   .page-card {
-    width: 500px !important;
-    height: 180px;
-    /* margin-bottom: 30px; */
+    width: 40% !important;
+    margin: 10px 20px;
   }
   .right-items {
     padding-top: 0px;
@@ -429,9 +428,8 @@ button:focus {
     height: 250px;
   }
   .page-card {
-    width: 320px !important;
-    height: 200px;
-    margin-bottom: 30px;
+    width: 100% !important;
+    margin: 10px 20px;
   }
   /* .fill {
     display: flex;
@@ -492,9 +490,8 @@ button:focus {
     height: 250px;
   }
   .page-card {
-    width: 600px !important;
-    height: 250px;
-    /* margin-bottom: 30px; */
+    width: 100% !important;
+    margin: 10px 20px;
   }
   .right-items {
     padding-top: 5%;
