@@ -262,9 +262,7 @@ exports.telegramSend = functions
       await twilio.messages
         .create({
           body:
-            "Request received & expire at the time of pickup. To Cancel: " +
-            cancel +
-            ". Pickup times that are too soon may not be assigned driver. ",
+            "Request received & expire at the time of pickup. See all orders and cancel at www.foodleh.app/orders. Pickup times that are too soon may not be assigned driver. ",
           from: "+12015847715",
           to: "+65" + requester_mobile,
         })
@@ -611,7 +609,7 @@ exports.taskRunner = functions
               street_to +
               "\nCust. No.:+65" +
               contact_to +
-              "\nPlease submit again or use another platform",
+              "\nTo resubmit go: www.foodleh.app/orders. ",
             from: "+12015847715",
             to: "+65" + contact,
           })
