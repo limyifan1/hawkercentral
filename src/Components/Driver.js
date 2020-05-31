@@ -30,7 +30,6 @@ import Slide from "@material-ui/core/Slide";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import Divider from "@material-ui/core/Divider";
 
 const cookies = new Cookies();
 const API_KEY = `${process.env.REACT_APP_GKEY}`;
