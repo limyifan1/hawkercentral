@@ -15,7 +15,7 @@
     "cheerio": "1.0.0-rc.3",
     "csv-writer": "1.6.0",
     "emailjs-com": "2.4.1",
-    "firebase": "7.14.5",
+    "firebase": "7.14.6",
     "firebaseui": "4.5.0",
     "gatsby-plugin-react-helmet": "3.3.2",
     "geofirex": "0.1.0",
