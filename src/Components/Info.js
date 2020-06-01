@@ -7,7 +7,13 @@ import React from "react";
 import "../App.css";
 import "react-multi-carousel/lib/styles.css";
 import queryString from "query-string";
-import { Button, Spinner, Form, Popover, OverlayTrigger } from "react-bootstrap";
+import {
+  Button,
+  Spinner,
+  Form,
+  Popover,
+  OverlayTrigger,
+} from "react-bootstrap";
 import { db } from "./Firestore";
 import ImageGallery from "react-image-gallery";
 import Component from "./index";
@@ -124,7 +130,9 @@ export class Info extends React.Component {
     this.updateCustomerDetails = this.updateCustomerDetails.bind(this);
     this.setOrderText = this.setOrderText.bind(this);
     this.formatSummary = this.formatSummary.bind(this);
-    this.toggleShouldRememberDetails = this.toggleShouldRememberDetails.bind(this);
+    this.toggleShouldRememberDetails = this.toggleShouldRememberDetails.bind(
+      this
+    );
   }
 
   componentWillMount() {
@@ -171,7 +179,7 @@ export class Info extends React.Component {
         customerNumber: this.state.customerNumber,
         postal: this.state.postal,
         unit: this.state.unit,
-        street: this.state.street
+        street: this.state.street,
       };
       localStorage.setItem("userDetails", JSON.stringify(userDetails));
     }
@@ -183,7 +191,7 @@ export class Info extends React.Component {
     this.updateSavedData(isChecked);
   }
 
-  updateCustomerDetails = async(event) => {
+  updateCustomerDetails = async (event) => {
     const inputValue = event.target.value;
     const inputField = event.target.name;
     if (inputField === "name") {
@@ -222,13 +230,12 @@ export class Info extends React.Component {
         await this.getPostal(inputValue);
       }
     }
-  }
+  };
 
   handleCustomerDetails = async (event) => {
-    await this.updateCustomerDetails(event)
-      .then(() => {
-        this.updateSavedData(this.state.shouldRememberDetails);
-      });
+    await this.updateCustomerDetails(event).then(() => {
+      this.updateSavedData(this.state.shouldRememberDetails);
+    });
   };
 
   async getPostal(postal) {
@@ -616,6 +623,7 @@ export class Info extends React.Component {
       hasReviewEditMessage: true,
       hasReviewDeleteMessage: false,
     });
+    window.scrollTo(0, 0);
     setTimeout(() => {
       this.setState({ hasReviewEditMessage: false });
     }, 10000);
@@ -626,6 +634,7 @@ export class Info extends React.Component {
       hasReviewDeleteMessage: true,
       hasReviewEditMessage: false,
     });
+    window.scrollTo(0, 0);
     setTimeout(() => {
       this.setState({ hasReviewDeleteMessage: false });
     }, 10000);
@@ -737,14 +746,26 @@ export class Info extends React.Component {
                       }}
                     >
                       {this.state.hasReviewEditMessage ? (
-                        <p style={{ margin: "10px", fontSize: "30px", color: "white", lineHeight:"25px"
-                      }}>
+                        <p
+                          style={{
+                            margin: "10px",
+                            fontSize: "30px",
+                            color: "white",
+                            lineHeight: "25px",
+                          }}
+                        >
                           Your edit(s) will be reflected once they have been
                           reviewed. Thank you for your patience!
                         </p>
                       ) : (
-                        <p style={{ margin: "10px", fontSize: "30px", color: "white", lineHeight:"25px"
-                      }}>
+                        <p
+                          style={{
+                            margin: "10px",
+                            fontSize: "30px",
+                            color: "white",
+                            lineHeight: "25px",
+                          }}
+                        >
                           This listing will be deleted once your request has
                           been reviewed. Thank you for your patience!
                         </p>
@@ -1556,18 +1577,22 @@ export class Info extends React.Component {
                                   ></input>
                                 </div>
                                 <div class="form-group create-title">
-                                  <OverlayTrigger trigger={["hover", "focus"]} placement="top" overlay={popover}>
+                                  <OverlayTrigger
+                                    trigger={["hover", "focus"]}
+                                    placement="top"
+                                    overlay={popover}
+                                  >
                                     <label for="remember">Remember me?</label>
                                   </OverlayTrigger>
-                                    <input
-                                      name="shouldRememberDetails"
-                                      type="checkbox"
-                                      checked={this.state.shouldRememberDetails}
-                                      onChange={this.toggleShouldRememberDetails}
-                                      style={{
-                                        marginLeft: "10px",
-                                      }}
-                                    ></input>
+                                  <input
+                                    name="shouldRememberDetails"
+                                    type="checkbox"
+                                    checked={this.state.shouldRememberDetails}
+                                    onChange={this.toggleShouldRememberDetails}
+                                    style={{
+                                      marginLeft: "10px",
+                                    }}
+                                  ></input>
                                 </div>
                                 <Button
                                   class="shadow-sm"
