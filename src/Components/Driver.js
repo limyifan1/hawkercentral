@@ -979,8 +979,10 @@ export class Driver extends React.Component {
                           {this.state.loadingDir ? (
                             <Spinner class="" animation="grow" />
                           ) : (
-                            <div
-                              style={{ fontSize: "14px", textAlign: "left" }}
+                            <div style={{ 
+                              fontSize: "14px", 
+                              textAlign: "left",
+                            }}
                             >
                               {this.state.retrievedDir &&
                               this.state.directions &&
@@ -998,10 +1000,34 @@ export class Driver extends React.Component {
                                           .duration.text
                                       : null}
                                     <br />
-                                    <b>{context.data.driver.deliverycost}:</b>
+                                    <b style={{ display: "inline-block" }}>
+                                      {context.data.driver.deliverycost}:
+                                    </b>
                                     {this.state.cost
-                                      ? "$" + this.state.cost.toString()
+                                      ? 
+                                      <div style={{ 
+                                        display: "inline-block",
+                                        width: "40px"
+                                      }}>
+                                        <p style={{ display : "inline-block" }}>$</p>
+                                        <input style={{ 
+                                          display: "inline-block",
+                                          width: "80%"
+                                          }} 
+                                          type="number"
+                                          value={this.state.cost}
+                                          ></input>
+                                      </div>
                                       : null}
+                                      <br />
+                                      {this.state.cost ?
+                                      <div
+                                        class="badge badge-danger"
+                                        style={{ fontSize: "12px" }}
+                                      >
+                                        Min delivery cost is ${this.state.cost}
+                                      </div>
+                                    : null}
                                   </div>
                                 </div>
                               ) : null}
