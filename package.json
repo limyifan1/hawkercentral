@@ -20,7 +20,7 @@
     "gatsby-plugin-react-helmet": "3.3.2",
     "geofirex": "0.1.0",
     "google-map-react": "1.1.7",
-    "immutability-helper": "3.0.2",
+    "immutability-helper": "3.1.1",
     "jimp": "0.12.1",
     "node-sass": "4.14.1",
     "rc-progress": "3.0.0",
