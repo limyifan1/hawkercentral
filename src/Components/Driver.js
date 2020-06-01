@@ -170,7 +170,9 @@ export class Driver extends React.Component {
       street_to: queryString.parse(this.props.location.search).street_to
         ? queryString.parse(this.props.location.search).street_to
         : "",
+      minCost: "",
       cost: "",
+      isCostBelowMin: false,
       distance: "",
       unit: queryString.parse(this.props.location.search).unit
         ? queryString.parse(this.props.location.search).unit
@@ -278,7 +280,9 @@ export class Driver extends React.Component {
               ? contents.routes[0].legs[0].distance.value
               : 0;
           this.setState({
+            minCost: cost ? cost : null,
             cost: cost,
+            isCostBelowMin: false,
             directions: contents,
             distance: distance,
             loadingDir: false,
@@ -384,6 +388,10 @@ export class Driver extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     this.setState({ submitting: true, status: "sending" });
+    if (this.state.cost || this.state.isCostBelowMin) {
+      alert("Please review the delivery cost!");
+    }
+
     if (this.state.datetime < time_now) {
       alert(
         <LanguageContext.Consumer>
@@ -582,6 +590,11 @@ export class Driver extends React.Component {
       this.state.street_to !== ""
     ) {
       this.getDirections();
+    }
+    if (name === "cost" && value.trim() !== "" && parseInt(value) < parseInt(this.state.minCost)) {
+      this.setState({ "isCostBelowMin": true });
+    } else if (name === "cost") {
+      this.setState({ "isCostBelowMin": false });
     }
   };
 
@@ -1003,29 +1016,30 @@ export class Driver extends React.Component {
                                     <b style={{ display: "inline-block" }}>
                                       {context.data.driver.deliverycost}:
                                     </b>
-                                    {this.state.cost
-                                      ? 
-                                      <div style={{ 
-                                        display: "inline-block",
-                                        width: "40px"
-                                      }}>
+                                    {this.state.minCost
+                                      ? <div style={{ 
+                                          display: "inline-block",
+                                          width: "50px"
+                                          }}>
                                         <p style={{ display : "inline-block" }}>$</p>
                                         <input style={{ 
                                           display: "inline-block",
                                           width: "80%"
                                           }} 
                                           type="number"
+                                          name="cost"
                                           value={this.state.cost}
+                                          onChange={this.handleChange}
                                           ></input>
-                                      </div>
+                                        </div>
                                       : null}
                                       <br />
-                                      {this.state.cost ?
+                                      {this.state.isCostBelowMin ?
                                       <div
                                         class="badge badge-danger"
                                         style={{ fontSize: "12px" }}
                                       >
-                                        Min delivery cost is ${this.state.cost}
+                                        Min delivery cost is ${this.state.minCost}
                                       </div>
                                     : null}
                                   </div>
