@@ -66,7 +66,9 @@ service cloud.firestore {
     'location',
     'menu_combined',
     'tagsValue',
-    'claps' ]) && fields.size() == 40
+    'claps',
+    'takesg'
+     ]) && fields.size() == 41
     }
     
     // TODO: Need structure
