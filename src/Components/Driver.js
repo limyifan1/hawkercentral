@@ -30,6 +30,7 @@ import Slide from "@material-ui/core/Slide";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import Slider from "@material-ui/core/Slider";
 
 const cookies = new Cookies();
 const API_KEY = `${process.env.REACT_APP_GKEY}`;
@@ -42,6 +43,41 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 function onLoad(name) {
   analytics.logEvent(name);
 }
+
+const marks = [
+  {
+    value: 6,
+    label: "$6",
+  },
+  {
+    value: 8,
+    label: "$8",
+  },
+  {
+    value: 10,
+    label: "$10",
+  },
+  {
+    value: 12,
+    label: "$12",
+  },
+  {
+    value: 14,
+    label: "$14",
+  },
+  {
+    value: 16,
+    label: "$16",
+  },
+  {
+    value: 18,
+    label: "$18",
+  },
+  {
+    value: 20,
+    label: "$20",
+  },
+];
 
 const dayName = [
   "Sunday",
@@ -388,9 +424,6 @@ export class Driver extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     this.setState({ submitting: true, status: "sending" });
-    if (this.state.cost || this.state.isCostBelowMin) {
-      alert("Please review the delivery cost!");
-    }
 
     if (this.state.datetime < time_now) {
       alert(
@@ -477,6 +510,9 @@ export class Driver extends React.Component {
             status: "failed",
           });
         }
+        setTimeout(() => {
+          this.setState({ submitted: false });
+        }, 5000);
       });
     });
   };
@@ -572,11 +608,21 @@ export class Driver extends React.Component {
     });
   };
 
+  handleSlider = (event, value) => {
+    this.setState({ cost: value });
+    if (value !== "" && parseInt(value) < parseInt(this.state.minCost)) {
+      this.setState({ isCostBelowMin: true });
+    } else {
+      this.setState({ isCostBelowMin: false });
+    }
+  };
+
   handleChange = async (event) => {
     const target = event.target;
     const value = target.value;
     const name = target.name;
     this.setState({ [name]: value });
+    console.log(value);
     if (name === "postal" && value.toString().length === 6) {
       await this.getPostal(value, "from");
       this.getMap();
@@ -591,10 +637,14 @@ export class Driver extends React.Component {
     ) {
       this.getDirections();
     }
-    if (name === "cost" && value.trim() !== "" && parseInt(value) < parseInt(this.state.minCost)) {
-      this.setState({ "isCostBelowMin": true });
+    if (
+      name === "cost" &&
+      value.trim() !== "" &&
+      parseInt(value) < parseInt(this.state.minCost)
+    ) {
+      this.setState({ isCostBelowMin: true });
     } else if (name === "cost") {
-      this.setState({ "isCostBelowMin": false });
+      this.setState({ isCostBelowMin: false });
     }
   };
 
@@ -992,10 +1042,11 @@ export class Driver extends React.Component {
                           {this.state.loadingDir ? (
                             <Spinner class="" animation="grow" />
                           ) : (
-                            <div style={{ 
-                              fontSize: "14px", 
-                              textAlign: "left",
-                            }}
+                            <div
+                              style={{
+                                fontSize: "14px",
+                                textAlign: "left",
+                              }}
                             >
                               {this.state.retrievedDir &&
                               this.state.directions &&
@@ -1016,32 +1067,39 @@ export class Driver extends React.Component {
                                     <b style={{ display: "inline-block" }}>
                                       {context.data.driver.deliverycost}:
                                     </b>
-                                    {this.state.minCost
-                                      ? <div style={{ 
+                                    {this.state.minCost ? (
+                                      <div
+                                        style={{
                                           display: "inline-block",
-                                          width: "50px"
-                                          }}>
-                                        <p style={{ display : "inline-block" }}>$</p>
-                                        <input style={{ 
-                                          display: "inline-block",
-                                          width: "80%"
-                                          }} 
+                                          width: "50px",
+                                        }}
+                                      >
+                                        <p style={{ display: "inline-block" }}>
+                                          $
+                                        </p>
+                                        <input
+                                          style={{
+                                            display: "inline-block",
+                                            width: "80%",
+                                          }}
                                           type="number"
                                           name="cost"
                                           value={this.state.cost}
                                           onChange={this.handleChange}
-                                          ></input>
-                                        </div>
-                                      : null}
-                                      <br />
-                                      {this.state.isCostBelowMin ?
-                                      <div
+                                          min="6"
+                                        ></input>
+                                      </div>
+                                    ) : null}
+                                    <br />
+                                    {this.state.isCostBelowMin ? (
+                                      <span
                                         class="badge badge-danger"
                                         style={{ fontSize: "12px" }}
                                       >
-                                        Min delivery cost is ${this.state.minCost}
-                                      </div>
-                                    : null}
+                                        Recommended delivery cost is above $
+                                        {this.state.minCost}
+                                      </span>
+                                    ) : null}
                                   </div>
                                 </div>
                               ) : null}
@@ -1560,6 +1618,33 @@ export class Driver extends React.Component {
                                         {this.state.cost
                                           ? "$" + this.state.cost.toString()
                                           : null}
+                                        <br />
+                                        <br />
+                                        <Slider
+                                          // defaultValue={this.state.cost}
+                                          // getAriaValueText={10}
+                                          aria-labelledby="discrete-slider"
+                                          valueLabelDisplay="on"
+                                          step={1}
+                                          marks={marks}
+                                          min={6}
+                                          max={20}
+                                          name="cost"
+                                          value={this.state.cost}
+                                          style={{ width: "90%" }}
+                                          onChange={this.handleSlider.bind(
+                                            this
+                                          )}
+                                        />
+                                        {this.state.isCostBelowMin ? (
+                                          <div
+                                            class="badge badge-danger"
+                                            style={{ fontSize: "12px" }}
+                                          >
+                                            Recommended delivery cost is above $
+                                            {this.state.minCost}
+                                          </div>
+                                        ) : null}
                                       </p>
                                     </span>
                                   ) : (
