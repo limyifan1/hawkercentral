@@ -54,6 +54,11 @@ const monthNames = [
   "December",
 ];
 
+const runtimeOpts = {
+  timeoutSeconds: 540,
+  memory: "2GB",
+};
+
 function formatAMPM(date) {
   var hours = date.getHours();
   var minutes = date.getMinutes();
@@ -630,7 +635,7 @@ exports.taskRunner = functions
 
 exports.takesgSync = functions
   .region("asia-east2")
-  .runWith({ memory: "2GB" })
+  .runWith(runtimeOpts)
   .pubsub.schedule("every 24 hours")
   .onRun(async (context) => {
     var take_keys = [];
@@ -670,10 +675,10 @@ exports.takesgSync = functions
           //   .data()
           //   .description_detail.includes("Contributed by take.sg");
           var inTakesg = take_keys.includes(data_contact);
-          if (inTakesg) {
+          if (inTakesg && d.data().takesg) {
             var index = take_keys.indexOf(data_contact);
             var data = take_data[index];
-            d.ref
+            await d.ref
               .update({
                 description_detail: data.description
                   ? data.description + "\n Contributed by take.sg"
