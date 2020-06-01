@@ -1052,7 +1052,7 @@ export class Driver extends React.Component {
                               this.state.directions &&
                               this.state.directions.routes.length > 0 ? (
                                 <div
-                                  class="p-6 d-flex align-items-center"
+                                  class="p-6 align-items-center"
                                   style={{
                                     padding: "15px",
                                   }}
@@ -1096,7 +1096,7 @@ export class Driver extends React.Component {
                                         class="badge badge-danger"
                                         style={{ fontSize: "12px" }}
                                       >
-                                        Recommended delivery cost is above $
+                                        Recommended delivery <br/>cost is above $
                                         {this.state.minCost}
                                       </span>
                                     ) : null}
