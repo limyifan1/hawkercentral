@@ -2056,10 +2056,10 @@
   dependencies:
     npmlog "^4.1.2"
 
-"@loopback/cli@2.7.1":
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/@loopback/cli/-/cli-2.7.1.tgz#2766777a5bc77ffbdb81b7683254d5036d4f66d4"
-  integrity sha512-QqQM8xuSLiEH6Vm5VGGMNERL0LBb0Mve5YMq/9iX+opuEX0oRxeG1Znrw/aOu+qe4GJSjrmKW9aE3ESCwaxXYQ==
+"@loopback/cli@2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@loopback/cli/-/cli-2.8.0.tgz#c5b0f82e3f6d0b2cabe470597000663daafcb00b"
+  integrity sha512-I6Rw8+9PxMOX9UvKON7tlRxzxy3+U9C9qF/Yk0QVJBIC/TUCU1Lw1R3x2XSl6bbUNsv9MJ4RyNVVa47tgMyVKw==
   dependencies:
     "@lerna/project" "^3.21.0"
     "@openapi-contrib/openapi-schema-to-json-schema" "^3.0.0"
@@ -2089,6 +2089,7 @@
     swagger-parser "^9.0.1"
     swagger2openapi "^6.0.3"
     tabtab "^3.0.2"
+    terminal-link "^2.1.1"
     tildify "^2.0.0"
     ts-morph "^7.1.0"
     typescript "~3.9.3"
@@ -7712,12 +7713,10 @@ immer@1.10.0:
   resolved "https://registry.yarnpkg.com/immer/-/immer-1.10.0.tgz#bad67605ba9c810275d91e1c2a47d4582e98286d"
   integrity sha512-O3sR1/opvCDGLEVcvrGTMtLac8GJ5IwZC4puPrLuRj3l7ICKvkmA0vGuU9OW8mV9WIBRnaxp5GJh9IEAaNOoYg==
 
-immutability-helper@3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/immutability-helper/-/immutability-helper-3.0.2.tgz#e9187158b47c93368a92e84c31714c4b3dff30b0"
-  integrity sha512-fcrJ26wpvUcuGRpoGY4hyQ/JOeR1HAunMmE3C0XYXSe6plAGtgTlB2S4BzueBANCPrDJ7AByL1yrIRLIlVfwpA==
-  dependencies:
-    invariant "^2.2.4"
+immutability-helper@3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/immutability-helper/-/immutability-helper-3.1.1.tgz#2b86b2286ed3b1241c9e23b7b21e0444f52f77b7"
+  integrity sha512-Q0QaXjPjwIju/28TsugCHNEASwoCcJSyJV3uO1sOIQGI0jKgm9f41Lvz0DZj3n46cNCyAZTsEYoY4C2bVRUzyQ==
 
 import-cwd@^2.0.0:
   version "2.1.0"
@@ -14551,6 +14550,14 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
+supports-hyperlinks@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/supports-hyperlinks/-/supports-hyperlinks-2.1.0.tgz#f663df252af5f37c5d49bbd7eeefa9e0b9e59e47"
+  integrity sha512-zoE5/e+dnEijk6ASB6/qrK+oYdm2do1hjoLWrqUC/8WEIW1gbxFcKuBof7sW8ArN6e+AYvsE8HBGiVRWL/F5CA==
+  dependencies:
+    has-flag "^4.0.0"
+    supports-color "^7.0.0"
+
 svg-parser@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/svg-parser/-/svg-parser-2.0.4.tgz#fdc2e29e13951736140b76cb122c8ee6630eb6b5"
@@ -14669,6 +14676,14 @@ term-size@^2.1.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/term-size/-/term-size-2.2.0.tgz#1f16adedfe9bdc18800e1776821734086fcc6753"
   integrity sha512-a6sumDlzyHVJWb8+YofY4TW112G6p2FCPEAFk+59gIYHv3XHRhm9ltVQ9kli4hNWeQBwSpe8cRN25x0ROunMOw==
+
+terminal-link@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/terminal-link/-/terminal-link-2.1.1.tgz#14a64a27ab3c0df933ea546fba55f2d078edc994"
+  integrity sha512-un0FmiRUQNr5PJqy9kP7c40F5BOfpGlYTrxonDChEZB7pzZxRNp/bt+ymiy9/npwXya9KH99nJ/GXFIiUkYGFQ==
+  dependencies:
+    ansi-escapes "^4.2.1"
+    supports-hyperlinks "^2.0.0"
 
 terser-webpack-plugin@2.3.5:
   version "2.3.5"
