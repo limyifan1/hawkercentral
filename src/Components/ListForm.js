@@ -1854,6 +1854,7 @@ export class ListForm extends React.Component {
                                   To protect our owners, edits will be manually
                                   reviewed and implemented within 24 hours.
                                 </b>
+                                <br />
                               </span>
                             ) : null}
                             <Button
