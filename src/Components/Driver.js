@@ -1096,8 +1096,8 @@ export class Driver extends React.Component {
                                         class="badge badge-danger"
                                         style={{ fontSize: "12px" }}
                                       >
-                                        Recommended delivery <br/>cost is above $
-                                        {this.state.minCost}
+                                        Recommended delivery <br />
+                                        cost is above ${this.state.minCost}
                                       </span>
                                     ) : null}
                                   </div>
