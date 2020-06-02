@@ -103,7 +103,7 @@ const handleData = async ({
   tagsValue,
   editedFields,
   originalName,
-  takesg
+  takesg,
 }) => {
   let now = new Date();
   var field = {
@@ -146,7 +146,7 @@ const handleData = async ({
     location: location,
     menu_combined: menu_combined,
     tagsValue: tagsValue,
-    takesg: takesg
+    takesg: takesg,
   };
   if (toggle === "create") {
     let id = await db
@@ -244,7 +244,7 @@ export class ListForm extends React.Component {
       tagsValue: [],
       tags: [],
       isLoading: false,
-      takesg: false
+      takesg: false,
     };
 
     this.initialState = {};
@@ -308,7 +308,7 @@ export class ListForm extends React.Component {
       menu: this.props.data.menu,
       menu_combined: this.props.data.menu_combined,
       wechatid: this.props.data.wechatid ? this.props.data.wechatid : "",
-      takesg: this.props.data.takesg ? this.props.data.takesg : false
+      takesg: this.props.data.takesg ? this.props.data.takesg : false,
     };
 
     return _.cloneDeep(initialState);
@@ -505,7 +505,7 @@ export class ListForm extends React.Component {
       tagsValue: this.state.tagsValue.map((v) => v.label.trim()),
       editedFields: edited_fields,
       originalName: this.initialState.name,
-      takesg: this.state.takesg
+      takesg: this.state.takesg,
     }).then((id) => {
       if (this.props.toggle === "create") {
         this.props.history.push({
@@ -1848,6 +1848,14 @@ export class ListForm extends React.Component {
                           </div>
                           <br />
                           <div class="create-title">
+                            {this.props.toggle === "edit" ? (
+                              <span>
+                                <b>
+                                  To protect our owners, edits will be manually
+                                  reviewed and implemented within 24 hours.
+                                </b>
+                              </span>
+                            ) : null}
                             <Button
                               class="shadow-sm"
                               style={{
