@@ -1618,6 +1618,40 @@ export class ListForm extends React.Component {
                                 <br />
                               </div>
                             )}
+                            <div class="create-title">
+                              <Button
+                                class="shadow-sm"
+                                style={{
+                                  backgroundColor: "blue",
+                                  borderColor: "blue",
+                                }}
+                                onClick={this.handleMenu}
+                                name="menu"
+                              >
+                                {context.data.create.additem}
+                              </Button>
+                              <br />
+                            </div>
+                            {this.state.menu ? (
+                              <div>
+                                <p>{this.handleMenuDisplay(context)} </p>
+                                {/* Option to add additional menu items, display only if menu is already shown */}
+                                <div class="create-title">
+                                  <Button
+                                    class="shadow-sm"
+                                    style={{
+                                      backgroundColor: "blue",
+                                      borderColor: "blue",
+                                    }}
+                                    onClick={this.handleMenu}
+                                    name="moreMenuItems"
+                                  >
+                                    {context.data.create.addmoreitem}
+                                  </Button>
+                                  <br />
+                                </div>
+                              </div>
+                            ) : null}
                           </div>
                           <hr
                             style={{
@@ -1718,40 +1752,6 @@ export class ListForm extends React.Component {
                               rows="3"
                             ></textarea>
                           </div>
-                          <div class="create-title">
-                            <Button
-                              class="shadow-sm"
-                              style={{
-                                backgroundColor: "blue",
-                                borderColor: "blue",
-                              }}
-                              onClick={this.handleMenu}
-                              name="menu"
-                            >
-                              {context.data.create.additem}
-                            </Button>
-                            <br />
-                          </div>
-                          {this.state.menu ? (
-                            <div>
-                              <p>{this.handleMenuDisplay(context)} </p>
-                              {/* Option to add additional menu items, display only if menu is already shown */}
-                              <div class="create-title">
-                                <Button
-                                  class="shadow-sm"
-                                  style={{
-                                    backgroundColor: "blue",
-                                    borderColor: "blue",
-                                  }}
-                                  onClick={this.handleMenu}
-                                  name="moreMenuItems"
-                                >
-                                  {context.data.create.addmoreitem}
-                                </Button>
-                                <br />
-                              </div>
-                            </div>
-                          ) : null}
                           <br />
                           <div class="form-group create-title">
                             <label for="unit">WeChat ID(微信号): </label>
