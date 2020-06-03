@@ -24,6 +24,7 @@ import Page from "./Page";
 import PageAbout from "./PageAbout";
 import PageItem from "./PageItem";
 import PageCart from "./PageCart";
+import PageDashboard from "./PageDashboard";
 
 import { db, storage } from "./Firestore";
 
@@ -49,6 +50,7 @@ export default {
   PageAbout,
   PageItem,
   PageCart,
+  PageDashboard,
   db,
   storage,
 };

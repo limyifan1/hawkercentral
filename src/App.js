@@ -318,6 +318,13 @@ class App extends React.Component {
                       <Components.PageAbout pageName={this.state.pageName} />
                     )}
                   />
+                  <Route
+                    exact
+                    path="/dashboard"
+                    render={() => (
+                      <Components.PageDashboard pageName={this.state.pageName} />
+                    )}
+                  />
                 </CartContext.Provider>
               ) : (
                 <div>
