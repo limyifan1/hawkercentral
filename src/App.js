@@ -18,6 +18,8 @@ import { Helmet } from "react-helmet";
 import { ThemeProvider } from "@material-ui/styles";
 import { db } from "./Components/Firestore";
 import { createMuiTheme } from "@material-ui/core/styles";
+import Skeleton from "@material-ui/lab/Skeleton";
+import { SnackbarProvider } from "notistack";
 
 const theme = createMuiTheme({
   palette: {

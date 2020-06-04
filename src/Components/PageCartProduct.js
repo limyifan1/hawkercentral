@@ -37,7 +37,6 @@ class PageCartProduct extends Component {
   };
 
   render() {
-    const { removeProduct } = this.props;
     const { product, img} = this.state;
 
     const classes = ["shelf-item"];
