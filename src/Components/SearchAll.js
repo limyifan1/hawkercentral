@@ -24,6 +24,7 @@ import Button from "@material-ui/core/Button";
 import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 const analytics = firebase.analytics();
 
@@ -370,6 +371,26 @@ export class SearchAll extends React.Component {
     let result = {
       nearby: [],
     };
+    let skeletons = [];
+    for (let index = 0; index < 10; index++) {
+      skeletons.push(
+        <figure
+          class="card shadow effect-bubba item-card"
+          style={{ margin: "5px", height: "200px"}}
+          onClick={this.handleClick}
+        >
+          <Skeleton width="100%">
+            <div style={{ height: "100px" }} class="card-img-top" alt=""></div>
+          </Skeleton>
+          <Skeleton width="80%">
+            <h3>.</h3>
+          </Skeleton>
+          <Skeleton width="50%">
+            <h3>.</h3>
+          </Skeleton>
+        </figure>
+      );
+    }
     if (this.state.data !== undefined && this.state.retrieved) {
       let filtered = this.state.data;
 
@@ -625,11 +646,10 @@ export class SearchAll extends React.Component {
                 <span class="mt-5">No Results Found</span>
               )
             ) : (
-              <div class="row h-100 page-container">
-                <div class="col-sm-12 my-auto">
-                  <h3>Loading</h3>
-                  <Spinner class="" animation="grow" />
-                </div>
+              <div class="row justify-content-center mt-4">
+                {/* <h3>Loading</h3> */}
+                {/* <Spinner class="" animation="grow" /> */}
+                {skeletons}
               </div>
             )}
             <ScrollTop>
