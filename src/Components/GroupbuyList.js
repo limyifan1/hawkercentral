@@ -7,6 +7,7 @@ import { db } from "./Firestore";
 import queryString from "query-string";
 import Cookies from "universal-cookie";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import update from "immutability-helper";
 
 const cookies = new Cookies();
 
@@ -57,21 +58,32 @@ export class GroupbuyList extends React.Component {
 
   handleExpand = async (event) => {
     event.preventDefault();
-    this.setState({ expanded: !this.state.expanded });
+    const idx = event.currentTarget.dataset.idx
+    // Get current groupbuy and reverse expanded status
+    let newGroupbuy = this.state.deliveryData[idx];
+    newGroupbuy.expanded = !newGroupbuy.expanded;
+    // Set state to update this groupbuy's expanded status
+    this.setState({
+      deliveryData: update(this.state.deliveryData, {
+        [idx]: { $set: newGroupbuy },
+      }),
+    });
+    //this.setState({ expanded: !this.state.expanded });
   };
 
   render() {
     let dataToDisplay = []
     if (this.state.deliveryData !== null) {
-      dataToDisplay = this.state.deliveryData.map((data) => {
+      dataToDisplay = this.state.deliveryData.map((data, index) => {
         return (
           <div
             onClick={this.handleExpand.bind(this)}
+            data-idx={index}
             style={{ cursor: "pointer" }}>
             {data.name} {data.active === false ? (<b>(Not Active)</b>) : null}
             <br />
             {/* Display menu items available */}
-            {(this.state.expanded && data.menuitem !== undefined) ? (
+            {(data.expanded === true && data.menuitem !== undefined) ? (
               data.menuitem.map(item =>
                 <div>
                   <div>{item.name}: ${item.price}</div>
@@ -81,7 +93,7 @@ export class GroupbuyList extends React.Component {
               )
             ) : null}
             {/* Display total buyers */}
-            {(this.state.expanded && data.menuitem !== undefined && data.buyers !== undefined) ? (
+            {(data.expanded === true && data.menuitem !== undefined && data.buyers !== undefined) ? (
               <div>
                 Total Number of buyers: {data.buyers.length}
                 <br/>
