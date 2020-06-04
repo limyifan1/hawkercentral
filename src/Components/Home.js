@@ -284,12 +284,12 @@ export class Home extends React.PureComponent {
                       </LanguageContext.Consumer>
                       <span style={{ fontSize: "12px" }}>0 </span>
                       <Line
-                        percent={this.state.count / 5}
+                        percent={this.state.count / 8}
                         strokeWidth="2"
                         strokeColor="#b48300"
                         style={{ width: "50%" }}
                       />
-                      <span style={{ fontSize: "12px" }}> 500</span>
+                      <span style={{ fontSize: "12px" }}> 800</span>
                     </div>
                   ) : null}
 
