@@ -297,62 +297,69 @@ class App extends React.Component {
           <LanguageContext.Provider value={this.state}>
             <div className="App">
               {this.state.pageName &&
-              this.state.pageName !== "www" &&
-              this.state.pageName !== "foodleh" &&
-              this.state.hostName !== "sh" &&
-              this.state.hostName !== "now" &&
-              this.state.hostName !== "now.sh" ? (
-                <CartContext.Provider value={this.state}>
-                  <PersonalHelmet name={this.state.pageData.name} />
-                  <Route
-                    exact
-                    path="/"
-                    render={() => (
-                      <Components.Page pageName={this.state.pageName} />
-                    )}
-                  />
-                  <Route
-                    exact
-                    path="/about"
-                    render={() => (
-                      <Components.PageAbout pageName={this.state.pageName} />
-                    )}
-                  />
-                  <Route
-                    exact
-                    path="/dashboard"
-                    render={() => (
-                      <Components.PageDashboard pageName={this.state.pageName} />
-                    )}
-                  />
-                </CartContext.Provider>
-              ) : (
-                <div>
-                  <Components.Menu />
-                  <SeoHelmet />
-                  <Route exact path="/" component={Components.Home} />
-                  <Route exact path="/create" component={Components.Create} />
-                  <Route exact path="/info" component={Components.Info} />
-                  <Route
-                    exact
-                    path="/searchall"
-                    component={Components.SearchAll}
-                  />
-                  <Route exact path="/about" component={Components.About} />
-                  <Route exact path="/driver" component={Components.Driver} />
-                  <Route
-                    exact
-                    path="/delivery"
-                    component={Components.Delivery}
-                  />
-                  <Route exact path="/orders" component={Components.Orders} />
-                  <Route
-                    exact
-                    path="/deliveries"
-                    component={Components.Deliveries}
-                  />
-                </div>
-              )}
+                this.state.pageName !== "www" &&
+                this.state.pageName !== "foodleh" &&
+                this.state.hostName !== "sh" &&
+                this.state.hostName !== "now" &&
+                this.state.hostName !== "now.sh" ? (
+                  <CartContext.Provider value={this.state}>
+                    <PersonalHelmet name={this.state.pageData.name} />
+                    <Route
+                      exact
+                      path="/"
+                      render={() => (
+                        <Components.Page pageName={this.state.pageName} />
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/about"
+                      render={() => (
+                        <Components.PageAbout pageName={this.state.pageName} />
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/dashboard"
+                      render={() => (
+                        <Components.PageDashboard pageName={this.state.pageName} />
+                      )}
+                    />
+                  </CartContext.Provider>
+                ) : (
+                  <div>
+                    <Components.Menu />
+                    <SeoHelmet />
+                    <Route exact path="/" component={Components.Home} />
+                    <Route exact path="/create" component={Components.Create} />
+                    <Route exact path="/info" component={Components.Info} />
+                    <Route
+                      exact
+                      path="/searchall"
+                      component={Components.SearchAll}
+                    />
+                    <Route exact path="/about" component={Components.About} />
+                    <Route exact path="/driver" component={Components.Driver} />
+                    <Route
+                      exact
+                      path="/delivery"
+                      component={Components.Delivery}
+                    />
+                    <Route exact path="/orders" component={Components.Orders} />
+                    {/* Allows extra URL params for each area eg groupbuy/Tampines */}
+                    <Route
+                      exact
+                      path="/groupbuy"
+                      component={Components.Groupbuy}
+                    />
+                    <Route exact path="/groupbuy/:area" component={Components.GroupbuyList} />
+                    <Route
+                      exact
+                      path="/deliveries"
+                      component={Components.Deliveries}
+                    />
+                  </div>
+                )}
               <script src="/__/firebase/7.14.1/firebase-app.js"></script>
               <script src="/__/firebase/7.14.1/firebase-analytics.js"></script>
               <script src="/__/firebase/init.js"></script>
