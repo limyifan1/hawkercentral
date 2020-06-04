@@ -18,7 +18,9 @@ import { Helmet } from "react-helmet";
 import { ThemeProvider } from "@material-ui/styles";
 import { db } from "./Components/Firestore";
 import { createMuiTheme } from "@material-ui/core/styles";
-import { Spinner } from "react-bootstrap";
+import { Navbar } from "react-bootstrap";
+import Skeleton from "@material-ui/lab/Skeleton";
+import { SnackbarProvider } from "notistack";
 
 const theme = createMuiTheme({
   palette: {
@@ -168,8 +170,12 @@ class App extends React.Component {
         cartTotal: {
           productQuantity: this.state.cartTotal.productQuantity + 1,
           totalPrice:
-            this.state.cartTotal.totalPrice +
-            Number(this.state.pageData.menu_combined[productIndex].price),
+            Math.round(
+              (this.state.cartTotal.totalPrice +
+                Number(this.state.pageData.menu_combined[productIndex].price) +
+                Number.EPSILON) *
+                100
+            ) / 100,
         },
         pageData: newPageData,
       });
@@ -194,8 +200,12 @@ class App extends React.Component {
         cartTotal: {
           productQuantity: this.state.cartTotal.productQuantity - 1,
           totalPrice:
-            this.state.cartTotal.totalPrice -
-            Number(this.state.pageData.menu_combined[productIndex].price),
+            Math.round(
+              (this.state.cartTotal.totalPrice -
+                Number(this.state.pageData.menu_combined[productIndex].price) +
+                Number.EPSILON) *
+                100
+            ) / 100,
         },
         pageData: newPageData,
       });
@@ -258,7 +268,7 @@ class App extends React.Component {
         if (snapshot.exists) {
           // After querying db for data, initialize orderData if menu info is available
           if (snapshot.data().redirect) {
-            window.location.href = "/info?id="+snapshot.data().docid;
+            window.location.href = "/info?id=" + snapshot.data().docid;
           } else {
             this.setState(snapshot.data());
             this.setState({ retrieved: true });
@@ -266,36 +276,70 @@ class App extends React.Component {
           }
         }
         //   onLoad("info_load", snapshot.data().name);
-        return true;
+        this.setState({ retrieved: true });
+        return false;
       })
       .catch((error) => {
         window.location.reload(true);
         console.log(error);
       });
-    await db
-      .collection("hawkers")
-      .doc(docid)
-      .get()
-      .then((snapshot) => {
-        if (snapshot.exists) {
-          // After querying db for data, initialize orderData if menu info is available
-          this.setState({
-            pageData: snapshot.data(),
-            orderData: new Array(snapshot.data().menu_combined.length).fill(0),
-          });
-        }
-        console.log("Fetched successfully!");
-        return true;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (docid) {
+      await db
+        .collection("hawkers")
+        .doc(docid)
+        .get()
+        .then((snapshot) => {
+          if (snapshot.exists) {
+            // After querying db for data, initialize orderData if menu info is available
+            this.setState({
+              pageData: snapshot.data(),
+              orderData: new Array(snapshot.data().menu_combined.length).fill(
+                0
+              ),
+            });
+          }
+          console.log("Fetched successfully!");
+          return true;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   render() {
     // The ThemedButton button inside the ThemeProvider
     // uses the theme from state while the one outside uses
     // the default dark theme
+    let skeletons = [];
+    for (let index = 0; index < 10; index++) {
+      skeletons.push(
+        <div style={{ width: "500px", margin: "10px" }}>
+          <div
+            class="card shadow"
+            style={{
+              paddingLeft: "0px !important",
+              paddingRight: "0px !important",
+            }}
+          >
+            <Skeleton width="100%">
+              <div
+                style={{ height: "100px" }}
+                class="card-img-top"
+                alt=""
+              ></div>
+            </Skeleton>
+            <Skeleton width="80%">
+              <h3>.</h3>
+            </Skeleton>
+            <Skeleton width="50%">
+              <h3>.</h3>
+            </Skeleton>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <ThemeProvider theme={theme}>
         <Router>
@@ -311,13 +355,21 @@ class App extends React.Component {
                   {this.state.retrieved ? (
                     <div>
                       <PersonalHelmet name={this.state.pageData.name} />
-                      <Route
-                        exact
-                        path="/"
-                        render={() => (
-                          <Components.Page pageName={this.state.pageName} />
-                        )}
-                      />
+                      <SnackbarProvider
+                        maxSnack={2}
+                        anchorOrigin={{
+                          vertical: "top",
+                          horizontal: "center",
+                        }}
+                      >
+                        <Route
+                          exact
+                          path="/"
+                          render={() => (
+                            <Components.Page pageName={this.state.pageName} />
+                          )}
+                        />
+                      </SnackbarProvider>
                       <Route
                         exact
                         path="/about"
@@ -338,10 +390,12 @@ class App extends React.Component {
                       />{" "}
                     </div>
                   ) : (
-                    <div class="row h-100 page-container">
-                      <div class="col-sm-12 my-auto">
-                        <h3>Loading</h3>
-                        <Spinner class="" animation="grow" />
+                    <div>
+                      <div className="row justify-content-center">
+                        <Skeleton width="100%">
+                          <div class="jumbotron" style={{ height: "300px" }} />
+                        </Skeleton>
+                        {skeletons}
                       </div>
                     </div>
                   )}

@@ -7,13 +7,12 @@ import React from "react";
 import "../App.css";
 import "react-multi-carousel/lib/styles.css";
 // import queryString from "query-string";
-import {
-  // Button,
-  // Spinner,
-  // Form,
-  // Popover,
-  // OverlayTrigger,
-} from "react-bootstrap";
+import // Button,
+// Spinner,
+// Form,
+// Popover,
+// OverlayTrigger,
+"react-bootstrap";
 import { db } from "./Firestore";
 // import ImageGallery from "react-image-gallery";
 import Component from "./index";
@@ -70,7 +69,10 @@ const shorten = (url) => {
 };
 
 const InfoMenu = (props) => {
-  const menu_color = props && props.css && props.css.menu_color? props.css.menu_color : "#b48300";
+  const menu_color =
+    props && props.css && props.css.menu_color
+      ? props.css.menu_color
+      : "#b48300";
   const menu_font_color = props && props.css ? props.css.menu_font_color : null;
   return (
     <Navbar
@@ -779,12 +781,13 @@ export class Page extends React.Component {
             paddingLeft: "0px",
             paddingRight: "0px",
             margin: "0px 0px",
+            marginBottom: "50px"
           }}
         >
           <div>
             {this.context.pageData.url ? (
               <div
-                class="container-fluid row align-items-center no-gutters"
+                class="container-fluid row align-items-center justify-content-center no-gutters"
                 style={{
                   background:
                     "linear-gradient(rgba(0,0,0,0.5), rgba(255,255,255,0.3)), url(" +
@@ -797,13 +800,25 @@ export class Page extends React.Component {
                   textAlign: "center",
                 }}
               >
-                <div class="center">
+                <div>
                   <div
                     style={{
                       color: "white",
                       fontSize: "50px",
                       fontWeight: "bold",
                     }}
+                    class="d-none d-md-inline-block"
+                    id="back-to-top-anchor"
+                  >
+                    {this.context.pageData.name}
+                  </div>
+                  <div
+                    style={{
+                      color: "white",
+                      fontSize: "30px",
+                      fontWeight: "bold",
+                    }}
+                    class="d-inline-block d-md-none"
                     id="back-to-top-anchor"
                   >
                     {this.context.pageData.name}
@@ -813,6 +828,7 @@ export class Page extends React.Component {
                       color: "white",
                       fontSize: "15px",
                     }}
+                    id="back-to-top-anchor"
                   >
                     {this.context.pageData.description}
                   </div>
@@ -933,7 +949,9 @@ export class Page extends React.Component {
                     </Typography>
                   </ExpansionPanelSummary>
                   <ExpansionPanelDetails>
-                    <Typography>{this.context.pageData.description_detail}</Typography>
+                    <Typography>
+                      {this.context.pageData.description_detail}
+                    </Typography>
                   </ExpansionPanelDetails>
                 </ExpansionPanel>
                 <ExpansionPanel

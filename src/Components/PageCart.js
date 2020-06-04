@@ -118,13 +118,15 @@ class PageCart extends Component {
     // console.log(context);
     const { cartTotal, cartProducts, pageData } = this.context;
 
+    const menu_color =
+      this.context && this.context.css && this.context.css.menu_color
+        ? this.context.css.menu_color
+        : "#b48300";
+
     const products = cartProducts.map((p) => {
       if (p.quantity > 0) {
         return (
-          <CartProduct
-            product={p}
-            img={pageData.menu_combined[p.index].image}
-          />
+          <CartProduct product={p} img={pageData.menu_combined[p.index].pic} />
         );
       }
       return null;
@@ -159,6 +161,62 @@ class PageCart extends Component {
             </span>
           </span>
         )}
+
+        {!this.state.isOpen && (
+          <div
+            class="d-flex align-items-center justify-content-center"
+            style={{
+              position: "fixed",
+              bottom: "0px",
+              width: "100%",
+              backgroundColor: menu_color,
+              right: "0px",
+              height: "45px",
+              cursor: "pointer",
+            }}
+            onClick={() => this.openFloatCart()}
+          >
+            {/* <span
+              onClick={() => this.openFloatCart()}
+              className="bag bag--float-cart-closed"
+              style={{ width: "100px" }}
+            >
+              <span className="bag__quantity">
+                {this.context.cartTotal.productQuantity}
+              </span>
+            </span> */}
+            <span
+              style={{
+                width: "40px",
+                height: "40px",
+                position: "relative",
+                display: "inline-block",
+                verticalAlign: "middle",
+                marginRight: "15px",
+              }}
+            >
+              View Cart
+              <span className="bag__quantity" style={{right: "-80px", bottom: "15px"}}>
+                {this.context.cartTotal.productQuantity}
+              </span>
+            </span>
+          </div>
+        )}
+
+        {/* <div
+          style={{
+            position: "fixed",
+            bottom: "-100px",
+            width: "100%",
+            height: "50px",
+            zIndex: 99999999,
+            backgroundColor: menu_color,
+            color: "white",
+          }}
+          // class="d-flex align-items-center"
+        >
+          View Cart
+        </div> */}
 
         <div className="float-cart__content">
           <div className="float-cart__header">
