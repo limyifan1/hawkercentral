@@ -6,7 +6,7 @@
 import React from "react";
 import "../App.css";
 import Item from "./Item";
-import { Spinner } from "react-bootstrap";
+// import { Spinner } from "react-bootstrap";
 import { db } from "./Firestore";
 import Select from "react-select";
 
@@ -372,7 +372,7 @@ export class SearchAll extends React.Component {
       nearby: [],
     };
     let skeletons = [];
-    for (let index = 0; index < 10; index++) {
+    for (let index = 0; index < 12; index++) {
       skeletons.push(
         <figure
           class="card shadow effect-bubba item-card"
