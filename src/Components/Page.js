@@ -70,7 +70,7 @@ const shorten = (url) => {
 };
 
 const InfoMenu = (props) => {
-  const menu_color = props && props.css ? props.css.menu_color : null;
+  const menu_color = props && props.css && props.css.menu_color? props.css.menu_color : "#b48300";
   const menu_font_color = props && props.css ? props.css.menu_font_color : null;
   return (
     <Navbar
@@ -933,7 +933,7 @@ export class Page extends React.Component {
                     </Typography>
                   </ExpansionPanelSummary>
                   <ExpansionPanelDetails>
-                    <Typography>{this.context.about}</Typography>
+                    <Typography>{this.context.pageData.description_detail}</Typography>
                   </ExpansionPanelDetails>
                 </ExpansionPanel>
                 <ExpansionPanel

@@ -26,7 +26,10 @@ export class PageItem extends React.Component {
   };
 
   render() {
-    var menu_color = this.props ? this.props.css.menu_color : null;
+    var menu_color =
+      this.props && this.props.css && this.props.css.menu_color
+        ? this.props.css.menu_color
+        : "#b48300";
 
     return (
       <div class="page-card">

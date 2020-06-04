@@ -18,6 +18,7 @@ import { Helmet } from "react-helmet";
 import { ThemeProvider } from "@material-ui/styles";
 import { db } from "./Components/Firestore";
 import { createMuiTheme } from "@material-ui/core/styles";
+import { Spinner } from "react-bootstrap";
 
 const theme = createMuiTheme({
   palette: {
@@ -256,8 +257,13 @@ class App extends React.Component {
       .then((snapshot) => {
         if (snapshot.exists) {
           // After querying db for data, initialize orderData if menu info is available
-          this.setState(snapshot.data());
-          return snapshot.data().docid;
+          if (snapshot.data().redirect) {
+            window.location.href = "/info?id="+snapshot.data().docid;
+          } else {
+            this.setState(snapshot.data());
+            this.setState({ retrieved: true });
+            return snapshot.data().docid;
+          }
         }
         //   onLoad("info_load", snapshot.data().name);
         return true;
@@ -275,7 +281,6 @@ class App extends React.Component {
           // After querying db for data, initialize orderData if menu info is available
           this.setState({
             pageData: snapshot.data(),
-            retrieved: true,
             orderData: new Array(snapshot.data().menu_combined.length).fill(0),
           });
         }
@@ -303,28 +308,43 @@ class App extends React.Component {
               this.state.hostName !== "now" &&
               this.state.hostName !== "now.sh" ? (
                 <CartContext.Provider value={this.state}>
-                  <PersonalHelmet name={this.state.pageData.name} />
-                  <Route
-                    exact
-                    path="/"
-                    render={() => (
-                      <Components.Page pageName={this.state.pageName} />
-                    )}
-                  />
-                  <Route
-                    exact
-                    path="/about"
-                    render={() => (
-                      <Components.PageAbout pageName={this.state.pageName} />
-                    )}
-                  />
-                  <Route
-                    exact
-                    path="/dashboard"
-                    render={() => (
-                      <Components.PageDashboard pageName={this.state.pageName} />
-                    )}
-                  />
+                  {this.state.retrieved ? (
+                    <div>
+                      <PersonalHelmet name={this.state.pageData.name} />
+                      <Route
+                        exact
+                        path="/"
+                        render={() => (
+                          <Components.Page pageName={this.state.pageName} />
+                        )}
+                      />
+                      <Route
+                        exact
+                        path="/about"
+                        render={() => (
+                          <Components.PageAbout
+                            pageName={this.state.pageName}
+                          />
+                        )}
+                      />
+                      <Route
+                        exact
+                        path="/dashboard"
+                        render={() => (
+                          <Components.PageDashboard
+                            pageName={this.state.pageName}
+                          />
+                        )}
+                      />{" "}
+                    </div>
+                  ) : (
+                    <div class="row h-100 page-container">
+                      <div class="col-sm-12 my-auto">
+                        <h3>Loading</h3>
+                        <Spinner class="" animation="grow" />
+                      </div>
+                    </div>
+                  )}
                 </CartContext.Provider>
               ) : (
                 <div>
@@ -351,6 +371,7 @@ class App extends React.Component {
                     path="/deliveries"
                     component={Components.Deliveries}
                   />
+                  <Route exact path="/custom" component={Components.Custom} />
                 </div>
               )}
               <script src="/__/firebase/7.14.1/firebase-app.js"></script>
