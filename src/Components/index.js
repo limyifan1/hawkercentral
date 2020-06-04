@@ -18,6 +18,8 @@ import ItemRendered from "./ItemRendered";
 import Driver from "./Driver";
 import Delivery from "./Delivery";
 import Orders from "./Orders";
+import Groupbuy from "./Groupbuy";
+import GroupbuyList from "./GroupbuyList";
 import Deliveries from "./Deliveries";
 import Search from "./Search";
 import Page from "./Page";
@@ -44,6 +46,8 @@ export default {
   Driver,
   Delivery,
   Orders,
+  Groupbuy,
+  GroupbuyList,
   Deliveries,
   Search,
   Page,
