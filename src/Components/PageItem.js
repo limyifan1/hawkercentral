@@ -4,7 +4,6 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import React from "react";
-import { withRouter } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 // import { LanguageContext } from "./themeContext";
