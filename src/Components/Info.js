@@ -1055,14 +1055,22 @@ export class Info extends React.Component {
                             >
                               {/* gradient overlay shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
                               {(!this.state.wantToOrder &&
-                                this.state.data.menu &&
-                                this.state.data.menu_combined.length > 1 &&
-                                this.state.data.menu_combined[1] &&
-                                this.state.data.menu_combined[1].name !== "") ||
-                              (!this.state.wantToOrder &&
-                                this.state.data.menu_combined[1] &&
-                                this.state.data.menu_combined[1].name ===
-                                  "") ? (
+                                  this.state.data.menu &&
+                                  this.state.data.menu_combined.length > 1 &&
+                                  this.state.data.menu_combined[1] &&
+                                  this.state.data.menu_combined[1].name !== "") 
+                                  // addresses case where >1 item and customer hasnt clicked
+                                  ||
+                                  (!this.state.wantToOrder &&
+                                    this.state.data.menu_combined[1] &&
+                                    this.state.data.menu_combined[1].name ===
+                                    "") 
+                                    // addresses case where there are multiple items in menu_combined but only 1 non-empty item
+                                    ||
+                                  (!this.state.wantToOrder &&
+                                    this.state.data.menu_combined.length === 1)
+                                    // addresses case where there is only 1 item in menu_combined
+ ? (
                                 <span style={{ height: "0px" }}>
                                   <img
                                     src={gradient}
@@ -1210,7 +1218,14 @@ export class Info extends React.Component {
                           this.state.data.menu_combined[0] &&
                           this.state.data.menu_combined[0].name !== "" &&
                           this.state.data.menu_combined[1] &&
-                          this.state.data.menu_combined[1].name === "") ? (
+                          this.state.data.menu_combined[1].name === "") 
+                          ||
+                        (!this.state.wantToOrder &&
+                          this.state.data.menu &&
+                          this.state.data.menu_combined.length === 1 &&
+                          this.state.data.menu_combined[0] &&
+                          this.state.data.menu_combined[0].name !== "") 
+                          ? (
                           <div style={{ marginTop: "30px" }}>
                             <hr
                               style={{
