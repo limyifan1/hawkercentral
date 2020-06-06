@@ -188,7 +188,7 @@ export class PageAbout extends React.Component {
         {this.state.retrieved ? (
           <div>
             {InfoMenu(this.state)}
-            <Info className="" id={this.state.docid}/>
+            <Info className="" hero={true} id={this.state.docid}/>
           </div>
         ) : (
           <div class="row h-100 page-container">
