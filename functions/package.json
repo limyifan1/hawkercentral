@@ -20,7 +20,7 @@
     "node-fetch": "2.6.0",
     "request": "2.88.2",
     "telegraf": "3.38.0",
-    "twilio": "3.44.0"
+    "twilio": "3.45.0"
   },
   "devDependencies": {
     "@firebase/testing": "0.19.6",
