@@ -54,12 +54,12 @@ export class Popup extends React.Component {
     return (
       <span>
         <div
-          class="row"
+          className="row"
           style={{ backgroundColor: "", position: "relative", left: "20px" }}
         >
           <div
             onClick={() => this.setShowDeleteModal()}
-            class="d-flex justify-content-center"
+            className="d-flex justify-content-center"
             style={{
               border: "2px solid",
               borderColor: "grey",
@@ -77,7 +77,7 @@ export class Popup extends React.Component {
           </div>
           <div
             onClick={() => this.setShowEditModal()}
-            class="d-flex justify-content-center"
+            className="d-flex justify-content-center"
             style={{
               border: "2px solid",
               borderColor: "grey",
@@ -95,7 +95,7 @@ export class Popup extends React.Component {
 
           {this.props.data.lastmodified ? (
             <span
-              class="align-items-center col"
+              className="align-items-center col"
               style={{ postition: "absolute", marginTop: "10px" }}
             >
               <small style={{ color: "grey" }}>
