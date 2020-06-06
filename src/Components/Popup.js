@@ -62,7 +62,7 @@ export class Popup extends React.Component {
             class="d-flex justify-content-center"
             style={{
               border: "2px solid",
-              "border-color": "grey",
+              borderColor: "grey",
               color: "black",
               width: "60px",
               alignText: "center",
@@ -80,7 +80,7 @@ export class Popup extends React.Component {
             class="d-flex justify-content-center"
             style={{
               border: "2px solid",
-              "border-color": "grey",
+              borderColor: "grey",
               color: "black",
               width: "60px",
               alignText: "center",

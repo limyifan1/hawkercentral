@@ -50,7 +50,7 @@ export class Menu extends React.Component {
             height="30"
             className="d-inline-block align-top"
           />{" "}
-          <div class="d-none d-md-inline-block">
+          <div className="d-none d-md-inline-block">
             <img
               alt=""
               src={name}
@@ -65,7 +65,7 @@ export class Menu extends React.Component {
           <LanguageContext.Consumer>
             {({ data, language, toggleLanguage }) => (
               <Button
-                class="shadow-sm"
+                className="shadow-sm"
                 style={{
                   backgroundColor: "#B48300",
                   borderColor: "#B48300",
@@ -79,7 +79,7 @@ export class Menu extends React.Component {
               </Button>
             )}
           </LanguageContext.Consumer>
-          <div class="d-none d-md-inline-block">
+          <div className="d-none d-md-inline-block">
             <Nav.Link
               href="#"
               as={Link}
