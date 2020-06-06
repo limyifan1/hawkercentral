@@ -164,6 +164,11 @@ class App extends React.Component {
           quantity: 1,
         });
       }
+      var newPageData = this.state.pageData;
+      newPageData.menu_combined[productIndex].quantity = newPageData
+        .menu_combined[productIndex].quantity
+        ? (newPageData.menu_combined[productIndex].quantity += 1)
+        : (newPageData.menu_combined[productIndex].quantity = 1);
       this.setState({
         cartTotal: {
           productQuantity: this.state.cartTotal.productQuantity + 1,
@@ -171,7 +176,9 @@ class App extends React.Component {
             this.state.cartTotal.totalPrice +
             Number(this.state.pageData.menu_combined[productIndex].price),
         },
+        pageData: newPageData,
       });
+      console.log(this.state);
     };
 
     this.removeProduct = (productIndex) => {
@@ -187,6 +194,11 @@ class App extends React.Component {
           this.state.cartProducts.splice(findElement.index, 1);
         }
       }
+      var newPageData = this.state.pageData;
+      newPageData.menu_combined[productIndex].quantity = newPageData
+        .menu_combined[productIndex].quantity
+        ? (newPageData.menu_combined[productIndex].quantity -= 1)
+        : (newPageData.menu_combined[productIndex].quantity = 0);
       this.setState({
         cartTotal: {
           productQuantity: this.state.cartTotal.productQuantity - 1,
@@ -194,8 +206,8 @@ class App extends React.Component {
             this.state.cartTotal.totalPrice -
             Number(this.state.pageData.menu_combined[productIndex].price),
         },
+        pageData: newPageData,
       });
-      console.log(this.state)
     };
 
     this.setScrollPosition = (pos) => {
