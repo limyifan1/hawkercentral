@@ -445,7 +445,7 @@ export class Info extends React.Component {
                   margin: "20px",
                   minHeight: "100px",
                   backgroundColor: "#f1f1f1",
-                  "border-radius": "5px",
+                  borderRadius: "5px",
                   position: "relative",
                   display: "flex",
                   padding: "10px 40px 40px",
@@ -517,7 +517,7 @@ export class Info extends React.Component {
                             style={{
                               backgroundColor: "white",
                               color: "black",
-                              "border-radius": "3px",
+                              borderRadius: "3px",
                               margin: "10px",
                             }}
                           >
@@ -545,7 +545,7 @@ export class Info extends React.Component {
                             style={{
                               backgroundColor: "black",
                               color: "white",
-                              "border-radius": "3px",
+                              borderRadius: "3px",
                               margin: "10px",
                             }}
                           >
@@ -608,9 +608,9 @@ export class Info extends React.Component {
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              fill-rule="evenodd"
+              fillRule="evenodd"
               d="M16 8A8 8 0 110 8a8 8 0 0116 0zm-4.146-3.146a.5.5 0 00-.708-.708L8 7.293 4.854 4.146a.5.5 0 10-.708.708L7.293 8l-3.147 3.146a.5.5 0 00.708.708L8 8.707l3.146 3.147a.5.5 0 00.708-.708L8.707 8l3.147-3.146z"
-              clip-rule="evenodd"
+              clipRule="evenodd"
             />
           </svg>
         </div>
@@ -662,12 +662,12 @@ export class Info extends React.Component {
       console.log(this.state.data.tagsValue);
       if (this.state.data.tagsValue) {
         this.state.data.tagsValue.forEach((element) => {
-          cuisine.push(<span class="badge badge-secondary">{element}</span>);
+          cuisine.push(<span key={element} class="badge badge-secondary">{element}</span>);
         });
       }
       if (this.state.data.regions) {
         this.state.data.regions.forEach((element) => {
-          regions.push(<span class="badge badge-warning">{element}</span>);
+          regions.push(<span key={element} class="badge badge-warning">{element}</span>);
         });
       }
       if (this.state.data.url) {
@@ -817,14 +817,14 @@ export class Info extends React.Component {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M8 3.293l6 6V13.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     />
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M7.293 1.5a1 1 0 011.414 0l6.647 6.646a.5.5 0 01-.708.708L8 2.207 1.354 8.854a.5.5 0 11-.708-.708L7.293 1.5z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     />
                   </svg>{" "}
                   <a
@@ -846,9 +846,9 @@ export class Info extends React.Component {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M2 1a1 1 0 00-1 1v4.586a1 1 0 00.293.707l7 7a1 1 0 001.414 0l4.586-4.586a1 1 0 000-1.414l-7-7A1 1 0 006.586 1H2zm4 3.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                         />
                       </svg>{" "}
                       {cuisine}
@@ -867,9 +867,9 @@ export class Info extends React.Component {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M14 5H2v9a1 1 0 001 1h10a1 1 0 001-1V5zM1 4v10a2 2 0 002 2h10a2 2 0 002-2V4H1z"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                         />
                         <path d="M8 1.5A2.5 2.5 0 005.5 4h-1a3.5 3.5 0 117 0h-1A2.5 2.5 0 008 1.5z" />
                       </svg>{" "}
@@ -891,9 +891,9 @@ export class Info extends React.Component {
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="black"
-                        stroke-width="3"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         class="feather feather-truck"
                       >
                         <rect x="1" y="3" width="15" height="13"></rect>
@@ -914,9 +914,9 @@ export class Info extends React.Component {
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="black"
-                        stroke-width="3"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         class="feather feather-phone"
                       >
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
@@ -1046,7 +1046,7 @@ export class Info extends React.Component {
                                 margin: "20px",
                                 minHeight: "100px",
                                 backgroundColor: "#f1f1f1",
-                                "border-radius": "5px",
+                                borderRadius: "5px",
                                 position: "relative",
                                 display: "flex",
                                 padding: "10px 40px 40px",
@@ -1078,7 +1078,7 @@ export class Info extends React.Component {
                                     style={{
                                       width: "130%",
                                       height: "150px",
-                                      "border-radius": "5px",
+                                      borderRadius: "5px",
                                       position: "absolute",
                                       bottom: "-30px",
                                       left: "-15px",
@@ -1165,7 +1165,7 @@ export class Info extends React.Component {
                                           style={{
                                             backgroundColor: "white",
                                             color: "black",
-                                            "border-radius": "3px",
+                                            borderRadius: "3px",
                                             margin: "10px",
                                           }}
                                         >
@@ -1192,7 +1192,7 @@ export class Info extends React.Component {
                                           style={{
                                             backgroundColor: "black",
                                             color: "white",
-                                            "border-radius": "3px",
+                                            borderRadius: "3px",
                                             margin: "10px",
                                           }}
                                         >
@@ -1275,7 +1275,7 @@ export class Info extends React.Component {
                                     paddingLeft: "10px",
                                     paddingTop: "10px",
                                     backgroundColor: "#f1f1f1",
-                                    "border-radius": "5px",
+                                    borderRadius: "5px",
                                     position: "relative",
                                     zIndex: 1,
                                   }}
@@ -1331,7 +1331,7 @@ export class Info extends React.Component {
                                                     style={{
                                                       backgroundColor: "white",
                                                       color: "black",
-                                                      "border-radius": "3px",
+                                                      borderRadius: "3px",
                                                       margin: "10px",
                                                     }}
                                                   >
@@ -1363,7 +1363,7 @@ export class Info extends React.Component {
                                                     style={{
                                                       backgroundColor: "black",
                                                       color: "white",
-                                                      "border-radius": "3px",
+                                                      borderRadius: "3px",
                                                       margin: "10px",
                                                     }}
                                                   >
@@ -1477,7 +1477,7 @@ export class Info extends React.Component {
                                       pattern="[8-9]{1}[0-9]{7}"
                                       style={{
                                         borderColor: "#b48300",
-                                        "border-radius": "5px",
+                                        borderRadius: "5px",
                                       }}
                                       required
                                     ></input>
@@ -1751,7 +1751,7 @@ export class Info extends React.Component {
                         </h6>
                         <p
                           style={{
-                            "white-space": "pre-line",
+                            whiteSpace: "pre-line",
                             marginBottom: "20px",
                           }}
                         >
@@ -1778,7 +1778,7 @@ export class Info extends React.Component {
                       <Linkify>
                         <p
                           style={{
-                            "white-space": "pre-line",
+                            whiteSpace: "pre-line",
                             marginBottom: "20px",
                           }}
                         >
@@ -1794,7 +1794,7 @@ export class Info extends React.Component {
                       </h6>
                       <p
                         style={{
-                          "white-space": "pre-line",
+                          whiteSpace: "pre-line",
                           marginBottom: "20px",
                         }}
                       >
@@ -1809,7 +1809,7 @@ export class Info extends React.Component {
                       </h6>
                       <p
                         style={{
-                          "white-space": "pre-line",
+                          whiteSpace: "pre-line",
                           marginBottom: "20px",
                         }}
                       >
@@ -1851,7 +1851,7 @@ export class Info extends React.Component {
           <div class="row h-100 page-container">
             <div class="col-sm-12 my-auto">
               <h3>Loading</h3>
-              <Spinner class="" animation="grow" />
+              <Spinner className="" animation="grow" />
             </div>
           </div>
         )}
