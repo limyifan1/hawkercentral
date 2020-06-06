@@ -106,6 +106,7 @@ export class Info extends React.Component {
     super(props);
 
     this.state = {
+      className: typeof this.props.className === "string" ? this.props.className : "container",
       data: [],
       orderData: [],
       totalPrice: 0.0,
@@ -117,7 +118,7 @@ export class Info extends React.Component {
       notes: "",
       customerNumber: "",
       deliveryTime: "",
-      id: queryString.parse(this.props.location.search).id,
+      id: this.props.id || queryString.parse(this.props.location.search).id,
       galleryOpened: false,
       retrieved: false,
       activePhoto: 1,
@@ -656,7 +657,7 @@ export class Info extends React.Component {
     if (this.state.retrieved) {
       if (this.state.data.categories) {
         this.state.data.categories.forEach((element) => {
-          cuisine.push(<span className="badge badge-info">{element}</span>);
+          cuisine.push(<span key={element} className="badge badge-info">{element}</span>);
         });
       }
       console.log(this.state.data.tagsValue);
@@ -717,7 +718,7 @@ export class Info extends React.Component {
     }
 
     return this.state.retrieved ? (
-      <div className="container" style={{ paddingTop: "56px", width: "100%" }}>
+      <div className={this.state.className} style={{ paddingTop: "56px", width: "100%" }}>
         {this.state.hasReviewEditMessage ||
         this.state.hasReviewDeleteMessage ? (
           <div
