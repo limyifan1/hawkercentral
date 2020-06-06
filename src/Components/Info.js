@@ -440,7 +440,7 @@ export class Info extends React.Component {
           data.push(
             <div>
               <figure
-                class="shadow row"
+                className="shadow row"
                 style={{
                   margin: "20px",
                   minHeight: "100px",
@@ -451,7 +451,7 @@ export class Info extends React.Component {
                   padding: "10px 40px 40px",
                 }}
               >
-                <div class="row">
+                <div className="row">
                   <span
                     style={{
                       alignContent: "right",
@@ -472,9 +472,9 @@ export class Info extends React.Component {
                     </b>
                   </span>
                 </div>
-                <div class="row">
+                <div className="row">
                   <div
-                    class="col"
+                    className="col"
                     style={{
                       position: "absolute",
                       left: "5px",
@@ -482,7 +482,7 @@ export class Info extends React.Component {
                     }}
                   >
                     <span
-                      class="shadow badge badge-info m-2"
+                      className="shadow badge badge-info m-2"
                       style={{
                         backgroundColor: "#b48300",
                         alignContent: "left",
@@ -493,7 +493,7 @@ export class Info extends React.Component {
                     </span>
                   </div>
                   <div
-                    class="col"
+                    className="col"
                     style={{
                       position: "absolute",
                       left: "10px",
@@ -501,7 +501,7 @@ export class Info extends React.Component {
                     }}
                   >
                     <div
-                      class="btn-group float-right"
+                      className="btn-group float-right"
                       role="group"
                       aria-label="Basic example"
                     >
@@ -600,7 +600,7 @@ export class Info extends React.Component {
           value="click"
         >
           <svg
-            class="bi bi-x-circle-fill"
+            className="bi bi-x-circle-fill"
             width="100%"
             height="100%"
             viewBox="0 0 16 16"
@@ -656,18 +656,18 @@ export class Info extends React.Component {
     if (this.state.retrieved) {
       if (this.state.data.categories) {
         this.state.data.categories.forEach((element) => {
-          cuisine.push(<span class="badge badge-info">{element}</span>);
+          cuisine.push(<span className="badge badge-info">{element}</span>);
         });
       }
       console.log(this.state.data.tagsValue);
       if (this.state.data.tagsValue) {
         this.state.data.tagsValue.forEach((element) => {
-          cuisine.push(<span key={element} class="badge badge-secondary">{element}</span>);
+          cuisine.push(<span key={element} className="badge badge-secondary">{element}</span>);
         });
       }
       if (this.state.data.regions) {
         this.state.data.regions.forEach((element) => {
-          regions.push(<span key={element} class="badge badge-warning">{element}</span>);
+          regions.push(<span key={element} className="badge badge-warning">{element}</span>);
         });
       }
       if (this.state.data.url) {
@@ -719,27 +719,27 @@ export class Info extends React.Component {
     return (
       <div>
         {this.state.retrieved ? (
-          <div class="container" style={{ paddingTop: "56px", width: "100%" }}>
+          <div className="container" style={{ paddingTop: "56px", width: "100%" }}>
             {this.state.hasReviewEditMessage ||
             this.state.hasReviewDeleteMessage ? (
               <div
-                class="row"
+                className="row"
                 style={{
                   marginTop: "20px",
                   marginBottom: "20px",
                 }}
               >
                 <div
-                  class="card shadow"
+                  className="card shadow"
                   style={{
                     color: "black",
                     backgroundColor: "red",
                     width: "100%",
                   }}
                 >
-                  <span class="card-body">
+                  <span className="card-body">
                     <div
-                      class="card-title"
+                      className="card-title"
                       style={{
                         fontSize: "13px",
                         margin: "10px",
@@ -776,7 +776,7 @@ export class Info extends React.Component {
               </div>
             ) : null}
             <div
-              class="jumbotron"
+              className="jumbotron"
               style={{
                 background:
                   "linear-gradient(rgba(0,0,0,0.5), rgba(255,255,255,0.3)), url(" +
@@ -804,9 +804,9 @@ export class Info extends React.Component {
                 {this.state.data.description}
               </div>
             </div>
-            <div class="row">
+            <div className="row">
               <div
-                class="jumbotron col-xs-6 col-sm-6 col-md-6 col-lg-6"
+                className="jumbotron col-xs-6 col-sm-6 col-md-6 col-lg-6"
                 style={{ height: "320px", backgroundColor: "white" }}
               >
                 {/* <img src={this.state.data.url} /> */}
@@ -828,14 +828,14 @@ export class Info extends React.Component {
                   ) : null}
                 </div>
               </div>
-              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+              <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <div
-                  class="container"
+                  className="container"
                   style={{ textAlign: "left", paddingTop: "10px" }}
                 >
                   <link rel="stylesheet" href="applause-button.css" />
                   <svg
-                    class="bi bi-house-fill"
+                    className="bi bi-house-fill"
                     width="1em"
                     height="1em"
                     viewBox="0 0 16 16"
@@ -864,7 +864,7 @@ export class Info extends React.Component {
                   {cuisine.length > 0 ? (
                     <div>
                       <svg
-                        class="bi bi-tag-fill"
+                        className="bi bi-tag-fill"
                         width="0.88em"
                         height="1em"
                         viewBox="0 0 16 16"
@@ -885,7 +885,7 @@ export class Info extends React.Component {
                   this.state.data.delivery_option ? (
                     <div>
                       <svg
-                        class="bi bi-bag"
+                        className="bi bi-bag"
                         width="14"
                         height="14"
                         viewBox="0 0 16 16"
@@ -900,10 +900,10 @@ export class Info extends React.Component {
                         <path d="M8 1.5A2.5 2.5 0 005.5 4h-1a3.5 3.5 0 117 0h-1A2.5 2.5 0 008 1.5z" />
                       </svg>{" "}
                       {this.state.data.pickup_option ? (
-                        <span class="badge badge-success">Da Bao</span>
+                        <span className="badge badge-success">Da Bao</span>
                       ) : null}
                       {this.state.data.delivery_option ? (
-                        <span class="badge badge-success">Delivery</span>
+                        <span className="badge badge-success">Delivery</span>
                       ) : null}{" "}
                       <br />
                     </div>
@@ -920,7 +920,7 @@ export class Info extends React.Component {
                         strokeWidth="3"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        class="feather feather-truck"
+                        className="feather feather-truck"
                       >
                         <rect x="1" y="3" width="15" height="13"></rect>
                         <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
@@ -943,7 +943,7 @@ export class Info extends React.Component {
                         strokeWidth="3"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        class="feather feather-phone"
+                        className="feather feather-phone"
                       >
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                       </svg>{" "}
@@ -979,7 +979,7 @@ export class Info extends React.Component {
                     this.state.data.whatsapp &&
                     this.state.data.menu_combined.length > 0 &&
                     this.state.data.menu_combined[0].name !== "" ? (
-                      <span class="">
+                      <span className="">
                         <img
                           alt=""
                           onClick={this.enterDetails}
@@ -1011,7 +1011,7 @@ export class Info extends React.Component {
                     ) : null}
                     {this.state.data.whatsapp ? (
                       <span>
-                        <span class="">
+                        <span className="">
                           <a
                             href={link}
                             target="blank"
@@ -1037,7 +1037,7 @@ export class Info extends React.Component {
                           <div>
                             <br />
                             <br />
-                            <span class="">
+                            <span className="">
                               <img
                                 alt=""
                                 src={orderleh_title}
@@ -1052,7 +1052,7 @@ export class Info extends React.Component {
                             <br />
                             <br />
 
-                            <span class="">
+                            <span className="">
                               <img
                                 alt=""
                                 src={menu_title}
@@ -1067,7 +1067,7 @@ export class Info extends React.Component {
                         this.state.data.menu_combined[0].name !== "" ? (
                           <div style={{ zIndex: -999 }}>
                             <figure
-                              class="shadow row"
+                              className="shadow row"
                               style={{
                                 margin: "20px",
                                 minHeight: "100px",
@@ -1113,7 +1113,7 @@ export class Info extends React.Component {
                                   />
                                 </span>
                               ) : null}
-                              <div class="row">
+                              <div className="row">
                                 <span
                                   style={{
                                     alignContent: "right",
@@ -1143,9 +1143,9 @@ export class Info extends React.Component {
                                   </b>
                                 </span>
                               </div>
-                              <div class="row">
+                              <div className="row">
                                 <div
-                                  class="col"
+                                  className="col"
                                   style={{
                                     position: "absolute",
                                     left: "5px",
@@ -1153,7 +1153,7 @@ export class Info extends React.Component {
                                   }}
                                 >
                                   <span
-                                    class="shadow badge badge-info m-2"
+                                    className="shadow badge badge-info m-2"
                                     style={{
                                       backgroundColor: "#b48300",
                                       alignContent: "left",
@@ -1167,7 +1167,7 @@ export class Info extends React.Component {
                                   </span>
                                 </div>
                                 <div
-                                  class="col"
+                                  className="col"
                                   style={{
                                     position: "absolute",
                                     left: "10px",
@@ -1175,7 +1175,7 @@ export class Info extends React.Component {
                                   }}
                                 >
                                   <div
-                                    class="btn-group float-right"
+                                    className="btn-group float-right"
                                     role="group"
                                     aria-label="Basic example"
                                   >
@@ -1295,7 +1295,7 @@ export class Info extends React.Component {
 
                               <div>
                                 <figure
-                                  class="shadow"
+                                  className="shadow"
                                   style={{
                                     margin: "20px",
                                     paddingLeft: "10px",
@@ -1341,7 +1341,7 @@ export class Info extends React.Component {
                                               </b>
                                             </span>
                                             <div
-                                              class="btn-group float-right"
+                                              className="btn-group float-right"
                                               role="group"
                                               aria-label="Basic example"
                                             >
@@ -1400,7 +1400,7 @@ export class Info extends React.Component {
                                             </div>
                                             <br />
                                             <span
-                                              class="shadow badge badge-info m-2"
+                                              className="shadow badge badge-info m-2"
                                               style={{
                                                 backgroundColor: "#b48300",
                                                 alignContent: "left",
@@ -1463,25 +1463,25 @@ export class Info extends React.Component {
                                   style={{ width: "60%" }}
                                 />
 
-                                <div class="form-group create-title">
+                                <div className="form-group create-title">
                                   <label for="name">Name</label>
                                   <input
                                     onChange={this.handleCustomerDetails}
                                     value={this.state.name}
                                     type="text"
-                                    class="form-control"
+                                    className="form-control"
                                     name="name"
                                     style={{ borderColor: "#b48300" }}
                                     placeholder="We don't store your info!"
                                   ></input>
                                 </div>
 
-                                <div class="form-group create-title">
+                                <div className="form-group create-title">
                                   <label for="unit">Mobile Number: </label>
-                                  <div class="input-group mb-12">
-                                    <div class="input-group-prepend">
+                                  <div className="input-group mb-12">
+                                    <div className="input-group-prepend">
                                       <span
-                                        class="input-group-text"
+                                        className="input-group-text"
                                         id="basic-addon1"
                                       >
                                         +65
@@ -1491,7 +1491,7 @@ export class Info extends React.Component {
                                       onChange={this.handleCustomerDetails}
                                       value={this.state.customerNumber}
                                       type="tel"
-                                      class={
+                                      className={
                                         !this.state.customerNumber
                                           ? "form-control is-invalid"
                                           : "form-control"
@@ -1510,13 +1510,13 @@ export class Info extends React.Component {
                                   </div>
                                 </div>
 
-                                <div class="form-group create-title">
+                                <div className="form-group create-title">
                                   <label for="address">Delivery Day/Time</label>
                                   <input
                                     onChange={this.handleCustomerDetails}
                                     value={this.state.deliveryTime}
                                     type="text"
-                                    class="form-control"
+                                    className="form-control"
                                     name="deliveryTime"
                                     style={{ borderColor: "#b48300" }}
                                     placeholder="Eg Thursday 7 May 12.30pm"
@@ -1524,22 +1524,22 @@ export class Info extends React.Component {
                                 </div>
 
                                 <div>
-                                  <div class="row">
+                                  <div className="row">
                                     {" "}
-                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                       {" "}
-                                      <div class="form-group create-title">
+                                      <div className="form-group create-title">
                                         <label for="postalcode">
                                           Postal Code
                                         </label>
-                                        <div class="input-group">
+                                        <div className="input-group">
                                           <input
                                             onChange={
                                               this.handleCustomerDetails
                                             }
                                             value={this.state.postal}
                                             type="text"
-                                            class={
+                                            className={
                                               !this.state.postal
                                                 ? "form-control is-invalid"
                                                 : "form-control"
@@ -1552,24 +1552,24 @@ export class Info extends React.Component {
                                         </div>
                                       </div>
                                     </div>
-                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                       {" "}
-                                      <div class="form-group create-title">
+                                      <div className="form-group create-title">
                                         <label for="unit">Unit #</label>
                                         <input
                                           onChange={this.handleCustomerDetails}
                                           value={this.state.unit}
                                           type="text"
-                                          class="form-control"
+                                          className="form-control"
                                           name="unit"
                                           placeholder="E.g. 01-01"
                                         ></input>
                                       </div>
                                     </div>
                                   </div>
-                                  <div class="row">
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                      <div class="form-group create-title">
+                                  <div className="row">
+                                    <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                      <div className="form-group create-title">
                                         <label for="street">
                                           Street Name<b> (Auto-Filled)</b>
                                         </label>
@@ -1577,7 +1577,7 @@ export class Info extends React.Component {
                                           onChange={this.handleCustomerDetails}
                                           value={this.state.street}
                                           type="text"
-                                          class={
+                                          className={
                                             !this.state.street
                                               ? "form-control is-invalid"
                                               : "form-control"
@@ -1591,25 +1591,25 @@ export class Info extends React.Component {
                                 </div>
 
                                 {/* 
-                                <div class="form-group create-title">
+                                <div className="form-group create-title">
                                   <label for="address">Address</label>
                                   <input
                                     onChange={this.handleCustomerDetails}
                                     value={this.state.address}
                                     type="text"
-                                    class="form-control"
+                                    className="form-control"
                                     name="address"
                                     style={{ borderColor: "#b48300" }}
                                     placeholder=""
                                   ></input>
                                 </div> */}
-                                <div class="form-group create-title">
+                                <div className="form-group create-title">
                                   <label for="address">Comments</label>
                                   <input
                                     onChange={this.handleCustomerDetails}
                                     value={this.state.notes}
                                     type="text"
-                                    class="form-control"
+                                    className="form-control"
                                     name="notes"
                                     style={{
                                       borderColor: "#b48300",
@@ -1617,7 +1617,7 @@ export class Info extends React.Component {
                                     placeholder="No chilli etc, leave blank if nil"
                                   ></input>
                                 </div>
-                                <div class="form-group create-title">
+                                <div className="form-group create-title">
                                   <OverlayTrigger
                                     trigger={["hover", "focus"]}
                                     placement="top"
@@ -1636,7 +1636,7 @@ export class Info extends React.Component {
                                   ></input>
                                 </div>
                                 <Button
-                                  class="shadow-sm"
+                                  className="shadow-sm"
                                   // href={
                                   //   "https://wa.me/65" +
                                   //   this.state.data.contact +
@@ -1676,7 +1676,7 @@ export class Info extends React.Component {
                   >
                     <FacebookIcon size={32} round={true} />
                   </FacebookShareButton>{" "}
-                  <span class="" style={{ marginRight: "5px" }}>
+                  <span className="" style={{ marginRight: "5px" }}>
                     <a
                       href={
                         "whatsapp://send?text=" +
@@ -1723,16 +1723,16 @@ export class Info extends React.Component {
                   <br />
                   {this.state.data.promo ? (
                     <div
-                      class="card shadow"
+                      className="card shadow"
                       style={{
                         color: "black",
                         backgroundColor: "white",
                         height: "35px",
                       }}
                     >
-                      <span class="card-body">
+                      <span className="card-body">
                         <div
-                          class="card-title"
+                          className="card-title"
                           style={{
                             position: "absolute",
                             top: "6px",
@@ -1874,8 +1874,8 @@ export class Info extends React.Component {
             </div>
           </div>
         ) : (
-          <div class="row h-100 page-container">
-            <div class="col-sm-12 my-auto">
+          <div className="row h-100 page-container">
+            <div className="col-sm-12 my-auto">
               <h3>Loading</h3>
               <Spinner className="" animation="grow" />
             </div>
