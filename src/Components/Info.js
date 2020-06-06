@@ -775,6 +775,35 @@ export class Info extends React.Component {
                 </div>
               </div>
             ) : null}
+            <div
+              class="jumbotron"
+              style={{
+                background:
+                  "linear-gradient(rgba(0,0,0,0.5), rgba(255,255,255,0.3)), url(" +
+                  this.state.data.url +
+                  ") no-repeat center center",
+                backgroundSize: "cover",
+                height: "300px",
+              }}
+            >
+              <div
+                style={{
+                  color: "white",
+                  fontSize: "50px",
+                  fontWeight: "bold"
+                }}
+              >
+                {this.state.name || this.state.data.name}
+              </div>
+              <div
+                style={{
+                  color: "white",
+                  fontSize: "15px",
+                }}
+              >
+                {this.state.data.description}
+              </div>
+            </div>
             <div class="row">
               <div
                 class="jumbotron col-xs-6 col-sm-6 col-md-6 col-lg-6"
@@ -804,9 +833,6 @@ export class Info extends React.Component {
                   class="container"
                   style={{ textAlign: "left", paddingTop: "10px" }}
                 >
-                  <div class="" id="back-to-top-anchor">
-                    <h2>{this.state.data.name}</h2>
-                  </div>
                   <link rel="stylesheet" href="applause-button.css" />
                   <svg
                     class="bi bi-house-fill"
