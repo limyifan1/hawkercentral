@@ -209,7 +209,7 @@ class FullScreenDialog extends Component {
             this.context.cartProducts[i].quantity *
             this.context.pageData.menu_combined[
               this.context.cartProducts[i].index
-            ].name
+            ].price
           ).toFixed(2) +
           "\n";
       }
