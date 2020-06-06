@@ -15,9 +15,11 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { CartContext } from "./themeContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import placeholder from "../placeholder.png";
+// import placeholder from "../placeholder.png";
 import Button from "@material-ui/core/Button";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 const drawerWidth = 240;
 
@@ -53,9 +55,11 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
 }));
-const thumbnail = (pic) => {
-  return `https://images.weserv.nl/?w=400&url=${encodeURIComponent(pic)}`;
-};
+// const thumbnail = (pic) => {
+//   return `https://images.weserv.nl/?w=400&url=${encodeURIComponent(pic)}`;
+// };
+
+const menu_color = "#b48300";
 
 class DashboardItem extends React.Component {
   render() {
@@ -69,7 +73,7 @@ class DashboardItem extends React.Component {
           }}
         >
           <div
-            class="row no-gutters"
+            class="row no-gutters justify-content-center"
             style={{
               paddingLeft: "0px !important",
               paddingRight: "0px !important",
@@ -77,16 +81,18 @@ class DashboardItem extends React.Component {
               marginRight: "0px !important",
             }}
           >
-            <div class="col-5 col-xs-3 col-sm-3 col-md-5 fill">
-              <LazyLoadImage
-                src={this.props.pic ? thumbnail(this.props.pic) : placeholder}
-                placeholderSrc={placeholder}
-                class="card-img-left"
-                alt=""
-              />
-            </div>
+            {this.props.pic ? (
+              <div class="col-4 col-xs-3 col-sm-3 col-md-3 col-lg-4 fill">
+                <LazyLoadImage
+                  src={this.props.pic ? this.thumbnail() : null}
+                  placeholderSrc={null}
+                  class="card-img-left"
+                  alt=""
+                />
+              </div>
+            ) : null}
             <div
-              class="col-7 col-xs-9 col-sm-9 col-md-7 card-text"
+              class="col-8 col-xs-9 col-sm-9 col-md-9 col-lg-8 card-text"
               style={{
                 padding: "10px",
                 alignItems: "center",
@@ -95,41 +101,67 @@ class DashboardItem extends React.Component {
             >
               <div class="card-block">
                 <h4
-                  class="card-page-title d-flex align-items-center"
+                  class="card-page-title align-items-center"
                   style={{
                     alignItems: "center",
                     justifyContent: "center",
                   }}
                 >
                   <span>
-                    <span>
+                    <span style={{ color: menu_color }}>
                       {this.props.quantity ? this.props.quantity + " x " : null}
                     </span>
-                    {this.props.name}
+                    <TextField
+                      required
+                      id="standard-required"
+                      label="Name"
+                      value={this.props.name}
+                      type="text"
+                      style={{ width: "170px" }}
+                      onChange={this.context.changeField}
+                    />
                   </span>
                 </h4>
                 {this.props.summary ? (
                   <h6
-                    class="card-page-subtitle mb-2 text-muted small d-flex justify-content-center"
+                    class="mb-2 text-muted small d-flex justify-content-center"
                     style={{ marginBottom: "0px" }}
                   >
-                    {this.props.summary}
+                    <TextField
+                      id="standard-required"
+                      label="Subtitle"
+                      value={this.props.summary}
+                      type="text"
+                      style={{ width: "170px" }}
+                    />
                   </h6>
                 ) : null}
                 <p
                   class="card-text item-title d-flex align-items-center justify-content-center"
                   style={{ marginBottom: "5px", fontSize: "20px" }}
                 >
-                  ${this.props.price}
+                  <TextField
+                    label="Price"
+                    id="standard-start-adornment"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">$</InputAdornment>
+                      ),
+                    }}
+                    type="number"
+                    value={this.props.price}
+                    style={{ width: "170px" }}
+                  />
                 </p>
-                <Button
-                  variant="contained"
-                  color="default"
-                  startIcon={<CloudUploadIcon />}
-                >
-                  Upload Image
-                </Button>
+                {/* {this.context.cartProducts} */}
               </div>
+              <Button
+                variant="contained"
+                color="default"
+                startIcon={<CloudUploadIcon />}
+              >
+                Upload Image
+              </Button>
             </div>
           </div>
         </div>
