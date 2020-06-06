@@ -193,29 +193,24 @@ class FullScreenDialog extends Component {
     for (let i = 0; i < this.context.cartProducts.length; i = i + 1) {
       if (
         this.context.cartProducts !== undefined &&
-        this.context.cartProducts.length !== 0
+        this.context.cartProducts.length !== 0 &&
+        this.context.cartProducts[i].quantity !== 0
       ) {
-        // customer ordered this item
-        const numItems = parseInt(this.context.cartTotal.productQuantity);
-        const thisPrice = parseFloat(
-          this.context.pageData.menu_combined[
-            this.context.cartProducts[i].index
-          ].price
-            ? this.context.pageData.menu_combined[
-                this.context.cartProducts[i].index
-              ].price
-            : 0
-        );
         text =
           text +
           "*" +
-          numItems +
+          this.context.cartProducts[i].quantity +
           "x* _" +
           this.context.pageData.menu_combined[
             this.context.cartProducts[i].index
           ].name +
           "_: $" +
-          (numItems * thisPrice).toFixed(2) +
+          (
+            this.context.cartProducts[i].quantity *
+            this.context.pageData.menu_combined[
+              this.context.cartProducts[i].index
+            ].name
+          ).toFixed(2) +
           "\n";
       }
     }

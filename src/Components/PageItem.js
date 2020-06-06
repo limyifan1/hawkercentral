@@ -100,7 +100,7 @@ export class PageItem extends React.Component {
                 >
                   Add To Cart
                 </div>
-                {this.context.cartProducts}
+                {/* {this.context.cartProducts} */}
               </div>
             </div>
           </div>
