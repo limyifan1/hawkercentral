@@ -145,6 +145,10 @@ class App extends React.Component {
       }
     };
 
+    this.changeField = (event) => {
+      console.log(event);
+    };
+
     this.addProduct = (productIndex) => {
       let findElement;
       this.state.cartProducts.forEach((element, index) => {
@@ -178,6 +182,7 @@ class App extends React.Component {
         },
         pageData: newPageData,
       });
+      console.log(this.state);
     };
 
     this.removeProduct = (productIndex) => {
@@ -189,6 +194,9 @@ class App extends React.Component {
         const newElement = findElement.element;
         newElement.quantity -= 1;
         this.state.cartProducts[findElement.index] = newElement;
+        if (newElement.quantity === 0) {
+          this.state.cartProducts.splice(findElement.index, 1);
+        }
       }
       var newPageData = this.state.pageData;
       newPageData.menu_combined[productIndex].quantity = newPageData
@@ -224,6 +232,7 @@ class App extends React.Component {
       toggleLanguage: this.toggleLanguage,
       addProduct: this.addProduct,
       removeProduct: this.removeProduct,
+      changeField: this.changeField,
       data: cookies.get("language") === "en" ? en : zh,
       scrollPosition: 0, // tracks scroll position of Search page
       setScrollPosition: this.setScrollPosition,
@@ -292,9 +301,6 @@ class App extends React.Component {
             // After querying db for data, initialize orderData if menu info is available
             this.setState({
               pageData: snapshot.data(),
-              orderData: new Array(snapshot.data().menu_combined.length).fill(
-                0
-              ),
             });
           }
           console.log("Fetched successfully!");

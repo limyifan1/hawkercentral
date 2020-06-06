@@ -706,7 +706,6 @@ export class Page extends React.Component {
     let cuisine = [];
     let regions = [];
     let photos = [];
-    console.log(this.context.pageData);
     // let link = "https://wa.me/65" + this.context.pageData.contact;
     if (this.state.retrieved) {
       if (this.context.pageData.categories) {
