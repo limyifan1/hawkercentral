@@ -20,6 +20,7 @@ import { db } from "./Components/Firestore";
 import { createMuiTheme } from "@material-ui/core/styles";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { SnackbarProvider } from "notistack";
+import update from "react-addons-update";
 
 const theme = createMuiTheme({
   palette: {
@@ -146,7 +147,16 @@ class App extends React.Component {
     };
 
     this.changeField = (event) => {
-      console.log(event);
+      const target = event.target.id;
+      const targetField = target.substring(0, target.indexOf("-"));
+      const targetId = target.substring(target.indexOf("-") + 1);
+      const value = event.target.value;
+      console.log([targetId], [targetField], [value]);
+      this.setState({
+        pageData: update(this.state.pageData, {
+          menu_combined: { [targetId]: { [targetField]: { $set: value } } },
+        }),
+      });
     };
 
     this.addProduct = (productIndex) => {
@@ -279,16 +289,14 @@ class App extends React.Component {
             window.location.href = "/info?id=" + snapshot.data().docid;
           } else {
             this.setState(snapshot.data());
-            this.setState({ retrieved: true });
             return snapshot.data().docid;
           }
         }
         //   onLoad("info_load", snapshot.data().name);
-        this.setState({ retrieved: true });
         return false;
       })
       .catch((error) => {
-        window.location.reload(true);
+        // window.location.reload(true);
         console.log(error);
       });
     if (docid) {
@@ -301,6 +309,7 @@ class App extends React.Component {
             // After querying db for data, initialize orderData if menu info is available
             this.setState({
               pageData: snapshot.data(),
+              retrieved: true,
             });
           }
           console.log("Fetched successfully!");
@@ -390,9 +399,12 @@ class App extends React.Component {
                         render={() => (
                           <Components.PageDashboard
                             pageName={this.state.pageName}
+                            data={this.state.pageData}
+                            css={this.state.css}
+                            changeField={this.changeField}
                           />
                         )}
-                      />{" "}
+                      />
                     </div>
                   ) : (
                     <div>
