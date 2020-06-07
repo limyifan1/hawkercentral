@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -55,127 +55,129 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
 }));
-// const thumbnail = (pic) => {
-//   return `https://images.weserv.nl/?w=400&url=${encodeURIComponent(pic)}`;
-// };
 
-const menu_color = "#b48300";
+const thumbnail = (pic) => {
+  return `https://images.weserv.nl/?w=400&url=${encodeURIComponent(pic)}`;
+};
 
-class DashboardItem extends React.Component {
-  render() {
-    return (
-      <div class="page-card">
+const DashboardItem = (props) => {
+  console.log(props);
+  return (
+    <div class="page-card">
+      <div
+        class="card shadow"
+        style={{
+          paddingLeft: "0px !important",
+          paddingRight: "0px !important",
+        }}
+      >
         <div
-          class="card shadow"
+          class="row no-gutters justify-content-center"
           style={{
             paddingLeft: "0px !important",
             paddingRight: "0px !important",
+            marginLeft: "0px !important",
+            marginRight: "0px !important",
           }}
         >
+          {props.pic ? (
+            <div class="col-4 col-xs-3 col-sm-3 col-md-3 col-lg-4 fill">
+              <LazyLoadImage
+                src={props.pic ? thumbnail(props.pic) : null}
+                placeholderSrc={null}
+                class="card-img-left"
+                alt=""
+              />
+            </div>
+          ) : null}
           <div
-            class="row no-gutters justify-content-center"
+            class="col-8 col-xs-9 col-sm-9 col-md-9 col-lg-8 card-text"
             style={{
-              paddingLeft: "0px !important",
-              paddingRight: "0px !important",
-              marginLeft: "0px !important",
-              marginRight: "0px !important",
+              padding: "10px",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            {this.props.pic ? (
-              <div class="col-4 col-xs-3 col-sm-3 col-md-3 col-lg-4 fill">
-                <LazyLoadImage
-                  src={this.props.pic ? this.thumbnail() : null}
-                  placeholderSrc={null}
-                  class="card-img-left"
-                  alt=""
-                />
-              </div>
-            ) : null}
-            <div
-              class="col-8 col-xs-9 col-sm-9 col-md-9 col-lg-8 card-text"
-              style={{
-                padding: "10px",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <div class="card-block">
-                <h4
-                  class="card-page-title align-items-center"
-                  style={{
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <span>
-                    <span style={{ color: menu_color }}>
-                      {this.props.quantity ? this.props.quantity + " x " : null}
-                    </span>
-                    <TextField
-                      required
-                      id="standard-required"
-                      label="Name"
-                      value={this.props.name}
-                      type="text"
-                      style={{ width: "170px" }}
-                      onChange={this.context.changeField}
-                    />
-                  </span>
-                </h4>
-                {this.props.summary ? (
-                  <h6
-                    class="mb-2 text-muted small d-flex justify-content-center"
-                    style={{ marginBottom: "0px" }}
-                  >
-                    <TextField
-                      id="standard-required"
-                      label="Subtitle"
-                      value={this.props.summary}
-                      type="text"
-                      style={{ width: "170px" }}
-                    />
-                  </h6>
-                ) : null}
-                <p
-                  class="card-text item-title d-flex align-items-center justify-content-center"
-                  style={{ marginBottom: "5px", fontSize: "20px" }}
-                >
-                  <TextField
-                    label="Price"
-                    id="standard-start-adornment"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">$</InputAdornment>
-                      ),
-                    }}
-                    type="number"
-                    value={this.props.price}
-                    style={{ width: "170px" }}
-                  />
-                </p>
-                {/* {this.context.cartProducts} */}
-              </div>
-              <Button
-                variant="contained"
-                color="default"
-                startIcon={<CloudUploadIcon />}
+            <div class="card-block">
+              <p
+                class="card-page-title align-items-center"
+                style={{ marginBottom: "0px" }}
               >
-                Upload Image
-              </Button>
+                <span>
+                  <TextField
+                    required
+                    label="Name"
+                    id={"name-" + props.index}
+                    value={props.name}
+                    type="text"
+                    style={{ width: "170px" }}
+                    onChange={props.changeField}
+                  />
+                </span>
+              </p>
+              <p
+                class="card-page-title align-items-center"
+                style={{ marginBottom: "0px" }}
+              >
+                <TextField
+                  id={"description-" + props.index}
+                  label="Subtitle"
+                  value={props.description}
+                  type="text"
+                  style={{ width: "170px" }}
+                  onChange={props.changeField}
+                />
+              </p>
+              <p
+                class="card-page-title align-items-center"
+                style={{ marginBottom: "0px" }}
+              >
+                <TextField
+                  label="Price"
+                  id={"price-" + props.index}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">$</InputAdornment>
+                    ),
+                  }}
+                  type="number"
+                  value={props.price}
+                  style={{ width: "170px" }}
+                  onChange={props.changeField}
+                />
+              </p>
+              {/* {this.context.cartProducts} */}
             </div>
+            <Button
+              variant="contained"
+              color="default"
+              startIcon={<CloudUploadIcon />}
+            >
+              Upload Image
+            </Button>
           </div>
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
-function ResponsiveDrawer(props) {
+const compareCheck = (prevProps, nextProps) => {
+  return (
+    prevProps.name === nextProps.name &&
+    prevProps.description === nextProps.description &&
+    prevProps.price === nextProps.price
+  );
+};
+
+const WrappedDashboardItem = React.memo(DashboardItem, compareCheck);
+
+const PageDashboard = (props) => {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const context = useContext(CartContext);
+  // const context = useContext(CartContext);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -197,30 +199,12 @@ function ResponsiveDrawer(props) {
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
-  const getMenu = () => {
-    if (context.pageData.menu_combined) {
-      let data = [];
-      context.pageData.menu_combined.forEach((element, i) => {
-        // If without_first_item, condition should be (element.name && element.price && i !== 0)) [1]
-        // Else condition should only be (element.name && element.price) [2]
-        let toPush = true;
-        if (toPush) {
-          data.push(
-            <DashboardItem
-              quantity={element["quantity"]}
-              name={element["name"]}
-              price={element["price"]}
-              pic={element["image"]}
-              summary={element["description"]}
-              css={context.css}
-              index={i}
-            />
-          );
-        }
-      });
-      return data;
-    }
-  };
+  const changeField = React.useCallback(
+    (e) => {
+      props.changeField(e);
+    },
+    [props]
+  );
 
   return (
     <div className={classes.root}>
@@ -275,14 +259,27 @@ function ResponsiveDrawer(props) {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <div className="row justify-content-center align-items-center mt-4">
-          {getMenu()}
+          {/* <Menu data={props.data} changeField={props.changeField} /> */}
+          {props.data.menu_combined
+            ? props.data.menu_combined.map((element, i) => (
+                <WrappedDashboardItem
+                  name={element["name"]}
+                  price={element["price"]}
+                  pic={element["image"]}
+                  description={element["description"]}
+                  key={i}
+                  index={i}
+                  changeField={changeField}
+                />
+              ))
+            : null}
         </div>
       </main>
     </div>
   );
-}
+};
 
-ResponsiveDrawer.propTypes = {
+PageDashboard.propTypes = {
   /**
    * Injected by the documentation to work in an iframe.
    * You won't need it on your project.
@@ -290,4 +287,4 @@ ResponsiveDrawer.propTypes = {
   window: PropTypes.func,
 };
 DashboardItem.contextType = CartContext;
-export default ResponsiveDrawer;
+export default PageDashboard;

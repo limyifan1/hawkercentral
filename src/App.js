@@ -20,6 +20,7 @@ import { db } from "./Components/Firestore";
 import { createMuiTheme } from "@material-ui/core/styles";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { SnackbarProvider } from "notistack";
+import update from "react-addons-update";
 
 const theme = createMuiTheme({
   palette: {
@@ -146,7 +147,16 @@ class App extends React.Component {
     };
 
     this.changeField = (event) => {
-      console.log(event);
+      const target = event.target.id;
+      const targetField = target.substring(0, target.indexOf("-"));
+      const targetId = target.substring(target.indexOf("-") + 1);
+      const value = event.target.value;
+      console.log([targetId], [targetField], [value]);
+      this.setState({
+        pageData: update(this.state.pageData, {
+          menu_combined: { [targetId]: { [targetField]: { $set: value } } },
+        }),
+      });
     };
 
     this.addProduct = (productIndex) => {
@@ -267,14 +277,18 @@ class App extends React.Component {
       .then((snapshot) => {
         if (snapshot.exists) {
           // After querying db for data, initialize orderData if menu info is available
-          this.setState(snapshot.data());
-          return snapshot.data().docid;
+          if (snapshot.data().redirect) {
+            window.location.href = "/info?id=" + snapshot.data().docid;
+          } else {
+            this.setState(snapshot.data());
+            return snapshot.data().docid;
+          }
         }
         //   onLoad("info_load", snapshot.data().name);
-        return true;
+        return false;
       })
       .catch((error) => {
-        window.location.reload(true);
+        // window.location.reload(true);
         console.log(error);
       });
     if (docid) {
@@ -287,6 +301,7 @@ class App extends React.Component {
             // After querying db for data, initialize orderData if menu info is available
             this.setState({
               pageData: snapshot.data(),
+              retrieved: true,
             });
           }
           console.log("Fetched successfully!");
@@ -308,6 +323,7 @@ class App extends React.Component {
           <LanguageContext.Provider value={this.state}>
             <div className="App">
               {this.state.pageName &&
+<<<<<<< HEAD
                 this.state.pageName !== "www" &&
                 this.state.pageName !== "foodleh" &&
                 this.state.hostName !== "sh" &&
@@ -371,6 +387,93 @@ class App extends React.Component {
                     />
                   </div>
                 )}
+=======
+              this.state.pageName !== "www" &&
+              this.state.pageName !== "foodleh" &&
+              this.state.hostName !== "sh" &&
+              this.state.hostName !== "now" &&
+              this.state.hostName !== "now.sh" ? (
+                <CartContext.Provider value={this.state}>
+                  {this.state.retrieved ? (
+                    <div>
+                      <PersonalHelmet name={this.state.pageData.name} />
+                      <SnackbarProvider
+                        maxSnack={2}
+                        anchorOrigin={{
+                          vertical: "top",
+                          horizontal: "center",
+                        }}
+                      >
+                        <Route
+                          exact
+                          path="/"
+                          render={() => (
+                            <Components.Page pageName={this.state.pageName} />
+                          )}
+                        />
+                      </SnackbarProvider>
+                      <Route
+                        exact
+                        path="/about"
+                        render={() => (
+                          <Components.PageAbout
+                            pageName={this.state.pageName}
+                          />
+                        )}
+                      />
+                      <Route
+                        exact
+                        path="/dashboard"
+                        render={() => (
+                          <Components.PageDashboard
+                            pageName={this.state.pageName}
+                            data={this.state.pageData}
+                            css={this.state.css}
+                            changeField={this.changeField}
+                          />
+                        )}
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="row justify-content-center">
+                        <Skeleton width="100%">
+                          <div class="jumbotron" style={{ height: "300px" }} />
+                        </Skeleton>
+                        {skeletons}
+                      </div>
+                    </div>
+                  )}
+                </CartContext.Provider>
+              ) : (
+                <div>
+                  <Components.Menu />
+                  <SeoHelmet />
+                  <Route exact path="/" component={Components.Home} />
+                  <Route exact path="/create" component={Components.Create} />
+                  <Route exact path="/info" component={Components.Info} />
+                  <Route
+                    exact
+                    path="/searchall"
+                    component={Components.SearchAll}
+                  />
+                  <Route exact path="/about" component={Components.About} />
+                  <Route exact path="/driver" component={Components.Driver} />
+                  <Route
+                    exact
+                    path="/delivery"
+                    component={Components.Delivery}
+                  />
+                  <Route exact path="/orders" component={Components.Orders} />
+                  <Route
+                    exact
+                    path="/deliveries"
+                    component={Components.Deliveries}
+                  />
+                  <Route exact path="/custom" component={Components.Custom} />
+                </div>
+              )}
+>>>>>>> feat(pagedashboard): implemented memoization for dashboard
               <script src="/__/firebase/7.14.1/firebase-app.js"></script>
               <script src="/__/firebase/7.14.1/firebase-analytics.js"></script>
               <script src="/__/firebase/init.js"></script>
