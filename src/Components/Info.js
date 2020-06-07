@@ -121,6 +121,7 @@ export class Info extends React.Component {
       id: this.props.id || queryString.parse(this.props.location.search).id,
       galleryOpened: false,
       retrieved: false,
+      hero: this.props.hero,
       activePhoto: 1,
       hasReviewEditMessage: false,
       hasReviewDeleteMessage: false,
