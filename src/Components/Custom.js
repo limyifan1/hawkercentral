@@ -37,7 +37,7 @@ export class Custom extends React.Component {
       creating: false,
       created: false,
       invalid: false,
-      firebaseUser: null
+      firebaseUser: null,
     };
   }
 
@@ -101,7 +101,7 @@ export class Custom extends React.Component {
         docid: this.state.id,
         logo: "",
         cover: this.state.cover,
-        user: this.state.firebaseUser.uid
+        user: this.state.firebaseUser.uid,
       })
       .then((d) => {
         this.setState({ creating: false, created: true });
@@ -200,10 +200,13 @@ export class Custom extends React.Component {
                 </p>
               </div>
             ) : (
-              <StyledFirebaseAuth
-                uiConfig={uiConfigPage}
-                firebaseAuth={firebase.auth()}
-              />
+              <div>
+                <StyledFirebaseAuth
+                  uiConfig={uiConfigPage}
+                  firebaseAuth={firebase.auth()}
+                />
+                <br />
+              </div>
             )}
           </React.Fragment>
         );
@@ -397,7 +400,9 @@ export class Custom extends React.Component {
                           color="primary"
                           onClick={this.increaseStep}
                           disabled={
-                            (this.state.step === 1 ? this.state.id : true)
+                            this.state.step === 0
+                              ? !this.state.firebaseUser
+                              : (this.state.step === 1 ? this.state.id : true)
                               ? this.state.step === 2
                                 ? !this.state.available
                                 : false
