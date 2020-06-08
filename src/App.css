@@ -80,9 +80,15 @@ button:focus {
 }
 
 .card-img-left {
+<<<<<<< HEAD
   /* object-fit: cover; */
   width: auto !important;
   height: 200px !important;
+=======
+  width: 100% !important;
+  object-fit: cover;
+  height: 180px !important;
+>>>>>>> feat(pagedashboard): added new dashboard features
 }
 
 .fill {

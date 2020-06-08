@@ -86,8 +86,8 @@ const InfoMenu = (props) => {
       <Navbar.Brand as={Link} to="/" style={{ color: "white" }}>
         <img
           alt=""
-          src={logo}
-          width="20"
+          src={props.logo ? props.logo : logo}
+          width="auto"
           height="30"
           className="d-inline-block align-top"
         />{" "}
@@ -99,7 +99,7 @@ const InfoMenu = (props) => {
             height="30"
             className="d-inline-block align-top"
           /> */}
-          {props.name}
+          {props.pageData.name}
         </div>
       </Navbar.Brand>
       <Navbar.Toggle />
@@ -607,7 +607,7 @@ export class Page extends React.Component {
               quantity={element["quantity"]}
               name={element["name"]}
               price={element["price"]}
-              pic={element["image"]}
+              pic={element["pic"]}
               summary={element["description"]}
               css={this.context.css}
               index={i}
@@ -778,16 +778,17 @@ export class Page extends React.Component {
             paddingLeft: "0px",
             paddingRight: "0px",
             margin: "0px 0px",
+            marginBottom: "50px",
           }}
         >
           <div>
-            {this.context.pageData.url ? (
+            {this.context.cover ? (
               <div
                 class="container-fluid row align-items-center no-gutters"
                 style={{
                   background:
                     "linear-gradient(rgba(0,0,0,0.5), rgba(255,255,255,0.3)), url(" +
-                    this.context.pageData.url +
+                    this.context.cover +
                     ") no-repeat center center",
                   backgroundSize: "cover",
                   minHeight: "300px",
