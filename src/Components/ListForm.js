@@ -154,6 +154,7 @@ const handleData = async ({
       .add({
         ...field,
         claps: 0,
+        custom: false
       })
       .then(function (docRef) {
         console.log(docRef.id);
