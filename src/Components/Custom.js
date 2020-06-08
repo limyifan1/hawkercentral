@@ -37,7 +37,7 @@ export class Custom extends React.Component {
       creating: false,
       created: false,
       invalid: false,
-      firebaseUser: null
+      firebaseUser: null,
     };
   }
 
@@ -52,9 +52,9 @@ export class Custom extends React.Component {
   getSteps = () => {
     return [
       "Step 1: Create Account",
-      "Step 2: Select Listing",
-      "Step 3: Choose Domain Name",
-      "Step 4: Create Domain/Website",
+      "Step 2: Select Your Listing",
+      "Step 3: Create Your Unique Link!",
+      "Step 4: Create Your Website",
     ];
   };
 
@@ -75,11 +75,12 @@ export class Custom extends React.Component {
       .then((snapshot) => {
         var data = [];
         snapshot.forEach((element) => {
-          data.push({
-            name: element.data().name,
-            id: element.id,
-            cover: element.data().url ? element.data().url : null,
-          });
+          if (!element.data().custom)
+            data.push({
+              name: element.data().name,
+              id: element.id,
+              cover: element.data().url ? element.data().url : null,
+            });
         });
         this.setState({ options: data });
         return data;
@@ -90,20 +91,22 @@ export class Custom extends React.Component {
     this.setState({ data: data, retrieved: true });
   };
 
-  createDomain = async (redirect) => {
+  createDomain = async () => {
     this.setState({ creating: true });
     await db
       .collection("pages")
       .doc(this.state.name)
       .set({
-        redirect: redirect,
         css: { menu_color: "", menu_font_color: "" },
         docid: this.state.id,
         logo: "",
         cover: this.state.cover,
-        user: this.state.firebaseUser.uid
+        user: this.state.firebaseUser.uid,
       })
-      .then((d) => {
+      .then(async (d) => {
+        await db.collection("hawkers").doc(this.state.id).update({
+          custom: true,
+        });
         this.setState({ creating: false, created: true });
       });
   };
@@ -200,10 +203,13 @@ export class Custom extends React.Component {
                 </p>
               </div>
             ) : (
-              <StyledFirebaseAuth
-                uiConfig={uiConfigPage}
-                firebaseAuth={firebase.auth()}
-              />
+              <div>
+                <StyledFirebaseAuth
+                  uiConfig={uiConfigPage}
+                  firebaseAuth={firebase.auth()}
+                />
+                <br />
+              </div>
             )}
           </React.Fragment>
         );
@@ -324,35 +330,39 @@ export class Custom extends React.Component {
             <br />
             <br />
             <Button
-              onClick={() => this.createDomain(true)}
+              onClick={() => this.createDomain()}
               variant="contained"
               color="secondary"
               disabled={this.state.created || this.state.creating}
               style={{ margin: "10px" }}
             >
-              Create Subdomain
-            </Button>
-            <Button
-              onClick={() => this.createDomain(false)}
-              variant="contained"
-              color="secondary"
-              disabled={this.state.created || this.state.creating}
-              style={{ margin: "10px" }}
-            >
-              Create Subdomain + Custom Website
+              Create Custom Website
             </Button>
             <br />
             <br />
             {this.state.created ? (
               <div>
                 <h4 style={{ color: "green" }}>Success! </h4>
-                Subdomain created at{" "}
-                <a
-                  href={"https://" + this.state.name + ".foodleh.app"}
-                  target="blank"
-                >
-                  {this.state.name}.foodleh.app
-                </a>
+                <h5>
+                  Website created at{" "}
+                  <a
+                    href={"https://" + this.state.name + ".foodleh.app"}
+                    target="blank"
+                  >
+                    https://{this.state.name}.foodleh.app
+                  </a>
+                </h5>
+                <h5>
+                  Edit website at:{" "}
+                  <a
+                    href={
+                      "https://" + this.state.name + ".foodleh.app/dashboard"
+                    }
+                    target="blank"
+                  >
+                    https://{this.state.name}.foodleh.app/dashboard
+                  </a>
+                </h5>
               </div>
             ) : null}
           </div>
@@ -367,7 +377,7 @@ export class Custom extends React.Component {
     return (
       <div class="container" style={{ paddingTop: "56px", width: "100%" }}>
         <div style={{ margin: "20px" }}>
-          <h3>Create A Custom Domain / Website</h3>
+          <h3>Build Your Own Custom Website</h3>
           <h5>e.g. huathuatrice.foodleh.app</h5>
         </div>
         <Stepper activeStep={this.state.step} orientation="vertical">
@@ -397,7 +407,9 @@ export class Custom extends React.Component {
                           color="primary"
                           onClick={this.increaseStep}
                           disabled={
-                            (this.state.step === 1 ? this.state.id : true)
+                            this.state.step === 0
+                              ? !this.state.firebaseUser
+                              : (this.state.step === 1 ? this.state.id : true)
                               ? this.state.step === 2
                                 ? !this.state.available
                                 : false
