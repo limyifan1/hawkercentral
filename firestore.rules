@@ -67,8 +67,9 @@ service cloud.firestore {
     'menu_combined',
     'tagsValue',
     'claps',
-    'takesg'
-     ]) && fields.size() == 41
+    'takesg',
+    'custom'
+     ]) && fields.size() == 42
     }
     
     // TODO: Need structure
