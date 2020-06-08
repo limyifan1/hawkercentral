@@ -75,11 +75,12 @@ export class Custom extends React.Component {
       .then((snapshot) => {
         var data = [];
         snapshot.forEach((element) => {
-          data.push({
-            name: element.data().name,
-            id: element.id,
-            cover: element.data().url ? element.data().url : null,
-          });
+          if (!element.data().custom)
+            data.push({
+              name: element.data().name,
+              id: element.id,
+              cover: element.data().url ? element.data().url : null,
+            });
         });
         this.setState({ options: data });
         return data;
@@ -102,7 +103,10 @@ export class Custom extends React.Component {
         cover: this.state.cover,
         user: this.state.firebaseUser.uid,
       })
-      .then((d) => {
+      .then(async (d) => {
+        await db.collection("hawkers").doc(this.state.id).update({
+          custom: true,
+        });
         this.setState({ creating: false, created: true });
       });
   };
@@ -332,20 +336,33 @@ export class Custom extends React.Component {
               disabled={this.state.created || this.state.creating}
               style={{ margin: "10px" }}
             >
-              Create Subdomain + Custom Website
+              Create Custom Website
             </Button>
             <br />
             <br />
             {this.state.created ? (
               <div>
                 <h4 style={{ color: "green" }}>Success! </h4>
-                Subdomain created at{" "}
-                <a
-                  href={"https://" + this.state.name + ".foodleh.app"}
-                  target="blank"
-                >
-                  {this.state.name}.foodleh.app
-                </a>
+                <h5>
+                  Website created at{" "}
+                  <a
+                    href={"https://" + this.state.name + ".foodleh.app"}
+                    target="blank"
+                  >
+                    https://{this.state.name}.foodleh.app
+                  </a>
+                </h5>
+                <h5>
+                  Edit website at:{" "}
+                  <a
+                    href={
+                      "https://" + this.state.name + ".foodleh.app/dashboard"
+                    }
+                    target="blank"
+                  >
+                    https://{this.state.name}.foodleh.app/dashboard
+                  </a>
+                </h5>
               </div>
             ) : null}
           </div>
