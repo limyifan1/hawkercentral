@@ -73,7 +73,7 @@ const InfoMenu = (props) => {
     props && props.css && props.css.menu_color
       ? props.css.menu_color
       : "#b48300";
-  const menu_font_color = props && props.css ? props.css.menu_font_color : null;
+  const menu_font_color = props && props.css ? props.css.menu_font_color : "#ffffff";
   return (
     <Navbar
       //   bg="light"
@@ -85,7 +85,7 @@ const InfoMenu = (props) => {
         backgroundColor: menu_color,
       }}
     >
-      <Navbar.Brand as={Link} to="/" style={{ color: "white" }}>
+      <Navbar.Brand as={Link} to="/" style={{ color: menu_font_color }}>
         <img
           alt=""
           src={props.logo ? props.logo : logo}
