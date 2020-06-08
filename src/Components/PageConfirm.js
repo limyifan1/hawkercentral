@@ -11,8 +11,15 @@ import "./style.scss";
 import { CartContext } from "./themeContext";
 import { OverlayTrigger, Popover, Form } from "react-bootstrap";
 import { BitlyClient } from "bitly";
+import firebase from "./Firestore";
+
 const REACT_APP_BITLY_KEY = `${process.env.REACT_APP_BITLY_KEY}`;
 const bitly = new BitlyClient(REACT_APP_BITLY_KEY, {});
+const analytics = firebase.analytics();
+
+function onLoad(name, item) {
+  analytics.logEvent(name, { name: item });
+}
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -266,7 +273,14 @@ class FullScreenDialog extends Component {
   render() {
     // var classes = useStyles();
     var menu_color =
-      this.context && this.context.css ? this.context.css.menu_color : null;
+      this.context && this.context.css
+        ? this.context.css.menu_color
+        : "#b48300";
+    const menu_font_color =
+      this.context && this.context.css
+        ? this.context.css.menu_font_color
+        : "#ffffff";
+
     return (
       <div>
         <div onClick={this.handleClickOpen} className="buy-btn">
@@ -461,9 +475,12 @@ class FullScreenDialog extends Component {
                       backgroundColor: menu_color,
                       borderColor: menu_color,
                       width: "300px",
+                      color: menu_font_color,
                     }}
                     disabled={this.state.loading}
-                    color={"secondary"}
+                    onClick={() =>
+                      onLoad("place_order_custom", this.state.name)
+                    }
                   >
                     Place order via WhatsApp
                   </Button>

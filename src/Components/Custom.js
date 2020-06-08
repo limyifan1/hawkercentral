@@ -13,8 +13,15 @@ import "../App.css";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { db } from "./Firestore";
+import { db, uiConfigPage } from "./Firestore";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import firebase from "./Firestore";
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+const analytics = firebase.analytics();
+
+function onLoad(name, item) {
+  analytics.logEvent(name, { name: item });
+}
 
 export class Custom extends React.Component {
   constructor(props) {
@@ -30,6 +37,7 @@ export class Custom extends React.Component {
       creating: false,
       created: false,
       invalid: false,
+      firebaseUser: null
     };
   }
 
@@ -42,7 +50,12 @@ export class Custom extends React.Component {
   };
 
   getSteps = () => {
-    return ["Step 1", "Step 2", "Step 3"];
+    return [
+      "Step 1: Create Account",
+      "Step 2: Select Listing",
+      "Step 3: Choose Domain Name",
+      "Step 4: Create Domain/Website",
+    ];
   };
 
   setOpen = () => {
@@ -88,6 +101,7 @@ export class Custom extends React.Component {
         docid: this.state.id,
         logo: "",
         cover: this.state.cover,
+        user: this.state.firebaseUser.uid
       })
       .then((d) => {
         this.setState({ creating: false, created: true });
@@ -124,9 +138,76 @@ export class Custom extends React.Component {
     this.setState({ name: event.target.value, available: null });
   };
 
+  componentDidMount() {
+    firebase.auth().useDeviceLanguage();
+    // window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+    //   "recaptcha-container",
+    //   {
+    //     size: "invisible",
+    //     callback: function (response) {
+    //       // reCAPTCHA solved
+    //     },
+    //   }
+    // );
+
+    firebase.auth().onAuthStateChanged(
+      function (user) {
+        if (user) {
+          // User is signed in, set state
+          // More auth information can be obtained here but for verification purposes, we just need to know user signed in
+          console.log(user);
+          this.setState({
+            firebaseUser: user,
+            displayName: user.displayName,
+            email: user.email ? user.email : null,
+            contact: user.phoneNumber ? user.phoneNumber.slice(3) : null,
+          });
+          onLoad("custom_domain", user.uid);
+        } else {
+          // No user is signed in.
+        }
+      }.bind(this)
+    );
+  }
+
   getStepContent = (step) => {
     switch (step) {
       case 0:
+        return (
+          <React.Fragment>
+            {this.state.firebaseUser ? (
+              <div style={{ color: "green" }}>
+                <p>
+                  <b>
+                    Verified: <br />
+                    {this.state.firebaseUser.phoneNumber}
+                    <br />
+                    {this.state.firebaseUser.displayName}
+                    <br />
+                    {this.state.firebaseUser.email}
+                    <br />
+                    <br />
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        firebase.auth().signOut();
+                        this.setState({ firebaseUser: null });
+                      }}
+                    >
+                      Sign-out
+                    </Button>
+                  </b>
+                </p>
+              </div>
+            ) : (
+              <StyledFirebaseAuth
+                uiConfig={uiConfigPage}
+                firebaseAuth={firebase.auth()}
+              />
+            )}
+          </React.Fragment>
+        );
+      case 1:
         return (
           <div>
             <Autocomplete
@@ -145,8 +226,12 @@ export class Custom extends React.Component {
               loading={this.state.open && this.state.options.length === 0}
               onChange={(event, newValue) => {
                 newValue
-                  ? this.setState({ id: newValue.id, fullname: newValue.name })
-                  : this.setState({ id: null, fullname: null });
+                  ? this.setState({
+                      id: newValue.id,
+                      fullname: newValue.name,
+                      cover: newValue.cover,
+                    })
+                  : this.setState({ id: null, fullname: null, cover: null });
               }}
               renderInput={(params) => (
                 <TextField
@@ -181,7 +266,7 @@ export class Custom extends React.Component {
             ) : null}
           </div>
         );
-      case 1:
+      case 2:
         return (
           <div>
             <TextField
@@ -232,7 +317,7 @@ export class Custom extends React.Component {
             ) : null}
           </div>
         );
-      case 2:
+      case 3:
         return (
           <div>
             You're ready to create your subdomain!
@@ -243,6 +328,7 @@ export class Custom extends React.Component {
               variant="contained"
               color="secondary"
               disabled={this.state.created || this.state.creating}
+              style={{ margin: "10px" }}
             >
               Create Subdomain
             </Button>
@@ -251,6 +337,7 @@ export class Custom extends React.Component {
               variant="contained"
               color="secondary"
               disabled={this.state.created || this.state.creating}
+              style={{ margin: "10px" }}
             >
               Create Subdomain + Custom Website
             </Button>
@@ -295,11 +382,11 @@ export class Custom extends React.Component {
                 </div>
                 <div>
                   <div>
-                    {this.state.step !== 2 ? (
+                    {this.state.step !== 3 ? (
                       <div>
                         <Button
                           disabled={
-                            this.state.step === 0 || this.state.step === 2
+                            this.state.step === 0 || this.state.step === 3
                           }
                           onClick={this.decreaseStep}
                         >
@@ -310,8 +397,8 @@ export class Custom extends React.Component {
                           color="primary"
                           onClick={this.increaseStep}
                           disabled={
-                            (this.state.step === 0 ? this.state.id : true)
-                              ? this.state.step === 1
+                            (this.state.step === 1 ? this.state.id : true)
+                              ? this.state.step === 2
                                 ? !this.state.available
                                 : false
                               : true
