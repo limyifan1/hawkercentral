@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -20,6 +20,16 @@ import Button from "@material-ui/core/Button";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import SaveIcon from "@material-ui/icons/Save";
+import { useSnackbar } from "notistack";
+import AddBoxIcon from "@material-ui/icons/AddBox";
+import Grid from "@material-ui/core/Grid";
+import DeleteIcon from "@material-ui/icons/Delete";
+import Container from "@material-ui/core/Container";
+import Card from "@material-ui/core/Card";
+import CardMedia from "@material-ui/core/CardMedia";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardContent from "@material-ui/core/CardContent";
 
 const drawerWidth = 240;
 
@@ -45,6 +55,10 @@ const useStyles = makeStyles((theme) => ({
       display: "none",
     },
   },
+  saveButton: {
+    marginLeft: "auto",
+    backgroundColor: "green",
+  },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
@@ -54,6 +68,10 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  cardMedia: {
+    height: 100,
+    objectFit: "scale-down",
+  },
 }));
 
 const thumbnail = (pic) => {
@@ -61,7 +79,6 @@ const thumbnail = (pic) => {
 };
 
 const DashboardItem = (props) => {
-  console.log(props);
   return (
     <div class="page-card">
       <div
@@ -72,7 +89,7 @@ const DashboardItem = (props) => {
         }}
       >
         <div
-          class="row no-gutters justify-content-center"
+          class="row no-gutters justify-content-center align-items-center"
           style={{
             paddingLeft: "0px !important",
             paddingRight: "0px !important",
@@ -81,14 +98,27 @@ const DashboardItem = (props) => {
           }}
         >
           {props.pic ? (
-            <div class="col-4 col-xs-3 col-sm-3 col-md-3 col-lg-4 fill">
-              <LazyLoadImage
-                src={props.pic ? thumbnail(props.pic) : null}
-                placeholderSrc={null}
-                class="card-img-left"
-                alt=""
-              />
-            </div>
+            <React.Fragment>
+              {props.pic === "loading" ? (
+                <div class="col-4 col-xs-3 col-sm-3 col-md-3 col-lg-4 fill">
+                  <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  class="col-4 col-xs-3 col-sm-3 col-md-3 col-lg-4 fill"
+                  style={{ height: "180px" }}
+                >
+                  <LazyLoadImage
+                    src={thumbnail(props.pic)}
+                    placeholderSrc={null}
+                    class="card-img-left"
+                    alt=""
+                  />
+                </div>
+              )}
+            </React.Fragment>
           ) : null}
           <div
             class="col-8 col-xs-9 col-sm-9 col-md-9 col-lg-8 card-text"
@@ -150,10 +180,33 @@ const DashboardItem = (props) => {
             </div>
             <Button
               variant="contained"
+              component="label"
               color="default"
               startIcon={<CloudUploadIcon />}
+              style={{ marginBottom: "5px", width: "170px" }}
             >
-              Upload Image
+              <input
+                type="file"
+                class="custom-file-input"
+                id={"image-" + props.index}
+                style={{ display: "none" }}
+                onChange={props.changeField}
+              />
+              {props.pic ? (
+                <span>Replace Image</span>
+              ) : (
+                <span>Upload Image</span>
+              )}
+            </Button>
+            <Button
+              variant="contained"
+              component="label"
+              startIcon={<DeleteIcon />}
+              style={{ backgroundColor: "red", color: "white", width: "170px" }}
+              id={"delete-" + props.index}
+              onClick={props.changeField}
+            >
+              Delete Item
             </Button>
           </div>
         </div>
@@ -166,21 +219,195 @@ const compareCheck = (prevProps, nextProps) => {
   return (
     prevProps.name === nextProps.name &&
     prevProps.description === nextProps.description &&
-    prevProps.price === nextProps.price
+    prevProps.price === nextProps.price &&
+    prevProps.pic === nextProps.pic
   );
 };
 
 const WrappedDashboardItem = React.memo(DashboardItem, compareCheck);
+
+const MenuSettings = (props) => {
+  const classes = useStyles();
+  const endRef = useRef(null);
+  const { enqueueSnackbar } = useSnackbar();
+  const changeField = React.useCallback(
+    (e) => {
+      props.changeField(e);
+      if (
+        e.currentTarget.id.substring(0, e.currentTarget.id.indexOf("-")) ===
+        "delete"
+      ) {
+        enqueueSnackbar("Deleted menu item!", {
+          variant: "warning",
+        });
+      }
+    },
+    [props]
+  );
+
+  const scrollToBottom = () => {
+    endRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const addMenuItem = async (props) => {
+    await props.addMenuItem();
+    enqueueSnackbar("Added new menu item!", {
+      variant: "success",
+    });
+    scrollToBottom();
+  };
+
+  return (
+    <div className="row justify-content-center align-items-center mt-4">
+      <Grid container direction="column">
+        <Grid sm={12}>
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            startIcon={<AddBoxIcon />}
+            onClick={() => addMenuItem(props)}
+          >
+            Add New Menu Item
+          </Button>
+        </Grid>
+        <Grid container sm={12}>
+          {props.data.menu_combined
+            ? props.data.menu_combined.map((element, i) => (
+                <WrappedDashboardItem
+                  name={element["name"]}
+                  price={element["price"]}
+                  pic={element["pic"]}
+                  description={element["description"]}
+                  key={i}
+                  index={i}
+                  changeField={changeField}
+                />
+              ))
+            : null}
+        </Grid>
+        <Grid container sm={12}>
+          <div ref={endRef} />
+        </Grid>
+      </Grid>
+    </div>
+  );
+};
+
+const InfoSettings = (props) => {
+  const classes = useStyles();
+  return (
+    <Container>
+      <Grid
+        container
+        direction="row"
+        alignContent={"center"}
+        justify={"start"}
+        spacing={2}
+      >
+        <Grid item xs={12} sm={6}>
+          <Card
+            style={{ width: "100%", height: "250px", alignContent: "center" }}
+          >
+            <CardHeader title={"Logo"} />
+            {props.logo ? (
+              <React.Fragment>
+                {props.logo === "loading" ? (
+                  <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                ) : (
+                  <CardMedia
+                    component="img"
+                    className={classes.cardMedia}
+                    image={props.logo}
+                    title={"logo"}
+                  />
+                )}
+              </React.Fragment>
+            ) : null}
+            <CardContent>
+              <Button
+                variant="contained"
+                component="label"
+                color="default"
+                startIcon={<CloudUploadIcon />}
+                style={{ marginBottom: "5px", width: "170px" }}
+              >
+                <input
+                  type="file"
+                  id={"logo"}
+                  style={{ display: "none" }}
+                  onChange={props.changeInfo}
+                />
+                {props.logo ? (
+                  <span>Replace Image</span>
+                ) : (
+                  <span>Upload Image</span>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="name"
+            label="Name"
+            multiline
+            style={{ width: "100%" }}
+            value={props.data.name}
+            onChange={props.changeInfo}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="description"
+            label="Brief Description"
+            multiline
+            rows={4}
+            style={{ width: "100%" }}
+            value={props.data.description}
+            onChange={props.changeInfo}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="description_detail"
+            label="Detailed Description"
+            multiline
+            rows={4}
+            style={{ width: "100%" }}
+            value={props.data.description_detail}
+            onChange={props.changeInfo}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="delivery_detail"
+            label="Delivery Detail"
+            multiline
+            rows={4}
+            style={{ width: "100%" }}
+            value={props.data.delivery_detail}
+            onChange={props.changeInfo}
+          />
+        </Grid>
+      </Grid>
+    </Container>
+  );
+};
 
 const PageDashboard = (props) => {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [tab, setTab] = React.useState("Menu");
   // const context = useContext(CartContext);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+  const { enqueueSnackbar } = useSnackbar();
 
   const drawer = (
     <div>
@@ -188,7 +415,7 @@ const PageDashboard = (props) => {
       <Divider />
       <List>
         {["Menu", "Info"].map((text, index) => (
-          <ListItem button key={text}>
+          <ListItem button key={text} onClick={() => setTab(text)}>
             <ListItemText primary={text} />
           </ListItem>
         ))}
@@ -199,12 +426,13 @@ const PageDashboard = (props) => {
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
-  const changeField = React.useCallback(
-    (e) => {
-      props.changeField(e);
-    },
-    [props]
-  );
+  const updateFields = async () => {
+    await props.saveToFirestore().then(() => {
+      enqueueSnackbar("Successfully saved changes!", {
+        variant: "success",
+      });
+    });
+  };
 
   return (
     <div className={classes.root}>
@@ -221,8 +449,36 @@ const PageDashboard = (props) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            Menu Settings
+            {tab === "Menu" ? (
+              <span>Menu Settings</span>
+            ) : (
+              <React.Fragment>
+                {tab === "Info" ? <span>Info Settings</span> : null}
+              </React.Fragment>
+            )}
           </Typography>
+          {props.updating ? (
+            <div
+              class="spinner-border"
+              role="status"
+              style={{
+                marginLeft: "auto",
+              }}
+            >
+              <span class="sr-only">Loading...</span>
+            </div>
+          ) : (
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              className={classes.saveButton}
+              startIcon={<SaveIcon />}
+              onClick={updateFields}
+            >
+              Save
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
@@ -258,22 +514,28 @@ const PageDashboard = (props) => {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <div className="row justify-content-center align-items-center mt-4">
-          {/* <Menu data={props.data} changeField={props.changeField} /> */}
-          {props.data.menu_combined
-            ? props.data.menu_combined.map((element, i) => (
-                <WrappedDashboardItem
-                  name={element["name"]}
-                  price={element["price"]}
-                  pic={element["image"]}
-                  description={element["description"]}
-                  key={i}
-                  index={i}
-                  changeField={changeField}
-                />
-              ))
-            : null}
-        </div>
+        {tab === "Menu" ? (
+          <MenuSettings
+            pageName={props.pageName}
+            data={props.data}
+            changeField={props.changeField}
+            saveToFirestore={props.saveToFirestore}
+            updating={props.updating}
+            updated={props.updated}
+            addMenuItem={props.addMenuItem}
+          />
+        ) : tab === "Info" ? (
+          <InfoSettings
+            pageName={props.pageName}
+            data={props.data}
+            changeInfo={props.changeInfo}
+            saveToFirestore={props.saveToFirestore}
+            updating={props.updating}
+            updated={props.updated}
+            addMenuItem={props.addMenuItem}
+            logo={props.logo}
+          />
+        ) : null}
       </main>
     </div>
   );

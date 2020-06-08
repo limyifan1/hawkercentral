@@ -65,6 +65,7 @@ export class Custom extends React.Component {
           data.push({
             name: element.data().name,
             id: element.id,
+            cover: element.data().url ? element.data().url : null,
           });
         });
         this.setState({ options: data });
@@ -82,11 +83,11 @@ export class Custom extends React.Component {
       .collection("pages")
       .doc(this.state.name)
       .set({
-        name: this.state.fullname,
         redirect: redirect,
         css: { menu_color: "", menu_font_color: "" },
         docid: this.state.id,
-        about: "",
+        logo: "",
+        cover: this.state.cover,
       })
       .then((d) => {
         this.setState({ creating: false, created: true });
@@ -238,7 +239,7 @@ export class Custom extends React.Component {
             <br />
             <br />
             <Button
-              onClick={()=>this.createDomain(true)}
+              onClick={() => this.createDomain(true)}
               variant="contained"
               color="secondary"
               disabled={this.state.created || this.state.creating}
@@ -246,7 +247,7 @@ export class Custom extends React.Component {
               Create Subdomain
             </Button>
             <Button
-              onClick={()=>this.createDomain(false)}
+              onClick={() => this.createDomain(false)}
               variant="contained"
               color="secondary"
               disabled={this.state.created || this.state.creating}

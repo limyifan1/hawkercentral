@@ -16,11 +16,13 @@ import zh from "./assets/translations/zh.json";
 import { LanguageContext, CartContext } from "./Components/themeContext";
 import { Helmet } from "react-helmet";
 import { ThemeProvider } from "@material-ui/styles";
-import { db } from "./Components/Firestore";
+import { db, storage } from "./Components/Firestore";
 import { createMuiTheme } from "@material-ui/core/styles";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { SnackbarProvider } from "notistack";
-import update from "react-addons-update";
+import update from "immutability-helper";
+import Jimp from "jimp";
+import Button from "@material-ui/core/Button";
 
 const theme = createMuiTheme({
   palette: {
@@ -50,6 +52,11 @@ const cookies = new Cookies();
 if (cookies.get("language") === null || cookies.get("language") === undefined) {
   cookies.set("language", "en", { path: "/" });
 }
+
+const notistackRef = React.createRef();
+const onClickDismiss = (key) => () => {
+  notistackRef.current.closeSnackbar(key);
+};
 
 // {/* This will only be useful if we convert to server-side rendering ie not CRA */}
 function SeoHelmet() {
@@ -147,14 +154,66 @@ class App extends React.Component {
     };
 
     this.changeField = (event) => {
-      const target = event.target.id;
+      event.preventDefault();
+      const target = event.currentTarget.id;
       const targetField = target.substring(0, target.indexOf("-"));
       const targetId = target.substring(target.indexOf("-") + 1);
       const value = event.target.value;
-      console.log([targetId], [targetField], [value]);
+      console.log(targetField, targetId);
+      if (targetField === "image") {
+        const image = event.target.files[0];
+        this.handleImageAsFile(targetId, image, targetField);
+      }
+      if (targetField === "delete") {
+        this.deleteMenuItem(targetId);
+      } else {
+        this.setState({
+          pageData: update(this.state.pageData, {
+            menu_combined: { [targetId]: { [targetField]: { $set: value } } },
+          }),
+        });
+      }
+    };
+
+    this.changeInfo = (event) => {
+      event.preventDefault();
+      const target = event.currentTarget.id;
+      const value = event.target.value;
+      if (target === "logo") {
+        const image = event.target.files[0];
+        console.log(image, target);
+        this.handleImageAsFile(null, image, target);
+      } else {
+        this.setState({
+          pageData: update(this.state.pageData, {
+            [target]: { $set: value },
+          }),
+        });
+      }
+    };
+
+    this.addMenuItem = () => {
+      return this.setState({
+        pageData: update(this.state.pageData, {
+          menu_combined: {
+            $push: [
+              {
+                name: "",
+                price: 0,
+                pic: "",
+              },
+            ],
+          },
+        }),
+      });
+    };
+
+    this.deleteMenuItem = (index) => {
       this.setState({
         pageData: update(this.state.pageData, {
-          menu_combined: { [targetId]: { [targetField]: { $set: value } } },
+          menu_combined: {
+            $splice: [[index, 1]],
+          },
         }),
       });
     };
@@ -256,7 +315,11 @@ class App extends React.Component {
         productQuantity: 0,
         totalPrice: 0,
       },
+      updating: false,
+      updated: false,
     };
+    this.handleFireBaseUpload = this.handleFireBaseUpload.bind(this);
+    this.handleImageAsFile = this.handleImageAsFile.bind(this);
   }
 
   componentWillMount() {
@@ -272,6 +335,111 @@ class App extends React.Component {
     )
       this.getDoc();
   }
+
+  handleImageAsFile = (targetId, image, targetField) => {
+    if (image !== undefined) {
+      var date = new Date();
+      var timestamp = date.getTime();
+      var newName = timestamp + "_" + image.name;
+      var reader = new FileReader();
+      reader.readAsArrayBuffer(image);
+      reader.onload = (event) => {
+        if (targetField === "logo") {
+          this.setState({
+            logo: "loading",
+          });
+        } else {
+          this.setState({
+            pageData: update(this.state.pageData, {
+              menu_combined: {
+                [targetId]: { pic: { $set: "loading" } },
+              },
+            }),
+          });
+        }
+        var blob = new Blob([event.target.result]); // create blob...
+        window.URL = window.URL || window.webkitURL;
+        var blobURL = window.URL.createObjectURL(blob); // and get it's URL
+        // helper Image object
+        var image = new Image();
+        image.src = blobURL;
+        //preview.appendChild(image); // preview commented out, I am using the canvas instead
+        this.handleFireBaseUpload(image, newName, targetId, targetField);
+      };
+    }
+  };
+
+  handleFireBaseUpload = (image, newName, targetId, targetField) => {
+    image.onload = () => {
+      // have to wait till it's loaded
+      Jimp.read(image.src).then((image) => {
+        image.quality(50);
+        image.resize(Jimp.AUTO, 750);
+        console.log(image);
+        image.getBase64(Jimp.AUTO, (err, res) => {
+          const uploadTask = storage
+            .ref(`/images/${newName}`)
+            .putString(res, "data_url");
+          uploadTask.on(
+            "state_changed",
+            (snapShot) => {
+              //takes a snap shot of the process as it is happening
+              console.log(snapShot);
+            },
+            (err) => {
+              //catches the errors
+              console.log(err);
+            },
+            () => {
+              // gets the functions from storage refences the image storage in firebase by the children
+              // gets the download url then sets the image from firebase as the value for the imgUrl key:
+              storage
+                .ref("images")
+                .child(newName)
+                .getDownloadURL()
+                .then((fireBaseUrl) => {
+                  if (targetField === "logo") {
+                    console.log(fireBaseUrl);
+                    this.setState({
+                      logo: fireBaseUrl,
+                    });
+                  } else {
+                    this.setState({
+                      pageData: update(this.state.pageData, {
+                        menu_combined: {
+                          [targetId]: { pic: { $set: fireBaseUrl } },
+                        },
+                      }),
+                    });
+                  }
+                });
+            }
+          );
+        });
+      });
+    };
+  };
+
+  saveToFirestore = async () => {
+    this.setState({ updating: true });
+    return db
+      .collection("hawkers")
+      .doc(this.state.docid)
+      .update(this.state.pageData)
+      .then(() => {
+        db.collection("pages")
+          .doc(this.state.pageName)
+          .update({
+            cover: this.state.cover,
+            css: this.state.css,
+            logo: this.state.logo,
+          })
+          .then(() => {
+            this.setState({ updating: false });
+            this.setState({ updated: true });
+          });
+      });
+  };
 
   getDoc = async () => {
     const domain = getPage();
@@ -319,6 +487,7 @@ class App extends React.Component {
           console.log(error);
         });
     }
+    console.log(this.state);
   };
 
   render() {
@@ -370,11 +539,15 @@ class App extends React.Component {
                     <div>
                       <PersonalHelmet name={this.state.pageData.name} />
                       <SnackbarProvider
+                        ref={notistackRef}
                         maxSnack={2}
                         anchorOrigin={{
                           vertical: "top",
                           horizontal: "center",
                         }}
+                        action={(key) => (
+                          <Button onClick={onClickDismiss(key)}>Dismiss</Button>
+                        )}
                       >
                         <Route
                           exact
@@ -383,28 +556,34 @@ class App extends React.Component {
                             <Components.Page pageName={this.state.pageName} />
                           )}
                         />
+                        <Route
+                          exact
+                          path="/about"
+                          render={() => (
+                            <Components.PageAbout
+                              pageName={this.state.pageName}
+                            />
+                          )}
+                        />
+                        <Route
+                          exact
+                          path="/dashboard"
+                          render={() => (
+                            <Components.PageDashboard
+                              pageName={this.state.pageName}
+                              data={this.state.pageData}
+                              css={this.state.css}
+                              changeField={this.changeField}
+                              saveToFirestore={this.saveToFirestore}
+                              updating={this.state.updating}
+                              updated={this.state.updated}
+                              addMenuItem={this.addMenuItem}
+                              logo={this.state.logo}
+                              changeInfo={this.changeInfo}
+                            />
+                          )}
+                        />
                       </SnackbarProvider>
-                      <Route
-                        exact
-                        path="/about"
-                        render={() => (
-                          <Components.PageAbout
-                            pageName={this.state.pageName}
-                          />
-                        )}
-                      />
-                      <Route
-                        exact
-                        path="/dashboard"
-                        render={() => (
-                          <Components.PageDashboard
-                            pageName={this.state.pageName}
-                            data={this.state.pageData}
-                            css={this.state.css}
-                            changeField={this.changeField}
-                          />
-                        )}
-                      />
                     </div>
                   ) : (
                     <div>

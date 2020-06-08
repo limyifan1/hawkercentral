@@ -81,7 +81,8 @@ button:focus {
 }
 
 .card-img-left {
-  width: auto !important;
+  width: 100% !important;
+  object-fit: cover;
   height: 180px !important;
 }
 
