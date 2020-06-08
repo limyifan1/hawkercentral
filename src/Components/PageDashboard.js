@@ -25,12 +25,20 @@ import { useSnackbar } from "notistack";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import Grid from "@material-ui/core/Grid";
 import DeleteIcon from "@material-ui/icons/Delete";
-import Container from "@material-ui/core/Container";
+import Box from "@material-ui/core/Box";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import ColorPicker from "material-ui-color-picker";
+import firebase, { uiConfigPage } from "./Firestore";
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+const analytics = firebase.analytics();
+const admin = `${process.env.REACT_APP_ADMIN}`;
+
+function onLoad(name, item) {
+  analytics.logEvent(name, { name: item });
+}
 
 const drawerWidth = 240;
 
@@ -299,7 +307,7 @@ const MenuSettings = (props) => {
 const InfoSettings = (props) => {
   const classes = useStyles();
   return (
-    <Container>
+    <React.Fragment>
       <Grid
         container
         direction="row"
@@ -404,6 +412,9 @@ const InfoSettings = (props) => {
           <ColorPicker
             id="menu_color"
             label="Theme Color"
+            TextFieldProps={{
+              value: props.css.menu_color,
+            }}
             value={props.css.menu_color}
             defaultValue={props.css.menu_color}
             onChange={(color) => props.changeColor(color, "menu_color")}
@@ -413,6 +424,9 @@ const InfoSettings = (props) => {
           <ColorPicker
             id="menu_font_color"
             label="Font Color"
+            TextFieldProps={{
+              value: props.css.menu_font_color,
+            }}
             value={props.css.menu_font_color}
             defaultValue={props.css.menu_font_color}
             onChange={(color) => props.changeColor(color, "menu_font_color")}
@@ -462,11 +476,11 @@ const InfoSettings = (props) => {
           />
         </Grid>
       </Grid>
-    </Container>
+    </React.Fragment>
   );
 };
 
-const PageDashboard = (props) => {
+const PageDashboardContainer = (props) => {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
@@ -521,7 +535,11 @@ const PageDashboard = (props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap style={{color: props.css.menu_font_color}}>
+          <Typography
+            variant="h6"
+            noWrap
+            style={{ color: props.css.menu_font_color }}
+          >
             {tab === "Menu" ? (
               <span>Menu Settings</span>
             ) : (
@@ -588,35 +606,158 @@ const PageDashboard = (props) => {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        {tab === "Menu" ? (
-          <MenuSettings
-            pageName={props.pageName}
-            data={props.data}
-            changeField={props.changeField}
-            saveToFirestore={props.saveToFirestore}
-            updating={props.updating}
-            updated={props.updated}
-            addMenuItem={props.addMenuItem}
-          />
-        ) : tab === "Info" ? (
-          <InfoSettings
-            pageName={props.pageName}
-            data={props.data}
-            changeInfo={props.changeInfo}
-            saveToFirestore={props.saveToFirestore}
-            updating={props.updating}
-            updated={props.updated}
-            addMenuItem={props.addMenuItem}
-            changeColor={props.changeColor}
-            logo={props.logo}
-            cover={props.cover}
-            css={props.css}
-          />
-        ) : null}
+        <Grid container alignContent={"center"} justify={"center"}>
+          <Grid
+            item
+            direction={"column"}
+            alignContent={"center"}
+            justify={"center"}
+            sm={12}
+          >
+            <Typography variant={"h6"}>
+              Welcome {props.user.displayName}!
+            </Typography>
+            <Button
+              variant="contained"
+              onClick={() => {
+                props.userSignOut();
+              }}
+            >
+              Sign-out
+            </Button>
+          </Grid>
+          <Grid item sm={12}>
+            {tab === "Menu" ? (
+              <MenuSettings
+                pageName={props.pageName}
+                data={props.data}
+                changeField={props.changeField}
+                saveToFirestore={props.saveToFirestore}
+                updating={props.updating}
+                updated={props.updated}
+                addMenuItem={props.addMenuItem}
+              />
+            ) : tab === "Info" ? (
+              <InfoSettings
+                pageName={props.pageName}
+                data={props.data}
+                changeInfo={props.changeInfo}
+                saveToFirestore={props.saveToFirestore}
+                updating={props.updating}
+                updated={props.updated}
+                addMenuItem={props.addMenuItem}
+                changeColor={props.changeColor}
+                logo={props.logo}
+                cover={props.cover}
+                css={props.css}
+              />
+            ) : null}
+          </Grid>
+        </Grid>
       </main>
     </div>
   );
 };
+
+class PageDashboard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      firebaseUser: null,
+    };
+  }
+
+  userSignOut = () => {
+    firebase.auth().signOut();
+    this.setState({ firebaseUser: null });
+  };
+
+  componentWillMount() {
+    firebase.auth().useDeviceLanguage();
+    // window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+    //   "recaptcha-container",
+    //   {
+    //     size: "invisible",
+    //     callback: function (response) {
+    //       // reCAPTCHA solved
+    //     },
+    //   }
+    // );
+
+    firebase.auth().onAuthStateChanged(
+      function (user) {
+        if (user) {
+          // User is signed in, set state
+          // More auth information can be obtained here but for verification purposes, we just need to know user signed in
+          this.setState({
+            firebaseUser: user,
+            displayName: user.displayName,
+            email: user.email ? user.email : null,
+            contact: user.phoneNumber ? user.phoneNumber.slice(3) : null,
+          });
+          onLoad("custom_domain", user.uid);
+        } else {
+          // No user is signed in.
+        }
+      }.bind(this)
+    );
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        {this.state.firebaseUser ? (
+          <React.Fragment>
+            {this.state.firebaseUser.uid === this.props.user ||
+            this.state.firebaseUser.uid === admin ? (
+              <PageDashboardContainer
+                pageName={this.props.pageName}
+                data={this.props.data}
+                css={this.props.css}
+                changeField={this.props.changeField}
+                saveToFirestore={this.props.saveToFirestore}
+                updating={this.props.updating}
+                updated={this.props.updated}
+                addMenuItem={this.props.addMenuItem}
+                logo={this.props.logo}
+                cover={this.props.cover}
+                changeInfo={this.props.changeInfo}
+                changeColor={this.props.changeColor}
+                user={this.state.firebaseUser}
+                userSignOut={this.userSignOut}
+              />
+            ) : (
+              <React.Fragment>
+                <p>You are not authorized to view this page</p>
+                <StyledFirebaseAuth
+                  uiConfig={uiConfigPage}
+                  firebaseAuth={firebase.auth()}
+                />
+              </React.Fragment>
+            )}
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <Box
+              display="flex"
+              alignItems={"center"}
+              justifyContent={"center"}
+              height={"100vh"}
+            >
+              <Grid>
+                <Typography>Log In to View Dashboard</Typography>
+                <StyledFirebaseAuth
+                  uiConfig={uiConfigPage}
+                  firebaseAuth={firebase.auth()}
+                />
+              </Grid>
+            </Box>
+          </React.Fragment>
+        )}
+      </React.Fragment>
+    );
+  }
+}
 
 PageDashboard.propTypes = {
   /**

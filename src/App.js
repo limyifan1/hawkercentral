@@ -570,6 +570,7 @@ class App extends React.Component {
                               cover={this.state.cover}
                               changeInfo={this.changeInfo}
                               changeColor={this.changeColor}
+                              user={this.state.user}
                             />
                           )}
                         />
