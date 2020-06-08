@@ -43,6 +43,25 @@ const uiConfig = {
   }
 };
 
+const uiConfigPage = {
+  // Popup signin flow rather than redirect flow.
+  signInFlow: 'popup',
+  // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
+  // We will display Google and Facebook as auth providers.
+  signInOptions: [
+    {
+      provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+      defaultCountry: 'SG'
+    },
+    firebase.auth.EmailAuthProvider.PROVIDER_ID
+  ],
+  callbacks: {
+    signInSuccessWithAuthResult(authResult, redirectUrl) {
+      // Do not automatically redirect.
+      return false;
+    },
+  }
+};
 
 if (typeof window !== 'undefined') {
   firebase.analytics();
@@ -57,6 +76,6 @@ const geoToPromise = geofirex.get;
 module.exports = {
   __esModule: true,
   geo, geoToPromise,
-  db, storage, firebase, uiConfig,
+  db, storage, firebase, uiConfig, uiConfigPage, 
   default: firebase,
 };

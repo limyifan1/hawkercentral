@@ -129,7 +129,7 @@ class Clap extends React.Component {
   }
   getAppContent(count, countTotal, isClicked, handleClick) {
     return (
-      <div class="row">
+      <div className="row">
         <span
           id="clap"
           className="clap d-flex align-items-center"
@@ -157,7 +157,7 @@ class Clap extends React.Component {
         </span>
         <span
           style={{ fontSize: "10px" }}
-          class="d-flex align-items-center justify-content-center"
+          className="d-flex align-items-center justify-content-center"
         >
           {this.props.toggle === "about" ? (
             <span>{cookies.get("language") === "en" ? 

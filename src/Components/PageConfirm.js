@@ -11,8 +11,15 @@ import "./style.scss";
 import { CartContext } from "./themeContext";
 import { OverlayTrigger, Popover, Form } from "react-bootstrap";
 import { BitlyClient } from "bitly";
+import firebase from "./Firestore";
+
 const REACT_APP_BITLY_KEY = `${process.env.REACT_APP_BITLY_KEY}`;
 const bitly = new BitlyClient(REACT_APP_BITLY_KEY, {});
+const analytics = firebase.analytics();
+
+function onLoad(name, item) {
+  analytics.logEvent(name, { name: item });
+}
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -193,29 +200,24 @@ class FullScreenDialog extends Component {
     for (let i = 0; i < this.context.cartProducts.length; i = i + 1) {
       if (
         this.context.cartProducts !== undefined &&
-        this.context.cartProducts.length !== 0
+        this.context.cartProducts.length !== 0 &&
+        this.context.cartProducts[i].quantity !== 0
       ) {
-        // customer ordered this item
-        const numItems = parseInt(this.context.cartTotal.productQuantity);
-        const thisPrice = parseFloat(
-          this.context.pageData.menu_combined[
-            this.context.cartProducts[i].index
-          ].price
-            ? this.context.pageData.menu_combined[
-                this.context.cartProducts[i].index
-              ].price
-            : 0
-        );
         text =
           text +
           "*" +
-          numItems +
+          this.context.cartProducts[i].quantity +
           "x* _" +
           this.context.pageData.menu_combined[
             this.context.cartProducts[i].index
           ].name +
           "_: $" +
-          (numItems * thisPrice).toFixed(2) +
+          (
+            this.context.cartProducts[i].quantity *
+            this.context.pageData.menu_combined[
+              this.context.cartProducts[i].index
+            ].price
+          ).toFixed(2) +
           "\n";
       }
     }
@@ -271,7 +273,14 @@ class FullScreenDialog extends Component {
   render() {
     // var classes = useStyles();
     var menu_color =
-      this.context && this.context.css ? this.context.css.menu_color : null;
+      this.context && this.context.css
+        ? this.context.css.menu_color
+        : "#b48300";
+    const menu_font_color =
+      this.context && this.context.css
+        ? this.context.css.menu_font_color
+        : "#ffffff";
+
     return (
       <div>
         <div onClick={this.handleClickOpen} className="buy-btn">
@@ -466,9 +475,12 @@ class FullScreenDialog extends Component {
                       backgroundColor: menu_color,
                       borderColor: menu_color,
                       width: "300px",
+                      color: menu_font_color,
                     }}
                     disabled={this.state.loading}
-                    color={"secondary"}
+                    onClick={() =>
+                      onLoad("place_order_custom", this.state.name)
+                    }
                   >
                     Place order via WhatsApp
                   </Button>

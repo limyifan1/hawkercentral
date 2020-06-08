@@ -37,7 +37,6 @@ class PageCartProduct extends Component {
   };
 
   render() {
-    const { removeProduct } = this.props;
     const { product, img} = this.state;
 
     const classes = ["shelf-item"];
@@ -48,12 +47,6 @@ class PageCartProduct extends Component {
 
     return (
       <div className={classes.join(" ")}>
-        <div
-          className="shelf-item__del"
-          onMouseOver={() => this.handleMouseOver()}
-          onMouseOut={() => this.handleMouseOut()}
-          onClick={() => removeProduct(product)}
-        />
         <Thumb
           classes="shelf-item__thumb"
           src={img}
@@ -65,11 +58,9 @@ class PageCartProduct extends Component {
           <p className="desc">Quantity: {product.quantity}</p>
         </div>
         <div className="shelf-item__price">
-          {/* <p>{`${product.price}`}</p> */}
           <div>
             <button
               onClick={() => this.handleOnDecrease(product.index)}
-              // disabled={product.quantity === 1 ? true : false}
               className="change-product-button"
             >
               -
