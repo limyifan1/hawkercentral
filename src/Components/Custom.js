@@ -52,9 +52,9 @@ export class Custom extends React.Component {
   getSteps = () => {
     return [
       "Step 1: Create Account",
-      "Step 2: Select Listing",
-      "Step 3: Choose Domain Name",
-      "Step 4: Create Domain/Website",
+      "Step 2: Select Your Listing",
+      "Step 3: Create Your Unique Link!",
+      "Step 4: Create Your Website",
     ];
   };
 
@@ -90,13 +90,12 @@ export class Custom extends React.Component {
     this.setState({ data: data, retrieved: true });
   };
 
-  createDomain = async (redirect) => {
+  createDomain = async () => {
     this.setState({ creating: true });
     await db
       .collection("pages")
       .doc(this.state.name)
       .set({
-        redirect: redirect,
         css: { menu_color: "", menu_font_color: "" },
         docid: this.state.id,
         logo: "",
@@ -327,16 +326,7 @@ export class Custom extends React.Component {
             <br />
             <br />
             <Button
-              onClick={() => this.createDomain(true)}
-              variant="contained"
-              color="secondary"
-              disabled={this.state.created || this.state.creating}
-              style={{ margin: "10px" }}
-            >
-              Create Subdomain
-            </Button>
-            <Button
-              onClick={() => this.createDomain(false)}
+              onClick={() => this.createDomain()}
               variant="contained"
               color="secondary"
               disabled={this.state.created || this.state.creating}
@@ -370,7 +360,7 @@ export class Custom extends React.Component {
     return (
       <div class="container" style={{ paddingTop: "56px", width: "100%" }}>
         <div style={{ margin: "20px" }}>
-          <h3>Create A Custom Domain / Website</h3>
+          <h3>Build Your Own Custom Website</h3>
           <h5>e.g. huathuatrice.foodleh.app</h5>
         </div>
         <Stepper activeStep={this.state.step} orientation="vertical">
