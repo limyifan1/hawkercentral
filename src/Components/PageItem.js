@@ -25,8 +25,16 @@ export class PageItem extends React.Component {
   };
 
   render() {
+<<<<<<< HEAD
     var menu_color = this.props ? this.props.css.menu_color : null;
 
+=======
+    var menu_color =
+      this.props && this.props.css && this.props.css.menu_color
+        ? this.props.css.menu_color
+        : "#b48300";
+        const menu_font_color = this.props && this.props.css ? this.props.css.menu_font_color : "#ffffff";
+>>>>>>> feat(pagedashboard): added color picker, save disable, icon helmet
     return (
       <div class="page-card">
         <div
@@ -95,6 +103,11 @@ export class PageItem extends React.Component {
                   style={{
                     backgroundColor: menu_color,
                     borderColor: menu_color,
+<<<<<<< HEAD
+=======
+                    color: menu_font_color,
+                    fontSize: "12px",
+>>>>>>> feat(pagedashboard): added color picker, save disable, icon helmet
                   }}
                   onClick={this.handleClick}
                 >

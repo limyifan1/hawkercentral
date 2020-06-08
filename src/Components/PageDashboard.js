@@ -30,12 +30,14 @@ import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
+import ColorPicker from "material-ui-color-picker";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    backgroundColor: "rgba(0, 0, 0, 0.04)",
   },
   drawer: {
     [theme.breakpoints.up("sm")]: {
@@ -242,7 +244,7 @@ const MenuSettings = (props) => {
         });
       }
     },
-    [props]
+    [enqueueSnackbar, props]
   );
 
   const scrollToBottom = () => {
@@ -305,6 +307,55 @@ const InfoSettings = (props) => {
         justify={"start"}
         spacing={2}
       >
+        <Grid item xs={12} sm={12}>
+          {props.cover === "loading" ? (
+            <div
+              class="container-fluid row align-items-center justify-content-center no-gutters"
+              style={{
+                height: "200px",
+              }}
+            >
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+          ) : (
+            <div
+              class="container-fluid row align-items-center justify-content-start no-gutters"
+              style={{
+                background:
+                  "linear-gradient(rgba(0,0,0,0.5), rgba(255,255,255,0.3)), url(" +
+                  props.cover +
+                  ") no-repeat center center",
+                backgroundSize: "cover",
+                minHeight: "200px",
+                width: "100%",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              <Button
+                variant="contained"
+                component="label"
+                color="default"
+                startIcon={<CloudUploadIcon />}
+                style={{ marginBottom: "5px", width: "200px" }}
+              >
+                <input
+                  type="file"
+                  id={"cover"}
+                  style={{ display: "none" }}
+                  onChange={props.changeInfo}
+                />
+                {props.cover ? (
+                  <span>Replace Cover Image</span>
+                ) : (
+                  <span>Upload Cover Image</span>
+                )}
+              </Button>
+            </div>
+          )}
+        </Grid>
         <Grid item xs={12} sm={6}>
           <Card
             style={{ width: "100%", height: "250px", alignContent: "center" }}
@@ -341,13 +392,31 @@ const InfoSettings = (props) => {
                   onChange={props.changeInfo}
                 />
                 {props.logo ? (
-                  <span>Replace Image</span>
+                  <span>Replace Logo</span>
                 ) : (
-                  <span>Upload Image</span>
+                  <span>Upload Logo</span>
                 )}
               </Button>
             </CardContent>
           </Card>
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          <ColorPicker
+            id="menu_color"
+            label="Theme Color"
+            value={props.css.menu_color}
+            defaultValue={props.css.menu_color}
+            onChange={(color) => props.changeColor(color, "menu_color")}
+          />
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          <ColorPicker
+            id="menu_font_color"
+            label="Font Color"
+            value={props.css.menu_font_color}
+            defaultValue={props.css.menu_font_color}
+            onChange={(color) => props.changeColor(color, "menu_font_color")}
+          />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -437,7 +506,11 @@ const PageDashboard = (props) => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
+      <AppBar
+        position="fixed"
+        className={classes.appBar}
+        style={{ backgroundColor: props.css.menu_color }}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
@@ -448,7 +521,7 @@ const PageDashboard = (props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h6" noWrap style={{color: props.css.menu_font_color}}>
             {tab === "Menu" ? (
               <span>Menu Settings</span>
             ) : (
@@ -475,8 +548,9 @@ const PageDashboard = (props) => {
               className={classes.saveButton}
               startIcon={<SaveIcon />}
               onClick={updateFields}
+              disabled={props.updated}
             >
-              Save
+              {props.updated ? "Saved" : "Save"}
             </Button>
           )}
         </Toolbar>
@@ -533,7 +607,10 @@ const PageDashboard = (props) => {
             updating={props.updating}
             updated={props.updated}
             addMenuItem={props.addMenuItem}
+            changeColor={props.changeColor}
             logo={props.logo}
+            cover={props.cover}
+            css={props.css}
           />
         ) : null}
       </main>

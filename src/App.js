@@ -71,6 +71,7 @@ function SeoHelmet() {
       <meta charSet="utf-8" />
       <title>FoodLeh?</title>
       <link rel="canonical" href={url} />
+      <link rel="icon" type="image/png" href={image_url} sizes="16x16" />
       <meta name="description" content={description} />
       <meta name="og:description" content={description} />
       <meta name="og:url" content={url} />
@@ -92,13 +93,15 @@ function PersonalHelmet(props) {
     "Save our local F&B! FoodLeh? is a nonprofit crowdsourced hawker directory relying on Singaporeans to share information about our local F&B places.";
   const url = "https://www.foodleh.app/";
   const keywords = "hawker food delivery and dabao Singapore circuit breaker";
-  const image_url =
-    "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/foodleh.png?alt=media&token=3fce2813-7eba-4e5a-8cbe-47119c1512f9";
+  const image_url = props.logo
+    ? props.logo
+    : "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/foodleh.png?alt=media&token=3fce2813-7eba-4e5a-8cbe-47119c1512f9";
   return (
     <Helmet>
       <meta charSet="utf-8" />
       <title>{props.name}</title>
       <link rel="canonical" href={url} />
+      <link rel="icon" type="image/png" href={image_url} sizes="16x16" />
       <meta name="description" content={description} />
       <meta name="og:description" content={description} />
       <meta name="og:url" content={url} />
@@ -159,7 +162,9 @@ class App extends React.Component {
       const targetField = target.substring(0, target.indexOf("-"));
       const targetId = target.substring(target.indexOf("-") + 1);
       const value = event.target.value;
-      console.log(targetField, targetId);
+      this.setState({
+        updated: false,
+      });
       if (targetField === "image") {
         const image = event.target.files[0];
         this.handleImageAsFile(targetId, image, targetField);
@@ -175,11 +180,23 @@ class App extends React.Component {
       }
     };
 
+    this.changeColor = (color, id) => {
+      this.setState({
+        updated: false,
+        css: update(this.state.css, {
+          [id]: { $set: color },
+        }),
+      });
+    };
+
     this.changeInfo = (event) => {
       event.preventDefault();
       const target = event.currentTarget.id;
       const value = event.target.value;
-      if (target === "logo") {
+      this.setState({
+        updated: false,
+      });
+      if (target === "logo" || target === "cover") {
         const image = event.target.files[0];
         console.log(image, target);
         this.handleImageAsFile(null, image, target);
@@ -193,6 +210,9 @@ class App extends React.Component {
     };
 
     this.addMenuItem = () => {
+      this.setState({
+        updated: false,
+      });
       return this.setState({
         pageData: update(this.state.pageData, {
           menu_combined: {
@@ -209,6 +229,9 @@ class App extends React.Component {
     };
 
     this.deleteMenuItem = (index) => {
+      this.setState({
+        updated: false,
+      });
       this.setState({
         pageData: update(this.state.pageData, {
           menu_combined: {
@@ -308,7 +331,7 @@ class App extends React.Component {
         totalPrice: 0,
       },
       updating: false,
-      updated: false,
+      updated: true,
     };
     this.handleFireBaseUpload = this.handleFireBaseUpload.bind(this);
     this.handleImageAsFile = this.handleImageAsFile.bind(this);
@@ -336,9 +359,9 @@ class App extends React.Component {
       var reader = new FileReader();
       reader.readAsArrayBuffer(image);
       reader.onload = (event) => {
-        if (targetField === "logo") {
+        if (targetField === "logo" || targetField === "cover") {
           this.setState({
-            logo: "loading",
+            [targetField]: "loading",
           });
         } else {
           this.setState({
@@ -390,10 +413,9 @@ class App extends React.Component {
                 .child(newName)
                 .getDownloadURL()
                 .then((fireBaseUrl) => {
-                  if (targetField === "logo") {
-                    console.log(fireBaseUrl);
+                  if (targetField === "logo" || targetField === "cover") {
                     this.setState({
-                      logo: fireBaseUrl,
+                      [targetField]: fireBaseUrl,
                     });
                   } else {
                     this.setState({
@@ -500,7 +522,10 @@ class App extends React.Component {
                 <CartContext.Provider value={this.state}>
                   {this.state.retrieved ? (
                     <div>
-                      <PersonalHelmet name={this.state.pageData.name} />
+                      <PersonalHelmet
+                        name={this.state.pageData.name}
+                        logo={this.state.logo}
+                      />
                       <SnackbarProvider
                         ref={notistackRef}
                         maxSnack={2}
@@ -542,7 +567,9 @@ class App extends React.Component {
                               updated={this.state.updated}
                               addMenuItem={this.addMenuItem}
                               logo={this.state.logo}
+                              cover={this.state.cover}
                               changeInfo={this.changeInfo}
+                              changeColor={this.changeColor}
                             />
                           )}
                         />
