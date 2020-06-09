@@ -154,7 +154,7 @@ const handleData = async ({
       .add({
         ...field,
         claps: 0,
-        custom: false
+        custom: false,
       })
       .then(function (docRef) {
         console.log(docRef.id);
@@ -1858,6 +1858,13 @@ export class ListForm extends React.Component {
                                 <br />
                               </span>
                             ) : null}
+                            <div>
+                              By listing via this platform, you agree to our{" "}
+                              <a href="https://foodleh.app/privacy">
+                                Privacy Policy
+                              </a>
+                            </div>
+                            <br />
                             <Button
                               class="shadow-sm"
                               style={{
