@@ -114,8 +114,6 @@ class PageCart extends Component {
   };
 
   render() {
-    // let context = this.context;
-    // console.log(context);
     const { cartTotal, cartProducts, pageData } = this.context;
 
     const menu_color =
@@ -129,7 +127,7 @@ class PageCart extends Component {
           <CartProduct product={p} img={pageData.menu_combined[p.index].pic} />
         );
       }
-      return null;
+      return <div></div>;
     });
 
     let classes = ["float-cart"];

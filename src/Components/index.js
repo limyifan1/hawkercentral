@@ -26,6 +26,7 @@ import PageItem from "./PageItem";
 import PageCart from "./PageCart";
 import PageDashboard from "./PageDashboard";
 import Custom from "./Custom";
+import PrivacyPolicy from "./PrivacyPolicy";
 
 import { db, storage } from "./Firestore";
 
@@ -53,6 +54,7 @@ export default {
   PageCart,
   Custom,
   PageDashboard,
+  PrivacyPolicy,
   db,
   storage,
 };

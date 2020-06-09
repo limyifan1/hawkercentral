@@ -18,6 +18,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import firebase from "./Firestore";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 const analytics = firebase.analytics();
+const admin = `${process.env.REACT_APP_ADMIN}`;
 
 function onLoad(name, item) {
   analytics.logEvent(name, { name: item });
@@ -102,8 +103,25 @@ export class Custom extends React.Component {
         logo: "",
         cover: this.state.cover,
         user: this.state.firebaseUser.uid,
+        orders: [],
       })
       .then(async (d) => {
+        await db
+          .collection("pages")
+          .doc(this.state.name)
+          .collection("users")
+          .doc(this.state.firebaseUser.uid)
+          .set({
+            role: "admin",
+          });
+        await db
+          .collection("pages")
+          .doc(this.state.name)
+          .collection("users")
+          .doc(admin)
+          .set({
+            role: "admin",
+          });
         await db.collection("hawkers").doc(this.state.id).update({
           custom: true,
         });
