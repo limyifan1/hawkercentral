@@ -102,8 +102,6 @@ export class Custom extends React.Component {
         docid: this.state.id,
         logo: "",
         cover: this.state.cover,
-        user: this.state.firebaseUser.uid,
-        orders: [],
       })
       .then(async (d) => {
         await db
