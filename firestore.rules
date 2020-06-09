@@ -123,6 +123,11 @@ service cloud.firestore {
       allow read, write, update, delete: if get(/databases/{database}/documents/pages/{document}/users/$(request.auth.uid)).role == "admin";
     }
     
+    match /pages/{document}/users/{userId}{
+      allow read, create, update: if true;
+      allow delete: if false;
+    }
+    
     match /groupbuy/{document=**} {
       allow read: if true;
       allow delete: if false;
