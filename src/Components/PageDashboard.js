@@ -34,7 +34,6 @@ import firebase, { uiConfigPage } from "./Firestore";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { db } from "./Firestore";
 const analytics = firebase.analytics();
-const admin = `${process.env.REACT_APP_ADMIN}`;
 
 function onLoad(name, item) {
   analytics.logEvent(name, { name: item });
