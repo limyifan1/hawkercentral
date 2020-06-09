@@ -12,7 +12,12 @@ import { CartContext } from "./themeContext";
 import { OverlayTrigger, Popover, Form } from "react-bootstrap";
 import { BitlyClient } from "bitly";
 import firebase from "./Firestore";
+import DatePicker from "react-date-picker";
+import TimePicker from "react-time-picker";
+import { db } from "./Firestore";
 
+const time_now = new Date();
+time_now.setMinutes(time_now.getMinutes());
 const REACT_APP_BITLY_KEY = `${process.env.REACT_APP_BITLY_KEY}`;
 const bitly = new BitlyClient(REACT_APP_BITLY_KEY, {});
 const analytics = firebase.analytics();
@@ -30,6 +35,42 @@ const shorten = (url) => {
     return d.link;
   });
 };
+
+const dayName = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+function formatAMPM(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  var strTime = hours + ":" + minutes + " " + ampm;
+  return strTime;
+}
 
 const popover = (
   <Popover>
@@ -64,6 +105,9 @@ class FullScreenDialog extends Component {
       hasReviewEditMessage: false,
       hasReviewDeleteMessage: false,
       shouldRememberDetails: false,
+      time: time_now.getHours() + ":" + time_now.getMinutes(),
+      date: time_now,
+      datetime: time_now,
     };
     this.setOrderText = this.setOrderText.bind(this);
     this.handleCustomerDetails = this.handleCustomerDetails.bind(this);
@@ -192,11 +236,41 @@ class FullScreenDialog extends Component {
     });
   };
 
+  handleTime = async (time) => {
+    this.setState({
+      time: time,
+      datetime: new Date(
+        this.state.date.getMonth() +
+          1 +
+          "/" +
+          this.state.date.getDate() +
+          "/" +
+          this.state.date.getFullYear() +
+          " " +
+          time
+      ),
+    });
+  };
+
+  handleDate = async (date) => {
+    this.setState({
+      date: date,
+      datetime: new Date(
+        date.getMonth() +
+          1 +
+          "/" +
+          date.getDate() +
+          "/" +
+          date.getFullYear() +
+          " " +
+          this.state.time
+      ),
+    });
+  };
+
   setOrderText = async () => {
     let text = "";
     text = text + "New order from " + this.state.name + "\n";
-    console.log(this.context.pageData);
-
     for (let i = 0; i < this.context.cartProducts.length; i = i + 1) {
       if (
         this.context.cartProducts !== undefined &&
@@ -235,7 +309,17 @@ class FullScreenDialog extends Component {
       " " +
       this.state.postal +
       "*";
-    text = text + "\nDelivery Date/Time: *" + this.state.deliveryTime + "*";
+
+    let time_text =
+      dayName[this.state.datetime.getDay()] +
+      " " +
+      this.state.datetime.getDate() +
+      " " +
+      monthNames[this.state.datetime.getMonth()] +
+      " " +
+      formatAMPM(this.state.datetime);
+    text = text + "\nDelivery Date/Time: *" + time_text + "*";
+
     if (this.state.notes !== "") {
       // only display notes if customer added
       text = text + "\nAdditional notes: _" + this.state.notes + "_";
@@ -264,15 +348,65 @@ class FullScreenDialog extends Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     console.log("submit");
+    this.setState({
+      loading: true,
+    });
+    await this.addOrder();
     var text = await this.setOrderText();
     var url =
       "https://wa.me/65" + this.context.pageData.contact + "?text=" + text;
     window.location = url;
   };
 
+  addOrder = () => {
+    var orderItems = [];
+    for (let i = 0; i < this.context.cartProducts.length; i = i + 1) {
+      if (
+        this.context.cartProducts !== undefined &&
+        this.context.cartProducts.length !== 0 &&
+        this.context.cartProducts[i].quantity !== 0
+      ) {
+        orderItems.push({
+          name: this.context.pageData.menu_combined[
+            this.context.cartProducts[i].index
+          ].name,
+          quantity: this.context.cartProducts[i].quantity,
+          price: (
+            this.context.cartProducts[i].quantity *
+            this.context.pageData.menu_combined[
+              this.context.cartProducts[i].index
+            ].price
+          ).toFixed(2),
+        });
+      }
+    }
+    return db
+      .collection("pages")
+      .doc(this.context.pageName)
+      .collection("orders")
+      .add({
+        orderItems: orderItems,
+        address:
+          this.state.street + " #" + this.state.unit + " " + this.state.postal,
+        contact: this.state.customerNumber,
+        deliveryTime:
+          dayName[this.state.datetime.getDay()] +
+          " " +
+          this.state.datetime.getDate() +
+          " " +
+          monthNames[this.state.datetime.getMonth()] +
+          " " +
+          formatAMPM(this.state.datetime),
+        notes: this.state.notes,
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   render() {
     // var classes = useStyles();
-    var menu_color =
+    const menu_color =
       this.context && this.context.css
         ? this.context.css.menu_color
         : "#b48300";
@@ -324,7 +458,7 @@ class FullScreenDialog extends Component {
                     class="form-control"
                     name="name"
                     style={{ borderColor: "#b48300" }}
-                    placeholder="We don't store your info!"
+                    placeholder="E.g. Xiao Ming"
                   ></input>
                 </div>
 
@@ -368,8 +502,49 @@ class FullScreenDialog extends Component {
                     class="form-control"
                     name="deliveryTime"
                     style={{ borderColor: "#b48300" }}
-                    placeholder="Eg Thursday 7 May 12.30pm"
+                    placeholder="E.g. Thursday 7 May 12.30pm"
                   ></input>
+                </div>
+
+                <div class="row">
+                  <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group create-title">
+                      <label for="time">Delivery Date</label>
+                      <DatePicker
+                        class="form-control is-invalid"
+                        dayPlaceholder="dd"
+                        monthPlaceholder="mm"
+                        yearPlaceholder="yyyy"
+                        onChange={this.handleDate}
+                        value={this.state.date}
+                        format="dd/MMM/yyyy"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                    <div class="form-group create-title">
+                      <label for="time">Delivery Time</label>
+                      <TimePicker
+                        class="form-control is-invalid"
+                        dayPlaceholder="dd"
+                        monthPlaceholder="mm"
+                        yearPlaceholder="yyyy"
+                        hourPlaceholder="hh"
+                        minutePlaceholder="mm"
+                        onChange={this.handleTime}
+                        value={this.state.time}
+                        format="hh:mma"
+                        disableClock
+                        required
+                      />
+                      {time_now > this.state.datetime ? (
+                        <span class="badge badge-danger">
+                          Time cannot be earlier than now
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
                 </div>
 
                 <div>
@@ -484,6 +659,9 @@ class FullScreenDialog extends Component {
                   >
                     Place order via WhatsApp
                   </Button>
+                </div>
+                <div>
+                  By placing order via this platform, you agree to our <a href="https://foodleh.app/privacy">Privacy Policy</a>
                 </div>
                 <br />
               </div>

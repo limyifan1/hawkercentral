@@ -27,6 +27,11 @@ import PageAbout from "./PageAbout";
 import PageItem from "./PageItem";
 import PageCart from "./PageCart";
 import PageDashboard from "./PageDashboard";
+<<<<<<< HEAD
+=======
+import Custom from "./Custom";
+import PrivacyPolicy from "./PrivacyPolicy";
+>>>>>>> feat(page): added privacy policy disclaimer, storing of order info, database rules
 
 import { db, storage } from "./Firestore";
 
@@ -55,6 +60,7 @@ export default {
   PageItem,
   PageCart,
   PageDashboard,
+  PrivacyPolicy,
   db,
   storage,
 };

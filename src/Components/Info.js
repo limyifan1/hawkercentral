@@ -14,7 +14,7 @@ import {
   Popover,
   OverlayTrigger,
 } from "react-bootstrap";
-import { db } from "./Firestore";
+import firebase, { db } from "./Firestore";
 import ImageGallery from "react-image-gallery";
 import Component from "./index";
 import Clap from "./Clap";
@@ -30,7 +30,6 @@ import orderleh_title from "../assets/orderleh_title.png";
 import delivery_title from "../assets/info_delivery.png";
 import gradient from "../assets/gradient.png";
 import revieworder from "../assets/info_review_order.png";
-import firebase from "./Firestore";
 import DatePicker from "react-date-picker";
 import TimePicker from "react-time-picker";
 import {

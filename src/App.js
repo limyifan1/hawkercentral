@@ -281,9 +281,20 @@ class App extends React.Component {
       if (findElement) {
         const newElement = findElement.element;
         newElement.quantity -= 1;
-        this.state.cartProducts[findElement.index] = newElement;
+        // this.state.cartProducts[findElement.index] = newElement;
+        this.setState({
+          cartProducts: update(this.state.cartProducts, {
+            [findElement.index]: { $set: newElement },
+          }),
+        });
         if (newElement.quantity === 0) {
-          this.state.cartProducts.splice(findElement.index, 1);
+          this.setState({
+            cartProducts: update(this.state.cartProducts, {
+              $set: this.state.cartProducts.filter(
+                (value) => value.index !== newElement.index
+              ),
+            }),
+          });
         }
       }
       var newPageData = this.state.pageData;
@@ -613,6 +624,7 @@ class App extends React.Component {
                     component={Components.Deliveries}
                   />
                   <Route exact path="/custom" component={Components.Custom} />
+                  <Route exact path="/privacy" component={Components.PrivacyPolicy} />
                 </div>
               )}
               <script src="/__/firebase/7.14.1/firebase-app.js"></script>

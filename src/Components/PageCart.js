@@ -114,8 +114,6 @@ class PageCart extends Component {
   };
 
   render() {
-    // let context = this.context;
-    // console.log(context);
     const { cartTotal, cartProducts, pageData } = this.context;
 
     const products = cartProducts.map((p) => {
@@ -127,7 +125,7 @@ class PageCart extends Component {
           />
         );
       }
-      return null;
+      return <div></div>;
     });
 
     let classes = ["float-cart"];
