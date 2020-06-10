@@ -96,6 +96,8 @@ const addData = async ({
   tagsValue,
   categories,
   regions,
+  takesg,
+  custom
 }) => {
   let now = new Date();
   var field = {
@@ -138,6 +140,8 @@ const addData = async ({
     location: location,
     menu_combined: menu_combined,
     tagsValue: tagsValue,
+    takesg: takesg,
+    custom: custom
   };
   if (toggle === "create") {
     let id = await db
