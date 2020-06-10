@@ -14,8 +14,6 @@ class PageCartProduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      product: this.props.product,
-      img: this.props.img,
       isMouseOver: false,
     };
   }
@@ -37,7 +35,7 @@ class PageCartProduct extends Component {
   };
 
   render() {
-    const { product, img} = this.state;
+    // const { product, img} = this.state;
 
     const classes = ["shelf-item"];
     const menu = this.context.pageData.menu_combined;
@@ -49,24 +47,23 @@ class PageCartProduct extends Component {
       <div className={classes.join(" ")}>
         <Thumb
           classes="shelf-item__thumb"
-          src={img}
-          alt={product.title}
+          src={this.props.img}
+          alt={this.props.product.title}
         />
-        {product.img}
         <div className="shelf-item__details">
-          <p className="title">{menu[product.index].name}</p>
-          <p className="desc">Quantity: {product.quantity}</p>
+          <p className="title">{menu[this.props.product.index].name}</p>
+          <p className="desc">Quantity: {this.props.product.quantity}</p>
         </div>
         <div className="shelf-item__price">
           <div>
             <button
-              onClick={() => this.handleOnDecrease(product.index)}
+              onClick={() => this.handleOnDecrease(this.props.product.index)}
               className="change-product-button"
             >
               -
             </button>
             <button
-              onClick={() => this.handleOnIncrease(product.index)}
+              onClick={() => this.handleOnIncrease(this.props.product.index)}
               className="change-product-button"
             >
               +

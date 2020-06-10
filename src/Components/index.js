@@ -26,8 +26,11 @@ import Page from "./Page";
 import PageAbout from "./PageAbout";
 import PageItem from "./PageItem";
 import PageCart from "./PageCart";
+import PageCartChannel from "./PageCartChannel";
 import PageDashboard from "./PageDashboard";
+import PageConfirm from "./PageConfirm";
 import Custom from "./Custom";
+import PrivacyPolicy from "./PrivacyPolicy";
 
 import { db, storage } from "./Firestore";
 
@@ -55,8 +58,11 @@ export default {
   PageAbout,
   PageItem,
   PageCart,
+  PageCartChannel,
+  PageConfirm,
   Custom,
   PageDashboard,
+  PrivacyPolicy,
   db,
   storage,
 };

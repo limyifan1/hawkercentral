@@ -20,14 +20,14 @@
     "node-fetch": "2.6.0",
     "request": "2.88.2",
     "telegraf": "3.38.0",
-    "twilio": "3.44.0"
+    "twilio": "3.45.0"
   },
   "devDependencies": {
-    "@firebase/testing": "0.19.6",
+    "@firebase/testing": "0.20.0",
     "eslint": "6.8.0",
     "eslint-plugin-promise": "4.2.1",
     "firebase-functions-test": "0.2.1",
-    "mocha": "7.2.0"
+    "mocha": "8.0.1"
   },
   "private": true
 }

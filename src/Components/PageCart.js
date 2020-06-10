@@ -1,20 +1,18 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
-// import { connect } from 'react-redux';
-// import {
-//   loadCart,
-//   removeProduct,
-//   changeProductQuantity,
-// } from '../../services/cart/actions';
-// import { updateCart } from '../../services/total/actions';
 import CartProduct from "./PageCartProduct";
-// import { formatPrice } from '../../services/util';
 import { CartContext } from "./themeContext";
-import PageConfirm from "./PageConfirm";
 import "./style.scss";
+import Dialog from "@material-ui/core/Dialog";
+import Slide from "@material-ui/core/Slide";
+import Component from "./index";
 
-class PageCart extends Component {
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+class PageCart extends React.Component {
   static propTypes = {
     loadCart: PropTypes.func.isRequired,
     updateCart: PropTypes.func.isRequired,
@@ -30,76 +28,15 @@ class PageCart extends Component {
     isOpen: false,
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.newProduct !== this.props.newProduct) {
-      this.addProduct(nextProps.newProduct);
-    }
-
-    if (nextProps.productToRemove !== this.props.productToRemove) {
-      this.removeProduct(nextProps.productToRemove);
-    }
-
-    if (nextProps.productToChange !== this.props.productToChange) {
-      this.changeProductQuantity(nextProps.productToChange);
-    }
-  }
-
   openFloatCart = () => {
+    if (!this.context.channel) {
+      this.context.toggleDialog();
+    }
     this.setState({ isOpen: true });
   };
 
   closeFloatCart = () => {
     this.setState({ isOpen: false });
-  };
-
-  addProduct = (product) => {
-    const { cartProducts, updateCart } = this.props;
-    let productAlreadyInCart = false;
-
-    cartProducts.forEach((cp) => {
-      if (cp.id === product.id) {
-        cp.quantity += product.quantity;
-        productAlreadyInCart = true;
-      }
-    });
-
-    if (!productAlreadyInCart) {
-      cartProducts.push(product);
-    }
-
-    updateCart(cartProducts);
-    this.openFloatCart();
-  };
-
-  removeProduct = (product) => {
-    const { cartProducts, updateCart } = this.props;
-
-    const index = cartProducts.findIndex((p) => p.id === product.id);
-    if (index >= 0) {
-      cartProducts.splice(index, 1);
-      updateCart(cartProducts);
-    }
-  };
-
-  proceedToCheckout = () => {
-    // const {
-    //   totalPrice,
-    //   productQuantity,
-    //   currencyFormat,
-    //   currencyId,
-    // } = this.props.cartTotal;
-    alert("Add some product in the cart!");
-
-    // if (!productQuantity) {
-    //   alert("Add some product in the cart!");
-    // } else {
-    //   //   alert(
-    //   //     `Checkout - Subtotal: ${currencyFormat} ${formatPrice(
-    //   //       totalPrice,
-    //   //       currencyId
-    //   //     )}`
-    //   //   );
-    // }
   };
 
   changeProductQuantity = (changedProduct) => {
@@ -113,9 +50,20 @@ class PageCart extends Component {
     updateCart(cartProducts);
   };
 
+  handleClickOpen = () => {
+    if(this.context.channel){
+      this.setState({ open: true });
+    }
+    else{
+      this.context.toggleDialog()
+    }
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
   render() {
-    // let context = this.context;
-    // console.log(context);
     const { cartTotal, cartProducts, pageData } = this.context;
 
     const menu_color =
@@ -129,7 +77,7 @@ class PageCart extends Component {
           <CartProduct product={p} img={pageData.menu_combined[p.index].pic} />
         );
       }
-      return null;
+      return <div></div>;
     });
 
     let classes = ["float-cart"];
@@ -196,7 +144,10 @@ class PageCart extends Component {
               }}
             >
               View Cart
-              <span className="bag__quantity" style={{right: "-80px", bottom: "15px"}}>
+              <span
+                className="bag__quantity"
+                style={{ right: "-80px", bottom: "15px" }}
+              >
                 {this.context.cartTotal.productQuantity}
               </span>
             </span>
@@ -229,6 +180,7 @@ class PageCart extends Component {
           </div>
 
           <div className="float-cart__shelf-container">
+            <Component.PageCartChannel />
             {products}
             {!products.length && (
               <p className="shelf-empty">
@@ -248,10 +200,26 @@ class PageCart extends Component {
             <div class="row">
               <div className="sub">DELIVERY FEES NOT INCLUDED</div>
             </div>
-            {/* <div onClick={() => this.proceedToCheckout()} className="buy-btn">
-              Checkout
-            </div> */}
-            <PageConfirm />
+            <div>
+              <div onClick={this.handleClickOpen} className="buy-btn">
+                {this.context.channel ? (
+                  <span>Order via WhatsApp</span>
+                ) : (
+                  <span>Choose Delivery/Pick-up</span>
+                )}
+              </div>
+            </div>
+            <Dialog
+              fullScreen
+              open={this.state.open}
+              onClose={this.handleClose}
+              TransitionComponent={Transition}
+            >
+              <Component.PageConfirm
+                handleClose={this.handleClose}
+                toggle="cart"
+              />
+            </Dialog>
           </div>
         </div>
       </span>

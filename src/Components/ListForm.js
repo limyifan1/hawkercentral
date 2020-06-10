@@ -16,6 +16,13 @@ import CreatableSelect from "react-select/creatable";
 import firebase from "./Firestore";
 import { withRouter } from "react-router-dom";
 import { LanguageContext } from "./themeContext";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import custom from "../assets/custom.png";
+
 // const API_KEY = `${process.env.REACT_APP_GKEY}`
 
 import _ from "lodash";
@@ -154,6 +161,7 @@ const handleData = async ({
       .add({
         ...field,
         claps: 0,
+        custom: false,
       })
       .then(function (docRef) {
         console.log(docRef.id);
@@ -245,6 +253,7 @@ export class ListForm extends React.Component {
       tags: [],
       isLoading: false,
       takesg: false,
+      dialogOpen: false,
     };
 
     this.initialState = {};
@@ -309,6 +318,7 @@ export class ListForm extends React.Component {
       menu_combined: this.props.data.menu_combined,
       wechatid: this.props.data.wechatid ? this.props.data.wechatid : "",
       takesg: this.props.data.takesg ? this.props.data.takesg : false,
+      newId: "",
     };
 
     return _.cloneDeep(initialState);
@@ -508,10 +518,11 @@ export class ListForm extends React.Component {
       takesg: this.state.takesg,
     }).then((id) => {
       if (this.props.toggle === "create") {
-        this.props.history.push({
-          pathname: "/info",
-          search: "?id=" + id,
-        });
+        // this.props.history.push({
+        //   pathname: "/info",
+        //   search: "?id=" + id,
+        // });
+        this.setState({ newId: id, dialogOpen: true });
       } else if (this.props.toggle === "edit") {
         this.setState({ isLoading: false });
 
@@ -973,10 +984,55 @@ export class ListForm extends React.Component {
     );
   };
 
+  handleClose = () => {
+    this.setState({ dialogOpen: false });
+  };
+
   render({ apiReady, maps, map } = this.state) {
     return (
       <div>
         <Form onSubmit={this.handleSubmit.bind(this)}>
+          <Dialog
+            open={this.state.dialogOpen}
+            onClose={this.handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Listing Successfully Created! "}
+            </DialogTitle>
+            <DialogContent>
+              <img src={custom} style={{ width: "100%" }} alt="header" />
+              <DialogContentText id="alert-dialog-description">
+                Do you want a free custom website? (e.g. yourname.foodleh.app){" "}
+                <b>
+                  Go to{" "}
+                  <a target="blank" href="/custom">
+                    www.foodleh.app/custom
+                  </a>{" "}
+                  to get one in 5 minutes!
+                </b>
+              </DialogContentText>
+
+              <DialogContentText id="alert-dialog-description">
+                <h5>
+                  <b>
+                    {" "}
+                    Your listing can be found here:{" "}
+                    <a href={"/info?id=" + this.state.newId} target="blank">
+                      www.foodleh.app/info?id={this.state.newId}
+                    </a>
+                  </b>
+                </h5>
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose} color="primary">
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+
           <div class="row">
             <div class="col">
               <div
@@ -1857,6 +1913,13 @@ export class ListForm extends React.Component {
                                 <br />
                               </span>
                             ) : null}
+                            <div>
+                              By listing via this platform, you agree to our{" "}
+                              <a href="https://foodleh.app/privacy">
+                                Privacy Policy
+                              </a>
+                            </div>
+                            <br />
                             <Button
                               class="shadow-sm"
                               style={{

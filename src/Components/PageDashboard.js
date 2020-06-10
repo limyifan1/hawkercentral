@@ -32,8 +32,8 @@ import CardContent from "@material-ui/core/CardContent";
 import ColorPicker from "material-ui-color-picker";
 import firebase, { uiConfigPage } from "./Firestore";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import { db } from "./Firestore";
 const analytics = firebase.analytics();
-const admin = `${process.env.REACT_APP_ADMIN}`;
 
 function onLoad(name, item) {
   analytics.logEvent(name, { name: item });
@@ -663,6 +663,7 @@ class PageDashboard extends React.Component {
     super(props);
     this.state = {
       firebaseUser: null,
+      users: [],
     };
   }
 
@@ -682,6 +683,17 @@ class PageDashboard extends React.Component {
     //     },
     //   }
     // );
+    var users = [];
+    db.collection("pages")
+      .doc(this.props.pageName)
+      .collection("users")
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((element) => {
+          users.push(element.id);
+        });
+        this.setState({ users: users });
+      });
 
     firebase.auth().onAuthStateChanged(
       function (user) {
@@ -707,8 +719,7 @@ class PageDashboard extends React.Component {
       <React.Fragment>
         {this.state.firebaseUser ? (
           <React.Fragment>
-            {this.state.firebaseUser.uid === this.props.user ||
-            this.state.firebaseUser.uid === admin ? (
+            {this.state.users.includes(this.state.firebaseUser.uid) ? (
               <PageDashboardContainer
                 pageName={this.props.pageName}
                 data={this.props.data}
