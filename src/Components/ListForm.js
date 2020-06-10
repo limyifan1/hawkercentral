@@ -620,6 +620,7 @@ export class ListForm extends React.Component {
         delivery: "",
         categories: [],
         takesg: true,
+        custom: false
       });
       await addData({
         url: images[0] !== undefined ? images[0] : "",
@@ -671,6 +672,7 @@ export class ListForm extends React.Component {
         delivery: "",
         categories: [],
         takesg: true,
+        custom: false
       });
     } else {
       console.log(
