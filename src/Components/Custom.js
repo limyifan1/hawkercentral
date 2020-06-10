@@ -247,48 +247,61 @@ export class Custom extends React.Component {
       case 1:
         return (
           <div>
-            <Autocomplete
-              id="asynchronous-demo"
-              style={{ width: "250px" }}
-              open={this.state.open}
-              onOpen={() => {
-                this.setOpen();
-              }}
-              onClose={() => {
-                this.setClose();
-              }}
-              getOptionSelected={(option, value) => option.name === value.name}
-              getOptionLabel={(option) => option.name}
-              options={this.state.options}
-              loading={this.state.open && this.state.options.length === 0}
-              onChange={(event, newValue) => {
-                newValue
-                  ? this.setState({
-                      id: newValue.id,
-                      fullname: newValue.name,
-                      cover: newValue.cover,
-                    })
-                  : this.setState({ id: null, fullname: null, cover: null });
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Choose Your Listing"
-                  variant="outlined"
-                  InputProps={{
-                    ...params.InputProps,
-                    endAdornment: (
-                      <React.Fragment>
-                        {this.state.open && this.state.options.length === 0 ? (
-                          <CircularProgress color="inherit" size={20} />
-                        ) : null}
-                        {params.InputProps.endAdornment}
-                      </React.Fragment>
-                    ),
-                  }}
-                />
-              )}
-            />
+            <div>
+              If you have not created a listing, please go to<span> </span>
+              <a href="/create" target="blank">
+                {" "}
+                www.foodleh.app/create{" "}
+              </a>{" "}
+              first!<br/>
+            </div>
+            <div class="d-flex row justify-content-center" style={{margin: "15px"}}>
+              <Autocomplete
+                id="asynchronous-demo"
+                style={{ width: "250px" }}
+                open={this.state.open}
+                onOpen={() => {
+                  this.setOpen();
+                }}
+                onClose={() => {
+                  this.setClose();
+                }}
+                getOptionSelected={(option, value) =>
+                  option.name === value.name
+                }
+                getOptionLabel={(option) => option.name}
+                options={this.state.options}
+                loading={this.state.open && this.state.options.length === 0}
+                onChange={(event, newValue) => {
+                  newValue
+                    ? this.setState({
+                        id: newValue.id,
+                        fullname: newValue.name,
+                        cover: newValue.cover,
+                      })
+                    : this.setState({ id: null, fullname: null, cover: null });
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Choose Your Listing"
+                    variant="outlined"
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <React.Fragment>
+                          {this.state.open &&
+                          this.state.options.length === 0 ? (
+                            <CircularProgress color="inherit" size={20} />
+                          ) : null}
+                          {params.InputProps.endAdornment}
+                        </React.Fragment>
+                      ),
+                    }}
+                  />
+                )}
+              />
+            </div>
             <br />
             {this.state.id ? (
               <div style={{ wordWrap: "break-word" }}>
