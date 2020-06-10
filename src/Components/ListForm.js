@@ -21,6 +21,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import custom from "../assets/custom.png";
 
 // const API_KEY = `${process.env.REACT_APP_GKEY}`
 
@@ -1001,12 +1002,7 @@ export class ListForm extends React.Component {
               {"Listing Successfully Created! "}
             </DialogTitle>
             <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Your listing can be found here:{" "}
-                <a href={"/info?id=" + this.state.newId} target="blank">
-                  www.foodleh.app/info?id={this.state.newId}
-                </a>
-              </DialogContentText>
+              <img src={custom} style={{ width: "100%" }} alt="header" />
               <DialogContentText id="alert-dialog-description">
                 Do you want a free custom website? (e.g. yourname.foodleh.app){" "}
                 <b>
@@ -1016,6 +1012,18 @@ export class ListForm extends React.Component {
                   </a>{" "}
                   to get one in 5 minutes!
                 </b>
+              </DialogContentText>
+
+              <DialogContentText id="alert-dialog-description">
+                <h5>
+                  <b>
+                    {" "}
+                    Your listing can be found here:{" "}
+                    <a href={"/info?id=" + this.state.newId} target="blank">
+                      www.foodleh.app/info?id={this.state.newId}
+                    </a>
+                  </b>
+                </h5>
               </DialogContentText>
             </DialogContent>
             <DialogActions>
