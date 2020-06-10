@@ -678,6 +678,12 @@ exports.takesgSync = functions
           if (inTakesg && d.data().takesg) {
             var index = take_keys.indexOf(data_contact);
             var data = take_data[index];
+            var delivery_detail = data.free_delivery
+              ? "Free delivery spend: $" + data.free_delivery + "\n"
+              : "";
+            delivery_detail = data.minimum_order
+              ? delivery_detail + "Minimum order: $" + data.minimum_order
+              : delivery_detail;
             await d.ref
               .update({
                 description_detail: data.description
@@ -689,6 +695,7 @@ exports.takesgSync = functions
                 menu_combined: data.menus ? data.menus : "",
                 tagsValue: data.tags ? data.tags : "",
                 menu: true,
+                delivery_detail: delivery_detail,
               })
               .then((d) => {
                 console.log("Updated: " + data.name);
