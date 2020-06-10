@@ -821,7 +821,6 @@ export class Info extends React.Component {
               >
                 <span className="card-body">
                   <div
-                    className="card-title"
                     style={{
                       fontSize: "13px",
                       margin: "10px",
