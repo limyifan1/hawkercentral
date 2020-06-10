@@ -17,7 +17,7 @@ import { db, uiConfigPage } from "./Firestore";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import firebase from "./Firestore";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import custom from "../assets/custom.png"
+import custom from "../assets/custom.png";
 const analytics = firebase.analytics();
 const admin = `${process.env.REACT_APP_ADMIN}`;
 
@@ -40,6 +40,7 @@ export class Custom extends React.Component {
       created: false,
       invalid: false,
       firebaseUser: null,
+      login: false,
     };
   }
 
@@ -221,10 +222,23 @@ export class Custom extends React.Component {
               </div>
             ) : (
               <div>
-                <StyledFirebaseAuth
-                  uiConfig={uiConfigPage}
-                  firebaseAuth={firebase.auth()}
-                />
+                {!this.state.login && (
+                  <div>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={() => this.setState({ login: true })}
+                    >
+                      Create Account/ Login
+                    </Button>
+                  </div>
+                )}
+                {this.state.login && (
+                  <StyledFirebaseAuth
+                    uiConfig={uiConfigPage}
+                    firebaseAuth={firebase.auth()}
+                  />
+                )}
                 <br />
               </div>
             )}
@@ -393,10 +407,10 @@ export class Custom extends React.Component {
     var steps = this.getSteps();
     return (
       <div class="container" style={{ paddingTop: "56px", width: "100%" }}>
-        <div class="flex" style={{ margin: "20px" }}>
-          {/* <img src={custom} style={{flexShrink: 0}}/> */}
-          <h3>Build Your Own Custom Website</h3>
-          <h5>e.g. huathuatrice.foodleh.app</h5>
+        <div class="d-flex justify-content-center">
+          <div class="col-md-8 col-xs-12">
+            <img src={custom} style={{ width: "100%" }} alt="header" />
+          </div>
         </div>
         <Stepper activeStep={this.state.step} orientation="vertical">
           {steps.map((label, index) => (
