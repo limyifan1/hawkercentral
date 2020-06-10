@@ -26,9 +26,14 @@ import Page from "./Page";
 import PageAbout from "./PageAbout";
 import PageItem from "./PageItem";
 import PageCart from "./PageCart";
+import PageCartChannel from "./PageCartChannel";
 import PageDashboard from "./PageDashboard";
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+import PageConfirm from "./PageConfirm";
+>>>>>>> feat(page): added new option for pickup and delivery
 import Custom from "./Custom";
 import PrivacyPolicy from "./PrivacyPolicy";
 >>>>>>> feat(page): added privacy policy disclaimer, storing of order info, database rules
@@ -59,6 +64,12 @@ export default {
   PageAbout,
   PageItem,
   PageCart,
+<<<<<<< HEAD
+=======
+  PageCartChannel,
+  PageConfirm,
+  Custom,
+>>>>>>> feat(page): added new option for pickup and delivery
   PageDashboard,
   PrivacyPolicy,
   db,

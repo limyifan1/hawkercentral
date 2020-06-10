@@ -23,6 +23,8 @@ import { SnackbarProvider } from "notistack";
 import update from "immutability-helper";
 import Jimp from "jimp";
 import Button from "@material-ui/core/Button";
+const time_now = new Date();
+time_now.setMinutes(time_now.getMinutes());
 
 const theme = createMuiTheme({
   palette: {
@@ -328,6 +330,9 @@ class App extends React.Component {
       addProduct: this.addProduct,
       removeProduct: this.removeProduct,
       changeField: this.changeField,
+      addCustomerDetails: this.addCustomerDetails,
+      changeChannel: this.changeChannel,
+      toggleDialog: this.toggleDialog,
       data: cookies.get("language") === "en" ? en : zh,
       scrollPosition: 0, // tracks scroll position of Search page
       setScrollPosition: this.setScrollPosition,
@@ -343,6 +348,21 @@ class App extends React.Component {
       },
       updating: false,
       updated: true,
+      channel: "",
+      channelDialog: false,
+      customerDetails: {
+        name: "",
+        address: "",
+        notes: "",
+        customerNumber: "",
+        deliveryTime: "",
+        unit: "",
+        street: "",
+        postal: "",
+        time: time_now.getHours() + ":" + time_now.getMinutes(),
+        date: time_now,
+        datetime: time_now,
+      },
     };
     this.handleFireBaseUpload = this.handleFireBaseUpload.bind(this);
     this.handleImageAsFile = this.handleImageAsFile.bind(this);
@@ -361,6 +381,26 @@ class App extends React.Component {
     )
       this.getDoc();
   }
+
+  addCustomerDetails = (field, value) => {
+    var newDetail = this.state.customerDetails;
+    newDetail[field] = value;
+    this.setState({
+      customerDetails: newDetail,
+    });
+  };
+
+  changeChannel = (channel) => {
+    this.setState({
+      channel: channel,
+    });
+  };
+
+  toggleDialog = () => {
+    this.setState({
+      channelDialog: !this.state.channelDialog,
+    });
+  };
 
   handleImageAsFile = (targetId, image, targetField) => {
     if (image !== undefined) {
@@ -624,7 +664,11 @@ class App extends React.Component {
                     component={Components.Deliveries}
                   />
                   <Route exact path="/custom" component={Components.Custom} />
-                  <Route exact path="/privacy" component={Components.PrivacyPolicy} />
+                  <Route
+                    exact
+                    path="/privacy"
+                    component={Components.PrivacyPolicy}
+                  />
                 </div>
               )}
               <script src="/__/firebase/7.14.1/firebase-app.js"></script>
