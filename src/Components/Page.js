@@ -54,6 +54,17 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
+import delivery from "../delivery_2.png";
+import self_collect from "../dabao_2.png";
+import i_want from "../i_want.jpeg";
 
 const REACT_APP_BITLY_KEY = `${process.env.REACT_APP_BITLY_KEY}`;
 const bitly = new BitlyClient(REACT_APP_BITLY_KEY, {});
@@ -70,10 +81,11 @@ const shorten = (url) => {
 
 const InfoMenu = (props) => {
   const menu_color =
-    props && props.css && props.css.menu_color
-      ? props.css.menu_color
+    props.data && props.data.css && props.data.css.menu_color
+      ? props.data.css.menu_color
       : "#b48300";
-  const menu_font_color = props && props.css ? props.css.menu_font_color : "#ffffff";
+  const menu_font_color =
+    props.data && props.data.css ? props.data.css.menu_font_color : "#ffffff";
   return (
     <Navbar
       //   bg="light"
@@ -88,78 +100,98 @@ const InfoMenu = (props) => {
       <Navbar.Brand as={Link} to="/" style={{ color: menu_font_color }}>
         <img
           alt=""
-          src={props.logo ? props.logo : logo}
+          src={props.data.logo ? props.data.logo : logo}
           width="auto"
           height="30"
           className="d-inline-block align-top"
         />{" "}
-        <div class="d-none d-md-inline-block">
-          {/* <img
-            alt=""
-            src={name}
-            width="140"
-            height="30"
-            className="d-inline-block align-top"
-          /> */}
-          {props.pageData.name}
-        </div>
+        <div class="d-none d-md-inline-block">{props.data.pageData.name}</div>
       </Navbar.Brand>
       <Navbar.Toggle />
-      {/* <Navbar.Collapse
-        id="basic-navbar-nav"
-        className="justify-content-end"
-        style={{ marginRight: "60px" }}
-      >
-        <LanguageContext.Consumer>
-          {({ data, language, toggleLanguage }) => (
-            <Button
-              class="shadow-sm"
-              style={{
-                backgroundColor: "#B48300",
-                borderColor: "#B48300",
-                fontSize: "10px",
-                width: "50px",
-              }}
-              onClick={toggleLanguage}
-              name="Language"
-            >
-              {data.menu.language_button}
-            </Button>
-          )}
-        </LanguageContext.Consumer>
-        <div class="d-none d-md-inline-block">
-          <Nav.Link
-            href="#"
-            as={Link}
-            to="/"
-            id="menu-link"
-            style={{ color: menu_font_color }}
-            // onClick={onClick("home")}
-          >
-            <LanguageContext.Consumer>
-              {({ data }) => data.menu.homelabel}
-            </LanguageContext.Consumer>
-          </Nav.Link>
-        </div>
-        {/* <Nav.Item>
-          <Nav.Link
-            href="#about"
-            as={Link}
-            to="/about"
-            id="menu-link"
-            style={{ color: menu_font_color }}
-            //   onClick={onClick("about")}
-          >
-            <LanguageContext.Consumer>
-              {({ data }) => data.menu.aboutlabel}
-            </LanguageContext.Consumer>
-          </Nav.Link>
-        </Nav.Item> 
-      </Navbar.Collapse> */}
       <Navbar.Brand style={{ color: menu_font_color }}>
-        <Component.PageCart />
+        <Component.PageCart toggleDialog={props.toggleDialog} />
       </Navbar.Brand>
     </Navbar>
+  );
+};
+
+const ResponsiveDialog = (props) => {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const context = React.useContext(CartContext);
+
+  return (
+    <div>
+      <Dialog
+        fullScreen={fullScreen}
+        open={context.channelDialog}
+        onClose={context.toggleDialog}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"Which dining method would you like?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <div class="row">
+              <div class="d-flex col-xs-12 col-sm-12 col-md-12 col-lg-12 justify-content-center align-items-center">
+                <img
+                  alt=""
+                  src={i_want}
+                  style={{
+                    flexShrink: "0",
+                    minWidth: "5vw",
+                    maxWidth: "15vw",
+                    marginBottom: "20px",
+                  }}
+                />
+              </div>
+              <div class="d-flex col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 justify-content-end align-items-center">
+                <img
+                  alt=""
+                  class={
+                    context.channel === "collect"
+                      ? "home-option-clicked"
+                      : "home-option"
+                  }
+                  onClick={() => context.changeChannel("collect")}
+                  src={self_collect}
+                  style={{ flexShrink: "0", minWidth: "100%" }}
+                />
+              </div>
+              <div class="d-flex col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 justify-content-start align-items-center">
+                <img
+                  alt=""
+                  onClick={() => context.changeChannel("delivery")}
+                  class={
+                    context.channel === "delivery"
+                      ? "home-option-clicked"
+                      : "home-option"
+                  }
+                  src={delivery}
+                  style={{ flexShrink: "0", minWidth: "100%" }}
+                />
+              </div>
+            </div>
+            {context.channel ? (
+              <Component.PageConfirm toggle="channel" />
+            ) : null}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={context.toggleDialog}
+            color="primary"
+            variant={"contained"}
+          >
+            Save
+          </Button>
+          <Button onClick={context.toggleDialog} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 };
 
@@ -221,6 +253,7 @@ export class Page extends React.Component {
       hasReviewEditMessage: false,
       hasReviewDeleteMessage: false,
       shouldRememberDetails: false,
+      channelDialog: false,
       css: { menu_color: "", menu_font_color: "" },
     };
     this.enterDetails = this.enterDetails.bind(this);
@@ -771,7 +804,10 @@ export class Page extends React.Component {
 
     return (
       <div>
-        {InfoMenu(this.context)}
+        <InfoMenu
+          data={this.context}
+          toggleDialog={this.context.toggleDialog}
+        />
         <div
           class="container-fluid"
           style={{
@@ -915,6 +951,10 @@ export class Page extends React.Component {
               className="row justify-content-center"
               style={{ margin: "0px 5%" }}
             >
+              <ResponsiveDialog
+                channelDialog={this.state.channelDialog}
+                closeChannelDialog={this.closeChannelDialog}
+              />
               <div className="row justify-content-center align-items-center mt-4">
                 <ExpansionPanel
                   // expanded={expanded === "panel1"}
