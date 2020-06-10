@@ -25,7 +25,7 @@
     "jimp": "0.12.1",
     "material-ui-color-picker": "3.5.0",
     "node-sass": "4.14.1",
-    "notistack": "0.9.16",
+    "notistack": "0.9.17",
     "rc-progress": "3.0.0",
     "react": "16.13.1",
     "react-addons-update": "15.6.2",
