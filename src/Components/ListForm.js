@@ -18,7 +18,7 @@ import { withRouter } from "react-router-dom";
 import { LanguageContext } from "./themeContext";
 // const API_KEY = `${process.env.REACT_APP_GKEY}`
 // const API_KEY = `${process.env.REACT_APP_GKEY}`;
-const ONEMAP_KEY = `${process.env.ONEMAP_KEY}`;
+const ONEMAP_KEY = `${process.env.REACT_APP_ONEMAP_KEY}`;
 const GKEY = `${process.env.REACT_APP_GKEY}`;
 
 const icon = (
@@ -468,7 +468,8 @@ export class ListForm extends React.Component {
       lat +
       "," +
       lng +
-      "&token="
+      "&token=" +
+      ONEMAP_KEY;
     return fetch(url)
       .then(function (response) {
         return response.json();
@@ -544,7 +545,10 @@ export class ListForm extends React.Component {
         element.location.lon
       );
     }
-    if ((!latitude || !longitude || !result || !result.POSTALCODE) && element.location) {
+    if (
+      (!latitude || !longitude || !result || !result.POSTALCODE) &&
+      element.location
+    ) {
       result = await this.callLatLng(
         element.location.lat,
         element.location.lon
@@ -615,6 +619,7 @@ export class ListForm extends React.Component {
         tagsValue: element.tags !== undefined ? element.tags : "",
         delivery: "",
         categories: [],
+        takesg: true,
       });
       await addData({
         url: images[0] !== undefined ? images[0] : "",
@@ -665,6 +670,7 @@ export class ListForm extends React.Component {
         tagsValue: element.tags !== undefined ? element.tags : "",
         delivery: "",
         categories: [],
+        takesg: true,
       });
     } else {
       console.log(
@@ -682,7 +688,7 @@ export class ListForm extends React.Component {
       .get()
       .then((snapshot) => {
         snapshot.forEach((d) => {
-          existing.push(d.data().name);
+          existing.push("65" + d.data().contact);
         });
       });
     await db
@@ -690,7 +696,7 @@ export class ListForm extends React.Component {
       .get()
       .then((snapshot) => {
         snapshot.forEach((d) => {
-          existing.push(d.data().name);
+          existing.push("65" + d.data().contact);
         });
       });
 
@@ -703,61 +709,64 @@ export class ListForm extends React.Component {
       .then(
         (jsonResponse) => {
           jsonResponse.forEach(async (element) => {
-            if (!existing.includes(element.name)) {
-              console.log(element.name);
+            if (
+              !existing.includes(element.phone) &&
+              element.country === "Singapore"
+            ) {
+              console.log(element.name, element.phone);
               let images = [];
-              // for (let index = 0; index < 6; index++) {
-              //   if (element.images[index]) {
-              //     let image_url =
-              //       "https://fathomless-falls-12833.herokuapp.com/" +
-              //       element.images[index];
-              //     let newName = element.name + index;
-              //     var jobs = [];
-              //     let job = Jimp.read(image_url)
-              //       .then(async (image) => {
-              //         image.quality(50);
-              //         image.resize(Jimp.AUTO, 750);
-              //         image.getBase64(Jimp.AUTO, async (_err, res) => {
-              //           const uploadTask = storage
-              //             .ref(`/images/${newName}`)
-              //             .putString(res, "data_url");
-              //           uploadTask.on(
-              //             "state_changed",
-              //             (snapShot) => {
-              //               //takes a snap shot of the process as it is happening
-              //               console.log(snapShot);
-              //             },
-              //             (err) => {
-              //               //catches the errors
-              //               console.log(err);
-              //             },
-              //             () => {
-              //               // gets the functions from storage refences the image storage in firebase by the children
-              //               // gets the download url then sets the image from firebase as the value for the imgUrl key:
-              //               storage
-              //                 .ref("images")
-              //                 .child(newName)
-              //                 .getDownloadURL()
-              //                 .then((fireBaseUrl) => {
-              //                   console.log(fireBaseUrl);
-              //                   images.push(fireBaseUrl);
-              //                 });
-              //             }
-              //           );
-              //         });
-              //       })
-              //       .catch((e) => {
-              //         console.log(e);
-              //         return null;
-              //       });
-              //     jobs.push(job);
-              //   }
-              // }
-              // if(jobs.length!==0){
-              //   await Promise.all(jobs);
-              // }
+              for (let index = 0; index < 6; index++) {
+                if (element.images[index]) {
+                  let image_url =
+                    "https://fathomless-falls-12833.herokuapp.com/" +
+                    element.images[index];
+                  let newName = element.name + index;
+                  var jobs = [];
+                  let job = Jimp.read(image_url)
+                    .then(async (image) => {
+                      image.quality(50);
+                      image.resize(Jimp.AUTO, 750);
+                      image.getBase64(Jimp.AUTO, async (_err, res) => {
+                        const uploadTask = storage
+                          .ref(`/images/${newName}`)
+                          .putString(res, "data_url");
+                        uploadTask.on(
+                          "state_changed",
+                          (snapShot) => {
+                            //takes a snap shot of the process as it is happening
+                            console.log(snapShot);
+                          },
+                          (err) => {
+                            //catches the errors
+                            console.log(err);
+                          },
+                          () => {
+                            // gets the functions from storage refences the image storage in firebase by the children
+                            // gets the download url then sets the image from firebase as the value for the imgUrl key:
+                            storage
+                              .ref("images")
+                              .child(newName)
+                              .getDownloadURL()
+                              .then((fireBaseUrl) => {
+                                console.log(fireBaseUrl);
+                                images.push(fireBaseUrl);
+                              });
+                          }
+                        );
+                      });
+                    })
+                    .catch((e) => {
+                      console.log(e);
+                      return null;
+                    });
+                  jobs.push(job);
+                }
+              }
+              if(jobs.length!==0){
+                await Promise.all(jobs);
+              }
               await this.continueUpload(images, element);
-              // console.log("Completed");
+              console.log("Completed");
             }
           });
         },
@@ -846,7 +855,7 @@ export class ListForm extends React.Component {
     // let fireData = await this.retrieveData();
     let data_mrt = [];
     let data_cuisine = [];
-    let current = new Set();
+    // let current = new Set();
     // fireData[1].forEach(function (doc) {
     //   if (doc.exists) {
     //     var d = doc.data();
