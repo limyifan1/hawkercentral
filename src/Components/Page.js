@@ -936,7 +936,7 @@ export class Page extends React.Component {
               ></div>
             )}
             <div
-              className="row justify-content-center"
+              className="justify-content-center"
               style={{ margin: "0px 5%" }}
             >
               <ResponsiveDialog
