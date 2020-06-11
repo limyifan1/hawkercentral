@@ -24,7 +24,9 @@
     "nowtoadd": " 去注册吧！"
   },
   "create": {
-    "createlisting": "入驻平台",
+    "createfree": "请在以下免费入驻平台与注册网站！",
+    "createlisting": "请在以下入驻平台",
+    "createwebsite": "请在以下入驻平台与注册网站",
     "step1": "第一： 摊位资料 （必填）",
     "pleaseenter": "请输入以下资料",
     "stallname": "摊位名称",
@@ -58,6 +60,8 @@
     "placeholderdeliverydetails": "例如，送到 Bukit Panjang，$30",
     "step2": "第二步: 其他细节 (选填)",
     "additional": "其他详情",
+    "free_delivery": "免费寄送量",
+    "minumum_order": "最低订购量",
     "placeholderadditional": "例如：限时促销，买三送一，全岛送餐",
     "generalpromo": "促销",
     "discount": "促销详情",
