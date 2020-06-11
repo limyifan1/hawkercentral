@@ -61,8 +61,10 @@ service cloud.firestore {
     'tagsValue',
     'claps',
     'takesg',
-    'custom'
-     ]) && fields.size() == 42
+    'custom',
+    'minimum_order',
+    'free_delivery'
+     ]) && fields.size() == 44
     }
     
     // TODO: Need structure
