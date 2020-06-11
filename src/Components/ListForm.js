@@ -1835,6 +1835,30 @@ export class ListForm extends React.Component {
                                       </div>
                                     </div>
                                     <div class="form-group create-title">
+                                      <label for="unit">
+                                        {context.data.create.minumum_order}
+                                      </label>
+                                      <div class="input-group">
+                                        <div class="input-group-prepend">
+                                          <span
+                                            class="input-group-text"
+                                            id="basic-addon1"
+                                          >
+                                            $
+                                          </span>
+                                        </div>
+                                        <input
+                                          onChange={this.handleChange}
+                                          value={this.state.minumum_order}
+                                          type="number"
+                                          class="form-control"
+                                          name="minumum_order"
+                                          placeholder="e.g. 20"
+                                        ></input>
+                                      </div>
+                                    </div>
+
+                                    <div class="form-group create-title">
                                       <label for="delivery_detail">
                                         {context.data.create.deliverydetails}{" "}
                                       </label>
@@ -1916,29 +1940,6 @@ export class ListForm extends React.Component {
                               }
                               rows="3"
                             ></textarea>
-                          </div>
-                          <div class="form-group create-title">
-                            <label for="unit">
-                              {context.data.create.minumum_order}
-                            </label>
-                            <div class="input-group">
-                              <div class="input-group-prepend">
-                                <span
-                                  class="input-group-text"
-                                  id="basic-addon1"
-                                >
-                                  $
-                                </span>
-                              </div>
-                              <input
-                                onChange={this.handleChange}
-                                value={this.state.minumum_order}
-                                type="number"
-                                class="form-control"
-                                name="minumum_order"
-                                placeholder="e.g. 20"
-                              ></input>
-                            </div>
                           </div>
                           <div class="form-group create-title">
                             <label for="street">
