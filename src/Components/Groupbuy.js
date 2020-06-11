@@ -4,48 +4,15 @@ import { Redirect, withRouter } from "react-router-dom";
 import { firebase, uiConfig } from "./Firestore";
 import { Form, Button } from "react-bootstrap";
 import { db } from "./Firestore";
-import queryString from "query-string";
-import Cookies from "universal-cookie";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import DatePicker from "react-date-picker";
 import TimePicker from "react-time-picker";
 import update from "immutability-helper";
 
-const cookies = new Cookies();
-
 const analytics = firebase.analytics();
 
 function onLoad(name, item) {
   analytics.logEvent(name, { name: item });
-}
-
-const dayName = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
-
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
-function getPhoneNumberFromUserInput() {
-  return document.getElementById("phone-number").value;
 }
 
 const time_now = new Date();
@@ -266,7 +233,6 @@ export class Groupbuy extends React.Component {
   handleOneArea = (event) => {
     const target = event.target;
     const value = target.value;
-    const name = target.name;
     // Get the groupbuys for this area
     this.setState({
       areaSelected: value,
