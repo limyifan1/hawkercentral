@@ -510,9 +510,9 @@ export class Driver extends React.Component {
             status: "failed",
           });
         }
-        setTimeout(() => {
-          this.setState({ submitted: false });
-        }, 5000);
+        // setTimeout(() => {
+        //   this.setState({ submitted: false });
+        // }, 5000);
       });
     });
   };
