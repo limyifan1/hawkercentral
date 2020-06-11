@@ -440,7 +440,7 @@ const syncTake = async () => {
   var take_keys = [];
   var take_data = [];
 
-  const url = "https://take.sg/api/latest?page=0&limit=100000";
+  const url = "";
 
   await fetch(url, {
     method: "GET",
