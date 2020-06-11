@@ -145,7 +145,10 @@ export class Info extends React.Component {
     super(props);
 
     this.state = {
-      className: typeof this.props.className === "string" ? this.props.className : "container",
+      className:
+        typeof this.props.className === "string"
+          ? this.props.className
+          : "container",
       data: [],
       orderData: [],
       totalPrice: 0.0,
@@ -290,8 +293,8 @@ export class Info extends React.Component {
   callPostal = (postal) => {
     return fetch(
       "https://developers.onemap.sg/commonapi/search?searchVal=" +
-      postal +
-      "&returnGeom=Y&getAddrDetails=Y"
+        postal +
+        "&returnGeom=Y&getAddrDetails=Y"
     )
       .then(function (response) {
         return response.json();
@@ -382,7 +385,8 @@ export class Info extends React.Component {
       " " +
       this.state.postal +
       "*";
-    let time_text = dayName[this.state.datetime.getDay()] +
+    let time_text =
+      dayName[this.state.datetime.getDay()] +
       " " +
       this.state.datetime.getDate() +
       " " +
@@ -451,11 +455,11 @@ export class Info extends React.Component {
         this.state.orderData[idx] === 0.0
           ? this.state.totalPrice
           : parseFloat(this.state.totalPrice) -
-          parseFloat(
-            this.state.data.menu_combined[idx].price
-              ? this.state.data.menu_combined[idx].price
-              : 0
-          ),
+            parseFloat(
+              this.state.data.menu_combined[idx].price
+                ? this.state.data.menu_combined[idx].price
+                : 0
+            ),
       orderData: update(this.state.orderData, {
         [idx]: {
           $set:
@@ -480,8 +484,8 @@ export class Info extends React.Component {
             ? (toPush = true)
             : (toPush = false)
           : element.name && element.price
-            ? (toPush = true)
-            : (toPush = false);
+          ? (toPush = true)
+          : (toPush = false);
         if (toPush) {
           data.push(
             <div>
@@ -577,8 +581,8 @@ export class Info extends React.Component {
                             <b>
                               {this.state.orderData[i] !== undefined
                                 ? this.state.orderData[
-                                JSON.parse(JSON.stringify(i))
-                                ]
+                                    JSON.parse(JSON.stringify(i))
+                                  ]
                                 : 0}
                             </b>
                           </span>
@@ -627,7 +631,7 @@ export class Info extends React.Component {
           value="click"
           className={`image-gallery-fullscreen-button${
             isFullscreen ? " active" : ""
-            }`}
+          }`}
           onClick={onClick}
         />
       );
@@ -690,9 +694,7 @@ export class Info extends React.Component {
     event.preventDefault();
     console.log("submit");
     if (time_now > this.state.datetime) {
-      alert(
-        "Time cannot be earlier than now"
-      );
+      alert("Time cannot be earlier than now");
     } else {
       var text = await this.setOrderText();
       var url = "https://wa.me/65" + this.state.data.contact + "?text=" + text;
@@ -705,13 +707,13 @@ export class Info extends React.Component {
       time: time,
       datetime: new Date(
         this.state.date.getMonth() +
-        1 +
-        "/" +
-        this.state.date.getDate() +
-        "/" +
-        this.state.date.getFullYear() +
-        " " +
-        time
+          1 +
+          "/" +
+          this.state.date.getDate() +
+          "/" +
+          this.state.date.getFullYear() +
+          " " +
+          time
       ),
     });
   };
@@ -721,13 +723,13 @@ export class Info extends React.Component {
       date: date,
       datetime: new Date(
         date.getMonth() +
-        1 +
-        "/" +
-        date.getDate() +
-        "/" +
-        date.getFullYear() +
-        " " +
-        this.state.time
+          1 +
+          "/" +
+          date.getDate() +
+          "/" +
+          date.getFullYear() +
+          " " +
+          this.state.time
       ),
     });
   };
@@ -740,18 +742,30 @@ export class Info extends React.Component {
     if (this.state.retrieved) {
       if (this.state.data.categories) {
         this.state.data.categories.forEach((element) => {
-          cuisine.push(<span key={element} className="badge badge-info">{element}</span>);
+          cuisine.push(
+            <span key={element} className="badge badge-info">
+              {element}
+            </span>
+          );
         });
       }
       console.log(this.state.data.tagsValue);
       if (this.state.data.tagsValue) {
         this.state.data.tagsValue.forEach((element) => {
-          cuisine.push(<span key={element} className="badge badge-secondary">{element}</span>);
+          cuisine.push(
+            <span key={element} className="badge badge-secondary">
+              {element}
+            </span>
+          );
         });
       }
       if (this.state.data.regions) {
         this.state.data.regions.forEach((element) => {
-          regions.push(<span key={element} className="badge badge-warning">{element}</span>);
+          regions.push(
+            <span key={element} className="badge badge-warning">
+              {element}
+            </span>
+          );
         });
       }
       if (this.state.data.url) {
@@ -801,94 +815,95 @@ export class Info extends React.Component {
     }
 
     return this.state.retrieved ? (
-      <div className={this.state.className} style={{ paddingTop: "56px", width: "100%" }}>
+      <div
+        className={this.state.className}
+        style={{ paddingTop: "56px", width: "100%" }}
+      >
         {this.state.hasReviewEditMessage ||
-          this.state.hasReviewDeleteMessage ? (
+        this.state.hasReviewDeleteMessage ? (
+          <div
+            className="row"
+            style={{
+              marginTop: "20px",
+              marginBottom: "20px",
+            }}
+          >
             <div
-              className="row"
+              className="card shadow"
               style={{
-                marginTop: "20px",
-                marginBottom: "20px",
+                color: "black",
+                backgroundColor: "red",
+                width: "100%",
               }}
             >
-              <div
-                className="card shadow"
-                style={{
-                  color: "black",
-                  backgroundColor: "red",
-                  width: "100%",
-                }}
-              >
-                <span className="card-body">
-                  <div
-                    style={{
-                      fontSize: "13px",
-                      margin: "10px",
-                    }}
-                  >
-                    {this.state.hasReviewEditMessage ? (
-                      <p
-                        style={{
-                          margin: "10px",
-                          fontSize: "30px",
-                          color: "white",
-                          lineHeight: "25px",
-                        }}
-                      >
-                        Your edit(s) will be reflected once they have been
-                        reviewed. Thank you for your patience!
-                      </p>
-                    ) : (
-                        <p
-                          style={{
-                            margin: "10px",
-                            fontSize: "30px",
-                            color: "white",
-                            lineHeight: "25px",
-                          }}
-                        >
-                          This listing will be deleted once your request has
-                          been reviewed. Thank you for your patience!
-                        </p>
-                      )}
-                  </div>
-                </span>
-              </div>
+              <span className="card-body">
+                <div
+                  style={{
+                    fontSize: "13px",
+                    margin: "10px",
+                  }}
+                >
+                  {this.state.hasReviewEditMessage ? (
+                    <p
+                      style={{
+                        margin: "10px",
+                        fontSize: "30px",
+                        color: "white",
+                        lineHeight: "25px",
+                      }}
+                    >
+                      Your edit(s) will be reflected once they have been
+                      reviewed. Thank you for your patience!
+                    </p>
+                  ) : (
+                    <p
+                      style={{
+                        margin: "10px",
+                        fontSize: "30px",
+                        color: "white",
+                        lineHeight: "25px",
+                      }}
+                    >
+                      This listing will be deleted once your request has been
+                      reviewed. Thank you for your patience!
+                    </p>
+                  )}
+                </div>
+              </span>
             </div>
-          ) : null}
-        {
-          this.state.hero ? (
+          </div>
+        ) : null}
+        {this.state.hero ? (
+          <div
+            className="jumbotron"
+            style={{
+              background:
+                "linear-gradient(rgba(0,0,0,0.5), rgba(255,255,255,0.3)), url(" +
+                this.state.data.url +
+                ") no-repeat center center",
+              backgroundSize: "cover",
+              height: "300px",
+            }}
+          >
             <div
-              className="jumbotron"
               style={{
-                background:
-                  "linear-gradient(rgba(0,0,0,0.5), rgba(255,255,255,0.3)), url(" +
-                  this.state.data.url +
-                  ") no-repeat center center",
-                backgroundSize: "cover",
-                height: "300px",
+                color: "white",
+                fontSize: "50px",
+                fontWeight: "bold",
               }}
             >
-              <div
-                style={{
-                  color: "white",
-                  fontSize: "50px",
-                  fontWeight: "bold"
-                }}
-              >
-                {this.state.name || this.state.data.name}
-              </div>
-              <div
-                style={{
-                  color: "white",
-                  fontSize: "15px",
-                }}
-              >
-                {this.state.data.description}
-              </div>
+              {this.state.name || this.state.data.name}
             </div>
-          ) : null
-        }
+            <div
+              style={{
+                color: "white",
+                fontSize: "15px",
+              }}
+            >
+              {this.state.data.description}
+            </div>
+          </div>
+        ) : null}
         <div className="row">
           <div
             className="jumbotron col-xs-6 col-sm-6 col-md-6 col-lg-6"
@@ -918,11 +933,11 @@ export class Info extends React.Component {
               className="container"
               style={{ textAlign: "left", paddingTop: "10px" }}
             >
-              {this.state.hero ? null :
+              {this.state.hero ? null : (
                 <div id="back-to-top-anchor">
                   <h2>{this.state.data.name}</h2>
                 </div>
-              }
+              )}
               <link rel="stylesheet" href="applause-button.css" />
               <svg
                 className="bi bi-house-fill"
@@ -943,11 +958,7 @@ export class Info extends React.Component {
                   clipRule="evenodd"
                 />
               </svg>{" "}
-              <a
-                href={
-                  "https://maps.google.com/?q=" + this.state.data.street
-                }
-              >
+              <a href={"https://maps.google.com/?q=" + this.state.data.street}>
                 {this.state.data.unit} {this.state.data.street}
               </a>
               <br />
@@ -972,32 +983,32 @@ export class Info extends React.Component {
                 </div>
               ) : null}
               {this.state.data.pickup_option ||
-                this.state.data.delivery_option ? (
-                  <div>
-                    <svg
-                      className="bi bi-bag"
-                      width="14"
-                      height="14"
-                      viewBox="0 0 16 16"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M14 5H2v9a1 1 0 001 1h10a1 1 0 001-1V5zM1 4v10a2 2 0 002 2h10a2 2 0 002-2V4H1z"
-                        clipRule="evenodd"
-                      />
-                      <path d="M8 1.5A2.5 2.5 0 005.5 4h-1a3.5 3.5 0 117 0h-1A2.5 2.5 0 008 1.5z" />
-                    </svg>{" "}
-                    {this.state.data.pickup_option ? (
-                      <span className="badge badge-success">Da Bao</span>
-                    ) : null}
-                    {this.state.data.delivery_option ? (
-                      <span className="badge badge-success">Delivery</span>
-                    ) : null}{" "}
-                    <br />
-                  </div>
-                ) : null}
+              this.state.data.delivery_option ? (
+                <div>
+                  <svg
+                    className="bi bi-bag"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M14 5H2v9a1 1 0 001 1h10a1 1 0 001-1V5zM1 4v10a2 2 0 002 2h10a2 2 0 002-2V4H1z"
+                      clipRule="evenodd"
+                    />
+                    <path d="M8 1.5A2.5 2.5 0 005.5 4h-1a3.5 3.5 0 117 0h-1A2.5 2.5 0 008 1.5z" />
+                  </svg>{" "}
+                  {this.state.data.pickup_option ? (
+                    <span className="badge badge-success">Da Bao</span>
+                  ) : null}
+                  {this.state.data.delivery_option ? (
+                    <span className="badge badge-success">Delivery</span>
+                  ) : null}{" "}
+                  <br />
+                </div>
+              ) : null}
               {regions.length > 0 ? (
                 <div>
                   <svg
@@ -1066,18 +1077,18 @@ export class Info extends React.Component {
               {/* Custom button display: menu, website, message */}
               <div>
                 {this.state.data.menu &&
-                  this.state.data.whatsapp &&
-                  this.state.data.menu_combined.length > 0 &&
-                  this.state.data.menu_combined[0].name !== "" ? (
-                    <span className="">
-                      <img
-                        alt=""
-                        onClick={this.enterDetails}
-                        src={menu_button}
-                        style={{ width: "25%", cursor: "pointer" }}
-                      />
-                    </span>
-                  ) : null}
+                this.state.data.whatsapp &&
+                this.state.data.menu_combined.length > 0 &&
+                this.state.data.menu_combined[0].name !== "" ? (
+                  <span className="">
+                    <img
+                      alt=""
+                      onClick={this.enterDetails}
+                      src={menu_button}
+                      style={{ width: "25%", cursor: "pointer" }}
+                    />
+                  </span>
+                ) : null}
                 {this.state.data.website ? (
                   <a
                     href={
@@ -1105,9 +1116,7 @@ export class Info extends React.Component {
                       <a
                         href={link}
                         target="blank"
-                        onClick={() =>
-                          onLoad("message", this.state.data.name)
-                        }
+                        onClick={() => onLoad("message", this.state.data.name)}
                       >
                         <img
                           alt=""
@@ -1121,253 +1130,246 @@ export class Info extends React.Component {
 
                     {/* Display appropriate header - menu / menu with Whatsapp ordering */}
                     {this.state.data.menu &&
-                      this.state.data.whatsapp &&
+                    this.state.data.whatsapp &&
+                    this.state.data.menu_combined.length > 0 &&
+                    this.state.data.menu_combined[0].name !== "" ? (
+                      <div>
+                        <br />
+                        <br />
+                        <span className="">
+                          <img
+                            alt=""
+                            src={orderleh_title}
+                            style={{ width: "60%" }}
+                          />
+                        </span>
+                      </div>
+                    ) : this.state.data.menu &&
                       this.state.data.menu_combined.length > 0 &&
                       this.state.data.menu_combined[0].name !== "" ? (
-                        <div>
-                          <br />
-                          <br />
-                          <span className="">
-                            <img
-                              alt=""
-                              src={orderleh_title}
-                              style={{ width: "60%" }}
-                            />
-                          </span>
-                        </div>
-                      ) : this.state.data.menu &&
-                        this.state.data.menu_combined.length > 0 &&
-                        this.state.data.menu_combined[0].name !== "" ? (
-                          <div>
-                            <br />
-                            <br />
+                      <div>
+                        <br />
+                        <br />
 
-                            <span className="">
-                              <img
-                                alt=""
-                                src={menu_title}
-                                style={{ width: "60%" }}
-                              />
-                            </span>
-                          </div>
-                        ) : null}
+                        <span className="">
+                          <img
+                            alt=""
+                            src={menu_title}
+                            style={{ width: "60%" }}
+                          />
+                        </span>
+                      </div>
+                    ) : null}
                     {/* Display the first item of the menu with a see more button - TODO: boilerplate code */}
                     {this.state.data.menu &&
-                      this.state.data.menu_combined.length > 0 &&
-                      this.state.data.menu_combined[0].name !== "" ? (
-                        <div style={{ zIndex: -999 }}>
-                          <figure
-                            className="shadow row"
-                            style={{
-                              margin: "20px",
-                              minHeight: "100px",
-                              backgroundColor: "#f1f1f1",
-                              borderRadius: "5px",
-                              position: "relative",
-                              display: "flex",
-                              padding: "10px 40px 40px",
-                              zIndex: 1,
-                            }}
-                          >
-                            {/* gradient overlay shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
-                            {(!this.state.wantToOrder &&
-                              this.state.data.menu &&
-                              this.state.data.menu_combined.length > 1 &&
-                              this.state.data.menu_combined[1] &&
-                              this.state.data.menu_combined[1].name !== "")
-                              // addresses case where >1 item and customer hasnt clicked
-                              ||
-                              (!this.state.wantToOrder &&
-                                this.state.data.menu_combined[1] &&
-                                this.state.data.menu_combined[1].name ===
-                                "")
-                              // addresses case where there are multiple items in menu_combined but only 1 non-empty item
-                              ||
-                              (!this.state.wantToOrder &&
-                                this.state.data.menu_combined.length === 1)
-                              // addresses case where there is only 1 item in menu_combined
-                              ? (
-                                <span style={{ height: "0px" }}>
-                                  <img
-                                    src={gradient}
-                                    alt=""
-                                    style={{
-                                      width: "130%",
-                                      height: "150px",
-                                      borderRadius: "5px",
-                                      position: "absolute",
-                                      bottom: "-30px",
-                                      left: "-15px",
-                                      zIndex: "999",
-                                    }}
-                                  />
-                                </span>
-                              ) : null}
-                            <div className="row">
-                              <span
+                    this.state.data.menu_combined.length > 0 &&
+                    this.state.data.menu_combined[0].name !== "" ? (
+                      <div style={{ zIndex: -999 }}>
+                        <figure
+                          className="shadow row"
+                          style={{
+                            margin: "20px",
+                            minHeight: "100px",
+                            backgroundColor: "#f1f1f1",
+                            borderRadius: "5px",
+                            position: "relative",
+                            display: "flex",
+                            padding: "10px 40px 40px",
+                            zIndex: 1,
+                          }}
+                        >
+                          {/* gradient overlay shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
+                          {(!this.state.wantToOrder &&
+                            this.state.data.menu &&
+                            this.state.data.menu_combined.length > 1 &&
+                            this.state.data.menu_combined[1] &&
+                            this.state.data.menu_combined[1].name !== "") ||
+                          // addresses case where >1 item and customer hasnt clicked
+                          (!this.state.wantToOrder &&
+                            this.state.data.menu_combined[1] &&
+                            this.state.data.menu_combined[1].name === "") ||
+                          // addresses case where there are multiple items in menu_combined but only 1 non-empty item
+                          (!this.state.wantToOrder &&
+                            this.state.data.menu_combined.length === 1) ? (
+                            // addresses case where there is only 1 item in menu_combined
+                            <span style={{ height: "0px" }}>
+                              <img
+                                src={gradient}
+                                alt=""
                                 style={{
-                                  alignContent: "right",
+                                  width: "130%",
+                                  height: "150px",
+                                  borderRadius: "5px",
+                                  position: "absolute",
+                                  bottom: "-30px",
+                                  left: "-15px",
+                                  zIndex: "999",
+                                }}
+                              />
+                            </span>
+                          ) : null}
+                          <div className="row">
+                            <span
+                              style={{
+                                alignContent: "right",
+                                fontSize: "110%",
+                                display: "flex",
+                              }}
+                            >
+                              <b>
+                                {this.state.data.menu_combined[0] ? (
+                                  <span>
+                                    {this.state.data.menu_combined[0].name}
+                                    {this.state.data.menu_combined[0] &&
+                                    this.state.data.menu_combined[0]
+                                      .description ? (
+                                      <span>
+                                        {" "}
+                                        (
+                                        {
+                                          this.state.data.menu_combined[0]
+                                            .description
+                                        }
+                                        )
+                                      </span>
+                                    ) : null}
+                                  </span>
+                                ) : null}
+                              </b>
+                            </span>
+                          </div>
+                          <div className="row">
+                            <div
+                              className="col"
+                              style={{
+                                position: "absolute",
+                                left: "5px",
+                                bottom: "13px",
+                              }}
+                            >
+                              <span
+                                className="shadow badge badge-info m-2"
+                                style={{
+                                  backgroundColor: "#b48300",
+                                  alignContent: "left",
                                   fontSize: "110%",
-                                  display: "flex",
                                 }}
                               >
-                                <b>
-                                  {this.state.data.menu_combined[0] ? (
-                                    <span>
-                                      {this.state.data.menu_combined[0].name}
-                                      {this.state.data.menu_combined[0] &&
-                                        this.state.data.menu_combined[0]
-                                          .description ? (
-                                          <span>
-                                            {" "}
-                                        (
-                                            {
-                                              this.state.data.menu_combined[0]
-                                                .description
-                                            }
-                                        )
-                                          </span>
-                                        ) : null}
-                                    </span>
-                                  ) : null}
-                                </b>
+                                $
+                                {this.state.data.menu_combined[0].price
+                                  ? this.state.data.menu_combined[0].price
+                                  : "TBD"}
                               </span>
                             </div>
-                            <div className="row">
+                            <div
+                              className="col"
+                              style={{
+                                position: "absolute",
+                                left: "10px",
+                                bottom: "10px",
+                              }}
+                            >
                               <div
-                                className="col"
-                                style={{
-                                  position: "absolute",
-                                  left: "5px",
-                                  bottom: "13px",
-                                }}
+                                className="btn-group float-right"
+                                role="group"
+                                aria-label="Basic example"
                               >
-                                <span
-                                  className="shadow badge badge-info m-2"
-                                  style={{
-                                    backgroundColor: "#b48300",
-                                    alignContent: "left",
-                                    fontSize: "110%",
-                                  }}
-                                >
-                                  $
-                                {this.state.data.menu_combined[0].price
-                                    ? this.state.data.menu_combined[0].price
-                                    : "TBD"}
-                                </span>
-                              </div>
-                              <div
-                                className="col"
-                                style={{
-                                  position: "absolute",
-                                  left: "10px",
-                                  bottom: "10px",
-                                }}
-                              >
-                                <div
-                                  className="btn-group float-right"
-                                  role="group"
-                                  aria-label="Basic example"
-                                >
-                                  <br />
-                                  {this.state.data.whatsapp ? (
-                                    <div>
-                                      <Button
-                                        variant="light"
-                                        size="sm"
-                                        onClick={this.minusItem}
-                                        name={0}
-                                        className="shadow-sm"
-                                        style={{
-                                          backgroundColor: "white",
-                                          color: "black",
-                                          borderRadius: "3px",
-                                          margin: "10px",
-                                        }}
-                                      >
-                                        -
+                                <br />
+                                {this.state.data.whatsapp ? (
+                                  <div>
+                                    <Button
+                                      variant="light"
+                                      size="sm"
+                                      onClick={this.minusItem}
+                                      name={0}
+                                      className="shadow-sm"
+                                      style={{
+                                        backgroundColor: "white",
+                                        color: "black",
+                                        borderRadius: "3px",
+                                        margin: "10px",
+                                      }}
+                                    >
+                                      -
                                     </Button>
-                                      <span
-                                        style={{
-                                          margin: "10px",
-                                        }}
-                                      >
-                                        <b>
-                                          {this.state.orderData[0] !==
-                                            undefined
-                                            ? this.state.orderData[0] // hardcode 0 to display first menu item
-                                            : 0}
-                                        </b>
-                                      </span>
-                                      <Button
-                                        variant="dark"
-                                        size="sm"
-                                        onClick={this.addItem}
-                                        name={0} // hardcode 0 to display first menu item
-                                        className="shadow-sm"
-                                        style={{
-                                          backgroundColor: "black",
-                                          color: "white",
-                                          borderRadius: "3px",
-                                          margin: "10px",
-                                        }}
-                                      >
-                                        +
+                                    <span
+                                      style={{
+                                        margin: "10px",
+                                      }}
+                                    >
+                                      <b>
+                                        {this.state.orderData[0] !== undefined
+                                          ? this.state.orderData[0] // hardcode 0 to display first menu item
+                                          : 0}
+                                      </b>
+                                    </span>
+                                    <Button
+                                      variant="dark"
+                                      size="sm"
+                                      onClick={this.addItem}
+                                      name={0} // hardcode 0 to display first menu item
+                                      className="shadow-sm"
+                                      style={{
+                                        backgroundColor: "black",
+                                        color: "white",
+                                        borderRadius: "3px",
+                                        margin: "10px",
+                                      }}
+                                    >
+                                      +
                                     </Button>
-                                    </div>
-                                  ) : null}
-                                </div>
+                                  </div>
+                                ) : null}
                               </div>
                             </div>
-                            <br />
-                          </figure>
-                        </div>
-                      ) : null}
+                          </div>
+                          <br />
+                        </figure>
+                      </div>
+                    ) : null}
                     {/* See more button shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
                     {(!this.state.wantToOrder &&
                       this.state.data.menu &&
                       this.state.data.menu_combined.length > 1 &&
                       this.state.data.menu_combined[1] &&
                       this.state.data.menu_combined[1].name !== "") ||
-                      (!this.state.wantToOrder &&
-                        this.state.data.menu &&
-                        this.state.data.menu_combined[0] &&
-                        this.state.data.menu_combined[0].name !== "" &&
-                        this.state.data.menu_combined[1] &&
-                        this.state.data.menu_combined[1].name === "")
-                      ||
-                      (!this.state.wantToOrder &&
-                        this.state.data.menu &&
-                        this.state.data.menu_combined.length === 1 &&
-                        this.state.data.menu_combined[0] &&
-                        this.state.data.menu_combined[0].name !== "")
-                      ? (
-                        <div style={{ marginTop: "30px" }}>
-                          <hr
-                            style={{
-                              color: "grey",
-                              backgroundColor: "grey",
-                              height: "1px",
-                              borderColor: "grey",
-                              width: "100%",
-                              alignItems: "center",
-                              marginBottom: "0px", // aligns See More to divider
-                            }}
-                          />
-                          <div
-                            style={{
-                              textAlign: "center",
-                              paddingRight: "15px",
-                              fontSize: "110%",
-                              cursor: "pointer",
-                              color: "grey",
-                            }}
-                            onClick={this.enterDetails}
-                          >
-                            <b>see more ↓</b>
-                          </div>
+                    (!this.state.wantToOrder &&
+                      this.state.data.menu &&
+                      this.state.data.menu_combined[0] &&
+                      this.state.data.menu_combined[0].name !== "" &&
+                      this.state.data.menu_combined[1] &&
+                      this.state.data.menu_combined[1].name === "") ||
+                    (!this.state.wantToOrder &&
+                      this.state.data.menu &&
+                      this.state.data.menu_combined.length === 1 &&
+                      this.state.data.menu_combined[0] &&
+                      this.state.data.menu_combined[0].name !== "") ? (
+                      <div style={{ marginTop: "30px" }}>
+                        <hr
+                          style={{
+                            color: "grey",
+                            backgroundColor: "grey",
+                            height: "1px",
+                            borderColor: "grey",
+                            width: "100%",
+                            alignItems: "center",
+                            marginBottom: "0px", // aligns See More to divider
+                          }}
+                        />
+                        <div
+                          style={{
+                            textAlign: "center",
+                            paddingRight: "15px",
+                            fontSize: "110%",
+                            cursor: "pointer",
+                            color: "grey",
+                          }}
+                          onClick={this.enterDetails}
+                        >
+                          <b>see more ↓</b>
                         </div>
-                      ) : null}
+                      </div>
+                    ) : null}
 
                     {/* Display the rest of the menu if customer clicks Menu / see more */}
                     {this.state.wantToOrder ? (
@@ -1407,105 +1409,100 @@ export class Info extends React.Component {
                               </span>
 
                               {/* Item represents object with properties name and price */}
-                              {this.state.data.menu_combined.map(
-                                (item, i) => {
-                                  if (
-                                    item !== undefined &&
-                                    this.state.orderData[i] !== 0
-                                  ) {
-                                    return (
-                                      <div
+                              {this.state.data.menu_combined.map((item, i) => {
+                                if (
+                                  item !== undefined &&
+                                  this.state.orderData[i] !== 0
+                                ) {
+                                  return (
+                                    <div
+                                      style={{
+                                        position: "relative",
+                                        padding: "5px",
+                                      }}
+                                    >
+                                      <span
                                         style={{
-                                          position: "relative",
-                                          padding: "5px",
+                                          alignContent: "right",
+                                          fontSize: "110%",
                                         }}
                                       >
-                                        <span
-                                          style={{
-                                            alignContent: "right",
-                                            fontSize: "110%",
-                                          }}
-                                        >
-                                          <b>
-                                            {item.name ? item.name : null}
-                                          </b>
-                                        </span>
-                                        <div
-                                          className="btn-group float-right"
-                                          role="group"
-                                          aria-label="Basic example"
-                                        >
-                                          <br />
-                                          {this.state.data.whatsapp ? (
-                                            <div>
-                                              <Button
-                                                variant="light"
-                                                size="sm"
-                                                onClick={this.minusItem}
-                                                name={i}
-                                                className="shadow-sm"
-                                                style={{
-                                                  backgroundColor: "white",
-                                                  color: "black",
-                                                  borderRadius: "3px",
-                                                  margin: "10px",
-                                                }}
-                                              >
-                                                -
-                                              </Button>
-                                              <span
-                                                style={{
-                                                  margin: "10px",
-                                                }}
-                                              >
-                                                <b>
-                                                  {this.state.orderData[
-                                                    i
-                                                  ] !== undefined
-                                                    ? this.state.orderData[
-                                                    JSON.parse(
-                                                      JSON.stringify(i)
-                                                    )
-                                                    ]
-                                                    : 0}
-                                                </b>
-                                              </span>
-                                              <Button
-                                                variant="dark"
-                                                size="sm"
-                                                onClick={this.addItem}
-                                                name={i}
-                                                className="shadow-sm"
-                                                style={{
-                                                  backgroundColor: "black",
-                                                  color: "white",
-                                                  borderRadius: "3px",
-                                                  margin: "10px",
-                                                }}
-                                              >
-                                                +
-                                              </Button>
-                                            </div>
-                                          ) : null}
-                                        </div>
+                                        <b>{item.name ? item.name : null}</b>
+                                      </span>
+                                      <div
+                                        className="btn-group float-right"
+                                        role="group"
+                                        aria-label="Basic example"
+                                      >
                                         <br />
-                                        <span
-                                          className="shadow badge badge-info m-2"
-                                          style={{
-                                            backgroundColor: "#b48300",
-                                            alignContent: "left",
-                                            fontSize: "110%",
-                                          }}
-                                        >
-                                          ${item.price ? item.price : "TBD"}
-                                        </span>
+                                        {this.state.data.whatsapp ? (
+                                          <div>
+                                            <Button
+                                              variant="light"
+                                              size="sm"
+                                              onClick={this.minusItem}
+                                              name={i}
+                                              className="shadow-sm"
+                                              style={{
+                                                backgroundColor: "white",
+                                                color: "black",
+                                                borderRadius: "3px",
+                                                margin: "10px",
+                                              }}
+                                            >
+                                              -
+                                            </Button>
+                                            <span
+                                              style={{
+                                                margin: "10px",
+                                              }}
+                                            >
+                                              <b>
+                                                {this.state.orderData[i] !==
+                                                undefined
+                                                  ? this.state.orderData[
+                                                      JSON.parse(
+                                                        JSON.stringify(i)
+                                                      )
+                                                    ]
+                                                  : 0}
+                                              </b>
+                                            </span>
+                                            <Button
+                                              variant="dark"
+                                              size="sm"
+                                              onClick={this.addItem}
+                                              name={i}
+                                              className="shadow-sm"
+                                              style={{
+                                                backgroundColor: "black",
+                                                color: "white",
+                                                borderRadius: "3px",
+                                                margin: "10px",
+                                              }}
+                                            >
+                                              +
+                                            </Button>
+                                          </div>
+                                        ) : null}
                                       </div>
-                                    );
-                                  } else {
-                                    return null;
-                                  }
+                                      <br />
+                                      <span
+                                        className="shadow badge badge-info m-2"
+                                        style={{
+                                          backgroundColor: "#b48300",
+                                          alignContent: "left",
+                                          fontSize: "110%",
+                                        }}
+                                      >
+                                        ${item.price ? item.price : "TBD"}
+                                      </span>
+                                    </div>
+                                  );
+                                } else {
+                                  return null;
                                 }
-                              )}
+                              })}
 
                               <figcaption>
                                 <hr
@@ -1600,12 +1597,9 @@ export class Info extends React.Component {
                               </div>
                             </div>
                             <div class="row">
-
                               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group create-title">
-                                  <label for="time">
-                                    Delivery Date
-                                  </label>
+                                  <label for="time">Delivery Date</label>
                                   <DatePicker
                                     class="form-control is-invalid"
                                     dayPlaceholder="dd"
@@ -1620,9 +1614,7 @@ export class Info extends React.Component {
                               </div>
                               <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                                 <div class="form-group create-title">
-                                  <label for="time">
-                                    Delivery Time
-                                  </label>
+                                  <label for="time">Delivery Time</label>
                                   <TimePicker
                                     class="form-control is-invalid"
                                     dayPlaceholder="dd"
@@ -1650,14 +1642,10 @@ export class Info extends React.Component {
                                 <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                   {" "}
                                   <div className="form-group create-title">
-                                    <label for="postalcode">
-                                      Postal Code
-                                    </label>
+                                    <label for="postalcode">Postal Code</label>
                                     <div className="input-group">
                                       <input
-                                        onChange={
-                                          this.handleCustomerDetails
-                                        }
+                                        onChange={this.handleCustomerDetails}
                                         value={this.state.postal}
                                         type="text"
                                         className={
@@ -1803,9 +1791,9 @@ export class Info extends React.Component {
                     "whatsapp://send?text=" +
                     encodeURIComponent(
                       "Hungry? Try out " +
-                      this.state.data.name +
-                      " now! Order form / more information at www.foodleh.app/info?id=" +
-                      this.state.id
+                        this.state.data.name +
+                        " now! Order form / more information at www.foodleh.app/info?id=" +
+                        this.state.id
                     )
                   }
                 >
@@ -1862,7 +1850,7 @@ export class Info extends React.Component {
                     >
                       <b>{this.state.data.promo}</b>:{" "}
                       {this.state.data.condition &&
-                        this.state.data.condition.length > 40
+                      this.state.data.condition.length > 40
                         ? this.state.data.condition.slice(0, 40) + "..."
                         : this.state.data.condition}
                     </div>
@@ -1890,22 +1878,22 @@ export class Info extends React.Component {
                   </p>
                 ) : null}
                 {this.state.data.description_detail &&
-                  this.state.data.description_detail !== "" &&
-                  this.state.data.description_detail !== undefined ? (
-                    <div>
-                      <h6 style={{ marginBottom: "0px" }}>
-                        <b>Detailed Description</b>
-                      </h6>
-                      <p
-                        style={{
-                          whiteSpace: "pre-line",
-                          marginBottom: "20px",
-                        }}
-                      >
-                        {this.state.data.description_detail}
-                      </p>
-                    </div>
-                  ) : null}
+                this.state.data.description_detail !== "" &&
+                this.state.data.description_detail !== undefined ? (
+                  <div>
+                    <h6 style={{ marginBottom: "0px" }}>
+                      <b>Detailed Description</b>
+                    </h6>
+                    <p
+                      style={{
+                        whiteSpace: "pre-line",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      {this.state.data.description_detail}
+                    </p>
+                  </div>
+                ) : null}
               </Linkify>
               {/* {Menu appears if menu data is present and whatsapp is not present} */}
               {this.state.data.menu && !this.state.data.whatsapp ? (
@@ -1931,6 +1919,16 @@ export class Info extends React.Component {
                     >
                       {this.state.data.delivery_detail}
                     </p>
+                    {this.state.data.minimum_order && (
+                      <span>
+                        Minimum Order: {this.state.data.minimum_order}
+                      </span>
+                    )}
+                    {this.state.data.free_delivery && (
+                      <span>
+                        Free Delivery: {this.state.data.free_delivery}
+                      </span>
+                    )}
                   </Linkify>
                 </div>
               ) : null}
@@ -1977,8 +1975,7 @@ export class Info extends React.Component {
               </p> */}
               <p style={{ color: "grey" }}>
                 <small>
-                  Are you the owner? Email foodleh@outlook.com for
-                  enquiries.{" "}
+                  Are you the owner? Email foodleh@outlook.com for enquiries.{" "}
                 </small>
               </p>
               <ScrollTop>
@@ -1995,13 +1992,13 @@ export class Info extends React.Component {
         </div>
       </div>
     ) : (
-        <div className="row h-100 page-container">
-          <div className="col-sm-12 my-auto">
-            <h3>Loading</h3>
-            <Spinner className="" animation="grow" />
-          </div>
+      <div className="row h-100 page-container">
+        <div className="col-sm-12 my-auto">
+          <h3>Loading</h3>
+          <Spinner className="" animation="grow" />
         </div>
-      );
+      </div>
+    );
   }
 }
 
