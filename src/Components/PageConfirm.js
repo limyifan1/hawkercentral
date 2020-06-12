@@ -652,28 +652,37 @@ class FullScreenDialog extends Component {
               </div>
               {this.props.toggle === "cart" ? (
                 <React.Fragment>
-                  <div class="row d-flex justify-content-center">
-                    <Button
-                      type="submit"
-                      variant={"contained"}
-                      style={{
-                        backgroundColor: menu_color,
-                        borderColor: menu_color,
-                        width: "300px",
-                        color: menu_font_color,
-                      }}
-                      disabled={this.state.loading}
-                      onClick={() =>
-                        onLoad("place_order_custom", this.state.name)
-                      }
-                    >
-                      Place order via WhatsApp
-                    </Button>
-                  </div>
-                  <div class="row d-flex">
-                    By placing order via this platform, you agree to our{" "}
-                    <a href="https://foodleh.app/privacy"> Privacy Policy</a>
-                  </div>
+                  {!this.state.loading ? (
+                    <React.Fragment>
+                      <div class="row d-flex justify-content-center">
+                        <Button
+                          type="submit"
+                          variant={"contained"}
+                          style={{
+                            backgroundColor: menu_color,
+                            borderColor: menu_color,
+                            width: "300px",
+                            color: menu_font_color,
+                          }}
+                          disabled={this.state.loading}
+                          onClick={() =>
+                            onLoad("place_order_custom", this.state.name)
+                          }
+                        >
+                          Place order via WhatsApp
+                        </Button>
+                      </div>
+                      <div class="row d-flex">
+                        By placing order via this platform, you agree to our{" "}
+                        <a href="https://foodleh.app/privacy">
+                          {" "}
+                          Privacy Policy
+                        </a>
+                      </div>
+                    </React.Fragment>
+                  ) : (
+                    <Spinner class="" animation="grow" />
+                  )}
                 </React.Fragment>
               ) : null}
             </div>
