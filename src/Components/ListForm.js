@@ -165,6 +165,7 @@ const handleData = async ({
   uid,
   minimum_order,
   free_delivery,
+  website_name,
 }) => {
   let now = new Date();
   var field = {
@@ -223,7 +224,7 @@ const handleData = async ({
       .then(async (docRef) => {
         console.log(docRef.id);
         if (option === "website") {
-          await createDomain(name, docRef.id, url, uid);
+          await createDomain(website_name, docRef.id, url, uid);
         }
         return docRef.id;
       })
@@ -629,6 +630,7 @@ export class ListForm extends React.Component {
       uid: this.state.firebaseUser.uid,
       free_delivery: this.state.free_delivery,
       minimum_order: this.state.minimum_order,
+      website_name: this.state.website_name,
     }).then((id) => {
       if (this.props.toggle === "create") {
         // this.props.history.push({
