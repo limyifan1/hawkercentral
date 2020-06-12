@@ -13,6 +13,7 @@ import firebase from "./Firestore";
 import DatePicker from "react-date-picker";
 import TimePicker from "react-time-picker";
 import { db } from "./Firestore";
+import { Spinner } from "react-bootstrap";
 
 const time_now = new Date();
 time_now.setMinutes(time_now.getMinutes());
