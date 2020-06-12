@@ -367,7 +367,7 @@ class FullScreenDialog extends Component {
     this.setState({
       loading: true,
     });
-    await this.addOrder();
+    // await this.addOrder();
     var text = await this.setOrderText();
     var url =
       "https://wa.me/65" + this.context.pageData.contact + "?text=" + text;
