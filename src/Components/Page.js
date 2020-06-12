@@ -629,13 +629,7 @@ export class Page extends React.Component {
         // If without_first_item, condition should be (element.name && element.price && i !== 0)) [1]
         // Else condition should only be (element.name && element.price) [2]
         let toPush = true;
-        without_first_item
-          ? element.name && element.price && i !== 0
-            ? (toPush = true)
-            : (toPush = false)
-          : element.name && element.price
-          ? (toPush = true)
-          : (toPush = false);
+        element.name ? (toPush = true) : (toPush = false)
         if (toPush) {
           data.push(
             <Component.PageItem
