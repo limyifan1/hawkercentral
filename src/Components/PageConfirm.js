@@ -555,70 +555,91 @@ class FullScreenDialog extends Component {
                   </div>
                 </div>
               </div>
-              <div
-                style={{
-                  display:
-                    this.context.channel === "delivery" ? "inline" : "none",
-                }}
-              >
-                <div class="row">
-                  <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    <div class="form-group create-title">
-                      <label for="postalcode">Postal Code</label>
-                      <div class="input-group">
+              {this.context.channel === "delivery" ? (
+                <div>
+                  <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                      <div class="form-group create-title">
+                        <label for="postalcode">Postal Code</label>
+                        <div class="input-group">
+                          <input
+                            onChange={this.handleCustomerDetails}
+                            value={this.context.customerDetails.postal}
+                            type="text"
+                            class={
+                              !this.context.customerDetails.postal
+                                ? "form-control is-invalid"
+                                : "form-control"
+                            }
+                            name="postal"
+                            placeholder="Enter Postal Code"
+                            maxLength="6"
+                            required
+                          ></input>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                      <div class="form-group create-title">
+                        <label for="unit">Unit #</label>
                         <input
                           onChange={this.handleCustomerDetails}
-                          value={this.context.customerDetails.postal}
+                          value={this.context.customerDetails.unit}
                           type="text"
-                          class={
-                            !this.context.customerDetails.postal
-                              ? "form-control is-invalid"
-                              : "form-control"
-                          }
-                          name="postal"
-                          placeholder="Enter Postal Code"
-                          maxLength="6"
-                          required
+                          class="form-control"
+                          name="unit"
+                          placeholder="E.g. 01-01"
                         ></input>
                       </div>
                     </div>
                   </div>
-                  <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    <div class="form-group create-title">
-                      <label for="unit">Unit #</label>
-                      <input
-                        onChange={this.handleCustomerDetails}
-                        value={this.context.customerDetails.unit}
-                        type="text"
-                        class="form-control"
-                        name="unit"
-                        placeholder="E.g. 01-01"
-                      ></input>
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                      <div class="form-group create-title">
+                        <label for="street">
+                          Street Name<b> (Auto-Filled)</b>
+                        </label>
+                        <input
+                          onChange={this.handleCustomerDetails}
+                          value={this.context.customerDetails.street}
+                          type="text"
+                          class={
+                            !this.context.customerDetails.street
+                              ? "form-control is-invalid"
+                              : "form-control"
+                          }
+                          name="street"
+                          placeholder="Enter Street Name"
+                        ></input>
+                      </div>
                     </div>
                   </div>
+                  {this.context.delivery_option === "distance" ? (
+                    <React.Fragment>
+                      {this.context.delivery_fee ? (
+                        <div class="row">
+                          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <b>Distance:</b> {this.context.distance / 1000}km{" "}
+                            <br />
+                            <b>Delivery Cost:</b> ${this.context.delivery_fee}{" "}
+                            <br />
+                          </div>
+                        </div>
+                      ) : (
+                        <div class="row">
+                          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <b>
+                              Please key in postal code to get delivery price.{" "}
+                            </b>
+                          </div>
+                        </div>
+                      )}
+                    </React.Fragment>
+                  ) : null}
                 </div>
-                <div class="row">
-                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="form-group create-title">
-                      <label for="street">
-                        Street Name<b> (Auto-Filled)</b>
-                      </label>
-                      <input
-                        onChange={this.handleCustomerDetails}
-                        value={this.context.customerDetails.street}
-                        type="text"
-                        class={
-                          !this.context.customerDetails.street
-                            ? "form-control is-invalid"
-                            : "form-control"
-                        }
-                        name="street"
-                        placeholder="Enter Street Name"
-                      ></input>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              ) : null}
+
+              <br />
               <div class="form-group create-title">
                 <label for="address">Comments</label>
                 <input
