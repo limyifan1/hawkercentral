@@ -14,6 +14,7 @@ import DatePicker from "react-date-picker";
 import TimePicker from "react-time-picker";
 import { db } from "./Firestore";
 import { Spinner } from "react-bootstrap";
+const API_KEY = `${process.env.REACT_APP_GKEY}`;
 
 const time_now = new Date();
 time_now.setMinutes(time_now.getMinutes());
@@ -103,6 +104,7 @@ class FullScreenDialog extends Component {
       time: time_now.getHours() + ":" + time_now.getMinutes(),
       date: time_now,
       datetime: time_now,
+      loading: false,
     };
     this.setOrderText = this.setOrderText.bind(this);
     this.handleCustomerDetails = this.handleCustomerDetails.bind(this);
@@ -120,18 +122,68 @@ class FullScreenDialog extends Component {
         postal: inputValue,
       });
       if (inputValue.length === 6) {
-        await this.getPostal(inputValue);
+        this.getPostal(inputValue);
       }
     }
     this.context.addCustomerDetails(inputField, inputValue);
   };
 
+  getDirections = async (street, street_to) => {
+    const query =
+      "https://fathomless-falls-12833.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?" +
+      "mode=driving" +
+      "&" +
+      "region=sg" +
+      "&" +
+      "units=metric" +
+      "&" +
+      "origin=" +
+      street +
+      "&" +
+      "destination=" +
+      street_to +
+      "&departure_time=" +
+      parseInt(time_now.valueOf() / 1000) +
+      "&" +
+      "key=" +
+      API_KEY;
+
+    return fetch(query, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      referrerPolicy: "no-referrer",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((contents) => {
+        var distance =
+          contents && contents.routes.length > 0
+            ? contents.routes[0].legs[0].distance.value
+            : 0;
+        return distance;
+      })
+      .catch((error) => {
+        console.log("Error:" + error.toString());
+      });
+  };
+
   async getPostal(postal) {
-    // event.preventDefault();
+    this.setState({ loading: true });
     let data = await this.callPostal(postal);
     if (data !== undefined) {
       this.context.addCustomerDetails("street", data["ADDRESS"]);
     }
+    if (this.context.delivery_option === "distance") {
+      let distance = await this.getDirections(
+        this.context.pageData.street,
+        data["ADDRESS"]
+      );
+      await this.context.addDistance(distance);
+    }
+    this.setState({ loading: false });
   }
 
   componentWillMount() {
@@ -146,6 +198,7 @@ class FullScreenDialog extends Component {
       this.context.addCustomerDetails("postal", userDetails.postal);
       this.context.addCustomerDetails("unit", userDetails.unit);
       this.context.addCustomerDetails("street", userDetails.street);
+      this.getPostal(userDetails.postal);
       // this.setState(userDetails);
       this.setState({ shouldRememberDetails: true });
     }
@@ -264,6 +317,7 @@ class FullScreenDialog extends Component {
   };
 
   setOrderText = async () => {
+    const { cartTotal } = this.context;
     let text = "";
     if (this.context.channel === "delivery") {
       text =
@@ -302,11 +356,39 @@ class FullScreenDialog extends Component {
           "\n";
       }
     }
-    text =
-      text +
-      "\n\nTotal Price (not including delivery): *$" +
-      this.context.cartTotal.totalPrice.toFixed(2) +
-      "*";
+
+    const delivery_fee =
+      cartTotal.totalPrice <= this.context.pageData.free_delivery ||
+      this.context.pageData.free_delivery === "0"
+        ? Number(this.context.delivery_fee)
+        : 0;
+
+    var discount =
+      this.context.all_promo || this.context.selfcollect_promo
+        ? (Number(this.context.all_promo) / 100) * Number(cartTotal.totalPrice)
+        : 0;
+
+    if (this.context.channel === "collect") {
+      discount =
+        discount +
+        (Number(this.context.selfcollect_promo) / 100) *
+          Number(cartTotal.totalPrice);
+    }
+
+    discount = discount.toFixed(2);
+
+    var totalPrice =
+      Number(this.context.cartTotal.totalPrice) +
+      Number(delivery_fee) -
+      Number(discount);
+
+    totalPrice = totalPrice.toFixed(2);
+
+    text = text + "\n\nPromotion: *-$" + discount + "*";
+
+    text = text + "\nDelivery: *$" + delivery_fee + "*";
+
+    text = text + "\nTotal Price: *$" + totalPrice + "*";
 
     if (this.context.channel === "delivery") {
       text =
@@ -368,7 +450,7 @@ class FullScreenDialog extends Component {
     this.setState({
       loading: true,
     });
-    // await this.addOrder();
+    await this.addOrder();
     var text = await this.setOrderText();
     var url =
       "https://wa.me/65" + this.context.pageData.contact + "?text=" + text;
@@ -626,13 +708,20 @@ class FullScreenDialog extends Component {
                           </div>
                         </div>
                       ) : (
-                        <div class="row">
-                          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <b>
-                              Please key in postal code to get delivery price.{" "}
-                            </b>
-                          </div>
-                        </div>
+                        <React.Fragment>
+                          {this.state.loading ? (
+                            <Spinner class="" animation="grow" />
+                          ) : (
+                            <div class="row">
+                              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <b>
+                                  Please key in postal code to get delivery
+                                  price.{" "}
+                                </b>
+                              </div>
+                            </div>
+                          )}
+                        </React.Fragment>
                       )}
                     </React.Fragment>
                   ) : null}
@@ -703,7 +792,10 @@ class FullScreenDialog extends Component {
                       </div>
                     </React.Fragment>
                   ) : (
-                    <Spinner class="" animation="grow" />
+                    <React.Fragment>
+                      <Spinner class="" animation="grow" />{" "}
+                      <span>Loading...</span>
+                    </React.Fragment>
                   )}
                 </React.Fragment>
               ) : null}

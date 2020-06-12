@@ -104,6 +104,7 @@ export class Custom extends React.Component {
         docid: this.state.id,
         logo: "",
         cover: this.state.cover,
+        delivery_option: "none"
       })
       .then(async (d) => {
         await db

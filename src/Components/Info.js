@@ -1921,12 +1921,12 @@ export class Info extends React.Component {
                     </p>
                     {this.state.data.minimum_order && (
                       <span>
-                        Minimum Order: {this.state.data.minimum_order}
+                        Minimum Order: ${this.state.data.minimum_order}
                       </span>
                     )}
                     {this.state.data.free_delivery && (
                       <span>
-                        Free Delivery: {this.state.data.free_delivery}
+                        Free Delivery: ${this.state.data.free_delivery}
                       </span>
                     )}
                   </Linkify>

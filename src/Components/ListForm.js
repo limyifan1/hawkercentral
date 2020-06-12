@@ -79,6 +79,7 @@ const createDomain = async (name, id, cover, uid) => {
       docid: id,
       logo: "",
       cover: cover,
+      delivery_option: "none"
     })
     .then(async () => {
       await db
@@ -2097,6 +2098,19 @@ export class ListForm extends React.Component {
                               <h5 class="card-title create-title">
                                 Step 3: Create website (required)
                               </h5>
+                              <div class="form-group create-title">
+                                <div>
+                                  <label for="website">
+                                    What your website can look like:{" "}
+                                    <a
+                                      target="blank"
+                                      href="https://shidefu.foodleh.app"
+                                    >
+                                      shidefu.foodleh.app
+                                    </a>
+                                  </label>
+                                </div>
+                              </div>
                               <div class="form-group create-title">
                                 <div>
                                   <label for="website">
