@@ -24,6 +24,7 @@ import update from "immutability-helper";
 import Jimp from "jimp";
 import Button from "@material-ui/core/Button";
 const time_now = new Date();
+
 time_now.setMinutes(time_now.getMinutes());
 
 const theme = createMuiTheme({
@@ -191,6 +192,41 @@ class App extends React.Component {
       });
     };
 
+    this.changePage = (event) => {
+      event.preventDefault();
+      const target = event.currentTarget.id;
+      const value = event.target.value;
+      this.setState({
+        updated: false,
+        [target]: value,
+      });
+    };
+
+    this.changeDelivery = (event) => {
+      event.preventDefault();
+      const target = event.currentTarget.name;
+      const value = event.target.value;
+      this.setState({
+        updated: false,
+        [target]: value,
+      });
+    };
+
+    this.changeDistance = (event) => {
+      event.preventDefault();
+      const target = event.currentTarget.id;
+      const targetId = target.substring(target.indexOf("-") + 1);
+      const value = event.target.value;
+      this.setState({
+        updated: false,
+      });
+      this.setState({
+        tiered_delivery: update(this.state.tiered_delivery, {
+          [targetId]: { $set: value },
+        }),
+      });
+    };
+
     this.changeInfo = (event) => {
       event.preventDefault();
       const target = event.currentTarget.id;
@@ -200,7 +236,6 @@ class App extends React.Component {
       });
       if (target === "logo" || target === "cover") {
         const image = event.target.files[0];
-        console.log(image, target);
         this.handleImageAsFile(null, image, target);
       } else {
         this.setState({
@@ -322,6 +357,30 @@ class App extends React.Component {
       });
     };
 
+    this.addDistance = (distance) => {
+      const tier = this.state.tiered_delivery;
+      var delivery_fee;
+      if (distance < 5000) {
+        delivery_fee = tier["5km"];
+      } else if (distance < 10000) {
+        delivery_fee = tier["10km"];
+      } else if (distance < 15000) {
+        delivery_fee = tier["15km"];
+      } else if (distance < 20000) {
+        delivery_fee = tier["20km"];
+      } else if (distance < 25000) {
+        delivery_fee = tier["25km"];
+      } else {
+        delivery_fee = tier["30km"];
+      }
+
+      this.setState({
+        delivery_fee: delivery_fee,
+        distance: distance,
+      });
+      console.log(distance);
+    };
+
     // State also contains the updater function so it will
     // be passed down into the context provider
     this.state = {
@@ -333,6 +392,7 @@ class App extends React.Component {
       addCustomerDetails: this.addCustomerDetails,
       changeChannel: this.changeChannel,
       toggleDialog: this.toggleDialog,
+      addDistance: this.addDistance,
       data: cookies.get("language") === "en" ? en : zh,
       scrollPosition: 0, // tracks scroll position of Search page
       setScrollPosition: this.setScrollPosition,
@@ -363,6 +423,19 @@ class App extends React.Component {
         date: time_now,
         datetime: time_now,
       },
+      delivery_fee: "0",
+      fixed_delivery: 0,
+      all_promo: 0,
+      selfcollect_promo: 0,
+      delivery_option: "none",
+      tiered_delivery: {
+        "5km": 0,
+        "10km": 0,
+        "15km": 0,
+        "20km": 0,
+        "25km": 0,
+        "30km": 0,
+      },
     };
     this.handleFireBaseUpload = this.handleFireBaseUpload.bind(this);
     this.handleImageAsFile = this.handleImageAsFile.bind(this);
@@ -391,8 +464,16 @@ class App extends React.Component {
   };
 
   changeChannel = (channel) => {
+    var delivery_fee;
+    if (channel === "delivery") {
+      if (this.state.delivery_option === "fixed")
+        delivery_fee = this.state.fixed_delivery;
+    } else {
+      delivery_fee = 0;
+    }
     this.setState({
       channel: channel,
+      delivery_fee: delivery_fee,
     });
   };
 
@@ -495,9 +576,14 @@ class App extends React.Component {
         db.collection("pages")
           .doc(this.state.pageName)
           .update({
+            delivery_option: this.state.delivery_option,
+            fixed_delivery: this.state.fixed_delivery,
             cover: this.state.cover,
             css: this.state.css,
             logo: this.state.logo,
+            tiered_delivery: this.state.tiered_delivery,
+            all_promo: this.state.all_promo,
+            selfcollect_promo: this.state.selfcollect_promo,
           })
           .then(() => {
             this.setState({ updating: false });
@@ -622,6 +708,14 @@ class App extends React.Component {
                               changeInfo={this.changeInfo}
                               changeColor={this.changeColor}
                               user={this.state.user}
+                              changePage={this.changePage}
+                              changeDelivery={this.changeDelivery}
+                              fixed_delivery={this.state.fixed_delivery}
+                              delivery_option={this.state.delivery_option}
+                              tiered_delivery={this.state.tiered_delivery}
+                              changeDistance={this.changeDistance}
+                              all_promo={this.state.all_promo}
+                              selfcollect_promo={this.state.selfcollect_promo}
                             />
                           )}
                         />

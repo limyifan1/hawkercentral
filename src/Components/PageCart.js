@@ -7,10 +7,23 @@ import "./style.scss";
 import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
 import Component from "./index";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
+function LinearProgressWithLabel(props) {
+  return (
+    <Box display="flex" alignItems="center" flexDirection="column">
+      <Box width="100%" mr={1}>
+        <LinearProgress variant="determinate" {...props} />
+      </Box>
+    </Box>
+  );
+}
 
 class PageCart extends React.Component {
   static propTypes = {
@@ -51,11 +64,10 @@ class PageCart extends React.Component {
   };
 
   handleClickOpen = () => {
-    if(this.context.channel){
+    if (this.context.channel) {
       this.setState({ open: true });
-    }
-    else{
-      this.context.toggleDialog()
+    } else {
+      this.context.toggleDialog();
     }
   };
 
@@ -83,6 +95,33 @@ class PageCart extends React.Component {
     if (this.state.isOpen) {
       classes.push("float-cart--open");
     }
+
+    const delivery_fee =
+      cartTotal.totalPrice <= this.context.pageData.free_delivery ||
+      this.context.pageData.free_delivery === "0"
+        ? Number(this.context.delivery_fee)
+        : 0;
+
+    var discount =
+      this.context.all_promo || this.context.selfcollect_promo
+        ? (Number(this.context.all_promo) / 100) * Number(cartTotal.totalPrice)
+        : 0;
+
+    if (this.context.channel === "collect") {
+      discount =
+        discount +
+        (Number(this.context.selfcollect_promo) / 100) *
+          Number(cartTotal.totalPrice);
+    }
+
+    discount = discount.toFixed(2);
+
+    var totalPrice =
+      Number(this.context.cartTotal.totalPrice) +
+      Number(delivery_fee) -
+      Number(discount);
+
+    totalPrice = totalPrice.toFixed(2);
 
     return (
       <span className={classes.join(" ")}>
@@ -190,16 +229,139 @@ class PageCart extends React.Component {
               </p>
             )}
           </div>
-
           <div className="float-cart__footer">
+            <div class="row">
+              {this.context.pageData.minimum_order &&
+              this.context.pageData.minimum_order !== "0" &&
+              this.context.channel === "delivery" ? (
+                <React.Fragment>
+                  {this.context.pageData.minimum_order - cartTotal.totalPrice >
+                  0 ? (
+                    <div className="progress">
+                      <Grid container direction={"row"}>
+                        <Grid
+                          style={{
+                            color: "black",
+                            width: "100%",
+                            marginBottom: "20px",
+                            fontSize: "18px",
+                          }}
+                        >
+                          $
+                          {this.context.pageData.minimum_order -
+                            cartTotal.totalPrice}{" "}
+                          to minimum amount
+                        </Grid>
+                        <Grid style={{ width: "100%" }}>
+                          <LinearProgressWithLabel
+                            value={
+                              (100 * cartTotal.totalPrice) /
+                              this.context.pageData.minimum_order
+                            }
+                          />
+                        </Grid>
+                      </Grid>
+                    </div>
+                  ) : (
+                    <React.Fragment>
+                      <div className="progress">
+                        <h5 style={{ color: "green" }}>Minimum Amount Met! </h5>
+                      </div>
+                    </React.Fragment>
+                  )}
+                </React.Fragment>
+              ) : null}
+            </div>
+            <div class="row">
+              {this.context.pageData.free_delivery &&
+              this.context.pageData.free_delivery !== "0" &&
+              this.context.channel === "delivery" ? (
+                <React.Fragment>
+                  {this.context.pageData.free_delivery - cartTotal.totalPrice >
+                  0 ? (
+                    <div className="progress">
+                      <Grid container direction={"row"}>
+                        <Grid
+                          style={{
+                            color: "black",
+                            width: "100%",
+                            marginBottom: "20px",
+                            fontSize: "18px",
+                          }}
+                        >
+                          $
+                          {this.context.pageData.free_delivery -
+                            cartTotal.totalPrice}{" "}
+                          to free delivery
+                        </Grid>
+                        <Grid style={{ width: "100%" }}>
+                          <LinearProgressWithLabel
+                            value={
+                              (100 * cartTotal.totalPrice) /
+                              this.context.pageData.free_delivery
+                            }
+                          />
+                        </Grid>
+                      </Grid>
+                    </div>
+                  ) : (
+                    <React.Fragment>
+                      <div className="progress">
+                        <h5 style={{ color: "green" }}>Free Delivery Met! </h5>
+                      </div>
+                    </React.Fragment>
+                  )}
+                </React.Fragment>
+              ) : null}
+            </div>
+            {this.context.channel === "delivery" ? (
+              <div class="row">
+                {(this.context.delivery_option === "none" ||
+                  !this.context.delivery_option) && (
+                  <div className="sub">DELIVERY FEES NOT INCLUDED</div>
+                )}
+                {(this.context.delivery_option === "fixed" ||
+                  this.context.delivery_option === "distance") &&
+                  this.context.delivery_option &&
+                  this.context.delivery_fee !== undefined && (
+                    <React.Fragment>
+                      <div className="sub">DELIVERY FEES: </div>
+                      <div className="sub-price">
+                        <p className="sub-price__val">${delivery_fee}</p>
+                      </div>
+                    </React.Fragment>
+                  )}
+              </div>
+            ) : null}
+            {this.context.all_promo || this.context.selfcollect_promo ? (
+              <div class="row">
+                {(this.context.delivery_option === "fixed" ||
+                  this.context.delivery_option === "distance") &&
+                  this.context.delivery_option &&
+                  this.context.delivery_fee !== undefined && (
+                    <React.Fragment>
+                      <div className="sub">DISCOUNT: </div>
+                      <div className="sub-price">
+                        <p className="sub-price__val">- ${discount}</p>
+                      </div>
+                    </React.Fragment>
+                  )}
+              </div>
+            ) : null}
             <div class="row">
               <div className="sub">SUBTOTAL</div>
               <div className="sub-price">
-                <p className="sub-price__val">${`${cartTotal.totalPrice}`}</p>
+                {(this.context.delivery_option === "none" ||
+                  this.context.channel === "collect") && (
+                  <p className="sub-price__val">${totalPrice}</p>
+                )}
+                {(this.context.delivery_option === "fixed" ||
+                  this.context.delivery_option === "distance") &&
+                  this.context.channel === "delivery" &&
+                  this.context.delivery_fee !== undefined && (
+                    <p className="sub-price__val">${totalPrice}</p>
+                  )}
               </div>
-            </div>
-            <div class="row">
-              <div className="sub">DELIVERY FEES NOT INCLUDED</div>
             </div>
             <div>
               <div onClick={this.handleClickOpen} className="buy-btn">

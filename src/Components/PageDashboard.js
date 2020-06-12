@@ -33,6 +33,19 @@ import ColorPicker from "material-ui-color-picker";
 import firebase, { uiConfigPage } from "./Firestore";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { db } from "./Firestore";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+
 const analytics = firebase.analytics();
 
 function onLoad(name, item) {
@@ -479,6 +492,210 @@ const InfoSettings = (props) => {
   );
 };
 
+const DeliverySettings = (props) => {
+  const classes = useStyles();
+
+  var entries = [];
+  var keys = ["5km", "10km", "15km", "20km", "25km", "30km"];
+  keys.forEach((element) => {
+    entries.push(
+      <TableRow key={"Less Than 5km"}>
+        <TableCell component="th" scope="row">
+          Less than {element}
+        </TableCell>
+        <TableCell align="right">
+          <TextField
+            label={element + "price"}
+            id={"distance-" + element}
+            value={props.tiered_delivery[element]}
+            type="text"
+            // style={{ width: "170px" }}
+            onChange={props.changeDistance}
+          />
+        </TableCell>
+      </TableRow>
+    );
+  });
+
+  return (
+    <React.Fragment>
+      <Grid
+        container
+        direction="row"
+        alignContent={"center"}
+        justify={"start"}
+        spacing={2}
+        style={{ marginTop: "20px" }}
+      >
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="minimum_order"
+            label="Minumum Order Amount e.g. minimum $15"
+            style={{ width: "100%" }}
+            value={props.data.minimum_order}
+            onChange={props.changeInfo}
+            type="number"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="free_delivery"
+            label="Free Delivery Amount e.g. minimum $30 free delivery"
+            style={{ width: "100%" }}
+            value={props.data.free_delivery}
+            onChange={props.changeInfo}
+            type="number"
+          />
+        </Grid>
+        <Grid item xs={12} sm={12}>
+          <Card
+            style={{ width: "100%", height: "auto", alignContent: "center" }}
+          >
+            <Grid
+              container
+              direction={"row"}
+              justify={"center"}
+              alignContent={"center"}
+            >
+              <Grid
+                item
+                xs={6}
+                sm={6}
+                alignContent={"center"}
+                alignItems={"center"}
+                style={{ padding: "20px" }}
+              >
+                <FormControl component="fieldset">
+                  <FormLabel component="legend">
+                    Delivery Price Calculation
+                  </FormLabel>
+                  <RadioGroup
+                    id="delivery_option"
+                    value={props.delivery_option}
+                    onChange={props.changeDelivery}
+                    name="delivery_option"
+                  >
+                    <FormControlLabel
+                      value="none"
+                      id="delivery_option"
+                      control={<Radio color="default" />}
+                      label="Don't Include"
+                    />
+                    <FormControlLabel
+                      value="fixed"
+                      id="delivery_option"
+                      control={<Radio color="default" />}
+                      label="Fixed Delivery Price"
+                    />
+                    <FormControlLabel
+                      value="distance"
+                      id="delivery_option"
+                      control={<Radio color="default" />}
+                      label="Calculate by Driving Distance"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
+              <Grid
+                item
+                container
+                xs={6}
+                sm={6}
+                justify={"flex-start"}
+                style={{ padding: "10px" }}
+              >
+                {props.delivery_option === "fixed" && (
+                  <React.Fragment>
+                    <h5>Fixed Delivery Price</h5>
+                    <Grid item xs={12} sm={12}>
+                      <TextField
+                        id="fixed_delivery"
+                        label="Fixed Delivery Fee"
+                        style={{ width: "100%" }}
+                        value={props.fixed_delivery}
+                        onChange={props.changePage}
+                        type="number"
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">$</InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Grid>
+                  </React.Fragment>
+                )}
+                {props.delivery_option === "distance" && (
+                  <React.Fragment>
+                    <h5>
+                      Delivery Price By Distance (Google Maps Driving Route)
+                    </h5>
+                    <TableContainer component={Paper}>
+                      <Table
+                        className={classes.table}
+                        aria-label="simple table"
+                      >
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Distance</TableCell>
+                            <TableCell align="right">Delivery Price</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>{entries}</TableBody>
+                      </Table>
+                    </TableContainer>
+                  </React.Fragment>
+                )}
+              </Grid>
+            </Grid>
+          </Card>
+        </Grid>
+      </Grid>
+    </React.Fragment>
+  );
+};
+
+const PromoSettings = (props) => {
+  // const classes = useStyles();
+  return (
+    <React.Fragment>
+      <Grid
+        container
+        direction="row"
+        alignContent={"center"}
+        justify={"start"}
+        spacing={2}
+      >
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="all_promo"
+            label="All Items Promo e.g. 20"
+            style={{ width: "100%" }}
+            value={props.all_promo}
+            onChange={props.changePage}
+            type="number"
+            InputProps={{
+              endAdornment: <InputAdornment position="start">%</InputAdornment>,
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="selfcollect_promo"
+            label="Self-Collect Promo e.g. 20"
+            style={{ width: "100%" }}
+            value={props.selfcollect_promo}
+            onChange={props.changePage}
+            type="number"
+            InputProps={{
+              endAdornment: <InputAdornment position="start">%</InputAdornment>,
+            }}
+          />
+        </Grid>
+      </Grid>
+    </React.Fragment>
+  );
+};
+
 const PageDashboardContainer = (props) => {
   const { window } = props;
   const classes = useStyles();
@@ -496,7 +713,7 @@ const PageDashboardContainer = (props) => {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {["Menu", "Info"].map((text, index) => (
+        {["Menu", "Info", "Delivery", "Promo"].map((text, index) => (
           <ListItem button key={text} onClick={() => setTab(text)}>
             <ListItemText primary={text} />
           </ListItem>
@@ -539,13 +756,10 @@ const PageDashboardContainer = (props) => {
             noWrap
             style={{ color: props.css.menu_font_color }}
           >
-            {tab === "Menu" ? (
-              <span>Menu Settings</span>
-            ) : (
-              <React.Fragment>
-                {tab === "Info" ? <span>Info Settings</span> : null}
-              </React.Fragment>
-            )}
+            {tab === "Menu" && <span>Menu Settings</span>}
+            {tab === "Info" && <span>Info Settings</span>}
+            {tab === "Delivery" && <span>Delivery Settings</span>}
+            {tab === "Promo" && <span>Promo Settings</span>}
           </Typography>
           {props.updating ? (
             <div
@@ -650,6 +864,37 @@ const PageDashboardContainer = (props) => {
                 cover={props.cover}
                 css={props.css}
               />
+            ) : tab === "Delivery" ? (
+              <DeliverySettings
+                pageName={props.pageName}
+                data={props.data}
+                changeInfo={props.changeInfo}
+                updating={props.updating}
+                updated={props.updated}
+                changePage={props.changePage}
+                fixed_delivery={props.fixed_delivery}
+                delivery_option={props.delivery_option}
+                changeDelivery={props.changeDelivery}
+                tiered_delivery={props.tiered_delivery}
+                changeDistance={props.changeDistance}
+              />
+            ) : tab === "Promo" ? (
+              <PromoSettings
+                pageName={props.pageName}
+                data={props.data}
+                changeInfo={props.changeInfo}
+                saveToFirestore={props.saveToFirestore}
+                updating={props.updating}
+                updated={props.updated}
+                addMenuItem={props.addMenuItem}
+                changeColor={props.changeColor}
+                logo={props.logo}
+                cover={props.cover}
+                css={props.css}
+                changePage={props.changePage}
+                all_promo={props.all_promo}
+                selfcollect_promo={props.selfcollect_promo}
+              />
             ) : null}
           </Grid>
         </Grid>
@@ -735,6 +980,14 @@ class PageDashboard extends React.Component {
                 changeColor={this.props.changeColor}
                 user={this.state.firebaseUser}
                 userSignOut={this.userSignOut}
+                changePage={this.props.changePage}
+                fixed_delivery={this.props.fixed_delivery}
+                delivery_option={this.props.delivery_option}
+                changeDelivery={this.props.changeDelivery}
+                tiered_delivery={this.props.tiered_delivery}
+                changeDistance={this.props.changeDistance}
+                all_promo={this.props.all_promo}
+                selfcollect_promo={this.props.selfcollect_promo}
               />
             ) : (
               <React.Fragment>
