@@ -1073,7 +1073,7 @@ export class Info extends React.Component {
                   </span>
                 </div>
               ) : null}
-              <br />
+
               {/* Custom button display: menu, website, message */}
               <div>
                 {this.state.data.menu &&
@@ -1111,23 +1111,111 @@ export class Info extends React.Component {
                   </a>
                 ) : null}
                 {this.state.data.whatsapp ? (
-                  <span>
-                    <span className="">
-                      <a
-                        href={link}
-                        target="blank"
-                        onClick={() => onLoad("message", this.state.data.name)}
-                      >
-                        <img
-                          alt=""
-                          src={whatsapp_button}
-                          style={{
-                            width: "25%",
-                          }}
-                        />
-                      </a>
-                    </span>
-
+                  <span className="">
+                    <a
+                      href={link}
+                      target="blank"
+                      onClick={() =>
+                        onLoad("message", this.state.data.name)
+                      }
+                    >
+                      <img
+                        alt=""
+                        src={whatsapp_button}
+                        style={{
+                          width: "25%",
+                        }}
+                      />
+                    </a>
+                  </span>
+                ) : null }
+              </div>
+              Share this with friends!
+              <br />
+              <FacebookShareButton
+                url={"www.foodleh.app/info?id=" + this.state.id}
+                quote={"Hungry? Try out " + this.state.data.name + " now!"}
+                hashtag={"#saveourFnB"}
+              >
+                <FacebookIcon size={32} round={true} />
+              </FacebookShareButton>{" "}
+              <span className="" style={{ marginRight: "5px" }}>
+                <a
+                  href={
+                    "whatsapp://send?text=" +
+                    encodeURIComponent(
+                      "Hungry? Try out " +
+                        this.state.data.name +
+                        " now! Order form / more information at www.foodleh.app/info?id=" +
+                        this.state.id
+                    )
+                  }
+                >
+                  <img
+                    alt=""
+                    src={whatsapp_icon}
+                    style={{ width: "32px", cursor: "pointer" }}
+                  />
+                </a>
+              </span>
+              {/* <WhatsappShareButton
+                url={"www.foodleh.app/info?id=" + this.state.id}
+                title={"Hungry? Try out " + this.state.data.name + " now!"}
+              >
+                <WhatsappIcon size={32} round={true} />
+              </WhatsappShareButton>{" "} */}
+              <TelegramShareButton
+                url={"www.foodleh.app/info?id=" + this.state.id}
+                title={"Hungry? Try out " + this.state.data.name + " now!"}
+              >
+                <TelegramIcon size={32} round={true} />
+              </TelegramShareButton>{" "}
+              <TwitterShareButton
+                url={"www.foodleh.app/info?id=" + this.state.id}
+                title={"Hungry? Try out " + this.state.data.name + " now!"}
+              >
+                <TwitterIcon size={32} round={true} />
+              </TwitterShareButton>{" "}
+              <Clap
+                collection={"hawkers"}
+                id={this.state.id}
+                claps={this.state.data.claps}
+              />
+              <Component.Popup
+                data={this.state.data}
+                id={this.state.id}
+                onSubmitEdit={this.showReviewEditMessage}
+                onSubmitDelete={this.showReviewDeleteMessage}
+              />
+              <br />
+              {this.state.data.promo ? (
+                <div
+                  className="card shadow"
+                  style={{
+                    color: "black",
+                    backgroundColor: "white",
+                    height: "35px",
+                  }}
+                >
+                  <span className="card-body">
+                    <div
+                      className="card-title"
+                      style={{
+                        position: "absolute",
+                        top: "6px",
+                        fontSize: "13px",
+                      }}
+                    >
+                      <b>{this.state.data.promo}</b>:{" "}
+                      {this.state.data.condition &&
+                      this.state.data.condition.length > 40
+                        ? this.state.data.condition.slice(0, 40) + "..."
+                        : this.state.data.condition}
+                    </div>
+                  </span>
+                </div>
+              ) : null}
+              <div>
                     {/* Display appropriate header - menu / menu with Whatsapp ordering */}
                     {this.state.data.menu &&
                     this.state.data.whatsapp &&
@@ -1772,97 +1860,7 @@ export class Info extends React.Component {
                         </Form>
                       </div>
                     ) : null}
-                  </span>
-                ) : null}
               </div>
-              <br />
-              Share this with friends!
-              <br />
-              <FacebookShareButton
-                url={"www.foodleh.app/info?id=" + this.state.id}
-                quote={"Hungry? Try out " + this.state.data.name + " now!"}
-                hashtag={"#saveourFnB"}
-              >
-                <FacebookIcon size={32} round={true} />
-              </FacebookShareButton>{" "}
-              <span className="" style={{ marginRight: "5px" }}>
-                <a
-                  href={
-                    "whatsapp://send?text=" +
-                    encodeURIComponent(
-                      "Hungry? Try out " +
-                        this.state.data.name +
-                        " now! Order form / more information at www.foodleh.app/info?id=" +
-                        this.state.id
-                    )
-                  }
-                >
-                  <img
-                    alt=""
-                    src={whatsapp_icon}
-                    style={{ width: "32px", cursor: "pointer" }}
-                  />
-                </a>
-              </span>
-              {/* <WhatsappShareButton
-                url={"www.foodleh.app/info?id=" + this.state.id}
-                title={"Hungry? Try out " + this.state.data.name + " now!"}
-              >
-                <WhatsappIcon size={32} round={true} />
-              </WhatsappShareButton>{" "} */}
-              <TelegramShareButton
-                url={"www.foodleh.app/info?id=" + this.state.id}
-                title={"Hungry? Try out " + this.state.data.name + " now!"}
-              >
-                <TelegramIcon size={32} round={true} />
-              </TelegramShareButton>{" "}
-              <TwitterShareButton
-                url={"www.foodleh.app/info?id=" + this.state.id}
-                title={"Hungry? Try out " + this.state.data.name + " now!"}
-              >
-                <TwitterIcon size={32} round={true} />
-              </TwitterShareButton>{" "}
-              <br />
-              <Component.Popup
-                data={this.state.data}
-                id={this.state.id}
-                onSubmitEdit={this.showReviewEditMessage}
-                onSubmitDelete={this.showReviewDeleteMessage}
-              />
-              <br />
-              {this.state.data.promo ? (
-                <div
-                  className="card shadow"
-                  style={{
-                    color: "black",
-                    backgroundColor: "white",
-                    height: "35px",
-                  }}
-                >
-                  <span className="card-body">
-                    <div
-                      className="card-title"
-                      style={{
-                        position: "absolute",
-                        top: "6px",
-                        fontSize: "13px",
-                      }}
-                    >
-                      <b>{this.state.data.promo}</b>:{" "}
-                      {this.state.data.condition &&
-                      this.state.data.condition.length > 40
-                        ? this.state.data.condition.slice(0, 40) + "..."
-                        : this.state.data.condition}
-                    </div>
-                  </span>
-                </div>
-              ) : null}
-              <br />
-              <Clap
-                collection={"hawkers"}
-                id={this.state.id}
-                claps={this.state.data.claps}
-              />
               {this.state.data.description ? (
                 <div>
                   <br />
