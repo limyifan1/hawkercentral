@@ -897,7 +897,7 @@ export class Info extends React.Component {
             style={{
               padding: "0rem 1rem",
               marginBottom: "0.5rem",
-              marginTop: "-2rem",
+              marginTop: "0rem",
               height: "320px",
               backgroundColor: "white",
             }}
