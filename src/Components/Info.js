@@ -905,29 +905,6 @@ export class Info extends React.Component {
           </div>
         ) : null}
         <div className="row">
-          <div
-            className="jumbotron col-xs-6 col-sm-6 col-md-6 col-lg-6"
-            style={{ height: "320px", backgroundColor: "white" }}
-          >
-            {/* <img src={this.state.data.url} /> */}
-            <div style={{ alignItems: "center" }}>
-              {photos.length !== 0 ? (
-                <ImageGallery
-                  items={photos}
-                  renderFullscreenButton={this.renderFullscreenButton}
-                  // lazyLoad={false}
-                  useBrowserFullscreen={false}
-                  showPlayButton={false}
-                  useTranslate3D={false}
-                  slideDuration={100}
-                  // isRTL={false}
-                  slideInterval={2000}
-                  slideOnThumbnailOver={false}
-                  thumbnailPosition={"bottom"}
-                />
-              ) : null}
-            </div>
-          </div>
           <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
             <div
               className="container"
@@ -1215,6 +1192,39 @@ export class Info extends React.Component {
                   </span>
                 </div>
               ) : null}
+            </div>
+          </div>
+
+          <div
+            className="jumbotron col-xs-6 col-sm-6 col-md-6 col-lg-6"
+            style={{ height: "320px", backgroundColor: "white" }}
+          >
+            {/* <img src={this.state.data.url} /> */}
+            <div style={{ alignItems: "center" }}>
+              {photos.length !== 0 ? (
+                <ImageGallery
+                  items={photos}
+                  renderFullscreenButton={this.renderFullscreenButton}
+                  // lazyLoad={false}
+                  useBrowserFullscreen={false}
+                  showPlayButton={false}
+                  useTranslate3D={false}
+                  slideDuration={100}
+                  // isRTL={false}
+                  slideInterval={2000}
+                  slideOnThumbnailOver={false}
+                  thumbnailPosition={"bottom"}
+                />
+              ) : null}
+            </div>
+          </div>
+        </div>
+
+        <div className="row">
+            <div
+              className="container"
+              style={{ textAlign: "left", paddingTop: "10px" }}
+            >
               <div>
                     {/* Display appropriate header - menu / menu with Whatsapp ordering */}
                     {this.state.data.menu &&
@@ -1987,7 +1997,6 @@ export class Info extends React.Component {
               </ScrollTop>
             </div>
           </div>
-        </div>
       </div>
     ) : (
       <div className="row h-100 page-container">
