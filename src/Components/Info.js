@@ -143,7 +143,7 @@ function formatAMPM(date) {
 export class Info extends React.Component {
   constructor(props) {
     super(props);
-
+    this.myRef = React.createRef();
     this.state = {
       className:
         typeof this.props.className === "string"
@@ -400,6 +400,7 @@ export class Info extends React.Component {
   enterDetails() {
     console.log("enterDetails");
     onLoad("view_menu", this.state.data.name);
+    this.scrollToMyRef();
     if (this.state.wantToOrder) {
       this.setState({ wantToOrder: false });
     } else {
@@ -711,6 +712,8 @@ export class Info extends React.Component {
       ),
     });
   };
+
+  scrollToMyRef = () => window.scrollTo(0, this.myRef.offsetTop - 60);
 
   render() {
     let cuisine = [];
