@@ -790,6 +790,11 @@ figure.effect-bubba:hover p {
   top: 0px;
   color: rgba(189, 195, 199, 1);
 }
+
+.badge {
+  margin: 0 0.1rem;
+}
+
 /*==================== Message ======================*/
 #message {
   position: absolute;
