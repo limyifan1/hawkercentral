@@ -238,39 +238,17 @@ export class Info extends React.Component {
   }
 
   updateCustomerDetails = async (event) => {
-    const inputValue = event.target.value;
-    const inputField = event.target.name;
-    if (inputField === "name") {
+    const { name: inputField, value: inputValue } = event.target;
+    const inputFields = [
+      "name", "address", "notes", "customerNumber", "unit", "street", "postal"
+    ];
+    if (inputFields.includes(inputField)) {
       this.setState({
-        name: inputValue,
-      });
-    } else if (inputField === "address") {
-      this.setState({
-        address: inputValue,
-      });
-    } else if (inputField === "notes") {
-      this.setState({
-        notes: inputValue,
-      });
-    } else if (inputField === "customerNumber") {
-      this.setState({
-        customerNumber: inputValue,
-      });
-    } else if (inputField === "unit") {
-      this.setState({
-        unit: inputValue,
-      });
-    } else if (inputField === "street") {
-      this.setState({
-        street: inputValue, // TODO: autofill
-      });
-    } else if (inputField === "postal") {
-      this.setState({
-        postal: inputValue,
-      });
-      if (inputValue.length === 6) {
-        await this.getPostal(inputValue);
-      }
+        [inputField]: inputValue,
+      })
+    }
+    if (inputField === "postal" && inputValue.length === 6) {
+      await this.getPostal(inputValue);
     }
   };
 
