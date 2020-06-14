@@ -1085,97 +1085,103 @@ export class Info extends React.Component {
                   </span>
                 ) : null }
               </div>
-              Share this with friends!
-              <br />
-              <FacebookShareButton
-                url={"www.foodleh.app/info?id=" + this.state.id}
-                quote={"Hungry? Try out " + this.state.data.name + " now!"}
-                hashtag={"#saveourFnB"}
-              >
-                <FacebookIcon size={32} round={true} />
-              </FacebookShareButton>{" "}
-              <span className="" style={{ marginRight: "5px" }}>
-                <a
-                  href={
-                    "whatsapp://send?text=" +
-                    encodeURIComponent(
-                      "Hungry? Try out " +
-                        this.state.data.name +
-                        " now! Order form / more information at www.foodleh.app/info?id=" +
-                        this.state.id
-                    )
-                  }
-                >
-                  <img
-                    alt=""
-                    src={whatsapp_icon}
-                    style={{ width: "32px", cursor: "pointer" }}
-                  />
-                </a>
-              </span>
-              {/* <WhatsappShareButton
-                url={"www.foodleh.app/info?id=" + this.state.id}
-                title={"Hungry? Try out " + this.state.data.name + " now!"}
-              >
-                <WhatsappIcon size={32} round={true} />
-              </WhatsappShareButton>{" "} */}
-              <TelegramShareButton
-                url={"www.foodleh.app/info?id=" + this.state.id}
-                title={"Hungry? Try out " + this.state.data.name + " now!"}
-              >
-                <TelegramIcon size={32} round={true} />
-              </TelegramShareButton>{" "}
-              <TwitterShareButton
-                url={"www.foodleh.app/info?id=" + this.state.id}
-                title={"Hungry? Try out " + this.state.data.name + " now!"}
-              >
-                <TwitterIcon size={32} round={true} />
-              </TwitterShareButton>{" "}
-              <Clap
-                collection={"hawkers"}
-                id={this.state.id}
-                claps={this.state.data.claps}
-              />
               <Component.Popup
                 data={this.state.data}
                 id={this.state.id}
                 onSubmitEdit={this.showReviewEditMessage}
                 onSubmitDelete={this.showReviewDeleteMessage}
               />
-              <br />
-              {this.state.data.promo ? (
-                <div
-                  className="card shadow"
-                  style={{
-                    color: "black",
-                    backgroundColor: "white",
-                    height: "35px",
-                  }}
-                >
-                  <span className="card-body">
-                    <div
-                      className="card-title"
-                      style={{
-                        position: "absolute",
-                        top: "6px",
-                        fontSize: "13px",
-                      }}
-                    >
-                      <b>{this.state.data.promo}</b>:{" "}
-                      {this.state.data.condition &&
-                      this.state.data.condition.length > 40
-                        ? this.state.data.condition.slice(0, 40) + "..."
-                        : this.state.data.condition}
-                    </div>
-                  </span>
+              <div className="row" style={{ margin: "1rem 0"}}>
+                <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6" style={{ padding: "0"  }}>
+                  <Clap
+                    collection={"hawkers"}
+                    id={this.state.id}
+                    claps={this.state.data.claps}
+                  />
                 </div>
-              ) : null}
+                <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6" style={{ padding: "0"  }}>
+                  Share this with friends!
+                  <br />
+                  <FacebookShareButton
+                    url={"www.foodleh.app/info?id=" + this.state.id}
+                    quote={"Hungry? Try out " + this.state.data.name + " now!"}
+                    hashtag={"#saveourFnB"}
+                  >
+                    <FacebookIcon size={32} round={true} />
+                  </FacebookShareButton>{" "}
+                  <span className="" style={{ marginRight: "5px" }}>
+                    <a
+                      href={
+                        "whatsapp://send?text=" +
+                        encodeURIComponent(
+                          "Hungry? Try out " +
+                            this.state.data.name +
+                            " now! Order form / more information at www.foodleh.app/info?id=" +
+                            this.state.id
+                        )
+                      }
+                    >
+                      <img
+                        alt=""
+                        src={whatsapp_icon}
+                        style={{ width: "32px", cursor: "pointer" }}
+                      />
+                    </a>
+                  </span>
+                  {/* <WhatsappShareButton
+                    url={"www.foodleh.app/info?id=" + this.state.id}
+                    title={"Hungry? Try out " + this.state.data.name + " now!"}
+                  >
+                    <WhatsappIcon size={32} round={true} />
+                  </WhatsappShareButton>{" "} */}
+                  <TelegramShareButton
+                    url={"www.foodleh.app/info?id=" + this.state.id}
+                    title={"Hungry? Try out " + this.state.data.name + " now!"}
+                  >
+                    <TelegramIcon size={32} round={true} />
+                  </TelegramShareButton>{" "}
+                  <TwitterShareButton
+                    url={"www.foodleh.app/info?id=" + this.state.id}
+                    title={"Hungry? Try out " + this.state.data.name + " now!"}
+                  >
+                    <TwitterIcon size={32} round={true} />
+                  </TwitterShareButton>{" "}
+                </div>
+
+              </div>
+                {this.state.data.promo ? (
+                  <div
+                    className="card shadow"
+                    style={{
+                      color: "black",
+                      backgroundColor: "white",
+                      height: "35px",
+                    }}
+                  >
+                    <span className="card-body">
+                      <div
+                        className="card-title"
+                        style={{
+                          position: "absolute",
+                          top: "6px",
+                          fontSize: "13px",
+                        }}
+                      >
+                        <b>{this.state.data.promo}</b>:{" "}
+                        {this.state.data.condition &&
+                        this.state.data.condition.length > 40
+                          ? this.state.data.condition.slice(0, 40) + "..."
+                          : this.state.data.condition}
+                      </div>
+                    </span>
+                  </div>
+                ) : null}
+              </div>
             </div>
-          </div>
 
           <div
-            className="jumbotron col-xs-6 col-sm-6 col-md-6 col-lg-6"
-            style={{ height: "320px", backgroundColor: "white" }}
+            className="col-xs-6 col-sm-6 col-md-6 col-lg-6"
+            style={{ padding: "2.5rem 1rem", height: "320px", backgroundColor: "white" }}
           >
             {/* <img src={this.state.data.url} /> */}
             <div style={{ alignItems: "center" }}>
