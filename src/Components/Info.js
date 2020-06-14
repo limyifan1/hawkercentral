@@ -240,12 +240,18 @@ export class Info extends React.Component {
   updateCustomerDetails = async (event) => {
     const { name: inputField, value: inputValue } = event.target;
     const inputFields = [
-      "name", "address", "notes", "customerNumber", "unit", "street", "postal"
+      "name",
+      "address",
+      "notes",
+      "customerNumber",
+      "unit",
+      "street",
+      "postal",
     ];
     if (inputFields.includes(inputField)) {
       this.setState({
         [inputField]: inputValue,
-      })
+      });
     }
     if (inputField === "postal" && inputValue.length === 6) {
       await this.getPostal(inputValue);
@@ -886,6 +892,34 @@ export class Info extends React.Component {
           </div>
         ) : null}
         <div className="row">
+          <div
+            className="d-md-none d-inline-block col-xs-6 col-sm-6 col-md-6 col-lg-6"
+            style={{
+              padding: "0rem 1rem",
+              marginBottom: "0.5rem",
+              marginTop: "-2rem",
+              height: "320px",
+              backgroundColor: "white",
+            }}
+          >
+            <div style={{ alignItems: "center" }}>
+              {photos.length !== 0 ? (
+                <ImageGallery
+                  items={photos}
+                  renderFullscreenButton={this.renderFullscreenButton}
+                  // lazyLoad={false}
+                  useBrowserFullscreen={false}
+                  showPlayButton={false}
+                  useTranslate3D={false}
+                  slideDuration={100}
+                  // isRTL={false}
+                  slideInterval={2000}
+                  slideOnThumbnailOver={false}
+                  thumbnailPosition={"bottom"}
+                />
+              ) : null}
+            </div>
+          </div>
           <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
             <div
               className="container"
@@ -1031,7 +1065,6 @@ export class Info extends React.Component {
                   </span>
                 </div>
               ) : null}
-
               {/* Custom button display: menu, website, message */}
               <div>
                 {this.state.data.menu &&
@@ -1073,9 +1106,7 @@ export class Info extends React.Component {
                     <a
                       href={link}
                       target="blank"
-                      onClick={() =>
-                        onLoad("message", this.state.data.name)
-                      }
+                      onClick={() => onLoad("message", this.state.data.name)}
                     >
                       <img
                         alt=""
@@ -1086,25 +1117,32 @@ export class Info extends React.Component {
                       />
                     </a>
                   </span>
-                ) : null }
+                ) : null}
               </div>
-              <Component.Popup
-                data={this.state.data}
-                id={this.state.id}
-                onSubmitEdit={this.showReviewEditMessage}
-                onSubmitDelete={this.showReviewDeleteMessage}
-              />
-              <div className="row" style={{ margin: "1rem 0"}}>
-                <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6" style={{ padding: "0"  }}>
+              <span className="d-none d-md-inline-block">
+                <Component.Popup
+                  data={this.state.data}
+                  id={this.state.id}
+                  onSubmitEdit={this.showReviewEditMessage}
+                  onSubmitDelete={this.showReviewDeleteMessage}
+                />
+              </span>
+              <div className="row" style={{ margin: "1rem 0" }}>
+                <div
+                  className="col-xs-6 col-sm-6 col-md-6 col-lg-6"
+                  style={{ padding: "0" }}
+                >
                   <Clap
                     collection={"hawkers"}
                     id={this.state.id}
                     claps={this.state.data.claps}
                   />
                 </div>
-                <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6" style={{ padding: "0"  }}>
-                  Share this with friends!
-                  <br />
+                <div
+                  className="d-none d-md-inline-block col-xs-6 col-sm-6 col-md-6 col-lg-6"
+                  style={{ padding: "0" }}
+                >
+                  <div style={{fontSize: "12px"}}> Share this with friends!</div>
                   <FacebookShareButton
                     url={"www.foodleh.app/info?id=" + this.state.id}
                     quote={"Hungry? Try out " + this.state.data.name + " now!"}
@@ -1131,12 +1169,6 @@ export class Info extends React.Component {
                       />
                     </a>
                   </span>
-                  {/* <WhatsappShareButton
-                    url={"www.foodleh.app/info?id=" + this.state.id}
-                    title={"Hungry? Try out " + this.state.data.name + " now!"}
-                  >
-                    <WhatsappIcon size={32} round={true} />
-                  </WhatsappShareButton>{" "} */}
                   <TelegramShareButton
                     url={"www.foodleh.app/info?id=" + this.state.id}
                     title={"Hungry? Try out " + this.state.data.name + " now!"}
@@ -1150,43 +1182,45 @@ export class Info extends React.Component {
                     <TwitterIcon size={32} round={true} />
                   </TwitterShareButton>{" "}
                 </div>
-
               </div>
-                {this.state.data.promo ? (
-                  <div
-                    className="card shadow"
-                    style={{
-                      color: "black",
-                      backgroundColor: "white",
-                      height: "35px",
-                    }}
-                  >
-                    <span className="card-body">
-                      <div
-                        className="card-title"
-                        style={{
-                          position: "absolute",
-                          top: "6px",
-                          fontSize: "13px",
-                        }}
-                      >
-                        <b>{this.state.data.promo}</b>:{" "}
-                        {this.state.data.condition &&
-                        this.state.data.condition.length > 40
-                          ? this.state.data.condition.slice(0, 40) + "..."
-                          : this.state.data.condition}
-                      </div>
-                    </span>
-                  </div>
-                ) : null}
-              </div>
+              {this.state.data.promo ? (
+                <div
+                  className="card shadow"
+                  style={{
+                    color: "black",
+                    backgroundColor: "white",
+                    height: "35px",
+                  }}
+                >
+                  <span className="card-body">
+                    <div
+                      className="card-title"
+                      style={{
+                        position: "absolute",
+                        top: "6px",
+                        fontSize: "13px",
+                      }}
+                    >
+                      <b>{this.state.data.promo}</b>:{" "}
+                      {this.state.data.condition &&
+                      this.state.data.condition.length > 40
+                        ? this.state.data.condition.slice(0, 40) + "..."
+                        : this.state.data.condition}
+                    </div>
+                  </span>
+                </div>
+              ) : null}
             </div>
+          </div>
 
           <div
-            className="col-xs-6 col-sm-6 col-md-6 col-lg-6"
-            style={{ padding: "2.5rem 1rem", height: "320px", backgroundColor: "white" }}
+            className="d-none d-md-inline-block col-xs-6 col-sm-6 col-md-6 col-lg-6"
+            style={{
+              padding: "2.5rem 1rem",
+              height: "320px",
+              backgroundColor: "white",
+            }}
           >
-            {/* <img src={this.state.data.url} /> */}
             <div style={{ alignItems: "center" }}>
               {photos.length !== 0 ? (
                 <ImageGallery
@@ -1208,561 +1242,555 @@ export class Info extends React.Component {
         </div>
 
         <div className="row">
-            <div
-              className="container"
-              style={{ textAlign: "left", paddingTop: "10px" }}
-            >
-              <div>
-                    {/* Display appropriate header - menu / menu with Whatsapp ordering */}
-                    {this.state.data.menu &&
-                    this.state.data.menu_combined.length > 0 &&
-                    this.state.data.menu_combined[0].name !== "" ? (
-                      <img
-                        alt=""
-                        src={this.state.data.whatsapp ? orderleh_title : menu_title}
-                        style={{ width: "310px" }}
-                      />
-                    ) : null}
-                    {/* Display the first item of the menu with a see more button - TODO: boilerplate code */}
-                    {this.state.data.menu &&
-                    this.state.data.menu_combined.length > 0 &&
-                    this.state.data.menu_combined[0].name !== "" ? (
-                      <div style={{ zIndex: -999 }}>
-                        <figure
-                          className="shadow row"
-                          style={{
-                            margin: "20px",
-                            minHeight: "100px",
-                            backgroundColor: "#f1f1f1",
-                            borderRadius: "5px",
-                            position: "relative",
-                            display: "flex",
-                            padding: "10px 40px 40px",
-                            zIndex: 1,
-                          }}
-                        >
-                          {/* gradient overlay shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
-                          {(!this.state.wantToOrder &&
-                            this.state.data.menu &&
-                            this.state.data.menu_combined.length > 1 &&
-                            this.state.data.menu_combined[1] &&
-                            this.state.data.menu_combined[1].name !== "") ||
-                          // addresses case where >1 item and customer hasnt clicked
-                          (!this.state.wantToOrder &&
-                            this.state.data.menu_combined[1] &&
-                            this.state.data.menu_combined[1].name === "") ||
-                          // addresses case where there are multiple items in menu_combined but only 1 non-empty item
-                          (!this.state.wantToOrder &&
-                            this.state.data.menu_combined.length === 1) ? (
-                            // addresses case where there is only 1 item in menu_combined
-                            <span style={{ height: "0px" }}>
-                              <img
-                                src={gradient}
-                                alt=""
-                                style={{
-                                  width: "130%",
-                                  height: "150px",
-                                  borderRadius: "5px",
-                                  position: "absolute",
-                                  bottom: "-30px",
-                                  left: "-15px",
-                                  zIndex: "999",
-                                }}
-                              />
-                            </span>
-                          ) : null}
-                          <div className="row">
-                            <span
-                              style={{
-                                alignContent: "right",
-                                fontSize: "110%",
-                                display: "flex",
-                              }}
-                            >
-                              <b>
-                                {this.state.data.menu_combined[0] ? (
-                                  <span>
-                                    {this.state.data.menu_combined[0].name}
-                                    {this.state.data.menu_combined[0] &&
-                                    this.state.data.menu_combined[0]
-                                      .description ? (
-                                      <span>
-                                        {" "}
-                                        (
-                                        {
-                                          this.state.data.menu_combined[0]
-                                            .description
-                                        }
-                                        )
-                                      </span>
-                                    ) : null}
-                                  </span>
-                                ) : null}
-                              </b>
-                            </span>
-                          </div>
-                          <div className="row">
-                            <div
-                              className="col"
-                              style={{
-                                position: "absolute",
-                                left: "5px",
-                                bottom: "13px",
-                              }}
-                            >
-                              <span
-                                className="shadow badge badge-info m-2"
-                                style={{
-                                  backgroundColor: "#b48300",
-                                  alignContent: "left",
-                                  fontSize: "110%",
-                                }}
-                              >
-                                $
-                                {this.state.data.menu_combined[0].price
-                                  ? this.state.data.menu_combined[0].price
-                                  : "TBD"}
-                              </span>
-                            </div>
-                            <div
-                              className="col"
-                              style={{
-                                position: "absolute",
-                                left: "10px",
-                                bottom: "10px",
-                              }}
-                            >
-                              <div
-                                className="btn-group float-right"
-                                role="group"
-                                aria-label="Basic example"
-                              >
-                                <br />
-                                {this.state.data.whatsapp ? (
-                                  <div>
-                                    <Button
-                                      variant="light"
-                                      size="sm"
-                                      onClick={this.minusItem}
-                                      name={0}
-                                      className="shadow-sm"
-                                      style={{
-                                        backgroundColor: "white",
-                                        color: "black",
-                                        borderRadius: "3px",
-                                        margin: "10px",
-                                      }}
-                                    >
-                                      -
-                                    </Button>
-                                    <span
-                                      style={{
-                                        margin: "10px",
-                                      }}
-                                    >
-                                      <b>
-                                        {this.state.orderData[0] !== undefined
-                                          ? this.state.orderData[0] // hardcode 0 to display first menu item
-                                          : 0}
-                                      </b>
-                                    </span>
-                                    <Button
-                                      variant="dark"
-                                      size="sm"
-                                      onClick={this.addItem}
-                                      name={0} // hardcode 0 to display first menu item
-                                      className="shadow-sm"
-                                      style={{
-                                        backgroundColor: "black",
-                                        color: "white",
-                                        borderRadius: "3px",
-                                        margin: "10px",
-                                      }}
-                                    >
-                                      +
-                                    </Button>
-                                  </div>
-                                ) : null}
-                              </div>
-                            </div>
-                          </div>
-                          <br />
-                        </figure>
-                      </div>
-                    ) : null}
-                    {/* See more button shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
+          <div
+            className="container"
+            style={{ textAlign: "left", paddingTop: "10px" }}
+          >
+            <div>
+              {/* Display appropriate header - menu / menu with Whatsapp ordering */}
+              {this.state.data.menu &&
+              this.state.data.menu_combined.length > 0 &&
+              this.state.data.menu_combined[0].name !== "" ? (
+                <img
+                  alt=""
+                  src={this.state.data.whatsapp ? orderleh_title : menu_title}
+                  style={{ width: "310px" }}
+                  ref={(ref) => (this.myRef = ref)}
+                />
+              ) : null}
+              {/* Display the first item of the menu with a see more button - TODO: boilerplate code */}
+              {this.state.data.menu &&
+              this.state.data.menu_combined.length > 0 &&
+              this.state.data.menu_combined[0].name !== "" ? (
+                <div style={{ zIndex: -999 }}>
+                  <figure
+                    className="shadow row"
+                    style={{
+                      margin: "20px",
+                      minHeight: "100px",
+                      backgroundColor: "#f1f1f1",
+                      borderRadius: "5px",
+                      position: "relative",
+                      display: "flex",
+                      padding: "10px 40px 40px",
+                      zIndex: 1,
+                    }}
+                  >
+                    {/* gradient overlay shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
                     {(!this.state.wantToOrder &&
                       this.state.data.menu &&
                       this.state.data.menu_combined.length > 1 &&
                       this.state.data.menu_combined[1] &&
                       this.state.data.menu_combined[1].name !== "") ||
+                    // addresses case where >1 item and customer hasnt clicked
                     (!this.state.wantToOrder &&
-                      this.state.data.menu &&
-                      this.state.data.menu_combined[0] &&
-                      this.state.data.menu_combined[0].name !== "" &&
                       this.state.data.menu_combined[1] &&
                       this.state.data.menu_combined[1].name === "") ||
+                    // addresses case where there are multiple items in menu_combined but only 1 non-empty item
                     (!this.state.wantToOrder &&
-                      this.state.data.menu &&
-                      this.state.data.menu_combined.length === 1 &&
-                      this.state.data.menu_combined[0] &&
-                      this.state.data.menu_combined[0].name !== "") ? (
-                      <div style={{ marginTop: "30px" }}>
-                        <hr
+                      this.state.data.menu_combined.length === 1) ? (
+                      // addresses case where there is only 1 item in menu_combined
+                      <span style={{ height: "0px" }}>
+                        <img
+                          src={gradient}
+                          alt=""
                           style={{
-                            color: "grey",
-                            backgroundColor: "grey",
-                            height: "1px",
-                            borderColor: "grey",
-                            width: "100%",
-                            alignItems: "center",
-                            marginBottom: "0px", // aligns See More to divider
+                            width: "130%",
+                            height: "150px",
+                            borderRadius: "5px",
+                            position: "absolute",
+                            bottom: "-30px",
+                            left: "-15px",
+                            zIndex: "999",
                           }}
                         />
-                        <div
-                          style={{
-                            textAlign: "center",
-                            paddingRight: "15px",
-                            fontSize: "110%",
-                            cursor: "pointer",
-                            color: "grey",
-                          }}
-                          onClick={this.enterDetails}
-                        >
-                          <b>see more ↓</b>
-                        </div>
-                      </div>
+                      </span>
                     ) : null}
-
-                    {/* Display the rest of the menu if customer clicks Menu / see more */}
-                    {this.state.wantToOrder ? (
-                      <div>
-                        <Form onSubmit={this.handleSubmit.bind(this)}>
-                          <p>{this.getMenu(true)} </p>
-                          <div>
-                            <br />
-                            <img
-                              alt=""
-                              src={revieworder}
-                              style={{ width: "310px" }}
-                            />
-                          </div>
-
-                          <div>
-                            <figure
-                              className="shadow"
-                              style={{
-                                margin: "20px",
-                                paddingLeft: "10px",
-                                paddingTop: "10px",
-                                backgroundColor: "#f1f1f1",
-                                borderRadius: "5px",
-                                position: "relative",
-                                zIndex: 1,
-                              }}
-                            >
-                              <span
+                    <div className="row">
+                      <span
+                        style={{
+                          alignContent: "right",
+                          fontSize: "110%",
+                          display: "flex",
+                        }}
+                      >
+                        <b>
+                          {this.state.data.menu_combined[0] ? (
+                            <span>
+                              {this.state.data.menu_combined[0].name}
+                              {this.state.data.menu_combined[0] &&
+                              this.state.data.menu_combined[0].description ? (
+                                <span>
+                                  {" "}
+                                  (
+                                  {this.state.data.menu_combined[0].description}
+                                  )
+                                </span>
+                              ) : null}
+                            </span>
+                          ) : null}
+                        </b>
+                      </span>
+                    </div>
+                    <div className="row">
+                      <div
+                        className="col"
+                        style={{
+                          position: "absolute",
+                          left: "5px",
+                          bottom: "13px",
+                        }}
+                      >
+                        <span
+                          className="shadow badge badge-info m-2"
+                          style={{
+                            backgroundColor: "#b48300",
+                            alignContent: "left",
+                            fontSize: "110%",
+                          }}
+                        >
+                          $
+                          {this.state.data.menu_combined[0].price
+                            ? this.state.data.menu_combined[0].price
+                            : "TBD"}
+                        </span>
+                      </div>
+                      <div
+                        className="col"
+                        style={{
+                          position: "absolute",
+                          left: "10px",
+                          bottom: "10px",
+                        }}
+                      >
+                        <div
+                          className="btn-group float-right"
+                          role="group"
+                          aria-label="Basic example"
+                        >
+                          <br />
+                          {this.state.data.whatsapp ? (
+                            <div>
+                              <Button
+                                variant="light"
+                                size="sm"
+                                onClick={this.minusItem}
+                                name={0}
+                                className="shadow-sm"
                                 style={{
-                                  fontSize: "110%",
+                                  backgroundColor: "white",
+                                  color: "black",
+                                  borderRadius: "3px",
+                                  margin: "10px",
                                 }}
                               >
-                                <b>Item Summary</b>
-                                <br />
-                                <br />
+                                -
+                              </Button>
+                              <span
+                                style={{
+                                  margin: "10px",
+                                }}
+                              >
+                                <b>
+                                  {this.state.orderData[0] !== undefined
+                                    ? this.state.orderData[0] // hardcode 0 to display first menu item
+                                    : 0}
+                                </b>
                               </span>
+                              <Button
+                                variant="dark"
+                                size="sm"
+                                onClick={this.addItem}
+                                name={0} // hardcode 0 to display first menu item
+                                className="shadow-sm"
+                                style={{
+                                  backgroundColor: "black",
+                                  color: "white",
+                                  borderRadius: "3px",
+                                  margin: "10px",
+                                }}
+                              >
+                                +
+                              </Button>
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+                    <br />
+                  </figure>
+                </div>
+              ) : null}
+              {/* See more button shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
+              {(!this.state.wantToOrder &&
+                this.state.data.menu &&
+                this.state.data.menu_combined.length > 1 &&
+                this.state.data.menu_combined[1] &&
+                this.state.data.menu_combined[1].name !== "") ||
+              (!this.state.wantToOrder &&
+                this.state.data.menu &&
+                this.state.data.menu_combined[0] &&
+                this.state.data.menu_combined[0].name !== "" &&
+                this.state.data.menu_combined[1] &&
+                this.state.data.menu_combined[1].name === "") ||
+              (!this.state.wantToOrder &&
+                this.state.data.menu &&
+                this.state.data.menu_combined.length === 1 &&
+                this.state.data.menu_combined[0] &&
+                this.state.data.menu_combined[0].name !== "") ? (
+                <div style={{ marginTop: "30px" }}>
+                  <hr
+                    style={{
+                      color: "grey",
+                      backgroundColor: "grey",
+                      height: "1px",
+                      borderColor: "grey",
+                      width: "100%",
+                      alignItems: "center",
+                      marginBottom: "0px", // aligns See More to divider
+                    }}
+                  />
+                  <div
+                    style={{
+                      textAlign: "center",
+                      paddingRight: "15px",
+                      fontSize: "110%",
+                      cursor: "pointer",
+                      color: "grey",
+                    }}
+                    onClick={this.enterDetails}
+                  >
+                    <b>see more ↓</b>
+                  </div>
+                </div>
+              ) : null}
 
-                              {/* Item represents object with properties name and price */}
-                              {this.state.data.menu_combined.map((item, i) => {
-                                if (
-                                  item !== undefined &&
-                                  this.state.orderData[i] !== 0
-                                ) {
-                                  return (
-                                    <div
-                                      style={{
-                                        position: "relative",
-                                        padding: "5px",
-                                      }}
-                                    >
-                                      <span
-                                        style={{
-                                          alignContent: "right",
-                                          fontSize: "110%",
-                                        }}
-                                      >
-                                        <b>{item.name ? item.name : null}</b>
-                                      </span>
-                                      <div
-                                        className="btn-group float-right"
-                                        role="group"
-                                        aria-label="Basic example"
-                                      >
-                                        <br />
-                                        {this.state.data.whatsapp ? (
-                                          <div>
-                                            <Button
-                                              variant="light"
-                                              size="sm"
-                                              onClick={this.minusItem}
-                                              name={i}
-                                              className="shadow-sm"
-                                              style={{
-                                                backgroundColor: "white",
-                                                color: "black",
-                                                borderRadius: "3px",
-                                                margin: "10px",
-                                              }}
-                                            >
-                                              -
-                                            </Button>
-                                            <span
-                                              style={{
-                                                margin: "10px",
-                                              }}
-                                            >
-                                              <b>
-                                                {this.state.orderData[i] !==
-                                                undefined
-                                                  ? this.state.orderData[
-                                                      JSON.parse(
-                                                        JSON.stringify(i)
-                                                      )
-                                                    ]
-                                                  : 0}
-                                              </b>
-                                            </span>
-                                            <Button
-                                              variant="dark"
-                                              size="sm"
-                                              onClick={this.addItem}
-                                              name={i}
-                                              className="shadow-sm"
-                                              style={{
-                                                backgroundColor: "black",
-                                                color: "white",
-                                                borderRadius: "3px",
-                                                margin: "10px",
-                                              }}
-                                            >
-                                              +
-                                            </Button>
-                                          </div>
-                                        ) : null}
-                                      </div>
-                                      <br />
-                                      <span
-                                        className="shadow badge badge-info m-2"
-                                        style={{
-                                          backgroundColor: "#b48300",
-                                          alignContent: "left",
-                                          fontSize: "110%",
-                                        }}
-                                      >
-                                        ${item.price ? item.price : "TBD"}
-                                      </span>
-                                    </div>
-                                  );
-                                } else {
-                                  return null;
-                                }
-                              })}
+              {/* Display the rest of the menu if customer clicks Menu / see more */}
+              {this.state.wantToOrder ? (
+                <div>
+                  <Form onSubmit={this.handleSubmit.bind(this)}>
+                    <p>{this.getMenu(true)} </p>
+                    <div>
+                      <br />
+                      <img
+                        alt=""
+                        src={revieworder}
+                        style={{ width: "310px" }}
+                      />
+                    </div>
 
-                              <figcaption>
-                                <hr
+                    <div>
+                      <figure
+                        className="shadow"
+                        style={{
+                          margin: "20px",
+                          paddingLeft: "10px",
+                          paddingTop: "10px",
+                          backgroundColor: "#f1f1f1",
+                          borderRadius: "5px",
+                          position: "relative",
+                          zIndex: 1,
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontSize: "110%",
+                          }}
+                        >
+                          <b>Item Summary</b>
+                          <br />
+                          <br />
+                        </span>
+
+                        {/* Item represents object with properties name and price */}
+                        {this.state.data.menu_combined.map((item, i) => {
+                          if (
+                            item !== undefined &&
+                            this.state.orderData[i] !== 0
+                          ) {
+                            return (
+                              <div
+                                style={{
+                                  position: "relative",
+                                  padding: "5px",
+                                }}
+                              >
+                                <span
                                   style={{
-                                    color: "#b48300",
-                                    backgroundColor: "#b48300",
-                                    height: "1px",
-                                    borderColor: "#b48300",
-                                    width: "100%",
-                                    alignItems: "center",
-                                  }}
-                                />
-                                <div
-                                  style={{
-                                    textAlign: "right",
-                                    paddingBottom: "10px",
-                                    paddingRight: "15px",
+                                    alignContent: "right",
                                     fontSize: "110%",
                                   }}
                                 >
-                                  <b>
-                                    $
-                                    {this.state.totalPrice !== undefined
-                                      ? this.state.totalPrice.toFixed(2)
-                                      : "0.00"}
-                                  </b>
-                                </div>
+                                  <b>{item.name ? item.name : null}</b>
+                                </span>
                                 <div
+                                  className="btn-group float-right"
+                                  role="group"
+                                  aria-label="Basic example"
+                                >
+                                  <br />
+                                  {this.state.data.whatsapp ? (
+                                    <div>
+                                      <Button
+                                        variant="light"
+                                        size="sm"
+                                        onClick={this.minusItem}
+                                        name={i}
+                                        className="shadow-sm"
+                                        style={{
+                                          backgroundColor: "white",
+                                          color: "black",
+                                          borderRadius: "3px",
+                                          margin: "10px",
+                                        }}
+                                      >
+                                        -
+                                      </Button>
+                                      <span
+                                        style={{
+                                          margin: "10px",
+                                        }}
+                                      >
+                                        <b>
+                                          {this.state.orderData[i] !== undefined
+                                            ? this.state.orderData[
+                                                JSON.parse(JSON.stringify(i))
+                                              ]
+                                            : 0}
+                                        </b>
+                                      </span>
+                                      <Button
+                                        variant="dark"
+                                        size="sm"
+                                        onClick={this.addItem}
+                                        name={i}
+                                        className="shadow-sm"
+                                        style={{
+                                          backgroundColor: "black",
+                                          color: "white",
+                                          borderRadius: "3px",
+                                          margin: "10px",
+                                        }}
+                                      >
+                                        +
+                                      </Button>
+                                    </div>
+                                  ) : null}
+                                </div>
+                                <br />
+                                <span
+                                  className="shadow badge badge-info m-2"
                                   style={{
-                                    color: "red",
-                                    paddingBottom: "10px",
-                                    paddingRight: "15px",
+                                    backgroundColor: "#b48300",
+                                    alignContent: "left",
+                                    fontSize: "110%",
                                   }}
                                 >
-                                  <b>*Delivery fees may apply</b>
-                                </div>
-                              </figcaption>
-                            </figure>
+                                  ${item.price ? item.price : "TBD"}
+                                </span>
+                              </div>
+                            );
+                          } else {
+                            return null;
+                          }
+                        })}
+
+                        <figcaption>
+                          <hr
+                            style={{
+                              color: "#b48300",
+                              backgroundColor: "#b48300",
+                              height: "1px",
+                              borderColor: "#b48300",
+                              width: "100%",
+                              alignItems: "center",
+                            }}
+                          />
+                          <div
+                            style={{
+                              textAlign: "right",
+                              paddingBottom: "10px",
+                              paddingRight: "15px",
+                              fontSize: "110%",
+                            }}
+                          >
+                            <b>
+                              $
+                              {this.state.totalPrice !== undefined
+                                ? this.state.totalPrice.toFixed(2)
+                                : "0.00"}
+                            </b>
                           </div>
-                          <br />
-                          <div>
-                            <img
-                              alt=""
-                              src={delivery_title}
-                              style={{ width: "310px" }}
+                          <div
+                            style={{
+                              color: "red",
+                              paddingBottom: "10px",
+                              paddingRight: "15px",
+                            }}
+                          >
+                            <b>*Delivery fees may apply</b>
+                          </div>
+                        </figcaption>
+                      </figure>
+                    </div>
+                    <br />
+                    <div>
+                      <img
+                        alt=""
+                        src={delivery_title}
+                        style={{ width: "310px" }}
+                      />
+
+                      <div className="form-group create-title">
+                        <label for="name">Name</label>
+                        <input
+                          onChange={this.handleCustomerDetails}
+                          value={this.state.name}
+                          type="text"
+                          className="form-control"
+                          name="name"
+                          style={{ borderColor: "#b48300" }}
+                          placeholder="We don't store your info!"
+                        ></input>
+                      </div>
+
+                      <div className="form-group create-title">
+                        <label for="unit">Mobile Number: </label>
+                        <div className="input-group mb-12">
+                          <div className="input-group-prepend">
+                            <span
+                              className="input-group-text"
+                              id="basic-addon1"
+                            >
+                              +65
+                            </span>
+                          </div>
+                          <input
+                            onChange={this.handleCustomerDetails}
+                            value={this.state.customerNumber}
+                            type="tel"
+                            className={
+                              !this.state.customerNumber
+                                ? "form-control is-invalid"
+                                : "form-control"
+                            }
+                            name="customerNumber"
+                            placeholder=" 9xxxxxxx"
+                            maxLength="8"
+                            minlength="8"
+                            pattern="[8-9]{1}[0-9]{7}"
+                            style={{
+                              borderColor: "#b48300",
+                              borderRadius: "5px",
+                            }}
+                            required
+                          ></input>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                          <div class="form-group create-title">
+                            <label for="time">Delivery Date</label>
+                            <DatePicker
+                              class="form-control is-invalid"
+                              dayPlaceholder="dd"
+                              monthPlaceholder="mm"
+                              yearPlaceholder="yyyy"
+                              onChange={this.handleDate}
+                              value={this.state.date}
+                              format="dd/MMM/yyyy"
+                              required
                             />
-
+                          </div>
+                        </div>
+                        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                          <div class="form-group create-title">
+                            <label for="time">Delivery Time</label>
+                            <TimePicker
+                              class="form-control is-invalid"
+                              dayPlaceholder="dd"
+                              monthPlaceholder="mm"
+                              yearPlaceholder="yyyy"
+                              hourPlaceholder="hh"
+                              minutePlaceholder="mm"
+                              onChange={this.handleTime}
+                              value={this.state.time}
+                              format="hh:mma"
+                              disableClock
+                              required
+                            />
+                            {time_now > this.state.datetime ? (
+                              <span class="badge badge-danger">
+                                Time cannot be earlier than now
+                              </span>
+                            ) : null}
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="row">
+                          {" "}
+                          <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            {" "}
                             <div className="form-group create-title">
-                              <label for="name">Name</label>
-                              <input
-                                onChange={this.handleCustomerDetails}
-                                value={this.state.name}
-                                type="text"
-                                className="form-control"
-                                name="name"
-                                style={{ borderColor: "#b48300" }}
-                                placeholder="We don't store your info!"
-                              ></input>
-                            </div>
-
-                            <div className="form-group create-title">
-                              <label for="unit">Mobile Number: </label>
-                              <div className="input-group mb-12">
-                                <div className="input-group-prepend">
-                                  <span
-                                    className="input-group-text"
-                                    id="basic-addon1"
-                                  >
-                                    +65
-                                  </span>
-                                </div>
+                              <label for="postalcode">Postal Code</label>
+                              <div className="input-group">
                                 <input
                                   onChange={this.handleCustomerDetails}
-                                  value={this.state.customerNumber}
-                                  type="tel"
+                                  value={this.state.postal}
+                                  type="text"
                                   className={
-                                    !this.state.customerNumber
+                                    !this.state.postal
                                       ? "form-control is-invalid"
                                       : "form-control"
                                   }
-                                  name="customerNumber"
-                                  placeholder=" 9xxxxxxx"
-                                  maxLength="8"
-                                  minlength="8"
-                                  pattern="[8-9]{1}[0-9]{7}"
-                                  style={{
-                                    borderColor: "#b48300",
-                                    borderRadius: "5px",
-                                  }}
+                                  name="postal"
+                                  placeholder="Enter Postal Code"
+                                  maxLength="6"
                                   required
                                 ></input>
                               </div>
                             </div>
-                            <div class="row">
-                              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                <div class="form-group create-title">
-                                  <label for="time">Delivery Date</label>
-                                  <DatePicker
-                                    class="form-control is-invalid"
-                                    dayPlaceholder="dd"
-                                    monthPlaceholder="mm"
-                                    yearPlaceholder="yyyy"
-                                    onChange={this.handleDate}
-                                    value={this.state.date}
-                                    format="dd/MMM/yyyy"
-                                    required
-                                  />
-                                </div>
-                              </div>
-                              <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-                                <div class="form-group create-title">
-                                  <label for="time">Delivery Time</label>
-                                  <TimePicker
-                                    class="form-control is-invalid"
-                                    dayPlaceholder="dd"
-                                    monthPlaceholder="mm"
-                                    yearPlaceholder="yyyy"
-                                    hourPlaceholder="hh"
-                                    minutePlaceholder="mm"
-                                    onChange={this.handleTime}
-                                    value={this.state.time}
-                                    format="hh:mma"
-                                    disableClock
-                                    required
-                                  />
-                                  {time_now > this.state.datetime ? (
-                                    <span class="badge badge-danger">
-                                      Time cannot be earlier than now
-                                    </span>
-                                  ) : null}
-                                </div>
-                              </div>
+                          </div>
+                          <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            {" "}
+                            <div className="form-group create-title">
+                              <label for="unit">Unit #</label>
+                              <input
+                                onChange={this.handleCustomerDetails}
+                                value={this.state.unit}
+                                type="text"
+                                className="form-control"
+                                name="unit"
+                                placeholder="E.g. 01-01"
+                              ></input>
                             </div>
-                            <div>
-                              <div className="row">
-                                {" "}
-                                <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                  {" "}
-                                  <div className="form-group create-title">
-                                    <label for="postalcode">Postal Code</label>
-                                    <div className="input-group">
-                                      <input
-                                        onChange={this.handleCustomerDetails}
-                                        value={this.state.postal}
-                                        type="text"
-                                        className={
-                                          !this.state.postal
-                                            ? "form-control is-invalid"
-                                            : "form-control"
-                                        }
-                                        name="postal"
-                                        placeholder="Enter Postal Code"
-                                        maxLength="6"
-                                        required
-                                      ></input>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                  {" "}
-                                  <div className="form-group create-title">
-                                    <label for="unit">Unit #</label>
-                                    <input
-                                      onChange={this.handleCustomerDetails}
-                                      value={this.state.unit}
-                                      type="text"
-                                      className="form-control"
-                                      name="unit"
-                                      placeholder="E.g. 01-01"
-                                    ></input>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="row">
-                                <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                  <div className="form-group create-title">
-                                    <label for="street">
-                                      Street Name<b> (Auto-Filled)</b>
-                                    </label>
-                                    <input
-                                      onChange={this.handleCustomerDetails}
-                                      value={this.state.street}
-                                      type="text"
-                                      className={
-                                        !this.state.street
-                                          ? "form-control is-invalid"
-                                          : "form-control"
-                                      }
-                                      name="street"
-                                      placeholder="Enter Street Name"
-                                    ></input>
-                                  </div>
-                                </div>
-                              </div>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div className="form-group create-title">
+                              <label for="street">
+                                Street Name<b> (Auto-Filled)</b>
+                              </label>
+                              <input
+                                onChange={this.handleCustomerDetails}
+                                value={this.state.street}
+                                type="text"
+                                className={
+                                  !this.state.street
+                                    ? "form-control is-invalid"
+                                    : "form-control"
+                                }
+                                name="street"
+                                placeholder="Enter Street Name"
+                              ></input>
                             </div>
+                          </div>
+                        </div>
+                      </div>
 
-                            {/* 
+                      {/* 
                             <div className="form-group create-title">
                               <label for="address">Address</label>
                               <input
@@ -1775,140 +1803,142 @@ export class Info extends React.Component {
                                 placeholder=""
                               ></input>
                             </div> */}
-                            <div className="form-group create-title">
-                              <label for="address">Comments</label>
-                              <input
-                                onChange={this.handleCustomerDetails}
-                                value={this.state.notes}
-                                type="text"
-                                className="form-control"
-                                name="notes"
-                                style={{
-                                  borderColor: "#b48300",
-                                }}
-                                placeholder="No chilli etc, leave blank if nil"
-                              ></input>
-                            </div>
-                            <div className="form-group create-title">
-                              <OverlayTrigger
-                                trigger={["hover", "focus"]}
-                                placement="top"
-                                overlay={popover}
-                              >
-                                <label for="remember">Remember me?</label>
-                              </OverlayTrigger>
-                              <input
-                                name="shouldRememberDetails"
-                                type="checkbox"
-                                checked={this.state.shouldRememberDetails}
-                                onChange={this.toggleShouldRememberDetails}
-                                style={{
-                                  marginLeft: "10px",
-                                }}
-                              ></input>
-                            </div>
-                            <Button
-                              className="shadow-sm"
-                              // href={
-                              //   "https://wa.me/65" +
-                              //   this.state.data.contact +
-                              //   "?text=" +
-                              //   this.setOrderText()
-                              // }
-                              // target="blank"
-                              type="Submit"
-                              style={{
-                                backgroundColor: "#B48300",
-                                borderColor: "#B48300",
-                                fontSize: "20px",
-                                width: "300px",
-                              }}
-                              name="Language"
-                              onClick={() =>
-                                onLoad("place_order", this.state.data.name)
-                              }
-                            >
-                              Place order via WhatsApp
-                            </Button>
-                            <br />
-                          </div>
-                        </Form>
+                      <div className="form-group create-title">
+                        <label for="address">Comments</label>
+                        <input
+                          onChange={this.handleCustomerDetails}
+                          value={this.state.notes}
+                          type="text"
+                          className="form-control"
+                          name="notes"
+                          style={{
+                            borderColor: "#b48300",
+                          }}
+                          placeholder="No chilli etc, leave blank if nil"
+                        ></input>
                       </div>
-                    ) : null}
+                      <div className="form-group create-title">
+                        <OverlayTrigger
+                          trigger={["hover", "focus"]}
+                          placement="top"
+                          overlay={popover}
+                        >
+                          <label for="remember">Remember me?</label>
+                        </OverlayTrigger>
+                        <input
+                          name="shouldRememberDetails"
+                          type="checkbox"
+                          checked={this.state.shouldRememberDetails}
+                          onChange={this.toggleShouldRememberDetails}
+                          style={{
+                            marginLeft: "10px",
+                          }}
+                        ></input>
+                      </div>
+                      <Button
+                        className="shadow-sm"
+                        // href={
+                        //   "https://wa.me/65" +
+                        //   this.state.data.contact +
+                        //   "?text=" +
+                        //   this.setOrderText()
+                        // }
+                        // target="blank"
+                        type="Submit"
+                        style={{
+                          backgroundColor: "#B48300",
+                          borderColor: "#B48300",
+                          fontSize: "20px",
+                          width: "300px",
+                        }}
+                        name="Language"
+                        onClick={() =>
+                          onLoad("place_order", this.state.data.name)
+                        }
+                      >
+                        Place order via WhatsApp
+                      </Button>
+                      <br />
+                    </div>
+                  </Form>
+                </div>
+              ) : null}
+            </div>
+            <span className="d-inline-block d-md-none">
+              <Component.Popup
+                data={this.state.data}
+                id={this.state.id}
+                onSubmitEdit={this.showReviewEditMessage}
+                onSubmitDelete={this.showReviewDeleteMessage}
+              />
+            </span>
+
+            <div
+              className="d-inline-block d-md-none col-xs-6 col-sm-6 col-md-6 col-lg-6"
+              style={{ padding: "0" }}
+            >
+              Share this with friends!
+              <br />
+              <FacebookShareButton
+                url={"www.foodleh.app/info?id=" + this.state.id}
+                quote={"Hungry? Try out " + this.state.data.name + " now!"}
+                hashtag={"#saveourFnB"}
+              >
+                <FacebookIcon size={32} round={true} />
+              </FacebookShareButton>{" "}
+              <span className="" style={{ marginRight: "5px" }}>
+                <a
+                  href={
+                    "whatsapp://send?text=" +
+                    encodeURIComponent(
+                      "Hungry? Try out " +
+                        this.state.data.name +
+                        " now! Order form / more information at www.foodleh.app/info?id=" +
+                        this.state.id
+                    )
+                  }
+                >
+                  <img
+                    alt=""
+                    src={whatsapp_icon}
+                    style={{ width: "32px", cursor: "pointer" }}
+                  />
+                </a>
+              </span>
+              <TelegramShareButton
+                url={"www.foodleh.app/info?id=" + this.state.id}
+                title={"Hungry? Try out " + this.state.data.name + " now!"}
+              >
+                <TelegramIcon size={32} round={true} />
+              </TelegramShareButton>{" "}
+              <TwitterShareButton
+                url={"www.foodleh.app/info?id=" + this.state.id}
+                title={"Hungry? Try out " + this.state.data.name + " now!"}
+              >
+                <TwitterIcon size={32} round={true} />
+              </TwitterShareButton>{" "}
+            </div>
+
+            {this.state.data.description ? (
+              <div>
+                <br />
+                <h6 style={{ marginBottom: "0px" }}>
+                  <b>Brief Description</b>
+                </h6>
               </div>
+            ) : null}
+            <Linkify>
               {this.state.data.description ? (
-                <div>
-                  <br />
-                  <h6 style={{ marginBottom: "0px" }}>
-                    <b>Brief Description</b>
-                  </h6>
-                </div>
+                <p style={{ marginBottom: "20px" }}>
+                  {this.state.data.description}
+                </p>
               ) : null}
-              <Linkify>
-                {this.state.data.description ? (
-                  <p style={{ marginBottom: "20px" }}>
-                    {this.state.data.description}
-                  </p>
-                ) : null}
-                {this.state.data.description_detail &&
-                this.state.data.description_detail !== "" &&
-                this.state.data.description_detail !== undefined ? (
-                  <div>
-                    <h6 style={{ marginBottom: "0px" }}>
-                      <b>Detailed Description</b>
-                    </h6>
-                    <p
-                      style={{
-                        whiteSpace: "pre-line",
-                        marginBottom: "20px",
-                      }}
-                    >
-                      {this.state.data.description_detail}
-                    </p>
-                  </div>
-                ) : null}
-              </Linkify>
-              {/* {Menu appears if menu data is present and whatsapp is not present} */}
-              {this.state.data.menu && !this.state.data.whatsapp ? (
+              {this.state.data.description_detail &&
+              this.state.data.description_detail !== "" &&
+              this.state.data.description_detail !== undefined ? (
                 <div>
                   <h6 style={{ marginBottom: "0px" }}>
-                    <b>Menu Items</b>
-                  </h6>
-                  <p>{this.getMenu(false)} </p>
-                  <br></br>
-                </div>
-              ) : null}
-              {this.state.data.delivery_detail ? (
-                <div>
-                  <h6 style={{ marginBottom: "0px" }}>
-                    <b>Details Regarding Delivery</b>
-                  </h6>
-                  <Linkify>
-                    <p
-                      style={{
-                        whiteSpace: "pre-line",
-                        marginBottom: "20px",
-                      }}
-                    >
-                      {this.state.data.delivery_detail}
-                    </p>
-                    {this.state.data.minimum_order && (
-                      <span>
-                        Minimum Order: ${this.state.data.minimum_order}
-                      </span>
-                    )}
-                    {this.state.data.free_delivery && (
-                      <span>
-                        Free Delivery: ${this.state.data.free_delivery}
-                      </span>
-                    )}
-                  </Linkify>
-                </div>
-              ) : null}
-              {this.state.data.price ? (
-                <div>
-                  <h6 style={{ marginBottom: "0px" }}>
-                    <b>Delivery Fees</b>
+                    <b>Detailed Description</b>
                   </h6>
                   <p
                     style={{
@@ -1916,26 +1946,75 @@ export class Info extends React.Component {
                       marginBottom: "20px",
                     }}
                   >
-                    {this.state.data.price}
+                    {this.state.data.description_detail}
                   </p>
                 </div>
               ) : null}
-              {this.state.data.opening ? (
-                <div>
-                  <h6 style={{ marginBottom: "0px" }}>
-                    <b>Opening Hours</b>
-                  </h6>
+            </Linkify>
+            {/* {Menu appears if menu data is present and whatsapp is not present} */}
+            {this.state.data.menu && !this.state.data.whatsapp ? (
+              <div>
+                <h6 style={{ marginBottom: "0px" }}>
+                  <b>Menu Items</b>
+                </h6>
+                <p>{this.getMenu(false)} </p>
+                <br></br>
+              </div>
+            ) : null}
+            {this.state.data.delivery_detail ? (
+              <div>
+                <h6 style={{ marginBottom: "0px" }}>
+                  <b>Details Regarding Delivery</b>
+                </h6>
+                <Linkify>
                   <p
                     style={{
                       whiteSpace: "pre-line",
                       marginBottom: "20px",
                     }}
                   >
-                    {this.state.data.opening}
+                    {this.state.data.delivery_detail}
                   </p>
-                </div>
-              ) : null}
-              {/* <p style={{ marginBottom: "20px" }}>
+                  {this.state.data.minimum_order && (
+                    <span>Minimum Order: ${this.state.data.minimum_order}</span>
+                  )}
+                  {this.state.data.free_delivery && (
+                    <span>Free Delivery: ${this.state.data.free_delivery}</span>
+                  )}
+                </Linkify>
+              </div>
+            ) : null}
+            {this.state.data.price ? (
+              <div>
+                <h6 style={{ marginBottom: "0px" }}>
+                  <b>Delivery Fees</b>
+                </h6>
+                <p
+                  style={{
+                    whiteSpace: "pre-line",
+                    marginBottom: "20px",
+                  }}
+                >
+                  {this.state.data.price}
+                </p>
+              </div>
+            ) : null}
+            {this.state.data.opening ? (
+              <div>
+                <h6 style={{ marginBottom: "0px" }}>
+                  <b>Opening Hours</b>
+                </h6>
+                <p
+                  style={{
+                    whiteSpace: "pre-line",
+                    marginBottom: "20px",
+                  }}
+                >
+                  {this.state.data.opening}
+                </p>
+              </div>
+            ) : null}
+            {/* <p style={{ marginBottom: "20px" }}>
                 {this.state.data.website ? (
                   this.state.data.website.slice(0, 4) === "http" ? (
                     <a href={this.state.data.website}>Website Link</a>
@@ -1946,22 +2025,18 @@ export class Info extends React.Component {
                   )
                 ) : null}
               </p> */}
-              <p style={{ color: "grey" }}>
-                <small>
-                  Are you the owner? Email foodleh@outlook.com for enquiries.{" "}
-                </small>
-              </p>
-              <ScrollTop>
-                <Fab
-                  color="primary"
-                  size="small"
-                  aria-label="scroll back to top"
-                >
-                  <KeyboardArrowUpIcon />
-                </Fab>
-              </ScrollTop>
-            </div>
+            <p style={{ color: "grey" }}>
+              <small>
+                Are you the owner? Email foodleh@outlook.com for enquiries.{" "}
+              </small>
+            </p>
+            <ScrollTop>
+              <Fab color="primary" size="small" aria-label="scroll back to top">
+                <KeyboardArrowUpIcon />
+              </Fab>
+            </ScrollTop>
           </div>
+        </div>
       </div>
     ) : (
       <div className="row h-100 page-container">
