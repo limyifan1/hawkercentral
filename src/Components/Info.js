@@ -1228,35 +1228,13 @@ export class Info extends React.Component {
               <div>
                     {/* Display appropriate header - menu / menu with Whatsapp ordering */}
                     {this.state.data.menu &&
-                    this.state.data.whatsapp &&
                     this.state.data.menu_combined.length > 0 &&
                     this.state.data.menu_combined[0].name !== "" ? (
-                      <div>
-                        <br />
-                        <br />
-                        <span className="">
-                          <img
-                            alt=""
-                            src={orderleh_title}
-                            style={{ width: "60%" }}
-                          />
-                        </span>
-                      </div>
-                    ) : this.state.data.menu &&
-                      this.state.data.menu_combined.length > 0 &&
-                      this.state.data.menu_combined[0].name !== "" ? (
-                      <div>
-                        <br />
-                        <br />
-
-                        <span className="">
-                          <img
-                            alt=""
-                            src={menu_title}
-                            style={{ width: "60%" }}
-                          />
-                        </span>
-                      </div>
+                      <img
+                        alt=""
+                        src={this.state.data.whatsapp ? orderleh_title : menu_title}
+                        style={{ width: "310px" }}
+                      />
                     ) : null}
                     {/* Display the first item of the menu with a see more button - TODO: boilerplate code */}
                     {this.state.data.menu &&
@@ -1479,7 +1457,7 @@ export class Info extends React.Component {
                             <img
                               alt=""
                               src={revieworder}
-                              style={{ width: "60%" }}
+                              style={{ width: "310px" }}
                             />
                           </div>
 
@@ -1645,7 +1623,7 @@ export class Info extends React.Component {
                             <img
                               alt=""
                               src={delivery_title}
-                              style={{ width: "60%" }}
+                              style={{ width: "310px" }}
                             />
 
                             <div className="form-group create-title">
