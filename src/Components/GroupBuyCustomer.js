@@ -3,18 +3,31 @@ import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { withRouter } from "react-router-dom";
 import Select from "react-select";
 import { db, firebase, uiConfig } from "./Firestore";
-import Cookies from "universal-cookie";
 import "../App.css";
 
 const analytics = firebase.analytics();
-const allGroupBuysOption = {
-  label: "All Group Buys",
-  value: "All Group Buys"
-};
 
 function onLoad(name, item) {
   analytics.logEvent(name, { name, item });
 }
+
+const allGroupBuysOption =   { label: "All", value: "All" };
+const activeGroupBuysOption = { label: "Active", value: "Active" };
+const inactiveGroupBuysOption = { label: "Inactive", value: "Inactive" };
+
+
+const filterOptions = [
+  allGroupBuysOption,
+  activeGroupBuysOption,
+  inactiveGroupBuysOption
+];
+
+// function GroupBuyList(props) {
+//   const groupBuys = props.groupBuys;
+//   const cards = groupBuys.map(groupBuy => 
+    
+//   );
+// }
 
 export class GroupBuyCustomer extends React.Component {
   constructor(props) {
@@ -23,7 +36,7 @@ export class GroupBuyCustomer extends React.Component {
       firebaseUser: null,
       allGroupBuys: [],
       filteredGroupBuys: [],
-      groupBuy: "",
+      filterOption: allGroupBuysOption,
     }
   }
 
@@ -90,12 +103,11 @@ export class GroupBuyCustomer extends React.Component {
       }
     ];
 
-    const allGroupBuys = [allGroupBuysOption];
+    const allGroupBuys = [];
     data.forEach(group => allGroupBuys.push({ label: group.area, value: group.area }));
 
     this.setState({
       allGroupBuys: allGroupBuys,
-      groupBuy: allGroupBuysOption,
       filteredGroupBuys: allGroupBuys
     });
   }
@@ -103,14 +115,14 @@ export class GroupBuyCustomer extends React.Component {
   filterGroupBuy = async(selectedOption) => {
     let filteredGroupBuys = this.state.allGroupBuys;
 
-    if (selectedOption.value !== "All Group Buys") {
+    if (selectedOption.value !== allGroupBuysOption.value) {
       filteredGroupBuys = this.state.allGroupBuys.filter(groupBuy => {
         return groupBuy.area === selectedOption.value;
       });
     }
 
     this.setState({ 
-      groupBuy: selectedOption,
+      filterOption: selectedOption,
       filteredGroupBuys: filteredGroupBuys 
     });
   }
@@ -148,11 +160,11 @@ export class GroupBuyCustomer extends React.Component {
             <Select
                 isDisabled={this.state.allGroupBuys.length === 0}
                 name="groupBuy"
-                options={this.state.allGroupBuys}
-                value={this.state.groupBuy}
+                options={filterOptions}
+                value={this.state.filterOption}
                 onChange={this.filterGroupBuy}
-                placeholder="Filter By Group Name"
             />
+            {/* <GroupBuyList groupbuys={this.state.filteredGroupBuys}/> */}
           </div>
         }
         </div>
