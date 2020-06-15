@@ -671,9 +671,6 @@ exports.takesgSync = functions
       .then((snapshot) => {
         snapshot.forEach(async (d) => {
           var data_contact = "65" + d.data().contact;
-          // var hasTakesgDescription = d
-          //   .data()
-          //   .description_detail.includes("Contributed by take.sg");
           var inTakesg = take_keys.includes(data_contact);
           if (inTakesg && d.data().takesg) {
             var index = take_keys.indexOf(data_contact);
@@ -695,7 +692,8 @@ exports.takesgSync = functions
                 menu_combined: data.menus ? data.menus : "",
                 tagsValue: data.tags ? data.tags : "",
                 menu: true,
-                delivery_detail: delivery_detail,
+                minimum_order: data.minimum_order ? data.minimum_order : 0,
+                free_delivery: data.free_delivery ? data.free_delivery : 0,
               })
               .then((d) => {
                 console.log("Updated: " + data.name);
