@@ -33,8 +33,13 @@ export class PageItem extends React.Component {
       this.props && this.props.css && this.props.css.menu_color
         ? this.props.css.menu_color
         : "#b48300";
+<<<<<<< HEAD
         const menu_font_color = this.props && this.props.css ? this.props.css.menu_font_color : "#ffffff";
 >>>>>>> feat(pagedashboard): added color picker, save disable, icon helmet
+=======
+    const menu_font_color =
+      this.props && this.props.css ? this.props.css.menu_font_color : "#ffffff";
+>>>>>>> feat(page): disabled cart when whatsapp is not enabled
     return (
       <div class="page-card">
         <div
@@ -98,6 +103,7 @@ export class PageItem extends React.Component {
                 >
                   ${this.props.price}
                 </p>
+<<<<<<< HEAD
                 <div
                   class="btn btn-primary"
                   style={{
@@ -113,6 +119,23 @@ export class PageItem extends React.Component {
                 >
                   Add To Cart
                 </div>
+=======
+                {this.context.pageData.whatsapp ? (
+                  <div
+                    class="btn btn-primary"
+                    style={{
+                      backgroundColor: menu_color,
+                      borderColor: menu_color,
+                      color: menu_font_color,
+                      fontSize: "12px",
+                    }}
+                    name={this.props.name}
+                    onClick={this.handleClick}
+                  >
+                    Add To Cart
+                  </div>
+                ) : null}
+>>>>>>> feat(page): disabled cart when whatsapp is not enabled
                 {/* {this.context.cartProducts} */}
               </div>
             </div>
