@@ -19,6 +19,7 @@ import Driver from "./Driver";
 import Delivery from "./Delivery";
 import Orders from "./Orders";
 import Groupbuy from "./Groupbuy";
+import GroupBuyCustomer from "./GroupBuyCustomer";
 import GroupbuyList from "./GroupbuyList";
 import Deliveries from "./Deliveries";
 import Search from "./Search";
@@ -51,6 +52,7 @@ export default {
   Delivery,
   Orders,
   Groupbuy,
+  GroupBuyCustomer,
   GroupbuyList,
   Deliveries,
   Search,
