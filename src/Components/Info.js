@@ -1142,7 +1142,10 @@ export class Info extends React.Component {
                   className="d-none d-md-inline-block col-xs-6 col-sm-6 col-md-6 col-lg-6"
                   style={{ padding: "0" }}
                 >
-                  <div style={{fontSize: "12px"}}> Share this with friends!</div>
+                  <div style={{ fontSize: "12px" }}>
+                    {" "}
+                    Share this with friends!
+                  </div>
                   <FacebookShareButton
                     url={"www.foodleh.app/info?id=" + this.state.id}
                     quote={"Hungry? Try out " + this.state.data.name + " now!"}
@@ -1961,7 +1964,7 @@ export class Info extends React.Component {
                 <br></br>
               </div>
             ) : null}
-            {this.state.data.delivery_detail ? (
+            {this.state.data.delivery_detail || this.state.data.minimum_order || this.state.data.free_delivery ? (
               <div>
                 <h6 style={{ marginBottom: "0px" }}>
                   <b>Details Regarding Delivery</b>
@@ -1976,7 +1979,10 @@ export class Info extends React.Component {
                     {this.state.data.delivery_detail}
                   </p>
                   {this.state.data.minimum_order && (
-                    <span>Minimum Order: ${this.state.data.minimum_order}</span>
+                    <span>
+                      Minimum Order: ${this.state.data.minimum_order}
+                      <br />
+                    </span>
                   )}
                   {this.state.data.free_delivery && (
                     <span>Free Delivery: ${this.state.data.free_delivery}</span>
