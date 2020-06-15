@@ -69,6 +69,8 @@ function SeoHelmet() {
   const keywords = "hawker food delivery and dabao Singapore circuit breaker";
   const image_url =
     "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/foodleh.png?alt=media&token=3fce2813-7eba-4e5a-8cbe-47119c1512f9";
+  const home_url =
+    "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/homepage.png?alt=media&token=93f830c3-b6fa-4311-bf43-8168de5d580a";
   return (
     <Helmet>
       <meta charSet="utf-8" />
@@ -78,12 +80,12 @@ function SeoHelmet() {
       <meta name="description" content={description} />
       <meta name="og:description" content={description} />
       <meta name="og:url" content={url} />
-      <meta name="og:image" content={image_url} />
+      <meta name="og:image" content={home_url} />
       <meta name="keywords" content={keywords} />
       {/* Facebook meta tags */}
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url} />
-      <meta property="og:image" content={image_url} />
+      <meta property="og:image" content={home_url} />
       <meta property="fb:pages" content="108930167461424"></meta>
       <meta property="ia:markup_url" content={url}></meta>
     </Helmet>
@@ -99,6 +101,8 @@ function PersonalHelmet(props) {
   const image_url = props.logo
     ? props.logo
     : "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/foodleh.png?alt=media&token=3fce2813-7eba-4e5a-8cbe-47119c1512f9";
+  const home_url =
+    "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/homepage.png?alt=media&token=93f830c3-b6fa-4311-bf43-8168de5d580a";
   return (
     <Helmet>
       <meta charSet="utf-8" />
@@ -108,12 +112,12 @@ function PersonalHelmet(props) {
       <meta name="description" content={description} />
       <meta name="og:description" content={description} />
       <meta name="og:url" content={url} />
-      <meta name="og:image" content={image_url} />
+      <meta name="og:image" content={home_url} />
       <meta name="keywords" content={keywords} />
       {/* Facebook meta tags */}
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url} />
-      <meta property="og:image" content={image_url} />
+      <meta property="og:image" content={home_url} />
       <meta property="fb:pages" content="108930167461424"></meta>
       <meta property="ia:markup_url" content={url}></meta>
     </Helmet>
