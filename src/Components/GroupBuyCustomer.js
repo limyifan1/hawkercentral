@@ -7,7 +7,10 @@ import Cookies from "universal-cookie";
 import "../App.css";
 
 const analytics = firebase.analytics();
-const cookies = new Cookies();
+const allGroupBuysOption = {
+  label: "All Group Buys",
+  value: "All Group Buys"
+};
 
 function onLoad(name, item) {
   analytics.logEvent(name, { name, item });
@@ -19,7 +22,8 @@ export class GroupBuyCustomer extends React.Component {
     this.state = {
       firebaseUser: null,
       allGroupBuys: [],
-      groupBuy: ""
+      filteredGroupBuys: [],
+      groupBuy: "",
     }
   }
 
@@ -42,6 +46,7 @@ export class GroupBuyCustomer extends React.Component {
             firebaseUser: user
           });
           onLoad("groupbuy customer", user.phoneNumber);
+          this.getGroupBuyCustomerData(user);
         } else {
           // no user is signed in
         }
@@ -49,19 +54,81 @@ export class GroupBuyCustomer extends React.Component {
     );
   }
 
+  getGroupBuyCustomerData = () => {
+    const data = [
+      {
+        active: true,
+        area: "Tampines",
+        items: [
+          {
+            name: "curry puff",
+            quantity: 2,
+            price: 3
+          },
+          {
+            name: "sardine puff",
+            quantity: 1,
+            price: 5
+          },
+        ]
+      },
+      {
+        active: true,
+        area: "Pasir Ris",
+        items: [
+          {
+            name: "curry chicken",
+            quantity: 1,
+            price: 10
+          },
+          {
+            name: "curry fish",
+            quantity: 2,
+            price: 8
+          },
+        ]
+      }
+    ];
+
+    const allGroupBuys = [allGroupBuysOption];
+    data.forEach(group => allGroupBuys.push({ label: group.area, value: group.area }));
+
+    this.setState({
+      allGroupBuys: allGroupBuys,
+      groupBuy: allGroupBuysOption,
+      filteredGroupBuys: allGroupBuys
+    });
+  }
+
+  filterGroupBuy = async(selectedOption) => {
+    let filteredGroupBuys = this.state.allGroupBuys;
+
+    if (selectedOption.value !== "All Group Buys") {
+      filteredGroupBuys = this.state.allGroupBuys.filter(groupBuy => {
+        return groupBuy.area === selectedOption.value;
+      });
+    }
+
+    this.setState({ 
+      groupBuy: selectedOption,
+      filteredGroupBuys: filteredGroupBuys 
+    });
+  }
+
   render() {
     const verifiedUser = this.state.firebaseUser;
+
     return (
       <div
-          class="jumbotron"
+          className="jumbotron"
           style={{
-            "padding-top": "70px",
-            "padding-bottom": "240px",
+            "paddingTop": "70px",
+            "paddingBottom": "240px",
             height: "100%",
-            "background-color": "white",
+            "backgroundColor": "white",
           }}
         >
-        <div class="container-fluid col-md-10 content col-xs-offset-2">
+        <div className="container-fluid col-md-10 content col-xs-offset-2">
         { verifiedUser === null ? 
           <div>
             <div>
