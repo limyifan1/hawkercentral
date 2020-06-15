@@ -108,9 +108,11 @@ const InfoMenu = (props) => {
         <div class="d-none d-md-inline-block">{props.data.pageData.name}</div>
       </Navbar.Brand>
       <Navbar.Toggle />
-      <Navbar.Brand style={{ color: menu_font_color }}>
-        <Component.PageCart toggleDialog={props.toggleDialog} />
-      </Navbar.Brand>
+      {props.data.pageData.whatsapp ? (
+        <Navbar.Brand style={{ color: menu_font_color }}>
+          <Component.PageCart toggleDialog={props.toggleDialog} />
+        </Navbar.Brand>
+      ) : null}
     </Navbar>
   );
 };
@@ -622,14 +624,14 @@ export class Page extends React.Component {
     });
   };
 
-  getMenu = (without_first_item) => {
+  getMenu = () => {
     if (this.context.pageData.menu_combined) {
       let data = [];
       this.context.pageData.menu_combined.forEach((element, i) => {
         // If without_first_item, condition should be (element.name && element.price && i !== 0)) [1]
         // Else condition should only be (element.name && element.price) [2]
         let toPush = true;
-        element.name ? (toPush = true) : (toPush = false)
+        element.name ? (toPush = true) : (toPush = false);
         if (toPush) {
           data.push(
             <Component.PageItem
@@ -1026,7 +1028,7 @@ export class Page extends React.Component {
                 </ExpansionPanel>
               </div>
               <div className="row justify-content-center align-items-center mt-4">
-                {this.getMenu(0)}
+                {this.getMenu()}
               </div>
             </div>
           </div>

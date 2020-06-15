@@ -35,7 +35,8 @@ export class PageItem extends React.Component {
       this.props && this.props.css && this.props.css.menu_color
         ? this.props.css.menu_color
         : "#b48300";
-        const menu_font_color = this.props && this.props.css ? this.props.css.menu_font_color : "#ffffff";
+    const menu_font_color =
+      this.props && this.props.css ? this.props.css.menu_font_color : "#ffffff";
     return (
       <div class="page-card">
         <div
@@ -101,19 +102,21 @@ export class PageItem extends React.Component {
                 >
                   ${this.props.price}
                 </p>
-                <div
-                  class="btn btn-primary"
-                  style={{
-                    backgroundColor: menu_color,
-                    borderColor: menu_color,
-                    color: menu_font_color,
-                    fontSize: "12px",
-                  }}
-                  name={this.props.name}
-                  onClick={this.handleClick}
-                >
-                  Add To Cart
-                </div>
+                {this.context.pageData.whatsapp ? (
+                  <div
+                    class="btn btn-primary"
+                    style={{
+                      backgroundColor: menu_color,
+                      borderColor: menu_color,
+                      color: menu_font_color,
+                      fontSize: "12px",
+                    }}
+                    name={this.props.name}
+                    onClick={this.handleClick}
+                  >
+                    Add To Cart
+                  </div>
+                ) : null}
                 {/* {this.context.cartProducts} */}
               </div>
             </div>
