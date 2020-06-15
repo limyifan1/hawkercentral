@@ -247,6 +247,10 @@ export class Groupbuy extends React.Component {
     });
   };
 
+  handleView = (event) => {
+    this.props.history.push("/groupbuy-customer");
+  }
+
   renderRedirect = () => {
     if (this.state.redirect) {
       // let areaGroupbuys = [];
@@ -360,6 +364,14 @@ export class Groupbuy extends React.Component {
                     {this.state.create ? <>Cancel New Groupbuy</> : <> Create New Groupbuy</>}
 
                   </Button>
+                  <Button
+                    onClick={this.handleView.bind(this)}
+                    style={{
+                      backgroundColor: "#b48300",
+                      borderColor: "#b48300",
+                      margin: "10px"
+                    }}
+                  >View My Groupbuys</Button>
                 </span>
               </div>
               {/* Display create form if user creates new groupbuy */}

@@ -697,11 +697,20 @@ class App extends React.Component {
                   <Route exact path="/orders" component={Components.Orders} />
                   {/* Allows extra URL params for each area eg groupbuy/Tampines */}
                   <Route
-                      exact
-                      path="/groupbuy"
-                      component={Components.Groupbuy}
-                    />
-                    <Route exact path="/groupbuy/:area" component={Components.GroupbuyList} />
+                    exact
+                    path="/groupbuy"
+                    component={Components.Groupbuy}
+                  />
+                  <Route
+                    exact
+                    path="/groupbuy/:area"
+                    component={Components.GroupbuyList}
+                  />
+                  <Route
+                    exact
+                    path="/groupbuy-customer"
+                    component={Components.GroupBuyCustomer}
+                  />
                   <Route
                     exact
                     path="/deliveries"
