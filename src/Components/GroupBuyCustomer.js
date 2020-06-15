@@ -37,7 +37,10 @@ export class GroupBuyCustomer extends React.Component {
       allGroupBuys: [],
       filteredGroupBuys: [],
       filterOption: allGroupBuysOption,
+      search: ""
     }
+
+    this.updateFilteredGroupBuys = this.updateFilteredGroupBuys.bind(this);
   }
 
   componentDidMount() {
@@ -70,6 +73,7 @@ export class GroupBuyCustomer extends React.Component {
   getGroupBuyCustomerData = () => {
     const data = [
       {
+        hawker: "Tiong Bahru Bakery",
         active: true,
         area: "Tampines",
         items: [
@@ -86,7 +90,8 @@ export class GroupBuyCustomer extends React.Component {
         ]
       },
       {
-        active: true,
+        hawker: "Hup Siong Chicken Rice",
+        active: false,
         area: "Pasir Ris",
         items: [
           {
@@ -103,28 +108,50 @@ export class GroupBuyCustomer extends React.Component {
       }
     ];
 
-    const allGroupBuys = [];
-    data.forEach(group => allGroupBuys.push({ label: group.area, value: group.area }));
-
     this.setState({
-      allGroupBuys: allGroupBuys,
-      filteredGroupBuys: allGroupBuys
+      allGroupBuys: data,
+      filteredGroupBuys: data
     });
   }
 
-  filterGroupBuy = async(selectedOption) => {
-    let filteredGroupBuys = this.state.allGroupBuys;
+  updateFilteredGroupBuys = async(event, meta=null) => {
+    let name = "";
+    let value = "";
+    
+    if (event.target) {
+      name = event.target.name;
+      value = event.target.value;
+    } else {
+      // this is for the react-select which does not return name directly
+      name = meta.name;
+      value = event;
+    }
 
-    if (selectedOption.value !== allGroupBuysOption.value) {
+    this.setState({ [name]: value }, () => {
+      this.filterGroupBuys();
+    });
+  }
+
+  filterGroupBuys = () => {
+    let filteredGroupBuys = this.state.allGroupBuys;
+    const status = this.state.filterOption;
+    const searchTerm = this.state.search;
+
+    const isActive = status === activeGroupBuysOption;
+    if (status.value !== allGroupBuysOption.value) {
       filteredGroupBuys = this.state.allGroupBuys.filter(groupBuy => {
-        return groupBuy.area === selectedOption.value;
+        return groupBuy.active === isActive;
       });
     }
 
-    this.setState({ 
-      filterOption: selectedOption,
-      filteredGroupBuys: filteredGroupBuys 
-    });
+    if (searchTerm) {
+      filteredGroupBuys = filteredGroupBuys.filter(groupBuy => {
+        return groupBuy.hawker.toLowerCase().includes(searchTerm.toLowerCase())
+          || groupBuy.area.toLowerCase().includes(searchTerm.toLowerCase());
+      });
+    }
+
+    this.setState({ filteredGroupBuys: filteredGroupBuys });
   }
 
   render() {
@@ -157,13 +184,33 @@ export class GroupBuyCustomer extends React.Component {
             <p>
               Verified your phone number: { verifiedUser.phoneNumber }
             </p>
-            <Select
-                isDisabled={this.state.allGroupBuys.length === 0}
-                name="groupBuy"
-                options={filterOptions}
-                value={this.state.filterOption}
-                onChange={this.filterGroupBuy}
-            />
+            <div class="row justify-content-center mt-4">
+              <div class="col-12 col-sm-6 col-md-6">
+                <input
+                  disabled={this.state.allGroupBuys.length === 0}
+                  class="form-control"
+                  type="text"
+                  name="search"
+                  value={this.state.search}
+                  placeholder="Search For Group Buy"
+                  style={{
+                    width: "100%",
+                    height: "38px",
+                    "border-radius": "1rem",
+                  }}
+                  onChange={this.updateFilteredGroupBuys}
+                ></input>
+              </div>
+              <div class="col-12 col-sm-6 col-md-6">
+                <Select
+                    isDisabled={this.state.allGroupBuys.length === 0}
+                    name="filterOption"
+                    options={filterOptions}
+                    value={this.state.filterOption}
+                    onChange={this.updateFilteredGroupBuys}
+                />
+              </div>
+            </div>
             {/* <GroupBuyList groupbuys={this.state.filteredGroupBuys}/> */}
           </div>
         }
