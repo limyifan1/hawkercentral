@@ -1986,15 +1986,15 @@ export class Info extends React.Component {
                   >
                     {this.state.data.delivery_detail}
                   </p>
-                  {this.state.data.minimum_order && (
+                  {this.state.data.minimum_order ? (
                     <span>
                       Minimum Order: ${this.state.data.minimum_order}
                       <br />
                     </span>
-                  )}
-                  {this.state.data.free_delivery && (
+                  ) : null}
+                  {this.state.data.free_delivery ? (
                     <span>Free Delivery: ${this.state.data.free_delivery}</span>
-                  )}
+                  ) : null}
                 </Linkify>
               </div>
             ) : null}
