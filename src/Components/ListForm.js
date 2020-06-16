@@ -1622,8 +1622,8 @@ export class ListForm extends React.Component {
                                 name="contact"
                                 placeholder="9xxxxxxx"
                                 maxLength="8"
-                                minlength="8"
-                                pattern="[6-9]{1}[0-9]{7}"
+                                // minlength="8"
+                                // pattern="[6-9]{1}[0-9]{7}"
                                 required
                               ></input>
                             </div>
