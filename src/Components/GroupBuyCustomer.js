@@ -4,7 +4,8 @@ import { withRouter } from "react-router-dom";
 import Select from "react-select";
 import { db, firebase, uiConfig } from "./Firestore";
 import "../App.css";
-import { Card, CardContent, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import { Card, CardContent, makeStyles, Table, TableBody, TableCell, 
+  TableFooter, TableHead, TablePagination, TableRow } from "@material-ui/core";
 
 const analytics = firebase.analytics();
 
@@ -16,46 +17,96 @@ const allGroupBuysOption =   { label: "All", value: "All" };
 const activeGroupBuysOption = { label: "Active", value: "Active" };
 const inactiveGroupBuysOption = { label: "Inactive", value: "Inactive" };
 
-
 const filterOptions = [
   allGroupBuysOption,
   activeGroupBuysOption,
   inactiveGroupBuysOption
 ];
 
-function GroupBuyList(props) {
-  const groupBuys = props.groupBuys;
+const useStyles = makeStyles({
+  paginationcell: {
+    borderBottom: "none",
+  },
+});
 
+function GroupBuyTable(props) {
+  const classes = useStyles();
+
+  const rows = props.rows;
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(3);
+
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  return (
+    <Table size="small" aria-label="a dense table">
+      <TableHead>
+        <TableRow>
+          <TableCell align="center">Item Name</TableCell>
+          <TableCell align="center">Price&nbsp;(S$)</TableCell>
+          <TableCell align="center">Quantity</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {(rowsPerPage > 0
+            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : rows
+          ).map(row => (
+          <TableRow key={row.name}>
+            <TableCell component="th" scope="row" align="center">
+              {row.name.length > 20 ? (row.name.substring(0, 18) + "...") : row.name }
+            </TableCell>
+            <TableCell align="center">{row.price}</TableCell>
+            <TableCell align="center">{row.quantity}</TableCell>
+          </TableRow>
+        ))}
+
+        {emptyRows > 0 && (
+          <TableRow style={{ height: 33 * emptyRows }}>
+            <TableCell colSpan={6} className={classes.paginationcell} />
+          </TableRow>
+        )}
+      </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TablePagination
+            className={classes.paginationcell}
+            rowsPerPageOptions={[3]}
+            colSpan={3}
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        </TableRow>
+      </TableFooter>
+    </Table>
+  );
+}
+
+function CustomerGroupBuyList(props) {
+  const groupBuys = props.groupBuys;
   const cards = groupBuys.map(groupBuy => 
     <Card
       key={groupBuy.hawker}
-      className="card shadow col-sm-6"
+      className="card shadow groupbuy-card"
       style={{ 
-        margin: "5px" 
+        margin: "5px"
       }}
     >
       <CardContent>
         <p className="card-title">{ groupBuy.hawker }</p>
-        <Table size="small" aria-label="a dense table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Item Name</TableCell>
-              <TableCell align="right">Price&nbsp;(S$)</TableCell>
-              <TableCell align="right">Quantity</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {groupBuy.items.map(item => (
-              <TableRow key={item.name}>
-                <TableCell component="th" scope="row">
-                  {item.name}
-                </TableCell>
-                <TableCell align="right">{item.price}</TableCell>
-                <TableCell align="right">{item.quantity}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <GroupBuyTable rows={groupBuy.items} />
       </CardContent>
     </Card>
   );
@@ -65,7 +116,7 @@ function GroupBuyList(props) {
       className="col-sm-12 groupbuy-container mt-4"
       style={{
         display: "inline-flex",
-        paddingLeft: "0px"
+        flexWrap: "wrap",
       }}
     >
       { cards }
@@ -132,6 +183,38 @@ export class GroupBuyCustomer extends React.Component {
             quantity: 1,
             price: 5
           },
+          {
+            name: "lemon puff",
+            quantity: 2,
+            price: 4.6
+          },
+          {
+            name: "spinach puff",
+            quantity: 1,
+            price: 0.5
+          },
+          {
+            name: "hello panda",
+            quantity: 9,
+            price: 0.8
+          },
+        ]
+      },
+      {
+        hawker: "test",
+        active: true,
+        area: "Bishan",
+        items: [
+          {
+            name: "curry puff",
+            quantity: 2,
+            price: 3
+          },
+          {
+            name: "sardine puff",
+            quantity: 1,
+            price: 5
+          },
         ]
       },
       {
@@ -148,6 +231,16 @@ export class GroupBuyCustomer extends React.Component {
             name: "curry fish",
             quantity: 2,
             price: 8
+          },
+          {
+            name: "spicy chicken",
+            quantity: 5,
+            price: 7.50
+          },
+          {
+            name: "spicy fish spicy fish spicy fish spicy fish spicy fish spicy fish",
+            quantity: 9,
+            price: 1
           },
         ]
       }
@@ -264,7 +357,7 @@ export class GroupBuyCustomer extends React.Component {
               </div>
             </div>
             { this.state.filteredGroupBuys &&
-              <GroupBuyList groupBuys={this.state.filteredGroupBuys}/> }
+              <CustomerGroupBuyList groupBuys={this.state.filteredGroupBuys}/> }
           </React.Fragment>
         }
         </div>
