@@ -104,7 +104,7 @@ export class Custom extends React.Component {
         docid: this.state.id,
         logo: "",
         cover: this.state.cover,
-        delivery_option: "none"
+        delivery_option: "none",
       })
       .then(async (d) => {
         await db
@@ -125,6 +125,7 @@ export class Custom extends React.Component {
           });
         await db.collection("hawkers").doc(this.state.id).update({
           custom: true,
+          takesg: false,
         });
         this.setState({ creating: false, created: true });
       });
@@ -254,9 +255,13 @@ export class Custom extends React.Component {
                 {" "}
                 www.foodleh.app/create{" "}
               </a>{" "}
-              first!<br/>
+              first!
+              <br />
             </div>
-            <div class="d-flex row justify-content-center" style={{margin: "15px"}}>
+            <div
+              class="d-flex row justify-content-center"
+              style={{ margin: "15px" }}
+            >
               <Autocomplete
                 id="asynchronous-demo"
                 style={{ width: "250px" }}
