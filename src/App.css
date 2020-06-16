@@ -187,6 +187,9 @@ button:focus {
     width: 180px !important;
     height: 250px;
   }
+  .groupbuy-container {
+    flex-direction: row;
+  }
   .page-card {
     width: 30% !important;
     margin: 10px 20px;
@@ -233,6 +236,9 @@ button:focus {
   .item-card {
     width: 180px !important;
     height: 250px;
+  }
+  .groupbuy-container {
+    flex-direction: row;
   }
   .page-card {
     width: 30% !important;
@@ -281,6 +287,9 @@ button:focus {
     width: 180px !important;
     height: 250px;
   }
+  .groupbuy-container {
+    flex-direction: column;
+  }
   .page-card {
     width: 70% !important;
     margin: 10px 20px;
@@ -327,6 +336,9 @@ button:focus {
   .item-card {
     width: 260px !important;
     height: 250px;
+  }
+  .groupbuy-container {
+    flex-direction: row;
   }
   .page-card {
     width: 45% !important;
@@ -376,6 +388,9 @@ button:focus {
   .item-card {
     width: 150px !important;
     height: 250px;
+  }
+  .groupbuy-container {
+    flex-direction: row;
   }
   .page-card {
     width: 100% !important;
@@ -429,6 +444,9 @@ button:focus {
   .item-card {
     width: 150px !important;
     height: 250px;
+  }
+  .groupbuy-container {
+    flex-direction: column;
   }
   .page-card {
     width: 100% !important;
@@ -490,6 +508,9 @@ button:focus {
   .item-card {
     width: 260px !important;
     height: 250px;
+  }
+  .groupbuy-container {
+    flex-direction: column;
   }
   .page-card {
     width: 100% !important;
