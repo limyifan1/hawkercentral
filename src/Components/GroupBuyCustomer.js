@@ -3,9 +3,10 @@ import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { withRouter } from "react-router-dom";
 import Select from "react-select";
 import { db, firebase, uiConfig } from "./Firestore";
-import "../App.css";
-import { Card, CardContent, makeStyles, Table, TableBody, TableCell, 
+import { Badge, Card, CardContent, makeStyles, Table, TableBody, TableCell, 
   TableFooter, TableHead, TablePagination, TableRow } from "@material-ui/core";
+  import { withStyles } from '@material-ui/core/styles';
+import "../App.css";
 
 const analytics = firebase.analytics();
 
@@ -24,10 +25,25 @@ const filterOptions = [
 ];
 
 const useStyles = makeStyles({
+  root: {
+    marginTop: 10
+  },
   paginationcell: {
     borderBottom: "none",
   },
 });
+
+const ActiveBadge = withStyles((theme) => ({
+  badge: {
+    backgroundColor: "lightgreen",
+  },
+}))(Badge);
+
+const InactiveBadge = withStyles((theme) => ({
+  badge: {
+    backgroundColor: "lightgrey",
+  },
+}))(Badge);
 
 function GroupBuyTable(props) {
   const classes = useStyles();
@@ -48,7 +64,7 @@ function GroupBuyTable(props) {
   };
 
   return (
-    <Table size="small" aria-label="a dense table">
+    <Table className={classes.root} size="small" aria-label="a dense table">
       <TableHead>
         <TableRow>
           <TableCell align="center">Item Name</TableCell>
@@ -105,7 +121,24 @@ function CustomerGroupBuyList(props) {
       }}
     >
       <CardContent>
-        <p className="card-title">{ groupBuy.hawker }</p>
+        <div className="col-sm-12">
+          <a 
+            className="card-title"
+            href={"/groupbuy/" + groupBuy.hawker}
+          >
+            { groupBuy.hawker }
+          </a>
+          { groupBuy.active 
+            ? <ActiveBadge 
+                badgeContent="Active" 
+                style={{ float: "right" }}
+              />
+            : <InactiveBadge 
+                badgeContent="Inactive" 
+                style={{ float: "right" }} 
+              />
+          }
+        </div>
         <GroupBuyTable rows={groupBuy.items} />
       </CardContent>
     </Card>
@@ -353,6 +386,10 @@ export class GroupBuyCustomer extends React.Component {
                     options={filterOptions}
                     value={this.state.filterOption}
                     onChange={this.updateFilteredGroupBuys}
+                    styles={{
+                      // fixes the overlapping problem of the component with badge
+                      menu: provided => ({ ...provided, zIndex: 9999 })
+                    }}
                 />
               </div>
             </div>
