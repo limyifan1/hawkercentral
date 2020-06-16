@@ -2,7 +2,7 @@ import React from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { withRouter } from "react-router-dom";
 import Select from "react-select";
-import { db, firebase, uiConfig } from "./Firestore";
+import { firebase, uiConfig } from "./Firestore";
 import { Badge, Card, CardContent, makeStyles, Table, TableBody, TableCell, 
   TableFooter, TableHead, TablePagination, TableRow } from "@material-ui/core";
   import { withStyles } from '@material-ui/core/styles';
@@ -339,15 +339,15 @@ export class GroupBuyCustomer extends React.Component {
           }}
         >
         <div className="container-fluid col-md-10 content col-xs-offset-2">
-        <div className="row justify-content-center">
-          <div className="col-12 col-sm-6 col-md-6">
-            <h3 id="back-to-top-anchor">
-              Your Group Buys
-            </h3>
+          <div className="row justify-content-center">
+            <div className="col-12 col-sm-6 col-md-6">
+              <h3 id="back-to-top-anchor">
+                Your Group Buys
+              </h3>
+            </div>
           </div>
-        </div>
         { verifiedUser === null ? 
-          <div>
+          <div className="row justify-content-center mt-4">
             <div>
               <StyledFirebaseAuth
                 uiConfig={uiConfig}
@@ -401,7 +401,6 @@ export class GroupBuyCustomer extends React.Component {
       </div>
     )
   }
-
 }
 
 export default withRouter(GroupBuyCustomer);
