@@ -83,10 +83,10 @@ class PageCart extends React.Component {
         ? this.context.css.menu_color
         : "#b48300";
 
-    const products = cartProducts.map((p) => {
+    const products = cartProducts.map((p, index) => {
       if (p.quantity > 0) {
         return (
-          <CartProduct product={p} img={pageData.menu_combined[p.index].pic} />
+          <CartProduct cartIndex={index} product={p} img={pageData.menu_combined[p.index].pic} />
         );
       }
       return <div></div>;

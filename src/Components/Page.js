@@ -642,6 +642,7 @@ export class Page extends React.Component {
               summary={element["description"]}
               css={this.context.css}
               index={i}
+              addon={element["addon"]}
             />
           );
         }
