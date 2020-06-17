@@ -520,24 +520,48 @@ class FullScreenDialog extends Component {
         });
       }
     }
+    const delivery_fee =
+      (this.context.cartTotal.totalPrice <=
+        this.context.pageData.free_delivery ||
+        this.context.pageData.free_delivery === "0") &&
+      this.context.delivery_fee
+        ? Number(this.context.delivery_fee)
+        : 0;
+
+    var discount = 0;
+    if (this.context.promo_code) {
+      if (this.context.promo_code_valid)
+        discount = this.context.all_promo
+          ? (Number(this.context.all_promo) / 100) *
+            Number(this.context.cartTotal.totalPrice)
+          : 0;
+    } else {
+      discount = this.context.all_promo
+        ? (Number(this.context.all_promo) / 100) *
+          Number(this.context.cartTotal.totalPrice)
+        : 0;
+    }
+
+    if (this.context.channel === "collect") {
+      discount =
+        discount +
+        (Number(this.context.selfcollect_promo) / 100) *
+          Number(this.context.cartTotal.totalPrice);
+    }
+
+    discount = discount.toFixed(2);
     return db
       .collection("pages")
       .doc(this.context.pageName)
       .collection("orders")
       .add({
         orderItems: orderItems,
-        address:
-          this.state.street + " #" + this.state.unit + " " + this.state.postal,
-        contact: this.state.customerNumber,
-        deliveryTime:
-          dayName[this.state.datetime.getDay()] +
-          " " +
-          this.state.datetime.getDate() +
-          " " +
-          monthNames[this.state.datetime.getMonth()] +
-          " " +
-          formatAMPM(this.state.datetime),
-        notes: this.state.notes,
+        customerDetails: this.context.customerDetails,
+        orderTime: new Date(),
+        channel: this.context.channel,
+        cartTotal: this.context.cartTotal,
+        delivery_fee: delivery_fee,
+        discount: discount,
       })
       .catch((e) => {
         console.log(e);

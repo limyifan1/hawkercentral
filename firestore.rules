@@ -122,7 +122,7 @@ service cloud.firestore {
     
     match /pages/{document}/orders/{orderId}{
       allow create: if true;
-      allow read, write, update, delete: if get(/databases/{database}/documents/pages/{document}/users/$(request.auth.uid)).role == "admin";
+      allow read, write, update, delete: if request.auth != null
     }
     
     match /pages/{document}/users/{userId}{
