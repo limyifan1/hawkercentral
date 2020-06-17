@@ -124,8 +124,15 @@
       position: relative;
       box-sizing: border-box;
       padding: 2%;
-
       transition: background-color 0.2s, opacity 0.2s;
+      &__details {
+        .title, .desc{
+          width: 100%;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          font-size: 18px;
+        }
+      }
 
       &::before {
         content: "";
