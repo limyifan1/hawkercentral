@@ -755,6 +755,17 @@ const PromoSettings = (props) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            id="promo_code"
+            label="Promo Code (Applies the All Items Promo)"
+            style={{ width: "100%" }}
+            value={props.promo_code}
+            onChange={props.changePage}
+            type="text"
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
             id="selfcollect_promo"
             label="Self-Collect Promo e.g. 20"
             style={{ width: "100%" }}
@@ -969,6 +980,7 @@ const PageDashboardContainer = (props) => {
                 changePage={props.changePage}
                 all_promo={props.all_promo}
                 selfcollect_promo={props.selfcollect_promo}
+                promo_code={props.promo_code}
               />
             ) : null}
           </Grid>
@@ -1063,6 +1075,7 @@ class PageDashboard extends React.Component {
                 changeDistance={this.props.changeDistance}
                 all_promo={this.props.all_promo}
                 selfcollect_promo={this.props.selfcollect_promo}
+                promo_code={this.props.promo_code}
                 addAddon={this.props.addAddon}
                 deleteAddon={this.props.deleteAddon}
               />

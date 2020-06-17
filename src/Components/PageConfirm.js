@@ -368,7 +368,7 @@ class FullScreenDialog extends Component {
           this.context.pageData.menu_combined[
             this.context.cartProducts[i].index
           ].name +
-          (addons ? (" - " + addons) : "") +
+          (addons ? " - " + addons : "") +
           "_: $" +
           (
             Number(
@@ -388,10 +388,18 @@ class FullScreenDialog extends Component {
         ? Number(this.context.delivery_fee)
         : 0;
 
-    var discount =
-      this.context.all_promo || this.context.selfcollect_promo
+    var discount = 0;
+    if (this.context.promo_code) {
+      if (this.context.promo_code_valid)
+        discount = this.context.all_promo
+          ? (Number(this.context.all_promo) / 100) *
+            Number(cartTotal.totalPrice)
+          : 0;
+    } else {
+      discount = this.context.all_promo
         ? (Number(this.context.all_promo) / 100) * Number(cartTotal.totalPrice)
         : 0;
+    }
 
     if (this.context.channel === "collect") {
       discount =
@@ -411,6 +419,9 @@ class FullScreenDialog extends Component {
 
     if (discount !== "0.00") {
       text = text + "\nPromotion: *-$" + discount + "*";
+      if (this.context.promo_code) {
+        text = text + "\nPromo Code: " + this.context.promo_code;
+      }
     }
 
     if (delivery_fee !== 0) {

@@ -52,11 +52,11 @@ class PageCartProduct extends Component {
         );
         addons.push(
           <React.Fragment>
-            <div>
+            <p className="desc">
               {menu[this.props.product.index].addon[element].name}
               {" (+$"}
               {menu[this.props.product.index].addon[element].price})
-            </div>
+            </p>
           </React.Fragment>
         );
       });
@@ -77,7 +77,7 @@ class PageCartProduct extends Component {
         />
         <div className="shelf-item__details">
           <p className="title">{menu[this.props.product.index].name}</p>
-          <p className="desc">{addons}</p>
+          {addons}
           <p className="desc">Quantity: {this.props.product.quantity}</p>
         </div>
         <div className="shelf-item__price">

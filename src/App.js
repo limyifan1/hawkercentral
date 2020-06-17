@@ -574,6 +574,7 @@ class App extends React.Component {
     // be passed down into the context provider
     this.state = {
       language: cookies.get("language"), // TODO: check why this is hardcoded
+      changePromocode: this.changePromocode,
       toggleLanguage: this.toggleLanguage,
       addProduct: this.addProduct,
       removeProduct: this.removeProduct,
@@ -650,6 +651,25 @@ class App extends React.Component {
     this.setState({
       customerDetails: newDetail,
     });
+  };
+
+  changePromocode = (event) => {
+    const value = event.target.value;
+    this.setState({
+      promo_code_input: value,
+    });
+    if (
+      this.state.promo_code &&
+      value === this.state.promo_code
+    ) {
+      this.setState({
+        promo_code_valid: true,
+      });
+    } else {
+      this.setState({
+        promo_code_valid: false,
+      });
+    }
   };
 
   changeChannel = (channel) => {
@@ -773,6 +793,7 @@ class App extends React.Component {
             tiered_delivery: this.state.tiered_delivery,
             all_promo: this.state.all_promo,
             selfcollect_promo: this.state.selfcollect_promo,
+            promo_code: this.state.promo_code
           })
           .then(() => {
             this.setState({ updating: false });
@@ -904,6 +925,7 @@ class App extends React.Component {
                               tiered_delivery={this.state.tiered_delivery}
                               changeDistance={this.changeDistance}
                               all_promo={this.state.all_promo}
+                              promo_code={this.state.promo_code}
                               selfcollect_promo={this.state.selfcollect_promo}
                               addAddon={this.addAddon}
                               deleteAddon={this.deleteAddon}

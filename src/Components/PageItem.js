@@ -115,9 +115,15 @@ export class PageItem extends React.Component {
   handleClick = async (event) => {
     event.preventDefault();
 <<<<<<< HEAD
+<<<<<<< HEAD
     this.context.addProduct(this.props.index);
 =======
     if (this.context.pageData.menu_combined[this.props.index].addon) {
+=======
+    if (
+      this.context.pageData.menu_combined[this.props.index].addon.length > 0
+    ) {
+>>>>>>> feat(page): added promo code feature
       this.toggleDialog();
     } else {
       this.props.enqueueSnackbar(
