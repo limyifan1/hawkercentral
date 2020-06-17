@@ -729,6 +729,129 @@ const DeliverySettings = (props) => {
   );
 };
 
+function formatAMPM(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  var strTime = hours + ":" + minutes + " " + ampm;
+  return strTime;
+}
+
+const dayName = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const OrderSettings = (props) => {
+  var orders = [];
+  props.orders.forEach((element, index) => {
+    let items = [];
+    element.orderItems.forEach((element, index) => {
+      items.push(
+        <div>
+          {element.quantity}
+          {" x "}
+          {element.name}
+          {" - "}
+          {element.price}
+        </div>
+      );
+    });
+    let formattedDate = element.customerDetails.date.toDate();
+    let time_text =
+      dayName[formattedDate.getDay()] +
+      " " +
+      formattedDate.getDate() +
+      " " +
+      monthNames[formattedDate.getMonth()] +
+      " " +
+      formatAMPM(formattedDate);
+    let formattedOrderDate = element.orderTime.toDate();
+    let order_text =
+      dayName[formattedDate.getDay()] +
+      " " +
+      formattedDate.getDate() +
+      " " +
+      monthNames[formattedDate.getMonth()] +
+      " " +
+      formatAMPM(formattedDate);
+
+    orders.push(
+      <Card
+        style={{
+          width: "100%",
+          backgroundColor: "#f5f5f5",
+          alignContent: "center",
+          margin: "5px",
+        }}
+      >
+        <CardContent>
+          <h5>Order # {index+1}</h5>
+          <br />
+          <h5>Ordered At {order_text}</h5>
+          <br />
+          <b>Channel: </b> {element.channel}
+          <br />
+          <b>Cart Total: </b> ${element.cartTotal.totalPrice}(
+          {element.cartTotal.productQuantity} items)
+          <br />
+          <b>Name: </b> {element.customerDetails.name} <br />
+          <b>Address: </b> {element.customerDetails.address} #{" "}
+          {element.customerDetails.unit} <br />
+          <b>Contact No.: </b> {element.customerDetails.customerNumber} <br />
+          <b>Delivery Time/ Pickup Time: </b> {time_text}
+          <br />
+          <b>Delivery Fee: </b> ${element.delivery_fee}
+          <br />
+          <b>Discount: </b> ${element.discount}
+          <br />
+          <b>Notes: </b>
+          {element.customerDetails.notes} <br />
+          <b>Order Items: </b> {items} <br />
+        </CardContent>
+      </Card>
+    );
+  });
+  return (
+    <React.Fragment>
+      <Grid
+        container
+        direction="row"
+        alignContent={"center"}
+        justify={"start"}
+        spacing={2}
+        style={{ paddingTop: "20px" }}
+      >
+        Orders Sorted by Order Time
+        {orders}
+      </Grid>
+    </React.Fragment>
+  );
+};
+
 const PromoSettings = (props) => {
   // const classes = useStyles();
   return (
@@ -799,7 +922,7 @@ const PageDashboardContainer = (props) => {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {["Menu", "Info", "Delivery", "Promo"].map((text, index) => (
+        {["Menu", "Info", "Delivery", "Promo", "Order"].map((text, index) => (
           <ListItem button key={text} onClick={() => setTab(text)}>
             <ListItemText primary={text} />
           </ListItem>
@@ -846,6 +969,7 @@ const PageDashboardContainer = (props) => {
             {tab === "Info" && <span>Info Settings</span>}
             {tab === "Delivery" && <span>Delivery Settings</span>}
             {tab === "Promo" && <span>Promo Settings</span>}
+            {tab === "Order" && <span>Order Settings</span>}
           </Typography>
           {props.updating ? (
             <div
@@ -982,6 +1106,8 @@ const PageDashboardContainer = (props) => {
                 selfcollect_promo={props.selfcollect_promo}
                 promo_code={props.promo_code}
               />
+            ) : tab === "Order" ? (
+              <OrderSettings orders={props.orders} />
             ) : null}
           </Grid>
         </Grid>
@@ -1044,6 +1170,21 @@ class PageDashboard extends React.Component {
         }
       }.bind(this)
     );
+
+    var orders = [];
+    db.collection("pages")
+      .doc(this.props.pageName)
+      .collection("orders")
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((element) => {
+          orders.push(element.data());
+        });
+        orders.sort((a, b) => {
+          return b.orderTime - a.orderTime;
+        });
+        this.setState({ orders: orders });
+      });
   }
 
   render() {
@@ -1078,6 +1219,7 @@ class PageDashboard extends React.Component {
                 promo_code={this.props.promo_code}
                 addAddon={this.props.addAddon}
                 deleteAddon={this.props.deleteAddon}
+                orders={this.state.orders}
               />
             ) : (
               <React.Fragment>
