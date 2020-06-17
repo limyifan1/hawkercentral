@@ -121,7 +121,7 @@ export class PageItem extends React.Component {
     if (this.context.pageData.menu_combined[this.props.index].addon) {
 =======
     if (
-      this.context.pageData.menu_combined[this.props.index].addon.length > 0
+      this.context.pageData.menu_combined[this.props.index].addon && this.context.pageData.menu_combined[this.props.index].addon.length > 0
     ) {
 >>>>>>> feat(page): added promo code feature
       this.toggleDialog();

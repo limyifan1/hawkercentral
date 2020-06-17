@@ -89,7 +89,7 @@
   &__shelf-container {
     position: relative;
     min-height: 280px;
-    padding-bottom: 200px;
+    padding-bottom: 400px;
 
     .shelf-empty {
       color: #000000;
@@ -360,7 +360,6 @@ main {
 
     .shelf-container {
       width: 80%;
-
       .shelf-item {
         width: 33.33%;
       }

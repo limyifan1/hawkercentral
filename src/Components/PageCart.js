@@ -182,8 +182,8 @@ class PageCart extends React.Component {
     }
 
     const delivery_fee =
-      cartTotal.totalPrice <= this.context.pageData.free_delivery ||
-      this.context.pageData.free_delivery === "0"
+      (cartTotal.totalPrice <= this.context.pageData.free_delivery ||
+      this.context.pageData.free_delivery === "0") && this.context.delivery_fee
         ? Number(this.context.delivery_fee)
         : 0;
 
@@ -214,6 +214,11 @@ class PageCart extends React.Component {
       Number(delivery_fee) -
       Number(discount);
 
+    console.log(
+      Number(this.context.cartTotal.totalPrice),
+      Number(delivery_fee),
+      Number(discount)
+    );
     totalPrice = totalPrice.toFixed(2);
 
     return (
