@@ -110,7 +110,9 @@ export class PageItem extends React.Component {
   }
   handleClick = async (event) => {
     event.preventDefault();
-    if (this.context.pageData.menu_combined[this.props.index].addon) {
+    if (
+      this.context.pageData.menu_combined[this.props.index].addon.length > 0
+    ) {
       this.toggleDialog();
     } else {
       this.props.enqueueSnackbar(

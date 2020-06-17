@@ -4,12 +4,20 @@ import PropTypes from "prop-types";
 import CartProduct from "./PageCartProduct";
 import { CartContext } from "./themeContext";
 import "./style.scss";
-import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
 import Component from "./index";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -25,6 +33,55 @@ function LinearProgressWithLabel(props) {
   );
 }
 
+const PromoCodeDialog = (props) => {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const context = React.useContext(CartContext);
+
+  return (
+    <div>
+      <Dialog
+        fullScreen={fullScreen}
+        open={props.promoDialog}
+        onClose={props.closeFloatPromo}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"Enter Your Promo Code"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <TextField
+              label={"Enter Promo Code"}
+              type="text"
+              value={context.promo_code_input}
+              style={{ width: "100%" }}
+              onChange={context.changePromocode}
+            />
+          </DialogContentText>
+          {context.promo_code_valid ? (
+            <p style={{ color: "green" }}>Promo Code Successfully Applied</p>
+          ) : (
+            <p style={{ color: "red" }}>Please Enter A Valid Code</p>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={props.closeFloatPromo}
+            color="primary"
+            variant={"contained"}
+          >
+            Done
+          </Button>
+          {/* <Button onClick={props.closeFloatPromo} color="primary">
+            Cancel
+          </Button> */}
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+};
+
 class PageCart extends React.Component {
   static propTypes = {
     loadCart: PropTypes.func.isRequired,
@@ -39,6 +96,7 @@ class PageCart extends React.Component {
 
   state = {
     isOpen: false,
+    promoDialog: false,
   };
 
   openFloatCart = () => {
@@ -52,9 +110,16 @@ class PageCart extends React.Component {
     this.setState({ isOpen: false });
   };
 
+  openFloatPromo = () => {
+    this.setState({ promoDialog: true });
+  };
+
+  closeFloatPromo = () => {
+    this.setState({ promoDialog: false });
+  };
+
   changeProductQuantity = (changedProduct) => {
     const { cartProducts, updateCart } = this.props;
-
     const product = cartProducts.find((p) => p.id === changedProduct.id);
     product.quantity = changedProduct.quantity;
     if (product.quantity <= 0) {
@@ -86,7 +151,11 @@ class PageCart extends React.Component {
     const products = cartProducts.map((p, index) => {
       if (p.quantity > 0) {
         return (
-          <CartProduct cartIndex={index} product={p} img={pageData.menu_combined[p.index].pic} />
+          <CartProduct
+            cartIndex={index}
+            product={p}
+            img={pageData.menu_combined[p.index].pic}
+          />
         );
       }
       return <div></div>;
@@ -104,10 +173,18 @@ class PageCart extends React.Component {
         ? Number(this.context.delivery_fee)
         : 0;
 
-    var discount =
-      this.context.all_promo || this.context.selfcollect_promo
+    var discount = 0;
+    if (this.context.promo_code) {
+      if (this.context.promo_code_valid)
+        discount = this.context.all_promo
+          ? (Number(this.context.all_promo) / 100) *
+            Number(cartTotal.totalPrice)
+          : 0;
+    } else {
+      discount = this.context.all_promo
         ? (Number(this.context.all_promo) / 100) * Number(cartTotal.totalPrice)
         : 0;
+    }
 
     if (this.context.channel === "collect") {
       discount =
@@ -332,19 +409,15 @@ class PageCart extends React.Component {
                   )}
               </div>
             ) : null}
-            {this.context.all_promo || this.context.selfcollect_promo ? (
+            {(this.context.all_promo || this.context.selfcollect_promo) &&
+            discount > 0 ? (
               <div class="row">
-                {(this.context.delivery_option === "fixed" ||
-                  this.context.delivery_option === "distance") &&
-                  this.context.delivery_option &&
-                  this.context.delivery_fee !== undefined && (
-                    <React.Fragment>
-                      <div className="sub">DISCOUNT: </div>
-                      <div className="sub-price">
-                        <p className="sub-price__val">- ${discount}</p>
-                      </div>
-                    </React.Fragment>
-                  )}
+                <React.Fragment>
+                  <div className="sub">DISCOUNT: </div>
+                  <div className="sub-price">
+                    <p className="sub-price__val">- ${discount}</p>
+                  </div>
+                </React.Fragment>
               </div>
             ) : null}
             <div class="row">
@@ -362,6 +435,16 @@ class PageCart extends React.Component {
                   )}
               </div>
             </div>
+            {this.context.promo_code ? (
+              <Button
+                onClick={this.openFloatPromo}
+                color={"inherit"}
+                variant={"contained"}
+                style={{ color: "black" }}
+              >
+                Enter Promo Code
+              </Button>
+            ) : null}
             <div>
               <div onClick={this.handleClickOpen} className="buy-btn">
                 {this.context.channel ? (
@@ -382,6 +465,11 @@ class PageCart extends React.Component {
                 toggle="cart"
               />
             </Dialog>
+            <PromoCodeDialog
+              promoDialog={this.state.promoDialog}
+              openFloatPromo={this.openFloatPromo}
+              closeFloatPromo={this.closeFloatPromo}
+            />
           </div>
         </div>
       </span>
