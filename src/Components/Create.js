@@ -102,6 +102,19 @@ export class Create extends React.Component {
                 style={{ flexShrink: "0", minWidth: "50%" }}
               />
             </div>
+            <div
+              class="d-flex col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 justify-content-center align-items-center"
+              style={{ marginTop: "40px" }}
+            >
+              <h6>
+                <b>
+                  {this.context.data.create.existing}{" "}
+                  <a href="https://www.foodleh.app/custom">
+                    www.foodleh.app/custom
+                  </a>
+                </b>
+              </h6>
+            </div>
           </div>
 
           {this.state.create && (
