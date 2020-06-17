@@ -313,23 +313,41 @@ class App extends React.Component {
       });
       const target = event.currentTarget.id;
       const targetId = target.substring(target.indexOf("-") + 1);
-      console.log(target, targetId);
-      return this.setState({
-        pageData: update(this.state.pageData, {
-          menu_combined: {
-            [targetId]: {
-              addon: {
-                $push: [
-                  {
-                    name: "",
-                    price: 0,
-                  },
-                ],
+      if (this.state.pageData.menu_combined[targetId].addon) {
+        this.setState({
+          pageData: update(this.state.pageData, {
+            menu_combined: {
+              [targetId]: {
+                addon: {
+                  $push: [
+                    {
+                      name: "",
+                      price: 0,
+                    },
+                  ],
+                },
               },
             },
-          },
-        }),
-      });
+          }),
+        });
+      } else {
+        this.setState({
+          pageData: update(this.state.pageData, {
+            menu_combined: {
+              [targetId]: {
+                addon: {
+                  $set: [
+                    {
+                      name: "",
+                      price: 0,
+                    },
+                  ],
+                },
+              },
+            },
+          }),
+        });
+      }
     };
 
     this.deleteAddon = (event) => {
