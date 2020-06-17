@@ -176,13 +176,17 @@
       &__price {
         display: inline-block;
         vertical-align: middle;
+<<<<<<< HEAD
+=======
+        // top: 50px
+>>>>>>> feat(page): added addon customizations
       }
 
       &__thumb {
         vertical-align: middle;
         width: 15%;
         margin-right: 3%;
-        margin-top: -20px;
+        // margin-top: -20px;
 
         img {
           width: 100%;

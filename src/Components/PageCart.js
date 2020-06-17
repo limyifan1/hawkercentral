@@ -78,6 +78,7 @@ class PageCart extends React.Component {
   render() {
     const { cartTotal, cartProducts, pageData } = this.context;
 
+<<<<<<< HEAD
     const products = cartProducts.map((p) => {
       if (p.quantity > 0) {
         return (
@@ -85,6 +86,17 @@ class PageCart extends React.Component {
             product={p}
             img={pageData.menu_combined[p.index].image}
           />
+=======
+    const menu_color =
+      this.context && this.context.css && this.context.css.menu_color
+        ? this.context.css.menu_color
+        : "#b48300";
+
+    const products = cartProducts.map((p, index) => {
+      if (p.quantity > 0) {
+        return (
+          <CartProduct cartIndex={index} product={p} img={pageData.menu_combined[p.index].pic} />
+>>>>>>> feat(page): added addon customizations
         );
       }
       return <div></div>;

@@ -61,6 +61,26 @@ const onClickDismiss = (key) => () => {
   notistackRef.current.closeSnackbar(key);
 };
 
+const arraysMatch = function (arr1, arr2) {
+  // Check if the arrays are the same length
+
+  if (!arr1 && !arr2) return true;
+
+  if (arr1 && !arr2) return false;
+
+  if (!arr1 && arr2) return false;
+
+  if (arr1.length !== arr2.length) return false;
+
+  // Check if all items exist and are in the same order
+  for (var i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) return false;
+  }
+
+  // Otherwise, return true
+  return true;
+};
+
 // {/* This will only be useful if we convert to server-side rendering ie not CRA */}
 function SeoHelmet() {
   const description =
@@ -175,9 +195,27 @@ class App extends React.Component {
       if (targetField === "image") {
         const image = event.target.files[0];
         this.handleImageAsFile(targetId, image, targetField);
-      }
-      if (targetField === "delete") {
+      } else if (targetField === "delete") {
         this.deleteMenuItem(targetId);
+      } else if (targetField.includes("addonname")) {
+        const addonId = targetField.substring(target.indexOf("+") + 1);
+        console.log(addonId, targetId, value);
+        this.setState({
+          pageData: update(this.state.pageData, {
+            menu_combined: {
+              [targetId]: { addon: { [addonId]: { name: { $set: value } } } },
+            },
+          }),
+        });
+      } else if (targetField.includes("addonprice")) {
+        const addonId = targetField.substring(target.indexOf("+") + 1);
+        this.setState({
+          pageData: update(this.state.pageData, {
+            menu_combined: {
+              [targetId]: { addon: { [addonId]: { price: { $set: value } } } },
+            },
+          }),
+        });
       } else {
         this.setState({
           pageData: update(this.state.pageData, {
@@ -269,6 +307,56 @@ class App extends React.Component {
       });
     };
 
+    this.addAddon = (event) => {
+      this.setState({
+        updated: false,
+      });
+      const target = event.currentTarget.id;
+      const targetId = target.substring(target.indexOf("-") + 1);
+      console.log(target, targetId);
+      return this.setState({
+        pageData: update(this.state.pageData, {
+          menu_combined: {
+            [targetId]: {
+              addon: {
+                $push: [
+                  {
+                    name: "",
+                    price: 0,
+                  },
+                ],
+              },
+            },
+          },
+        }),
+      });
+    };
+
+    this.deleteAddon = (event) => {
+      this.setState({
+        updated: false,
+      });
+      const target = event.currentTarget.id;
+      const targetId = target.substring(target.indexOf("-") + 1);
+      console.log(target, targetId);
+      return this.setState({
+        pageData: update(this.state.pageData, {
+          menu_combined: {
+            [targetId]: {
+              addon: {
+                $splice: [
+                  [
+                    this.state.pageData.menu_combined[targetId].addon.length -
+                      1,
+                  ],
+                ],
+              },
+            },
+          },
+        }),
+      });
+    };
+
     this.deleteMenuItem = (index) => {
       this.setState({
         updated: false,
@@ -282,19 +370,36 @@ class App extends React.Component {
       });
     };
 
-    this.addProduct = (productIndex) => {
+    this.addProduct = (productIndex, addon) => {
       let findElement;
+      console.log(addon);
+      var addons = [];
+
+      if (addon) {
+        addon.forEach((element) => {
+          if (element.checked) {
+            addons.push(element.index);
+          }
+        });
+      }
+
       this.state.cartProducts.forEach((element, index) => {
-        if (element.index === productIndex) findElement = { element, index };
+        if (element.index === productIndex && arraysMatch(addon, element.addon))
+          findElement = { element, index };
       });
+
       if (findElement) {
         const newElement = findElement.element;
         newElement.quantity += 1;
+        if (addons.length > 0) {
+          newElement.addons = [...addons];
+        }
         this.state.cartProducts[findElement.index] = newElement;
       } else {
         this.state.cartProducts.push({
           index: productIndex,
           quantity: 1,
+          addons: addons,
         });
       }
       var newPageData = this.state.pageData;
@@ -303,54 +408,116 @@ class App extends React.Component {
         ? (newPageData.menu_combined[productIndex].quantity += 1)
         : (newPageData.menu_combined[productIndex].quantity = 1);
       this.setState({
+<<<<<<< HEAD
         cartTotal: {
           productQuantity: this.state.cartTotal.productQuantity + 1,
           totalPrice:
             this.state.cartTotal.totalPrice +
             Number(this.state.pageData.menu_combined[productIndex].price),
         },
+=======
+        // cartTotal: {
+        //   productQuantity: this.state.cartTotal.productQuantity + 1,
+        //   totalPrice:
+        //     Math.round(
+        //       (this.state.cartTotal.totalPrice +
+        //         Number(this.state.pageData.menu_combined[productIndex].price) +
+        //         Number.EPSILON) *
+        //         100
+        //     ) / 100,
+        // },
+>>>>>>> feat(page): added addon customizations
         pageData: newPageData,
       });
+      this.updateCart();
       console.log(this.state);
     };
 
-    this.removeProduct = (productIndex) => {
-      let findElement;
-      this.state.cartProducts.forEach((element, index) => {
-        if (element.index === productIndex) findElement = { element, index };
+    this.removeProduct = (productIndex, cartIndex) => {
+      let cartElement = this.state.cartProducts[cartIndex];
+
+      // let findElement;
+      // this.state.cartProducts.forEach((element, index) => {
+      //   if (element.index === productIndex) findElement = { element, index };
+      // });
+
+      const newElement = cartElement;
+      newElement.quantity -= 1;
+      // this.state.cartProducts[findElement.index] = newElement;
+      this.setState({
+        cartProducts: update(this.state.cartProducts, {
+          [cartIndex]: { $set: newElement },
+        }),
       });
-      if (findElement) {
-        const newElement = findElement.element;
-        newElement.quantity -= 1;
-        // this.state.cartProducts[findElement.index] = newElement;
+      if (newElement.quantity === 0) {
+        let cartProductsCopy = this.state.cartProducts.slice();
+        cartProductsCopy.splice(cartIndex, 1);
         this.setState({
           cartProducts: update(this.state.cartProducts, {
-            [findElement.index]: { $set: newElement },
+            $set: cartProductsCopy,
           }),
         });
-        if (newElement.quantity === 0) {
-          this.setState({
-            cartProducts: update(this.state.cartProducts, {
-              $set: this.state.cartProducts.filter(
-                (value) => value.index !== newElement.index
-              ),
-            }),
-          });
-        }
       }
+
       var newPageData = this.state.pageData;
       newPageData.menu_combined[productIndex].quantity = newPageData
         .menu_combined[productIndex].quantity
         ? (newPageData.menu_combined[productIndex].quantity -= 1)
         : (newPageData.menu_combined[productIndex].quantity = 0);
       this.setState({
+        // cartTotal: {
+        //   productQuantity: this.state.cartTotal.productQuantity - 1,
+        //   totalPrice:
+        //     Math.round(
+        //       (this.state.cartTotal.totalPrice -
+        //         Number(this.state.pageData.menu_combined[productIndex].price) +
+        //         Number.EPSILON) *
+        //         100
+        //     ) / 100,
+        // },
+        pageData: newPageData,
+      });
+      this.updateCart();
+    };
+
+    this.updateCart = () => {
+      var productQuantity = 0;
+      var totalPrice = 0;
+      this.state.cartProducts.forEach((element) => {
+        var addonsTotal = 0;
+        if (element.addons) {
+          element.addons.forEach((addonElement, index) => {
+            addonsTotal += Number(
+              this.state.pageData.menu_combined[element.index].addon[
+                addonElement
+              ].price
+            );
+          });
+        }
+        console.log(addonsTotal);
+
+        if (element.quantity !== 0) {
+          productQuantity += element.quantity;
+          totalPrice +=
+            Number(
+              Number(this.state.pageData.menu_combined[element.index].price) +
+                addonsTotal
+            ) * element.quantity;
+        }
+      });
+
+      this.setState({
         cartTotal: {
+<<<<<<< HEAD
           productQuantity: this.state.cartTotal.productQuantity - 1,
           totalPrice:
             this.state.cartTotal.totalPrice -
             Number(this.state.pageData.menu_combined[productIndex].price),
+=======
+          productQuantity: productQuantity,
+          totalPrice: totalPrice,
+>>>>>>> feat(page): added addon customizations
         },
-        pageData: newPageData,
       });
     };
 
@@ -720,6 +887,8 @@ class App extends React.Component {
                               changeDistance={this.changeDistance}
                               all_promo={this.state.all_promo}
                               selfcollect_promo={this.state.selfcollect_promo}
+                              addAddon={this.addAddon}
+                              deleteAddon={this.deleteAddon}
                             />
                           )}
                         />

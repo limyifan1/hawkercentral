@@ -318,6 +318,7 @@ class FullScreenDialog extends Component {
 
   setOrderText = async () => {
     const { cartTotal } = this.context;
+
     let text = "";
     if (this.context.channel === "delivery") {
       text =
@@ -338,6 +339,27 @@ class FullScreenDialog extends Component {
         this.context.cartProducts.length !== 0 &&
         this.context.cartProducts[i].quantity !== 0
       ) {
+        let addons = "";
+        let addonValue = 0;
+
+        this.context.cartProducts[i].addons.forEach((addonIndex) => {
+          addons =
+            addons +
+            this.context.pageData.menu_combined[
+              this.context.cartProducts[i].index
+            ].addon[addonIndex].name +
+            "(+$" +
+            this.context.pageData.menu_combined[
+              this.context.cartProducts[i].index
+            ].addon[addonIndex].price +
+            ") ";
+          addonValue +=
+            Number(
+              this.context.pageData.menu_combined[
+                this.context.cartProducts[i].index
+              ].addon[addonIndex].price
+            ) * Number(this.context.cartProducts[i].quantity);
+        });
         text =
           text +
           "*" +
@@ -346,12 +368,15 @@ class FullScreenDialog extends Component {
           this.context.pageData.menu_combined[
             this.context.cartProducts[i].index
           ].name +
+          (addons ? (" - " + addons) : "") +
           "_: $" +
           (
-            this.context.cartProducts[i].quantity *
-            this.context.pageData.menu_combined[
-              this.context.cartProducts[i].index
-            ].price
+            Number(
+              this.context.cartProducts[i].quantity *
+                this.context.pageData.menu_combined[
+                  this.context.cartProducts[i].index
+                ].price
+            ) + addonValue
           ).toFixed(2) +
           "\n";
       }
@@ -384,9 +409,13 @@ class FullScreenDialog extends Component {
 
     totalPrice = totalPrice.toFixed(2);
 
-    text = text + "\n\nPromotion: *-$" + discount + "*";
+    if (discount !== "0.00") {
+      text = text + "\nPromotion: *-$" + discount + "*";
+    }
 
-    text = text + "\nDelivery: *$" + delivery_fee + "*";
+    if (delivery_fee !== 0) {
+      text = text + "\nDelivery: *$" + delivery_fee + "*";
+    }
 
     text = text + "\nTotal Price: *$" + totalPrice + "*";
 

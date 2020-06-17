@@ -101,6 +101,36 @@ const thumbnail = (pic) => {
 };
 
 const DashboardItem = (props) => {
+  var addons = [];
+  if (props.addon) {
+    props.addon.forEach((element, index) => {
+      addons.push(
+        <React.Fragment>
+          <TextField
+            label={"Addon #" + (index + 1) + " Name"}
+            id={"addonname+" + index + "-" + props.index}
+            type="text"
+            value={element.name}
+            style={{ width: "170px" }}
+            onChange={props.changeField}
+          />
+          <TextField
+            label={"Addon #" + (index + 1) + " Price"}
+            id={"addonprice+" + index + "-" + props.index}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
+            type="number"
+            value={element.price}
+            style={{ width: "170px" }}
+            onChange={props.changeField}
+          />
+        </React.Fragment>
+      );
+    });
+  }
   return (
     <div class="page-card">
       <div
@@ -198,8 +228,49 @@ const DashboardItem = (props) => {
                   onChange={props.changeField}
                 />
               </p>
-              {/* {this.context.cartProducts} */}
+              <p>
+                <Card
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#f5f5f5",
+                    alignContent: "center",
+                  }}
+                >
+                  <CardContent>
+                    <div>Add Ons (e.g. extra chilli):</div>
+                    {addons}
+                    <Button
+                      variant="contained"
+                      component="label"
+                      color="default"
+                      startIcon={<AddBoxIcon />}
+                      style={{ marginBottom: "5px", width: "170px" }}
+                      id={"addon-" + props.index}
+                      onClick={props.addAddon}
+                    >
+                      Add One More
+                    </Button>
+                    <Button
+                      variant="contained"
+                      component="label"
+                      color="default"
+                      startIcon={<AddBoxIcon />}
+                      style={{
+                        backgroundColor: "red",
+                        color: "white",
+                        marginBottom: "5px",
+                        width: "170px",
+                      }}
+                      id={"addon-" + props.index}
+                      onClick={props.deleteAddon}
+                    >
+                      Delete One
+                    </Button>
+                  </CardContent>
+                </Card>
+              </p>
             </div>
+
             <Button
               variant="contained"
               component="label"
@@ -242,7 +313,8 @@ const compareCheck = (prevProps, nextProps) => {
     prevProps.name === nextProps.name &&
     prevProps.description === nextProps.description &&
     prevProps.price === nextProps.price &&
-    prevProps.pic === nextProps.pic
+    prevProps.pic === nextProps.pic &&
+    prevProps.addon === nextProps.addon
   );
 };
 
@@ -300,7 +372,10 @@ const MenuSettings = (props) => {
                   name={element["name"]}
                   price={element["price"]}
                   pic={element["pic"]}
+                  addon={element["addon"]}
                   description={element["description"]}
+                  addAddon={props.addAddon}
+                  deleteAddon={props.deleteAddon}
                   key={i}
                   index={i}
                   changeField={changeField}
@@ -849,6 +924,8 @@ const PageDashboardContainer = (props) => {
                 updating={props.updating}
                 updated={props.updated}
                 addMenuItem={props.addMenuItem}
+                addAddon={props.addAddon}
+                deleteAddon={props.deleteAddon}
               />
             ) : tab === "Info" ? (
               <InfoSettings
@@ -858,7 +935,6 @@ const PageDashboardContainer = (props) => {
                 saveToFirestore={props.saveToFirestore}
                 updating={props.updating}
                 updated={props.updated}
-                addMenuItem={props.addMenuItem}
                 changeColor={props.changeColor}
                 logo={props.logo}
                 cover={props.cover}
@@ -886,7 +962,6 @@ const PageDashboardContainer = (props) => {
                 saveToFirestore={props.saveToFirestore}
                 updating={props.updating}
                 updated={props.updated}
-                addMenuItem={props.addMenuItem}
                 changeColor={props.changeColor}
                 logo={props.logo}
                 cover={props.cover}
@@ -988,6 +1063,8 @@ class PageDashboard extends React.Component {
                 changeDistance={this.props.changeDistance}
                 all_promo={this.props.all_promo}
                 selfcollect_promo={this.props.selfcollect_promo}
+                addAddon={this.props.addAddon}
+                deleteAddon={this.props.deleteAddon}
               />
             ) : (
               <React.Fragment>
