@@ -25,6 +25,7 @@
   },
   "create": {
     "createfree": "请在以下免费入驻平台与注册网站！",
+    "existing": "若您已注册，请到: ",
     "createlisting": "请在以下入驻平台",
     "createwebsite": "请在以下入驻平台与注册网站",
     "step1": "第一： 摊位资料 （必填）",

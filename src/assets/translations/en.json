@@ -25,6 +25,7 @@
   },
   "create": {
     "createfree": "Create a FREE listing and website below! ",
+    "existing": "Already have a listing? Go to: ",
     "createlisting": "Create Listing Below",
     "createwebsite": "Create Listing & Website Below",
     "step1": "Step 1: Stall Details (Important)",
