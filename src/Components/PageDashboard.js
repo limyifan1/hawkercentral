@@ -789,7 +789,6 @@ const OrderSettings = (props) => {
       monthNames[formattedDate.getMonth()] +
       " " +
       formatAMPM(formattedDate);
-    let formattedOrderDate = element.orderTime.toDate();
     let order_text =
       dayName[formattedDate.getDay()] +
       " " +

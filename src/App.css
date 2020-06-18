@@ -120,9 +120,15 @@ button:focus {
 }
 
 .card-page-title {
+<<<<<<< HEAD
   line-height: 1em;
   height: 55px; 
   overflow: hidden; 
+=======
+  line-height: 1.1em;
+  /* height: 55px; */
+  overflow: hidden;
+>>>>>>> style(page): removed fixed height for title and subtitle
   /* height: 34px; */
   font-size: large;
   font-weight: bold;
@@ -130,8 +136,13 @@ button:focus {
 }
 
 .card-page-subtitle {
+<<<<<<< HEAD
   line-height: 1em;
   height: 26px; 
+=======
+  line-height: 1.1em;
+  /* height: 26px; */
+>>>>>>> style(page): removed fixed height for title and subtitle
   overflow: hidden;
   word-break: break-word !important;
 }
