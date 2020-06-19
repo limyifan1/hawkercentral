@@ -400,6 +400,10 @@ export class Info extends React.Component {
     );
     text =
       text + "\n For F&B Owner, request for a driver here: " + shortenedURL;
+    if (this.state.data.additional_text) {
+      text = text + "\n" + this.state.data.additional_text;
+    }
+
     return encodeURIComponent(text);
   };
 
