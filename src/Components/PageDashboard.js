@@ -562,6 +562,17 @@ const InfoSettings = (props) => {
             onChange={props.changeInfo}
           />
         </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="additional_text"
+            label="Additional Text added to End Of WhatsApp Message"
+            multiline
+            rows={4}
+            style={{ width: "100%" }}
+            value={props.data.additional_text}
+            onChange={props.changeInfo}
+          />
+        </Grid>
       </Grid>
     </React.Fragment>
   );
@@ -808,7 +819,7 @@ const OrderSettings = (props) => {
         }}
       >
         <CardContent>
-          <h5>Order # {index+1}</h5>
+          <h5>Order # {index + 1}</h5>
           <br />
           <h5>Ordered At {order_text}</h5>
           <br />
