@@ -626,6 +626,7 @@ class App extends React.Component {
         "25km": 0,
         "30km": 0,
       },
+      promo_code: "",
     };
     this.handleFireBaseUpload = this.handleFireBaseUpload.bind(this);
     this.handleImageAsFile = this.handleImageAsFile.bind(this);
@@ -658,10 +659,7 @@ class App extends React.Component {
     this.setState({
       promo_code_input: value,
     });
-    if (
-      this.state.promo_code &&
-      value === this.state.promo_code
-    ) {
+    if (this.state.promo_code && value === this.state.promo_code) {
       this.setState({
         promo_code_valid: true,
       });
@@ -793,11 +791,16 @@ class App extends React.Component {
             tiered_delivery: this.state.tiered_delivery,
             all_promo: this.state.all_promo,
             selfcollect_promo: this.state.selfcollect_promo,
-            promo_code: this.state.promo_code
+            promo_code: this.state.promo_code,
           })
           .then(() => {
             this.setState({ updating: false });
             this.setState({ updated: true });
+          })
+          .catch((e) => {
+            this.setState({ updating: false });
+            this.setState({ updated: true });
+            console.log(e);
           });
       });
   };
