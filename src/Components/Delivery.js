@@ -574,19 +574,6 @@ export class Delivery extends React.Component {
                             <br />
                             <b>Distance:</b> {this.state.data.distance}
                             <br />
-                            {this.state.data.duration ? (
-                              <div>
-                                <b>Est. Duration:</b> {this.state.data.duration}
-                                <br />{" "}
-                              </div>
-                            ) : null}
-                            {this.state.data.arrival ? (
-                              <div>
-                                <b>Est. Arrival Time:</b>{" "}
-                                {this.state.data.arrival}
-                                <br />{" "}
-                              </div>
-                            ) : null}
                             <b>Estimated Fee:</b> ${this.state.data.cost}
                             <br /> <br />
                             <b>
