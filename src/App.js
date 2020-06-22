@@ -426,14 +426,6 @@ class App extends React.Component {
         ? (newPageData.menu_combined[productIndex].quantity += 1)
         : (newPageData.menu_combined[productIndex].quantity = 1);
       this.setState({
-<<<<<<< HEAD
-        cartTotal: {
-          productQuantity: this.state.cartTotal.productQuantity + 1,
-          totalPrice:
-            this.state.cartTotal.totalPrice +
-            Number(this.state.pageData.menu_combined[productIndex].price),
-        },
-=======
         // cartTotal: {
         //   productQuantity: this.state.cartTotal.productQuantity + 1,
         //   totalPrice:
@@ -444,7 +436,6 @@ class App extends React.Component {
         //         100
         //     ) / 100,
         // },
->>>>>>> feat(page): added addon customizations
         pageData: newPageData,
       });
       this.updateCart();
@@ -526,15 +517,8 @@ class App extends React.Component {
 
       this.setState({
         cartTotal: {
-<<<<<<< HEAD
-          productQuantity: this.state.cartTotal.productQuantity - 1,
-          totalPrice:
-            this.state.cartTotal.totalPrice -
-            Number(this.state.pageData.menu_combined[productIndex].price),
-=======
           productQuantity: productQuantity,
           totalPrice: totalPrice,
->>>>>>> feat(page): added addon customizations
         },
       });
     };
@@ -626,7 +610,6 @@ class App extends React.Component {
         "25km": 0,
         "30km": 0,
       },
-      promo_code: "",
     };
     this.handleFireBaseUpload = this.handleFireBaseUpload.bind(this);
     this.handleImageAsFile = this.handleImageAsFile.bind(this);
@@ -659,7 +642,10 @@ class App extends React.Component {
     this.setState({
       promo_code_input: value,
     });
-    if (this.state.promo_code && value === this.state.promo_code) {
+    if (
+      this.state.promo_code &&
+      value === this.state.promo_code
+    ) {
       this.setState({
         promo_code_valid: true,
       });
@@ -791,16 +777,11 @@ class App extends React.Component {
             tiered_delivery: this.state.tiered_delivery,
             all_promo: this.state.all_promo,
             selfcollect_promo: this.state.selfcollect_promo,
-            promo_code: this.state.promo_code,
+            promo_code: this.state.promo_code
           })
           .then(() => {
             this.setState({ updating: false });
             this.setState({ updated: true });
-          })
-          .catch((e) => {
-            this.setState({ updating: false });
-            this.setState({ updated: true });
-            console.log(e);
           });
       });
   };
@@ -858,6 +839,35 @@ class App extends React.Component {
     // The ThemedButton button inside the ThemeProvider
     // uses the theme from state while the one outside uses
     // the default dark theme
+    let skeletons = [];
+    for (let index = 0; index < 10; index++) {
+      skeletons.push(
+        <div style={{ width: "500px", margin: "10px" }}>
+          <div
+            class="card shadow"
+            style={{
+              paddingLeft: "0px !important",
+              paddingRight: "0px !important",
+            }}
+          >
+            <Skeleton width="100%">
+              <div
+                style={{ height: "100px" }}
+                class="card-img-top"
+                alt=""
+              ></div>
+            </Skeleton>
+            <Skeleton width="80%">
+              <h3>.</h3>
+            </Skeleton>
+            <Skeleton width="50%">
+              <h3>.</h3>
+            </Skeleton>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <ThemeProvider theme={theme}>
         <Router>

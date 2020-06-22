@@ -117,12 +117,10 @@ service cloud.firestore {
       allow update: if true;
       allow create: if true;
     }
-<<<<<<< HEAD
-=======
     
     match /pages/{document}/orders/{orderId}{
       allow create: if true;
-      allow read, write, update, delete: if request.auth != null
+      allow read, write, update, delete: if get(/databases/{database}/documents/pages/{document}/users/$(request.auth.uid)).role == "admin";
     }
     
     match /pages/{document}/users/{userId}{
@@ -136,7 +134,6 @@ service cloud.firestore {
       allow update: if true;
       allow create: if true;
     }
->>>>>>> feat(page): added privacy policy disclaimer, storing of order info, database rules
 
     match /hawkers/{document} {
       //Reads are public, but may incur download costs if malicious users continuously reads them.

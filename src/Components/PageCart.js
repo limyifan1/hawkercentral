@@ -143,15 +143,6 @@ class PageCart extends React.Component {
   render() {
     const { cartTotal, cartProducts, pageData } = this.context;
 
-<<<<<<< HEAD
-    const products = cartProducts.map((p) => {
-      if (p.quantity > 0) {
-        return (
-          <CartProduct
-            product={p}
-            img={pageData.menu_combined[p.index].image}
-          />
-=======
     const menu_color =
       this.context && this.context.css && this.context.css.menu_color
         ? this.context.css.menu_color
@@ -160,16 +151,11 @@ class PageCart extends React.Component {
     const products = cartProducts.map((p, index) => {
       if (p.quantity > 0) {
         return (
-<<<<<<< HEAD
-          <CartProduct cartIndex={index} product={p} img={pageData.menu_combined[p.index].pic} />
->>>>>>> feat(page): added addon customizations
-=======
           <CartProduct
             cartIndex={index}
             product={p}
             img={pageData.menu_combined[p.index].pic}
           />
->>>>>>> feat(page): added promo code feature
         );
       }
       return <div></div>;
@@ -245,8 +231,6 @@ class PageCart extends React.Component {
           </span>
         )}
 
-<<<<<<< HEAD
-=======
         {!this.state.isOpen && (
           <div
             class="d-flex align-items-center justify-content-center"
@@ -306,7 +290,6 @@ class PageCart extends React.Component {
           View Cart
         </div> */}
 
->>>>>>> feat(page): added new option for pickup and delivery
         <div className="float-cart__content">
           <div className="float-cart__header">
             <span className="bag">

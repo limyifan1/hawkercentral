@@ -18,8 +18,6 @@ import ItemRendered from "./ItemRendered";
 import Driver from "./Driver";
 import Delivery from "./Delivery";
 import Orders from "./Orders";
-import Groupbuy from "./Groupbuy";
-import GroupbuyList from "./GroupbuyList";
 import Deliveries from "./Deliveries";
 import Search from "./Search";
 import Page from "./Page";
@@ -28,15 +26,9 @@ import PageItem from "./PageItem";
 import PageCart from "./PageCart";
 import PageCartChannel from "./PageCartChannel";
 import PageDashboard from "./PageDashboard";
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
 import PageConfirm from "./PageConfirm";
->>>>>>> feat(page): added new option for pickup and delivery
 import Custom from "./Custom";
 import PrivacyPolicy from "./PrivacyPolicy";
->>>>>>> feat(page): added privacy policy disclaimer, storing of order info, database rules
 
 import { db, storage } from "./Firestore";
 
@@ -56,20 +48,15 @@ export default {
   Driver,
   Delivery,
   Orders,
-  Groupbuy,
-  GroupbuyList,
   Deliveries,
   Search,
   Page,
   PageAbout,
   PageItem,
   PageCart,
-<<<<<<< HEAD
-=======
   PageCartChannel,
   PageConfirm,
   Custom,
->>>>>>> feat(page): added new option for pickup and delivery
   PageDashboard,
   PrivacyPolicy,
   db,

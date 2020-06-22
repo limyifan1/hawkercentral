@@ -64,12 +64,6 @@ class PageCartProduct extends Component {
 
     return (
       <div className={classes.join(" ")}>
-        <div
-          className="shelf-item__del"
-          onMouseOver={() => this.handleMouseOver()}
-          onMouseOut={() => this.handleMouseOut()}
-          onClick={() => removeProduct(product)}
-        />
         <Thumb
           classes="shelf-item__thumb"
           src={this.props.img}
@@ -81,17 +75,6 @@ class PageCartProduct extends Component {
           <p className="desc">Quantity: {this.props.product.quantity}</p>
         </div>
         <div className="shelf-item__price">
-<<<<<<< HEAD
-          {/* <p>{`${product.price}`}</p> */}
-          <div>
-            <button
-<<<<<<< HEAD
-              onClick={() => this.handleOnDecrease(product.index)}
-              // disabled={product.quantity === 1 ? true : false}
-=======
-              onClick={() => this.handleOnDecrease(this.props.product.index)}
->>>>>>> feat(page): added privacy policy disclaimer, storing of order info, database rules
-=======
           $
           {(
             (Number(menu[this.props.product.index].price) + addonsTotal) *
@@ -100,7 +83,6 @@ class PageCartProduct extends Component {
           <div>
             <button
               onClick={() => this.handleOnDecrease(this.props.product.index, this.props.cartIndex)}
->>>>>>> feat(page): added addon customizations
               className="change-product-button"
             >
               -

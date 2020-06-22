@@ -9,10 +9,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 // import { LanguageContext } from "./themeContext";
 
 import "../App.css";
-import placeholder from "../placeholder.png";
 import { CartContext } from "./themeContext";
-<<<<<<< HEAD
-=======
 import { withSnackbar } from "notistack";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -102,7 +99,6 @@ const ResponsiveDialog = (props) => {
     </div>
   );
 };
->>>>>>> feat(page): added addon customizations
 
 export class PageItem extends React.Component {
   constructor(props) {
@@ -114,16 +110,9 @@ export class PageItem extends React.Component {
   }
   handleClick = async (event) => {
     event.preventDefault();
-<<<<<<< HEAD
-<<<<<<< HEAD
-    this.context.addProduct(this.props.index);
-=======
-    if (this.context.pageData.menu_combined[this.props.index].addon) {
-=======
     if (
       this.context.pageData.menu_combined[this.props.index].addon && this.context.pageData.menu_combined[this.props.index].addon.length > 0
     ) {
->>>>>>> feat(page): added promo code feature
       this.toggleDialog();
     } else {
       this.props.enqueueSnackbar(
@@ -140,7 +129,6 @@ export class PageItem extends React.Component {
     this.setState({
       dialog: !this.state.dialog,
     });
->>>>>>> feat(page): added addon customizations
   };
 
   thumbnail = () => {
@@ -150,21 +138,12 @@ export class PageItem extends React.Component {
   };
 
   render() {
-<<<<<<< HEAD
-    var menu_color = this.props ? this.props.css.menu_color : null;
-
-=======
     var menu_color =
       this.props && this.props.css && this.props.css.menu_color
         ? this.props.css.menu_color
         : "#b48300";
-<<<<<<< HEAD
-        const menu_font_color = this.props && this.props.css ? this.props.css.menu_font_color : "#ffffff";
->>>>>>> feat(pagedashboard): added color picker, save disable, icon helmet
-=======
     const menu_font_color =
       this.props && this.props.css ? this.props.css.menu_font_color : "#ffffff";
->>>>>>> feat(page): disabled cart when whatsapp is not enabled
     return (
       <React.Fragment>
         <ResponsiveDialog
@@ -177,31 +156,14 @@ export class PageItem extends React.Component {
         />
         <div class="page-card">
           <div
-<<<<<<< HEAD
-            class="row no-gutters"
-=======
             class="card shadow"
->>>>>>> feat(page): added addon customizations
             style={{
               paddingLeft: "0px !important",
               paddingRight: "0px !important",
             }}
           >
-<<<<<<< HEAD
-            <div class="col-5 col-xs-3 col-sm-3 col-md-5 fill">
-              <LazyLoadImage
-                src={this.props.pic ? this.thumbnail() : placeholder}
-                placeholderSrc={placeholder}
-                class="card-img-left"
-                alt=""
-              />
-            </div>
-            <div
-              class="col-7 col-xs-9 col-sm-9 col-md-7 card-text"
-=======
             <div
               class="row no-gutters justify-content-center"
->>>>>>> feat(page): added addon customizations
               style={{
                 paddingLeft: "0px !important",
                 paddingRight: "0px !important",
@@ -209,57 +171,6 @@ export class PageItem extends React.Component {
                 marginRight: "0px !important",
               }}
             >
-<<<<<<< HEAD
-              <div class="card-block">
-                <h4
-                  class="card-page-title d-flex align-items-center"
-                  style={{
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <span>
-                    <span style={{ color: menu_color }}>
-                      {this.props.quantity ? this.props.quantity + " x " : null}
-                    </span>
-                    {this.props.name}
-                  </span>
-                </h4>
-                {this.props.summary ? (
-                  <h6
-                    class="card-page-subtitle mb-2 text-muted small d-flex justify-content-center"
-                    style={{ marginBottom: "0px" }}
-                  >
-                    {this.props.summary}
-                  </h6>
-                ) : null}
-                <p
-                  class="card-text item-title d-flex align-items-center justify-content-center"
-                  style={{ marginBottom: "5px", fontSize: "20px" }}
-                >
-                  ${this.props.price}
-                </p>
-<<<<<<< HEAD
-                <div
-                  class="btn btn-primary"
-                  style={{
-                    backgroundColor: menu_color,
-                    borderColor: menu_color,
-<<<<<<< HEAD
-=======
-                    color: menu_font_color,
-                    fontSize: "12px",
->>>>>>> feat(pagedashboard): added color picker, save disable, icon helmet
-                  }}
-                  onClick={this.handleClick}
-                >
-                  Add To Cart
-                </div>
-=======
-                {this.context.pageData.whatsapp ? (
-                  <div
-                    class="btn btn-primary"
-=======
               {this.props.pic ? (
                 <div class="col-4 col-xs-3 col-sm-3 col-md-3 col-lg-4 fill">
                   <LazyLoadImage
@@ -281,19 +192,11 @@ export class PageItem extends React.Component {
                 <div class="card-block">
                   <h4
                     class="card-page-title align-items-center"
->>>>>>> feat(page): added addon customizations
                     style={{
                       alignItems: "center",
                       justifyContent: "center",
                     }}
                   >
-<<<<<<< HEAD
-                    Add To Cart
-                  </div>
-                ) : null}
->>>>>>> feat(page): disabled cart when whatsapp is not enabled
-                {/* {this.context.cartProducts} */}
-=======
                     <span>
                       <span style={{ color: menu_color }}>
                         {this.props.quantity
@@ -334,7 +237,6 @@ export class PageItem extends React.Component {
                   ) : null}
                   {/* {this.context.cartProducts} */}
                 </div>
->>>>>>> feat(page): added addon customizations
               </div>
             </div>
           </div>
@@ -344,4 +246,4 @@ export class PageItem extends React.Component {
   }
 }
 PageItem.contextType = CartContext;
-export default withRouter(PageItem);
+export default withSnackbar(PageItem);

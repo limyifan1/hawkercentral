@@ -1,20 +1,8 @@
 import React from "react";
 import "../App.css";
-import { useParams, withRouter } from "react-router-dom";
-import { firebase, uiConfig } from "./Firestore";
+import { withRouter } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { db } from "./Firestore";
-import queryString from "query-string";
-import Cookies from "universal-cookie";
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-
-const cookies = new Cookies();
-
-const analytics = firebase.analytics();
-
-function onLoad(name, item) {
-  analytics.logEvent(name, { name: item });
-}
 
 // This is an individual area's groupbuys. Redirected from Groupbuy.js with area name in URL params
 // Retrieve separately from db instead of passing area data from Groupbuy.js
