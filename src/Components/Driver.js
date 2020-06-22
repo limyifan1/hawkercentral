@@ -14,7 +14,6 @@ import check_rates from "../check-delivry-rates.png";
 import delivery_cost from "../delivery_cost.jpg";
 import Cookies from "universal-cookie";
 import Helpers from "../Helpers/helpers";
-import GetApp from "@material-ui/icons/GetApp";
 import Button from "@material-ui/core/Button";
 import DatePicker from "react-date-picker";
 import TimePicker from "react-time-picker";
@@ -31,7 +30,6 @@ import Slide from "@material-ui/core/Slide";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import Slider from "@material-ui/core/Slider";
 
 const cookies = new Cookies();
 const API_KEY = `${process.env.REACT_APP_GKEY}`;
@@ -44,41 +42,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 function onLoad(name) {
   analytics.logEvent(name);
 }
-
-const marks = [
-  {
-    value: 6,
-    label: "$6",
-  },
-  {
-    value: 8,
-    label: "$8",
-  },
-  {
-    value: 10,
-    label: "$10",
-  },
-  {
-    value: 12,
-    label: "$12",
-  },
-  {
-    value: 14,
-    label: "$14",
-  },
-  {
-    value: 16,
-    label: "$16",
-  },
-  {
-    value: 18,
-    label: "$18",
-  },
-  {
-    value: 20,
-    label: "$20",
-  },
-];
 
 const dayName = [
   "Sunday",

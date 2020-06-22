@@ -1,20 +1,8 @@
 import React from "react";
 import "../App.css";
 import { Redirect, withRouter } from "react-router-dom";
-import { firebase, uiConfig } from "./Firestore";
 import { Button } from "react-bootstrap";
 import { db } from "./Firestore";
-import queryString from "query-string";
-import Cookies from "universal-cookie";
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-
-const cookies = new Cookies();
-
-const analytics = firebase.analytics();
-
-function onLoad(name, item) {
-  analytics.logEvent(name, { name: item });
-}
 
 // Retrieves all groupbuys from db and displays unique set of areas eg Tampines, Bishan.
 // Upon clicking area, redirect user with specific area param and retrieve groupbuys in this area from db
@@ -62,7 +50,6 @@ export class Groupbuy extends React.Component {
   handleOneArea = (event) => {
     const target = event.target;
     const value = target.value;
-    const name = target.name;
     // Get the groupbuys for this area
     this.setState({
       areaSelected: value,
