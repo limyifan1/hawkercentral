@@ -218,8 +218,8 @@ exports.telegramSend = functions
         console.log(e);
       });
       var requester_mobile = req.body.requester_mobile;
-      var duration = req.body.duration;
-      var arrival = req.body.arrival;
+      // = req.body.duration;
+      //var arrival = req.body.arrival;
       var message =
         "<b>New Order Received from <a href='www.foodleh.app'>FoodLeh</a></b> \n" +
         "<b>From: </b> <a href='https://maps.google.com/?q=" +
@@ -237,12 +237,6 @@ exports.telegramSend = functions
         "\n" +
         "<b>Pickup Time: </b>" +
         time +
-        "\n" +
-        "<b>Est. Duration: </b>" +
-        duration +
-        "\n" +
-        "<b>Est. Arrival: </b>" +
-        arrival +
         "\n" +
         "<b>Click to Accept (first come first serve): </b>" +
         url +
@@ -324,8 +318,8 @@ exports.telegramEdit = functions
         : null;
       var note = req.body.note ? req.body.note : null;
       var cost = req.body.cost ? req.body.cost : null;
-      var duration = req.body.duration ? req.body.duration : null;
-      var arrival = req.body.arrival ? req.body.arrival : null;
+      //var duration = req.body.duration ? req.body.duration : null;
+      //var arrival = req.body.arrival ? req.body.arrival : null;
       var paynow_alternate = req.body.paynow_alternate
         ? req.body.paynow_alternate
         : "Driver No.";
@@ -393,12 +387,6 @@ exports.telegramEdit = functions
         "\n" +
         "<b>Pickup Time: </b>" +
         time +
-        "\n" +
-        "<b>Est. Duration: </b>" +
-        duration +
-        "\n" +
-        "<b>Est. Arrival: </b>" +
-        arrival +
         "\n" +
         "<b>Click to Accept (first come first serve): </b></s>" +
         "\n\n<b>Someone Has Accepted This Request</b>";
@@ -475,12 +463,6 @@ exports.telegramCancel = functions
         "<b>Pickup Time: </b>" +
         time +
         "\n" +
-        "<b>Est. Duration: </b>" +
-        data.duration +
-        "\n" +
-        "<b>Est. Arrival: </b>" +
-        data.arrival +
-        "\n" +
         "<b>Click to Accept (first come first serve): </b></s>" +
         "\n\n<b>The owner has cancelled this request. </b>";
       await bot.telegram
@@ -540,8 +522,8 @@ exports.taskRunner = functions
         street,
         cost,
         time,
-        duration,
-        arrival,
+        //duration,
+        //arrival,
       } = snapshot.data();
       var expiry = new Date(
         snapshot.data().time.toDate().getTime() - 0 * 60000
@@ -578,12 +560,6 @@ exports.taskRunner = functions
           "\n" +
           "<b>Pickup Time: </b>" +
           time_formatted +
-          "\n" +
-          "<b>Est. Duration: </b>" +
-          duration +
-          "\n" +
-          "<b>Est. Arrival: </b>" +
-          arrival +
           "\n" +
           "<b>Click to Accept (first come first serve): </b></s>" +
           "\n\n<b>This request has expired </b>" +

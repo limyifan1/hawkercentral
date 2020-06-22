@@ -11,9 +11,9 @@ import delivery_address from "../delivery_address.png";
 import summary from "../summary.png";
 import instructions from "../infographic.jpg";
 import check_rates from "../check-delivry-rates.png";
+import delivery_cost from "../delivery_cost.jpg";
 import Cookies from "universal-cookie";
 import Helpers from "../Helpers/helpers";
-import GetApp from "@material-ui/icons/GetApp";
 import Button from "@material-ui/core/Button";
 import DatePicker from "react-date-picker";
 import TimePicker from "react-time-picker";
@@ -30,7 +30,6 @@ import Slide from "@material-ui/core/Slide";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import Slider from "@material-ui/core/Slider";
 
 const cookies = new Cookies();
 const API_KEY = `${process.env.REACT_APP_GKEY}`;
@@ -43,41 +42,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 function onLoad(name) {
   analytics.logEvent(name);
 }
-
-const marks = [
-  {
-    value: 6,
-    label: "$6",
-  },
-  {
-    value: 8,
-    label: "$8",
-  },
-  {
-    value: 10,
-    label: "$10",
-  },
-  {
-    value: 12,
-    label: "$12",
-  },
-  {
-    value: 14,
-    label: "$14",
-  },
-  {
-    value: 16,
-    label: "$16",
-  },
-  {
-    value: 18,
-    label: "$18",
-  },
-  {
-    value: 20,
-    label: "$20",
-  },
-];
 
 const dayName = [
   "Sunday",
@@ -129,15 +93,12 @@ const addData = async ({
   street,
   street_to,
   cost,
-  distance,
   unit,
   unit_to,
   contact,
   contact_to,
   time,
   note,
-  arrival,
-  duration,
 }) => {
   let now = new Date();
   var field = {
@@ -150,7 +111,6 @@ const addData = async ({
     street: street,
     street_to: street_to,
     cost: cost,
-    distance: distance,
     unit: unit,
     unit_to: unit_to,
     contact: contact,
@@ -161,8 +121,6 @@ const addData = async ({
     note: note,
     expired: false,
     cancelled: false,
-    arrival: arrival,
-    duration: duration,
   };
   let id = await db
     .collection("deliveries")
@@ -189,8 +147,8 @@ export class Driver extends React.Component {
       postal: queryString.parse(this.props.location.search).postal
         ? queryString.parse(this.props.location.search).postal
         : cookies.get("postal")
-        ? cookies.get("postal")
-        : "",
+          ? cookies.get("postal")
+          : "",
       postal_to: queryString.parse(this.props.location.search).postal_to
         ? queryString.parse(this.props.location.search).postal_to
         : "",
@@ -201,28 +159,27 @@ export class Driver extends React.Component {
       street: queryString.parse(this.props.location.search).street
         ? queryString.parse(this.props.location.search).street
         : cookies.get("street")
-        ? cookies.get("street")
-        : "",
+          ? cookies.get("street")
+          : "",
       street_to: queryString.parse(this.props.location.search).street_to
         ? queryString.parse(this.props.location.search).street_to
         : "",
       minCost: "",
       cost: "",
       isCostBelowMin: false,
-      distance: "",
       unit: queryString.parse(this.props.location.search).unit
         ? queryString.parse(this.props.location.search).unit
         : cookies.get("unit")
-        ? cookies.get("unit")
-        : "",
+          ? cookies.get("unit")
+          : "",
       unit_to: queryString.parse(this.props.location.search).unit_to
         ? queryString.parse(this.props.location.search).unit_to
         : "",
       contact: queryString.parse(this.props.location.search).contact
         ? queryString.parse(this.props.location.search).contact
         : cookies.get("contact")
-        ? cookies.get("contact")
-        : "",
+          ? cookies.get("contact")
+          : "",
       contact_to: queryString.parse(this.props.location.search).contact_to
         ? queryString.parse(this.props.location.search).contact_to
         : "",
@@ -232,8 +189,8 @@ export class Driver extends React.Component {
       note: queryString.parse(this.props.location.search).note
         ? queryString.parse(this.props.location.search).note
         : cookies.get("note")
-        ? cookies.get("note")
-        : "",
+          ? cookies.get("note")
+          : "",
       pickup_option: false,
       submitted: false,
       show: false,
@@ -334,8 +291,8 @@ export class Driver extends React.Component {
   callPostal = (postal) => {
     return fetch(
       "https://developers.onemap.sg/commonapi/search?searchVal=" +
-        postal +
-        "&returnGeom=Y&getAddrDetails=Y"
+      postal +
+      "&returnGeom=Y&getAddrDetails=Y"
     )
       .then(function (response) {
         return response.json();
@@ -424,16 +381,18 @@ export class Driver extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     this.setState({ submitting: true, status: "sending" });
-
+    console.log(this.state.cost)
+    if (this.state.cost === "") {
+      alert(
+        "Please fill in delivery cost"
+      );
+    }
     if (this.state.datetime < time_now) {
       alert(
         <LanguageContext.Consumer>
           {(context) => <div>{context.data.driver.timelimit}</div>}
         </LanguageContext.Consumer>
       );
-    }
-    if (!this.state.retrievedDir) {
-      alert("Please wait for directions to load");
     }
     await this.getPostal(this.state.postal_to, "to");
     await this.getPostal(this.state.postal, "from");
@@ -442,24 +401,9 @@ export class Driver extends React.Component {
     cookies.set("unit", this.state.unit, { path: "/" });
     cookies.set("contact", this.state.contact, { path: "/" });
     cookies.set("note", this.state.note, { path: "/" });
-    var arrival = new Date(this.state.datetime);
-    arrival.setMinutes(
-      arrival.getMinutes() +
-        15 +
-        this.state.directions.routes[0].legs[0].duration.value / 60
-    );
-    arrival =
-      dayName[arrival.getDay()] +
-      " " +
-      arrival.getDate() +
-      " " +
-      monthNames[arrival.getMonth()] +
-      " " +
-      formatAMPM(arrival);
     await addData({
       origin: this.state.street,
       destination: this.state.street_to,
-      distance: this.state.directions.routes[0].legs[0].distance.text,
       cost: this.state.cost,
       postal: this.state.postal,
       postal_to: this.state.postal_to,
@@ -475,13 +419,10 @@ export class Driver extends React.Component {
       contact_to: this.state.contact_to,
       time: this.state.datetime,
       note: this.state.note,
-      arrival: arrival,
-      duration: this.state.directions.routes[0].legs[0].duration.text,
     }).then(async (id) => {
       await this.sendData({
         origin: this.state.street,
         destination: this.state.street_to,
-        distance: this.state.directions.routes[0].legs[0].distance.text,
         requester_mobile: this.state.contact,
         cost: "$" + this.state.cost,
         id: id,
@@ -494,8 +435,6 @@ export class Driver extends React.Component {
           monthNames[this.state.datetime.getMonth()] +
           " " +
           formatAMPM(this.state.datetime),
-        duration: this.state.directions.routes[0].legs[0].duration.text,
-        arrival: arrival,
       }).then((d) => {
         if (d && d.status && d.status === 200) {
           this.setState({
@@ -519,8 +458,8 @@ export class Driver extends React.Component {
 
   componentWillMount() {
     if (this.state.postal) {
-      this.getMap();
-      if (this.state.postal_to) this.getDirections();
+      //this.getMap();
+      //if (this.state.postal_to) this.getDirections();
     }
     onLoad("find_driver");
   }
@@ -580,13 +519,13 @@ export class Driver extends React.Component {
       time: time,
       datetime: new Date(
         this.state.date.getMonth() +
-          1 +
-          "/" +
-          this.state.date.getDate() +
-          "/" +
-          this.state.date.getFullYear() +
-          " " +
-          time
+        1 +
+        "/" +
+        this.state.date.getDate() +
+        "/" +
+        this.state.date.getFullYear() +
+        " " +
+        time
       ),
     });
   };
@@ -596,13 +535,13 @@ export class Driver extends React.Component {
       date: date,
       datetime: new Date(
         date.getMonth() +
-          1 +
-          "/" +
-          date.getDate() +
-          "/" +
-          date.getFullYear() +
-          " " +
-          this.state.time
+        1 +
+        "/" +
+        date.getDate() +
+        "/" +
+        date.getFullYear() +
+        " " +
+        this.state.time
       ),
     });
   };
@@ -624,7 +563,7 @@ export class Driver extends React.Component {
     console.log(value);
     if (name === "postal" && value.toString().length === 6) {
       await this.getPostal(value, "from");
-      this.getMap();
+      //this.getMap();
     }
     if (name === "postal_to" && value.toString().length === 6) {
       await this.getPostal(value, "to");
@@ -634,7 +573,7 @@ export class Driver extends React.Component {
       this.state.street !== "" &&
       this.state.street_to !== ""
     ) {
-      this.getDirections();
+      //this.getDirections();
     }
     if (
       name === "cost" &&
@@ -657,6 +596,12 @@ export class Driver extends React.Component {
 
   handleClickOpen = (event) => {
     event.preventDefault();
+    if (this.state.cost === "") {
+      alert(
+        "Please fill in delivery cost at the top of the page."
+      );
+      return;
+    }
     this.setState({ open: true });
   };
 
@@ -675,8 +620,8 @@ export class Driver extends React.Component {
       arrival = new Date(this.state.datetime);
       arrival.setMinutes(
         arrival.getMinutes() +
-          15 +
-          this.state.directions.routes[0].legs[0].duration.value / 60
+        15 +
+        this.state.directions.routes[0].legs[0].duration.value / 60
       );
     }
     return (
@@ -829,48 +774,48 @@ export class Driver extends React.Component {
                               </h5>
                             </div>
                           ) : (
-                            <Button
-                              variant="contained"
-                              color={"primary"}
-                              type="Submit"
-                              style={{ justifyContent: "center" }}
-                            >
-                              {context.data.menu.searchlabel}
-                            </Button>
-                          )}
+                              <Button
+                                variant="contained"
+                                color={"primary"}
+                                type="Submit"
+                                style={{ justifyContent: "center" }}
+                              >
+                                {context.data.menu.searchlabel}
+                              </Button>
+                            )}
                         </div>
                       ) : (
-                        <div>
-                          {this.state.submitted ? (
                             <div>
-                              <div
-                                class="shadow-lg"
-                                style={{
-                                  backgroundColor: "red",
-                                  borderColor: "white",
-                                  fontSize: "25px",
-                                  color: "white",
-                                }}
-                              >
-                                ERROR PLEASE SUBMIT AGAIN
+                              {this.state.submitted ? (
+                                <div>
+                                  <div
+                                    class="shadow-lg"
+                                    style={{
+                                      backgroundColor: "red",
+                                      borderColor: "white",
+                                      fontSize: "25px",
+                                      color: "white",
+                                    }}
+                                  >
+                                    ERROR PLEASE SUBMIT AGAIN
                               </div>
-                              <h5>
-                                To arrange a new delivery, please refresh the
-                                page.
+                                  <h5>
+                                    To arrange a new delivery, please refresh the
+                                    page.
                               </h5>
+                                </div>
+                              ) : (
+                                  <Button
+                                    variant="contained"
+                                    color={"primary"}
+                                    type="Submit"
+                                    onClick={this.handleSubmit.bind(this)}
+                                  >
+                                    {context.data.driver.clicktosearch}
+                                  </Button>
+                                )}
                             </div>
-                          ) : (
-                            <Button
-                              variant="contained"
-                              color={"primary"}
-                              type="Submit"
-                              onClick={this.handleSubmit.bind(this)}
-                            >
-                              {context.data.driver.clicktosearch}
-                            </Button>
                           )}
-                        </div>
-                      )}
                     </div>
                   </AppBar>
                 </Dialog>
@@ -987,10 +932,10 @@ export class Driver extends React.Component {
                                   Postal Code is invalid
                                 </div>
                               ) : (
-                                <div>
-                                  <br />
-                                </div>
-                              )}
+                                  <div>
+                                    <br />
+                                  </div>
+                                )}
                             </div>
                           </div>
                           <div class="p-6" style={{ padding: "0px 10px" }}>
@@ -1027,140 +972,67 @@ export class Driver extends React.Component {
                                   Postal Code is invalid
                                 </div>
                               ) : (
-                                <div>
-                                  <br />
-                                </div>
-                              )}
+                                  <div>
+                                    <br />
+                                  </div>
+                                )}
                             </div>
                           </div>
                         </div>
+
+
+
+
                         <div
                           class="d-flex flex-row justify-content-center align-items-center"
                           style={{ padding: "0px 10px" }}
                         >
-                          {this.state.loadingDir ? (
-                            <Spinner class="" animation="grow" />
-                          ) : (
+                          <div
+                            style={{
+                              fontSize: "14px",
+                              textAlign: "left",
+                            }}
+                          >
                             <div
+                              class="p-6 align-items-center"
                               style={{
-                                fontSize: "14px",
-                                textAlign: "left",
+                                padding: "15px",
                               }}
                             >
-                              {this.state.retrievedDir &&
-                              this.state.directions &&
-                              this.state.directions.routes.length > 0 ? (
+                              <div>
+                                <b style={{ display: "inline-block" }}>
+                                  {context.data.driver.deliverycost}:{" "}
+                                </b>
                                 <div
-                                  class="p-6 align-items-center"
                                   style={{
-                                    padding: "15px",
+                                    display: "inline-block",
+                                    width: "50px",
                                   }}
                                 >
-                                  <div>
-                                    <b>{context.data.driver.estduration}: </b>
-                                    {this.state.directions.routes.length > 0
-                                      ? this.state.directions.routes[0].legs[0]
-                                          .duration.text
-                                      : null}
-                                    <br />
-                                    <b style={{ display: "inline-block" }}>
-                                      {context.data.driver.deliverycost}:
-                                    </b>
-                                    {this.state.minCost ? (
-                                      <div
-                                        style={{
-                                          display: "inline-block",
-                                          width: "50px",
-                                        }}
-                                      >
-                                        <p style={{ display: "inline-block" }}>
-                                          $
+                                  <p style={{ display: "inline-block" }}>
+                                    $
                                         </p>
-                                        <input
-                                          style={{
-                                            display: "inline-block",
-                                            width: "80%",
-                                          }}
-                                          type="number"
-                                          name="cost"
-                                          value={this.state.cost}
-                                          onChange={this.handleChange}
-                                          min="6"
-                                        ></input>
-                                      </div>
-                                    ) : null}
-                                    <br />
-                                    {this.state.isCostBelowMin ? (
-                                      <span
-                                        class="badge badge-danger"
-                                        style={{ fontSize: "12px" }}
-                                      >
-                                        Recommended delivery <br />
-                                        cost is above ${this.state.minCost}
-                                      </span>
-                                    ) : null}
-                                  </div>
+                                  <input
+                                    style={{
+                                      display: "inline-block",
+                                      width: "80%",
+                                    }}
+                                    type="number"
+                                    name="cost"
+                                    value={this.state.cost}
+                                    onChange={this.handleChange}
+                                    min="6"
+                                  ></input>
                                 </div>
-                              ) : null}
-                            </div>
-                          )}
-                          <div class="p-6 d-flex flex-row justify-content-center align-items-center">
-                            {this.state.loadingMap ? (
-                              <div>
                                 <br />
-                                <Spinner class="" animation="grow" />
                               </div>
-                            ) : (
-                              <div>
-                                {this.state.retrievedMap &&
-                                this.state.regionFrom.planningarea ? (
-                                  <span>
-                                    <div>
-                                      <img
-                                        src={
-                                          "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
-                                          this.state.regionFrom.planningarea
-                                            .replace(/ /g, "")
-                                            .toLowerCase() +
-                                          ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
-                                        }
-                                        alt="map"
-                                        style={{
-                                          width: "100px",
-                                          height: "auto",
-                                        }}
-                                      />
-                                      <Button
-                                        variant="contained"
-                                        color={"secondary"}
-                                        size="large"
-                                        startIcon={<GetApp />}
-                                        style={{
-                                          fontSize: "10px",
-                                          width: "auto",
-                                          margin: "10px",
-                                          // position: "absolute",
-                                          // right: "40px",
-                                        }}
-                                        target="blank"
-                                        href={
-                                          "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
-                                          this.state.regionFrom.planningarea
-                                            .replace(/ /g, "")
-                                            .toLowerCase() +
-                                          ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
-                                        }
-                                        download
-                                      >
-                                        <div>{context.data.driver.viewmap}</div>
-                                      </Button>
-                                    </div>
-                                  </span>
-                                ) : (
-                                  <div>{context.data.driver.mapwillload}</div>
-                                )}
-                              </div>
-                            )}
+                                  Suggested Delivery Cost by Distance
+                                  <div><img
+                                alt=""
+                                src={delivery_cost}
+                                //style={{ flexShrink: "0", minWidth: "100%" }}
+                              /></div>
+                            </div>
                           </div>
                         </div>
                         <div style={{ paddingTop: "20px" }}>
@@ -1554,105 +1426,26 @@ export class Driver extends React.Component {
                                 alt=""
                                 style={{ width: "40%" }}
                               />
-                              {this.state.loadingDir ? (
-                                <div>
-                                  <br />
-                                  <Spinner class="" animation="grow" />
-                                </div>
-                              ) : (
-                                <div>
-                                  {this.state.retrievedDir &&
-                                  this.state.directions &&
-                                  this.state.directions.routes.length > 0 ? (
-                                    <span>
-                                      <p
-                                        style={{
-                                          textAlign: "center",
-                                          fontSize: "20px",
-                                        }}
-                                      >
-                                        <b>
-                                          {context.data.driver.distance} (Google
-                                          Maps):{" "}
-                                        </b>
-                                        <br />
-                                        {this.state.directions.routes.length > 0
-                                          ? this.state.directions.routes[0]
-                                              .legs[0].distance.text
-                                          : null}
-                                        <br />
-                                        <b>
-                                          {context.data.driver.estduration}:{" "}
-                                        </b>
-                                        <br />
-                                        {this.state.directions.routes.length > 0
-                                          ? this.state.directions.routes[0]
-                                              .legs[0].duration.text
-                                          : null}
-                                        <br />
-                                        <b>
-                                          {context.data.driver.estarrival}{" "}
-                                          <br />{" "}
-                                          <small style={{ color: "grey" }}>
-                                            (Pickup Time + Duration + 15 min
-                                            Buffer):
-                                          </small>
-                                        </b>
-                                        <br />
-                                        {this.state.directions.routes.length > 0
-                                          ? dayName[arrival.getDay()] +
-                                            " " +
-                                            arrival.getDate() +
-                                            " " +
-                                            monthNames[arrival.getMonth()] +
-                                            " " +
-                                            formatAMPM(arrival)
-                                          : null}
+                              <div>
 
-                                        <br />
-                                        <b>
-                                          {context.data.driver.deliverycost}:{" "}
-                                        </b>
-                                        <br />
-                                        {this.state.cost
-                                          ? "$" + this.state.cost.toString()
-                                          : null}
-                                        <br />
-                                        <br />
-                                        <Slider
-                                          // defaultValue={this.state.cost}
-                                          // getAriaValueText={10}
-                                          aria-labelledby="discrete-slider"
-                                          valueLabelDisplay="on"
-                                          step={1}
-                                          marks={marks}
-                                          min={6}
-                                          max={20}
-                                          name="cost"
-                                          value={this.state.cost}
-                                          style={{ width: "90%" }}
-                                          onChange={this.handleSlider.bind(
-                                            this
-                                          )}
-                                        />
-                                        {this.state.isCostBelowMin ? (
-                                          <div
-                                            class="badge badge-danger"
-                                            style={{ fontSize: "12px" }}
-                                          >
-                                            Recommended delivery cost is above $
-                                            {this.state.minCost}
-                                          </div>
-                                        ) : null}
-                                      </p>
-                                    </span>
-                                  ) : (
-                                    <div>
-                                      {context.data.driver.fillindetails}
-                                    </div>
-                                  )}
-                                </div>
-                              )}
+                                <span>
+                                  <p
+                                    style={{
+                                      textAlign: "center",
+                                      fontSize: "20px",
+                                    }}
+                                  >
+                                    <b>
+                                      {context.data.driver.deliverycost}:{" "}
+                                    </b>
+                                    <br />
+                                    {this.state.cost
+                                      ? "$" + this.state.cost.toString()
+                                      : null}
+                                    <br />
+                                  </p>
+                                </span>
+                              </div>
                               <div
                                 class="form-check create-title"
                                 style={{ textAlign: "center" }}
