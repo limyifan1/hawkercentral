@@ -520,7 +520,7 @@ export class Driver extends React.Component {
   componentWillMount() {
     if (this.state.postal) {
       this.getMap();
-      if (this.state.postal_to) this.getDirections();
+      //if (this.state.postal_to) this.getDirections();
     }
     onLoad("find_driver");
   }
@@ -624,7 +624,7 @@ export class Driver extends React.Component {
     console.log(value);
     if (name === "postal" && value.toString().length === 6) {
       await this.getPostal(value, "from");
-      this.getMap();
+      //this.getMap();
     }
     if (name === "postal_to" && value.toString().length === 6) {
       await this.getPostal(value, "to");
@@ -634,7 +634,7 @@ export class Driver extends React.Component {
       this.state.street !== "" &&
       this.state.street_to !== ""
     ) {
-      this.getDirections();
+      //this.getDirections();
     }
     if (
       name === "cost" &&
@@ -1034,22 +1034,20 @@ export class Driver extends React.Component {
                             </div>
                           </div>
                         </div>
+                        
+
+
+
                         <div
                           class="d-flex flex-row justify-content-center align-items-center"
                           style={{ padding: "0px 10px" }}
                         >
-                          {this.state.loadingDir ? (
-                            <Spinner class="" animation="grow" />
-                          ) : (
                             <div
                               style={{
                                 fontSize: "14px",
                                 textAlign: "left",
                               }}
                             >
-                              {this.state.retrievedDir &&
-                              this.state.directions &&
-                              this.state.directions.routes.length > 0 ? (
                                 <div
                                   class="p-6 align-items-center"
                                   style={{
@@ -1057,16 +1055,9 @@ export class Driver extends React.Component {
                                   }}
                                 >
                                   <div>
-                                    <b>{context.data.driver.estduration}: </b>
-                                    {this.state.directions.routes.length > 0
-                                      ? this.state.directions.routes[0].legs[0]
-                                          .duration.text
-                                      : null}
-                                    <br />
                                     <b style={{ display: "inline-block" }}>
-                                      {context.data.driver.deliverycost}:
+                                      {context.data.driver.deliverycost}:{" "}
                                     </b>
-                                    {this.state.minCost ? (
                                       <div
                                         style={{
                                           display: "inline-block",
@@ -1088,79 +1079,9 @@ export class Driver extends React.Component {
                                           min="6"
                                         ></input>
                                       </div>
-                                    ) : null}
                                     <br />
-                                    {this.state.isCostBelowMin ? (
-                                      <span
-                                        class="badge badge-danger"
-                                        style={{ fontSize: "12px" }}
-                                      >
-                                        Recommended delivery <br />
-                                        cost is above ${this.state.minCost}
-                                      </span>
-                                    ) : null}
                                   </div>
                                 </div>
-                              ) : null}
-                            </div>
-                          )}
-                          <div class="p-6 d-flex flex-row justify-content-center align-items-center">
-                            {this.state.loadingMap ? (
-                              <div>
-                                <br />
-                                <Spinner class="" animation="grow" />
-                              </div>
-                            ) : (
-                              <div>
-                                {this.state.retrievedMap &&
-                                this.state.regionFrom.planningarea ? (
-                                  <span>
-                                    <div>
-                                      <img
-                                        src={
-                                          "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
-                                          this.state.regionFrom.planningarea
-                                            .replace(/ /g, "")
-                                            .toLowerCase() +
-                                          ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
-                                        }
-                                        alt="map"
-                                        style={{
-                                          width: "100px",
-                                          height: "auto",
-                                        }}
-                                      />
-                                      <Button
-                                        variant="contained"
-                                        color={"secondary"}
-                                        size="large"
-                                        startIcon={<GetApp />}
-                                        style={{
-                                          fontSize: "10px",
-                                          width: "auto",
-                                          margin: "10px",
-                                          // position: "absolute",
-                                          // right: "40px",
-                                        }}
-                                        target="blank"
-                                        href={
-                                          "https://firebasestorage.googleapis.com/v0/b/hawkercentral.appspot.com/o/maps%2F" +
-                                          this.state.regionFrom.planningarea
-                                            .replace(/ /g, "")
-                                            .toLowerCase() +
-                                          ".png?alt=media&token=5942b166-0826-41e2-9a33-268dce1e9aac"
-                                        }
-                                        download
-                                      >
-                                        <div>{context.data.driver.viewmap}</div>
-                                      </Button>
-                                    </div>
-                                  </span>
-                                ) : (
-                                  <div>{context.data.driver.mapwillload}</div>
-                                )}
-                              </div>
-                            )}
                           </div>
                         </div>
                         <div style={{ paddingTop: "20px" }}>
@@ -1554,16 +1475,8 @@ export class Driver extends React.Component {
                                 alt=""
                                 style={{ width: "40%" }}
                               />
-                              {this.state.loadingDir ? (
                                 <div>
-                                  <br />
-                                  <Spinner class="" animation="grow" />
-                                </div>
-                              ) : (
-                                <div>
-                                  {this.state.retrievedDir &&
-                                  this.state.directions &&
-                                  this.state.directions.routes.length > 0 ? (
+                                
                                     <span>
                                       <p
                                         style={{
@@ -1572,45 +1485,6 @@ export class Driver extends React.Component {
                                         }}
                                       >
                                         <b>
-                                          {context.data.driver.distance} (Google
-                                          Maps):{" "}
-                                        </b>
-                                        <br />
-                                        {this.state.directions.routes.length > 0
-                                          ? this.state.directions.routes[0]
-                                              .legs[0].distance.text
-                                          : null}
-                                        <br />
-                                        <b>
-                                          {context.data.driver.estduration}:{" "}
-                                        </b>
-                                        <br />
-                                        {this.state.directions.routes.length > 0
-                                          ? this.state.directions.routes[0]
-                                              .legs[0].duration.text
-                                          : null}
-                                        <br />
-                                        <b>
-                                          {context.data.driver.estarrival}{" "}
-                                          <br />{" "}
-                                          <small style={{ color: "grey" }}>
-                                            (Pickup Time + Duration + 15 min
-                                            Buffer):
-                                          </small>
-                                        </b>
-                                        <br />
-                                        {this.state.directions.routes.length > 0
-                                          ? dayName[arrival.getDay()] +
-                                            " " +
-                                            arrival.getDate() +
-                                            " " +
-                                            monthNames[arrival.getMonth()] +
-                                            " " +
-                                            formatAMPM(arrival)
-                                          : null}
-
-                                        <br />
-                                        <b>
                                           {context.data.driver.deliverycost}:{" "}
                                         </b>
                                         <br />
@@ -1618,41 +1492,9 @@ export class Driver extends React.Component {
                                           ? "$" + this.state.cost.toString()
                                           : null}
                                         <br />
-                                        <br />
-                                        <Slider
-                                          // defaultValue={this.state.cost}
-                                          // getAriaValueText={10}
-                                          aria-labelledby="discrete-slider"
-                                          valueLabelDisplay="on"
-                                          step={1}
-                                          marks={marks}
-                                          min={6}
-                                          max={20}
-                                          name="cost"
-                                          value={this.state.cost}
-                                          style={{ width: "90%" }}
-                                          onChange={this.handleSlider.bind(
-                                            this
-                                          )}
-                                        />
-                                        {this.state.isCostBelowMin ? (
-                                          <div
-                                            class="badge badge-danger"
-                                            style={{ fontSize: "12px" }}
-                                          >
-                                            Recommended delivery cost is above $
-                                            {this.state.minCost}
-                                          </div>
-                                        ) : null}
                                       </p>
                                     </span>
-                                  ) : (
-                                    <div>
-                                      {context.data.driver.fillindetails}
-                                    </div>
-                                  )}
                                 </div>
-                              )}
                               <div
                                 class="form-check create-title"
                                 style={{ textAlign: "center" }}

@@ -17,7 +17,7 @@ import { LanguageContext, CartContext } from "./Components/themeContext";
 import { Helmet } from "react-helmet";
 import { ThemeProvider } from "@material-ui/styles";
 import { db, storage } from "./Components/Firestore";
-import { createMuiTheme } from "@material-ui/core/styles";s
+import { createMuiTheme } from "@material-ui/core/styles";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { SnackbarProvider } from "notistack";
 import update from "immutability-helper";
