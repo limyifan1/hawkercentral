@@ -372,10 +372,6 @@ const retrieveData = async () => {
 
 // retrieveData();
 
-const updateData = () => {
-  db.collection("hawkers").doc("").update({});
-};
-
 const moveData = () => {
   db.collection("hawkers")
     .get()
@@ -436,4 +432,83 @@ const sendData = async () => {
   }
 };
 
-updateData();
+const updateData = () => {
+  db.collection("hawkers").doc("").update({});
+};
+
+const syncTake = async () => {
+  var take_keys = [];
+  var take_data = [];
+
+  const url = "";
+
+  await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((json) => {
+      json.forEach((d) => {
+        take_keys.push(d.phone);
+        take_data.push(d);
+      });
+      return json;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+
+  await db
+    .collection("hawkers")
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach(async (d) => {
+        var data_contact = "65" + d.data().contact;
+        // var hasTakesgDescription = d
+        //   .data()
+        //   .description_detail.includes("Contributed by take.sg");
+        var inTakesg = take_keys.includes(data_contact);
+        if (inTakesg && d.data().takesg) {
+          var index = take_keys.indexOf(data_contact);
+          var data = take_data[index];
+          var delivery_detail = data.free_delivery
+            ? "Free delivery spend: $" + data.free_delivery + "\n"
+            : "";
+          delivery_detail = data.minimum_order
+            ? delivery_detail + "Minimum order: $" + data.minimum_order
+            : delivery_detail;
+          await d.ref
+            .update({
+              description_detail: data.description
+                ? data.description + "\n Contributed by take.sg"
+                : "",
+              name: data.name,
+              price: data.delivery_cost ? "$" + data.delivery_cost : "",
+              website: data.reference ? data.reference : "",
+              menu_combined: data.menus ? data.menus : "",
+              tagsValue: data.tags ? data.tags : "",
+              menu: true,
+              delivery_detail: delivery_detail,
+            })
+            .then((d) => {
+              console.log("Updated: " + data.name);
+              return true;
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }
+      });
+      return true;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
+// updateData();
+syncTake();

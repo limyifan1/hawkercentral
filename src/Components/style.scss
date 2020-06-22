@@ -4,7 +4,7 @@
   right: -450px;
   width: 450px;
   height: 100%;
-  background-color: #1b1a20;
+  background-color: #eceff1;
   box-sizing: border-box;
   transition: right 0.2s;
 
@@ -73,11 +73,12 @@
   }
 
   &__header {
-    color: #ececec;
+    color: #000000;
     box-sizing: border-box;
     text-align: center;
     padding: 45px 0;
-
+    margin-top: -20px;
+    margin-bottom: 5px;
     .header-title {
       font-weight: bold;
       font-size: 1.2em;
@@ -88,20 +89,50 @@
   &__shelf-container {
     position: relative;
     min-height: 280px;
-    padding-bottom: 200px;
+    padding-bottom: 400px;
 
     .shelf-empty {
-      color: #ececec;
+      color: #000000;
       text-align: center;
       line-height: 40px;
+    }
+
+    .shelf-channel {
+      box-sizing: border-box;
+      padding: 2%;
+      position: relative;
+      width: 100%;
+      height: 110px;
+      z-index: 2;
+      color: #000000;
+      margin-bottom: 10px;
+      background-color: #eceff1;
+      box-shadow: 0px 0px 5px 0.1px;
+      &::before {
+        content: "";
+        width: 100%;
+        height: 20px;
+        display: block;
+        position: absolute;
+        top: -20px;
+        left: 0;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent);
+      }  
     }
 
     .shelf-item {
       position: relative;
       box-sizing: border-box;
-      padding: 5%;
-
+      padding: 2%;
       transition: background-color 0.2s, opacity 0.2s;
+      &__details {
+        .title, .desc{
+          width: 100%;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          font-size: 18px;
+        }
+      }
 
       &::before {
         content: "";
@@ -152,23 +183,27 @@
       &__price {
         display: inline-block;
         vertical-align: middle;
+        // top: 50px
       }
 
       &__thumb {
         vertical-align: middle;
         width: 15%;
         margin-right: 3%;
+        // margin-top: -20px;
 
         img {
           width: 100%;
-          height: auto;
+          height: 70px;
+          object-fit: cover;
+
         }
       }
       &__details {
         width: 57%;
 
         .title {
-          color: #ececec;
+          color: #000000;
           margin: 0;
         }
 
@@ -202,9 +237,9 @@
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 200px;
+    height: auto;
     z-index: 2;
-    background-color: #1b1a20;
+    background-color: #eceff1;
 
     &::before {
       content: "";
@@ -217,11 +252,20 @@
       background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
     }
 
+    .progress{
+      padding-top: 10px;
+      height: 50px;
+      width: 100%;
+      vertical-align: middle;
+      display: inline-block;
+    }
+
     .sub,
     .sub-price {
       color: #5b5a5e;
       vertical-align: middle;
       display: inline-block;
+      font-size: 18px;
     }
 
     .sub {
@@ -239,7 +283,7 @@
 
       &__val {
         color: #eabf00;
-        font-size: 22px;
+        font-size: 20px;
       }
     }
 
@@ -248,8 +292,8 @@
       text-transform: uppercase;
       background-color: #0c0b10;
       text-align: center;
-      padding: 15px 0;
-      margin-top: 40px;
+      padding: 5px 0;
+      margin-top: 15px;
       cursor: pointer;
 
       transition: background-color 0.2s;
@@ -313,7 +357,6 @@ main {
 
     .shelf-container {
       width: 80%;
-
       .shelf-item {
         width: 33.33%;
       }

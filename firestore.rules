@@ -9,18 +9,11 @@ service cloud.firestore {
   //Matches only /hawkers/{documentId} and not any deeper subcollections/documents, those matches has to be written explicitly
   match /databases/{database}/documents {
   //checks if a given number is a postive number and is a number object
-  	function isNumber(num){
-    	return (num is float || num is int);
-    }
 
     function isString(stringToTest){
       return (stringToTest is string);
     }
     
-    function isPositiveNumber(num){
-      return isNumber(num) && num > 0;
-    }
-
     function isValidPhoneNumber(num){
        return string(num).matches('^(6|8|9)[0-9]{7}$') || num == 0;
     }
@@ -67,8 +60,11 @@ service cloud.firestore {
     'menu_combined',
     'tagsValue',
     'claps',
-    'takesg'
-     ]) && fields.size() == 41
+    'takesg',
+    'custom',
+    'minimum_order',
+    'free_delivery'
+     ]) && fields.size() == 44
     }
     
     // TODO: Need structure
@@ -115,7 +111,24 @@ service cloud.firestore {
       allow create: if true;
     }
     
-    match /pages/{document=**} {
+    match /pages/{document} {
+      allow read: if true;
+      allow delete: if false;
+      allow update: if true;
+      allow create: if true;
+    }
+    
+    match /pages/{document}/orders/{orderId}{
+      allow create: if true;
+      allow read, write, update, delete: if request.auth != null
+    }
+    
+    match /pages/{document}/users/{userId}{
+      allow read, create, update: if true;
+      allow delete: if false;
+    }
+    
+    match /groupbuy/{document=**} {
       allow read: if true;
       allow delete: if false;
       allow update: if true;

@@ -10,7 +10,8 @@
   margin-left: auto;
 } */
 
-html, body { 
+html,
+body {
   overflow-x: hidden;
   width: 100%;
 }
@@ -80,26 +81,28 @@ button:focus {
 }
 
 .card-img-left {
-  /* object-fit: cover; */
-  width: auto !important;
-  height: 200px !important;
+  width: 100% !important;
+  object-fit: cover;
+  height: 180px !important;
 }
 
 .fill {
   display: flex;
   justify-content: center;
+  justify-items: center;
   align-items: center;
   overflow: hidden;
-  /* max-height: 250px;
-  max-width: 100px; */
-  min-height: 100px;
-  min-width: 100px;
+  object-fit: cover !important;
+}
+
+.fill img{
+  position: absolute;
 }
 
 .card-title {
   line-height: 1em;
-  height: 38px; 
-  overflow: hidden; 
+  height: 38px;
+  overflow: hidden;
   /* height: 34px; */
   font-size: large;
   font-weight: bold;
@@ -114,9 +117,9 @@ button:focus {
 }
 
 .card-page-title {
-  line-height: 1em;
-  height: 55px; 
-  overflow: hidden; 
+  line-height: 1.1em;
+  /* height: 55px; */
+  overflow: hidden;
   /* height: 34px; */
   font-size: large;
   font-weight: bold;
@@ -124,8 +127,8 @@ button:focus {
 }
 
 .card-page-subtitle {
-  line-height: 1em;
-  height: 26px; 
+  line-height: 1.1em;
+  /* height: 26px; */
   overflow: hidden;
   word-break: break-word !important;
 }
@@ -279,7 +282,7 @@ button:focus {
     height: 250px;
   }
   .page-card {
-    width: 40% !important;
+    width: 70% !important;
     margin: 10px 20px;
   }
   .hashtag {
@@ -299,7 +302,7 @@ button:focus {
   }
 }
 
-@media screen and (min-device-width: 1200px) and (max-device-width: 1600px) and (-webkit-min-device-pixel-ratio: 1) {
+@media only screen and (min-width: 1200px) and (max-width: 1600px) and (-webkit-min-device-pixel-ratio: 1) {
   .banner-img-top {
     width: 100%;
     height: 230px;
@@ -326,7 +329,7 @@ button:focus {
     height: 250px;
   }
   .page-card {
-    width: 40% !important;
+    width: 45% !important;
     margin: 10px 20px;
   }
   .right-items {
@@ -349,7 +352,7 @@ button:focus {
   }
 }
 
-@media screen and (min-device-width: 480px) and (max-device-width: 1200px) and (-webkit-min-device-pixel-ratio: 1) {
+@media only screen and (min-width: 480px) and (max-width: 1200px) and (-webkit-min-device-pixel-ratio: 1) {
   .banner-img-top {
     width: 100%;
     height: 230px;
@@ -375,7 +378,7 @@ button:focus {
     height: 250px;
   }
   .page-card {
-    width: 40% !important;
+    width: 100% !important;
     margin: 10px 20px;
   }
   .right-items {
@@ -402,7 +405,7 @@ button:focus {
   }
 }
 
-@media only screen and (min-device-width: 0px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+@media only screen and (min-width: 0px) and (max-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
   .banner-img-top {
     width: 100%;
     height: 230px;
@@ -429,7 +432,7 @@ button:focus {
   }
   .page-card {
     width: 100% !important;
-    margin: 10px 20px;
+    margin: 5px 20px;
   }
   /* .fill {
     display: flex;
@@ -463,8 +466,7 @@ button:focus {
   }
 }
 
-
-@media (device-height: 568px) and (device-width: 320px) and (-webkit-min-device-pixel-ratio: 2) {
+@media only screen and(device-height: 568px) and (device-width: 320px) and (-webkit-min-device-pixel-ratio: 2) {
   .banner-img-top {
     width: 100%;
     height: 230px;
@@ -788,6 +790,11 @@ figure.effect-bubba:hover p {
   top: 0px;
   color: rgba(189, 195, 199, 1);
 }
+
+.badge {
+  margin: 0 0.1rem;
+}
+
 /*==================== Message ======================*/
 #message {
   position: absolute;

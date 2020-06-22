@@ -24,7 +24,10 @@
     "nowtoadd": " now to add a listing for your favourite hawkers!"
   },
   "create": {
-    "createlisting": "Create Listing",
+    "createfree": "Create a FREE listing and website below! ",
+    "existing": "Already have a listing? Go to: ",
+    "createlisting": "Create Listing Below",
+    "createwebsite": "Create Listing & Website Below",
     "step1": "Step 1: Stall Details (Important)",
     "pleaseenter": "Please enter more details regarding your stall listing.",
     "stallname": "Stall Name",
@@ -58,6 +61,8 @@
     "placeholderdeliverydetails": "E.g. Only deliver to Bukit Batok for orders above $30",
     "step2": "Step 2: Additional Details (Optional)",
     "additional": "Additional Details",
+    "free_delivery": "Free Delivery Amount",
+    "minumum_order": "Minumum Order Amount",
     "placeholderadditional": "e.g. For a limited time, buy 3 get 1 free and islandwide delivery",
     "generalpromo": "General Promotion (if any)",
     "discount": "Discount",

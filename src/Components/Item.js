@@ -5,7 +5,7 @@
 
 import React from "react";
 import { withRouter } from "react-router-dom";
-import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import { LanguageContext } from "./themeContext";
 
@@ -15,7 +15,6 @@ import placeholder from "../placeholder.png";
 export class Item extends React.Component {
   handleClick = async (event) => {
     event.preventDefault();
-    console.log(window.pageYOffset);
     this.context.setScrollPosition(window.pageYOffset);
     if (this.props.name) {
       this.props.history.push({
@@ -26,13 +25,18 @@ export class Item extends React.Component {
   };
 
   thumbnail = () => {
-    return `https://images.weserv.nl/?w=250&url=${encodeURIComponent(this.props.pic)}`
-  }
+    return `https://images.weserv.nl/?w=250&url=${encodeURIComponent(
+      this.props.pic
+    )}`;
+  };
 
   render() {
     return (
       <div>
-        <a href={"/info?id=" + this.props.id} style={{color:"inherit"}}>
+        <a
+          href={this.props.name ? "/info?id=" + this.props.id : null}
+          style={{ color: "inherit" }}
+        >
           {this.props.name !== undefined ? (
             <figure
               class="card shadow effect-bubba item-card"
@@ -57,12 +61,12 @@ export class Item extends React.Component {
                 </div>
               ) : null}
               <LazyLoadImage
-                src={this.props.pic ? this.thumbnail() : placeholder} 
+                src={this.props.pic ? this.thumbnail() : placeholder}
                 placeholderSrc={placeholder}
                 style={{ height: "120px" }}
-                class="card-img-top" 
+                class="card-img-top"
                 height="120"
-                alt="" 
+                alt=""
               />
               {this.props.promo ? (
                 <div

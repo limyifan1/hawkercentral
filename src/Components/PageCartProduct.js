@@ -14,8 +14,6 @@ class PageCartProduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      product: this.props.product,
-      img: this.props.img,
       isMouseOver: false,
     };
   }
@@ -32,13 +30,12 @@ class PageCartProduct extends Component {
     this.context.addProduct(index);
   };
 
-  handleOnDecrease = (index) => {
-    this.context.removeProduct(index);
+  handleOnDecrease = (index, cartIndex) => {
+    this.context.removeProduct(index, cartIndex);
   };
 
   render() {
-    const { removeProduct } = this.props;
-    const { product, img} = this.state;
+    // const { product, img} = this.state;
 
     const classes = ["shelf-item"];
     const menu = this.context.pageData.menu_combined;
@@ -46,36 +43,52 @@ class PageCartProduct extends Component {
       classes.push("shelf-item--mouseover");
     }
 
+    var addons = [];
+    var addonsTotal = 0;
+    if (this.props.product.addons) {
+      this.props.product.addons.forEach((element, index) => {
+        addonsTotal += Number(
+          menu[this.props.product.index].addon[element].price
+        );
+        addons.push(
+          <React.Fragment>
+            <p className="desc">
+              {menu[this.props.product.index].addon[element].name}
+              {" (+$"}
+              {menu[this.props.product.index].addon[element].price})
+            </p>
+          </React.Fragment>
+        );
+      });
+    }
+
     return (
       <div className={classes.join(" ")}>
-        <div
-          className="shelf-item__del"
-          onMouseOver={() => this.handleMouseOver()}
-          onMouseOut={() => this.handleMouseOut()}
-          onClick={() => removeProduct(product)}
-        />
         <Thumb
           classes="shelf-item__thumb"
-          src={img}
-          alt={product.title}
+          src={this.props.img}
+          alt={this.props.product.title}
         />
-        {product.img}
         <div className="shelf-item__details">
-          <p className="title">{menu[product.index].name}</p>
-          <p className="desc">Quantity: {product.quantity}</p>
+          <p className="title">{menu[this.props.product.index].name}</p>
+          {addons}
+          <p className="desc">Quantity: {this.props.product.quantity}</p>
         </div>
         <div className="shelf-item__price">
-          {/* <p>{`${product.price}`}</p> */}
+          $
+          {(
+            (Number(menu[this.props.product.index].price) + addonsTotal) *
+            Number(this.props.product.quantity)
+          ).toFixed(2)}
           <div>
             <button
-              onClick={() => this.handleOnDecrease(product.index)}
-              // disabled={product.quantity === 1 ? true : false}
+              onClick={() => this.handleOnDecrease(this.props.product.index, this.props.cartIndex)}
               className="change-product-button"
             >
               -
             </button>
             <button
-              onClick={() => this.handleOnIncrease(product.index)}
+              onClick={() => this.handleOnIncrease(this.props.product.index)}
               className="change-product-button"
             >
               +

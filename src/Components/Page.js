@@ -7,13 +7,12 @@ import React from "react";
 import "../App.css";
 import "react-multi-carousel/lib/styles.css";
 // import queryString from "query-string";
-import {
-  // Button,
-  // Spinner,
-  // Form,
-  // Popover,
-  // OverlayTrigger,
-} from "react-bootstrap";
+import // Button,
+// Spinner,
+// Form,
+// Popover,
+// OverlayTrigger,
+"react-bootstrap";
 import { db } from "./Firestore";
 // import ImageGallery from "react-image-gallery";
 import Component from "./index";
@@ -55,6 +54,17 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
+import delivery from "../delivery_2.png";
+import self_collect from "../dabao_2.png";
+import i_want from "../i_want.jpeg";
 
 const REACT_APP_BITLY_KEY = `${process.env.REACT_APP_BITLY_KEY}`;
 const bitly = new BitlyClient(REACT_APP_BITLY_KEY, {});
@@ -70,8 +80,12 @@ const shorten = (url) => {
 };
 
 const InfoMenu = (props) => {
-  const menu_color = props && props.css ? props.css.menu_color : null;
-  const menu_font_color = props && props.css ? props.css.menu_font_color : null;
+  const menu_color =
+    props.data && props.data.css && props.data.css.menu_color
+      ? props.data.css.menu_color
+      : "#b48300";
+  const menu_font_color =
+    props.data && props.data.css ? props.data.css.menu_font_color : "#ffffff";
   return (
     <Navbar
       //   bg="light"
@@ -83,81 +97,103 @@ const InfoMenu = (props) => {
         backgroundColor: menu_color,
       }}
     >
-      <Navbar.Brand as={Link} to="/" style={{ color: "white" }}>
+      <Navbar.Brand as={Link} to="/" style={{ color: menu_font_color }}>
         <img
           alt=""
-          src={logo}
-          width="20"
+          src={props.data.logo ? props.data.logo : logo}
+          width="auto"
           height="30"
           className="d-inline-block align-top"
         />{" "}
-        <div class="d-none d-md-inline-block">
-          {/* <img
-            alt=""
-            src={name}
-            width="140"
-            height="30"
-            className="d-inline-block align-top"
-          /> */}
-          {props.name}
-        </div>
+        <div class="d-none d-md-inline-block">{props.data.pageData.name}</div>
       </Navbar.Brand>
       <Navbar.Toggle />
-      {/* <Navbar.Collapse
-        id="basic-navbar-nav"
-        className="justify-content-end"
-        style={{ marginRight: "60px" }}
-      >
-        <LanguageContext.Consumer>
-          {({ data, language, toggleLanguage }) => (
-            <Button
-              class="shadow-sm"
-              style={{
-                backgroundColor: "#B48300",
-                borderColor: "#B48300",
-                fontSize: "10px",
-                width: "50px",
-              }}
-              onClick={toggleLanguage}
-              name="Language"
-            >
-              {data.menu.language_button}
-            </Button>
-          )}
-        </LanguageContext.Consumer>
-        <div class="d-none d-md-inline-block">
-          <Nav.Link
-            href="#"
-            as={Link}
-            to="/"
-            id="menu-link"
-            style={{ color: menu_font_color }}
-            // onClick={onClick("home")}
-          >
-            <LanguageContext.Consumer>
-              {({ data }) => data.menu.homelabel}
-            </LanguageContext.Consumer>
-          </Nav.Link>
-        </div>
-        {/* <Nav.Item>
-          <Nav.Link
-            href="#about"
-            as={Link}
-            to="/about"
-            id="menu-link"
-            style={{ color: menu_font_color }}
-            //   onClick={onClick("about")}
-          >
-            <LanguageContext.Consumer>
-              {({ data }) => data.menu.aboutlabel}
-            </LanguageContext.Consumer>
-          </Nav.Link>
-        </Nav.Item> 
-      </Navbar.Collapse> */}
-      <Navbar.Brand style={{ color: menu_font_color }}>
-        <Component.PageCart />
-      </Navbar.Brand>
+      {props.data.pageData.whatsapp ? (
+        <Navbar.Brand style={{ color: menu_font_color }}>
+          <Component.PageCart toggleDialog={props.toggleDialog} />
+        </Navbar.Brand>
+      ) : null}
     </Navbar>
+  );
+};
+
+const ResponsiveDialog = (props) => {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const context = React.useContext(CartContext);
+
+  return (
+    <div>
+      <Dialog
+        fullScreen={fullScreen}
+        open={context.channelDialog}
+        onClose={context.toggleDialog}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"Which dining method would you like?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <div class="row">
+              <div class="d-flex col-xs-12 col-sm-12 col-md-12 col-lg-12 justify-content-center align-items-center">
+                <img
+                  alt=""
+                  src={i_want}
+                  style={{
+                    flexShrink: "0",
+                    minWidth: "5vw",
+                    maxWidth: "15vw",
+                    marginBottom: "20px",
+                  }}
+                />
+              </div>
+              <div class="d-flex col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 justify-content-end align-items-center">
+                <img
+                  alt=""
+                  class={
+                    context.channel === "collect"
+                      ? "home-option-clicked"
+                      : "home-option"
+                  }
+                  onClick={() => context.changeChannel("collect")}
+                  src={self_collect}
+                  style={{ flexShrink: "0", minWidth: "100%" }}
+                />
+              </div>
+              <div class="d-flex col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 justify-content-start align-items-center">
+                <img
+                  alt=""
+                  onClick={() => context.changeChannel("delivery")}
+                  class={
+                    context.channel === "delivery"
+                      ? "home-option-clicked"
+                      : "home-option"
+                  }
+                  src={delivery}
+                  style={{ flexShrink: "0", minWidth: "100%" }}
+                />
+              </div>
+            </div>
+            {context.channel ? (
+              <Component.PageConfirm toggle="channel" />
+            ) : null}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={context.toggleDialog}
+            color="primary"
+            variant={"contained"}
+          >
+            Save
+          </Button>
+          <Button onClick={context.toggleDialog} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 };
 
@@ -219,6 +255,7 @@ export class Page extends React.Component {
       hasReviewEditMessage: false,
       hasReviewDeleteMessage: false,
       shouldRememberDetails: false,
+      channelDialog: false,
       css: { menu_color: "", menu_font_color: "" },
     };
     this.enterDetails = this.enterDetails.bind(this);
@@ -587,30 +624,25 @@ export class Page extends React.Component {
     });
   };
 
-  getMenu = (without_first_item) => {
+  getMenu = () => {
     if (this.context.pageData.menu_combined) {
       let data = [];
       this.context.pageData.menu_combined.forEach((element, i) => {
         // If without_first_item, condition should be (element.name && element.price && i !== 0)) [1]
         // Else condition should only be (element.name && element.price) [2]
         let toPush = true;
-        without_first_item
-          ? element.name && element.price && i !== 0
-            ? (toPush = true)
-            : (toPush = false)
-          : element.name && element.price
-          ? (toPush = true)
-          : (toPush = false);
+        element.name ? (toPush = true) : (toPush = false);
         if (toPush) {
           data.push(
             <Component.PageItem
               quantity={element["quantity"]}
               name={element["name"]}
               price={element["price"]}
-              pic={element["image"]}
+              pic={element["pic"]}
               summary={element["description"]}
               css={this.context.css}
               index={i}
+              addon={element["addon"]}
             />
           );
         }
@@ -704,7 +736,6 @@ export class Page extends React.Component {
     let cuisine = [];
     let regions = [];
     let photos = [];
-    console.log(this.context.pageData);
     // let link = "https://wa.me/65" + this.context.pageData.contact;
     if (this.state.retrieved) {
       if (this.context.pageData.categories) {
@@ -770,7 +801,10 @@ export class Page extends React.Component {
 
     return (
       <div>
-        {InfoMenu(this.context)}
+        <InfoMenu
+          data={this.context}
+          toggleDialog={this.context.toggleDialog}
+        />
         <div
           class="container-fluid"
           style={{
@@ -779,16 +813,17 @@ export class Page extends React.Component {
             paddingLeft: "0px",
             paddingRight: "0px",
             margin: "0px 0px",
+            marginBottom: "50px",
           }}
         >
           <div>
-            {this.context.pageData.url ? (
+            {this.context.cover ? (
               <div
-                class="container-fluid row align-items-center no-gutters"
+                class="container-fluid row align-items-center justify-content-center no-gutters"
                 style={{
                   background:
                     "linear-gradient(rgba(0,0,0,0.5), rgba(255,255,255,0.3)), url(" +
-                    this.context.pageData.url +
+                    this.context.cover +
                     ") no-repeat center center",
                   backgroundSize: "cover",
                   minHeight: "300px",
@@ -797,13 +832,25 @@ export class Page extends React.Component {
                   textAlign: "center",
                 }}
               >
-                <div class="center">
+                <div>
                   <div
                     style={{
                       color: "white",
                       fontSize: "50px",
                       fontWeight: "bold",
                     }}
+                    class="d-none d-md-inline-block"
+                    id="back-to-top-anchor"
+                  >
+                    {this.context.pageData.name}
+                  </div>
+                  <div
+                    style={{
+                      color: "white",
+                      fontSize: "30px",
+                      fontWeight: "bold",
+                    }}
+                    class="d-inline-block d-md-none"
                     id="back-to-top-anchor"
                   >
                     {this.context.pageData.name}
@@ -813,6 +860,7 @@ export class Page extends React.Component {
                       color: "white",
                       fontSize: "15px",
                     }}
+                    id="back-to-top-anchor"
                   >
                     {this.context.pageData.description}
                   </div>
@@ -897,9 +945,13 @@ export class Page extends React.Component {
               ></div>
             )}
             <div
-              className="row justify-content-center"
+              className="justify-content-center"
               style={{ margin: "0px 5%" }}
             >
+              <ResponsiveDialog
+                channelDialog={this.state.channelDialog}
+                closeChannelDialog={this.closeChannelDialog}
+              />
               <div className="row justify-content-center align-items-center mt-4">
                 <ExpansionPanel
                   // expanded={expanded === "panel1"}
@@ -933,7 +985,9 @@ export class Page extends React.Component {
                     </Typography>
                   </ExpansionPanelSummary>
                   <ExpansionPanelDetails>
-                    <Typography>{this.context.about}</Typography>
+                    <Typography>
+                      {this.context.pageData.description_detail}
+                    </Typography>
                   </ExpansionPanelDetails>
                 </ExpansionPanel>
                 <ExpansionPanel
@@ -975,7 +1029,7 @@ export class Page extends React.Component {
                 </ExpansionPanel>
               </div>
               <div className="row justify-content-center align-items-center mt-4">
-                {this.getMenu(0)}
+                {this.getMenu()}
               </div>
             </div>
           </div>

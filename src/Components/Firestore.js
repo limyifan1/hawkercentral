@@ -21,30 +21,44 @@ firebase.initializeApp({
   storageBucket: "hawkercentral.appspot.com",
   messagingSenderId: "596185831538",
   appId: "1:596185831538:web:9cbfb234d1fff146cf8aeb",
-  measurementId: "G-Z220VNJFT9"
+  measurementId: "G-Z220VNJFT9",
 });
 
 const uiConfig = {
   // Popup signin flow rather than redirect flow.
-  signInFlow: 'popup',
+  signInFlow: "popup",
   // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
   // We will display Google and Facebook as auth providers.
   signInOptions: [
     {
       provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-      defaultCountry: 'SG'
-    }
+      defaultCountry: "SG",
+    },
   ],
   callbacks: {
     signInSuccessWithAuthResult(authResult, redirectUrl) {
       // Do not automatically redirect.
       return false;
     },
-  }
+  },
 };
 
+const uiConfigPage = {
+  // Popup signin flow rather than redirect flow.
+  signInFlow: "popup",
+  // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
+  // We will display Google and Facebook as auth providers.
+  credentialHelper: 'none',
+  signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID],
+  callbacks: {
+    signInSuccessWithAuthResult(authResult, redirectUrl) {
+      // Do not automatically redirect.
+      return false;
+    },
+  },
+};
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   firebase.analytics();
 }
 
@@ -56,7 +70,12 @@ const geoToPromise = geofirex.get;
 
 module.exports = {
   __esModule: true,
-  geo, geoToPromise,
-  db, storage, firebase, uiConfig,
+  geo,
+  geoToPromise,
+  db,
+  storage,
+  firebase,
+  uiConfig,
+  uiConfigPage,
   default: firebase,
 };

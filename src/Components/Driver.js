@@ -510,9 +510,9 @@ export class Driver extends React.Component {
             status: "failed",
           });
         }
-        setTimeout(() => {
-          this.setState({ submitted: false });
-        }, 5000);
+        // setTimeout(() => {
+        //   this.setState({ submitted: false });
+        // }, 5000);
       });
     });
   };
@@ -548,7 +548,7 @@ export class Driver extends React.Component {
             firebaseUser: user,
             contact: user.phoneNumber.slice(3),
           });
-          onLoad("hawker_dashboard", user.phoneNumber.slice(3));
+          onLoad("driverleh", user.phoneNumber.slice(3));
         } else {
           // No user is signed in.
         }
@@ -558,7 +558,6 @@ export class Driver extends React.Component {
 
   handleVerify = async (event) => {
     event.preventDefault();
-    //cookies.set("driver_contact", this.state.driver_contact, { path: "/" });
     // Handle Firebase phone number-OTP verification
     var phoneNumber = getPhoneNumberFromUserInput();
     var appVerifier = window.recaptchaVerifier;
