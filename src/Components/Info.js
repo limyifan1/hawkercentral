@@ -953,7 +953,7 @@ export class Info extends React.Component {
                   ) : null}
                 </div>
               )}
-              <div style={{ marginTop: "1rem" }}>
+              <div style={{ marginTop: "0.75rem" }}>
                 <svg
                   className="bi bi-house-fill"
                   width="1em"
@@ -1058,7 +1058,7 @@ export class Info extends React.Component {
               </div>
               {this.state.data.pickup_option ||
               this.state.data.delivery_option ? (
-                <div style={{ marginTop: "1rem" }}>
+                <div style={{ marginTop: "0.75rem" }}>
                   <svg
                     className="bi bi-bag"
                     width="14"
@@ -1807,48 +1807,46 @@ export class Info extends React.Component {
                 ) : null}
 
                 {/* See more button shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
-                <div style={{ marginTop: "30px" }}>
-                    <hr
-                      style={{
-                        color: "grey",
-                        backgroundColor: "grey",
-                        height: "1px",
-                        borderColor: "grey",
-                        width: "100%",
-                        alignItems: "center",
-                        marginBottom: "0px", // aligns See More to divider
-                      }}
-                    />
-                    <div
-                      style={{
-                        textAlign: "center",
-                        paddingRight: "15px",
-                        fontSize: "110%",
-                        cursor: "pointer",
-                        color: "grey",
-                      }}
-                      onClick={this.enterDetails}
-                    >
-                    {(!this.state.wantToOrder &&
-                      this.state.data.menu &&
-                      this.state.data.menu_combined.length > 1 &&
+                {
+                  this.state.data.menu && (
+                    (this.state.data.menu_combined.length > 1 &&
                       this.state.data.menu_combined[1] &&
                       this.state.data.menu_combined[1].name !== "") ||
-                    (!this.state.wantToOrder &&
-                      this.state.data.menu &&
-                      this.state.data.menu_combined[0] &&
+                    (this.state.data.menu_combined[0] &&
                       this.state.data.menu_combined[0].name !== "" &&
                       this.state.data.menu_combined[1] &&
                       this.state.data.menu_combined[1].name === "") ||
-                    (!this.state.wantToOrder &&
-                      this.state.data.menu &&
-                      this.state.data.menu_combined.length === 1 &&
+                    (this.state.data.menu_combined.length === 1 &&
                       this.state.data.menu_combined[0] &&
-                      this.state.data.menu_combined[0].name !== "") ? 
-                      <b>see more ↓</b> : <b>see less ↑</b>
-                    }
+                      this.state.data.menu_combined[0].name !== "") 
+                  ) 
+                    ? <div style={{ marginTop: "30px" }}>
+                      <hr
+                        style={{
+                          color: "grey",
+                          backgroundColor: "grey",
+                          height: "1px",
+                          borderColor: "grey",
+                          width: "100%",
+                          alignItems: "center",
+                          marginBottom: "0px", // aligns See More to divider
+                        }}
+                      />
+                      <div
+                        style={{
+                          textAlign: "center",
+                          paddingRight: "15px",
+                          fontSize: "110%",
+                          cursor: "pointer",
+                          color: "grey",
+                        }}
+                        onClick={this.enterDetails}
+                      >
+                        {!this.state.wantToOrder ? <b>see more ↓</b> : <b>see less ↑</b>}
+                      </div>
                     </div>
-                  </div>
+                    : null
+                }
               </div>
             ) : null}
             <span className="d-inline-block d-md-none">
