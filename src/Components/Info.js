@@ -22,9 +22,6 @@ import Linkify from "react-linkify";
 import { withRouter } from "react-router-dom";
 import update from "immutability-helper";
 import whatsapp_icon from "../assets/whatsapp_icon.png";
-import whatsapp_button from "../assets/whatsapp_button.png";
-import menu_button from "../assets/menu_button.png";
-import website_button from "../assets/website_button.png";
 import menu_title from "../assets/info_menu.png";
 import orderleh_title from "../assets/orderleh_title.png";
 import delivery_title from "../assets/info_delivery.png";
@@ -1104,60 +1101,64 @@ export class Info extends React.Component {
                   ) : null}
                 </div>
               ) : null}
-              {/* Custom button display: menu, website, message */}
-              <div>
-                {this.state.data.menu &&
-                this.state.data.whatsapp &&
-                this.state.data.menu_combined.length > 0 &&
-                this.state.data.menu_combined[0].name !== "" ? (
-                  <span className="">
-                    <img
-                      alt=""
-                      onClick={this.enterDetails}
-                      src={menu_button}
-                      style={{ width: "25%", cursor: "pointer" }}
-                    />
-                  </span>
-                ) : null}
-                {this.state.data.website ? (
-                  <a
-                    href={
-                      this.state.data.website.slice(0, 4) === "http"
-                        ? this.state.data.website
-                        : "https://" + this.state.data.website
-                    }
-                    onClick={() =>
-                      onLoad("website_click", this.state.data.name)
-                    }
-                    target="blank"
-                  >
-                    <img
-                      alt=""
-                      src={website_button}
+              {this.state.data.delivery_detail ||
+              this.state.data.minimum_order ||
+              this.state.data.free_delivery ? (
+                <div style={{ marginTop: "0.5rem" }}>
+                  <h6 style={{ marginBottom: "0px" }}>
+                    <b>Details Regarding Delivery</b>
+                  </h6>
+                  <Linkify>
+                    <p
                       style={{
-                        width: "25%",
+                        whiteSpace: "pre-line",
+                        marginBottom: "20px",
                       }}
-                    />
-                  </a>
-                ) : null}
-                {this.state.data.whatsapp ? (
-                  <span className="">
-                    <a
-                      href={whatsAppLink}
-                      target="blank"
-                      onClick={() => onLoad("message", this.state.data.name)}
                     >
-                      <img
-                        alt=""
-                        src={whatsapp_button}
-                        style={{
-                          width: "25%",
-                        }}
-                      />
-                    </a>
-                  </span>
-                ) : null}
-              </div>
+                      {this.state.data.delivery_detail}
+                    </p>
+                    {this.state.data.minimum_order ? (
+                      <span>
+                        Minimum Order: ${this.state.data.minimum_order}
+                        <br />
+                      </span>
+                    ) : null}
+                    {this.state.data.free_delivery ? (
+                      <span>Free Delivery: ${this.state.data.free_delivery}</span>
+                    ) : null}
+                  </Linkify>
+                </div>
+              ) : null}
+              {this.state.data.price ? (
+                <div>
+                  <h6 style={{ marginBottom: "0px" }}>
+                    <b>Delivery Fees</b>
+                  </h6>
+                  <p
+                    style={{
+                      whiteSpace: "pre-line",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    {this.state.data.price}
+                  </p>
+                </div>
+              ) : null}
+              {this.state.data.opening ? (
+                <div>
+                  <h6 style={{ marginBottom: "0px" }}>
+                    <b>Opening Hours</b>
+                  </h6>
+                  <p
+                    style={{
+                      whiteSpace: "pre-line",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    {this.state.data.opening}
+                  </p>
+                </div>
+              ) : null}
               {this.state.data.promo ? (
                 <div
                   className="card shadow"
@@ -1398,49 +1399,6 @@ export class Info extends React.Component {
                       </div>
                       <br />
                     </figure>
-                  </div>
-                ) : null}
-                {/* See more button shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
-                {(!this.state.wantToOrder &&
-                  this.state.data.menu &&
-                  this.state.data.menu_combined.length > 1 &&
-                  this.state.data.menu_combined[1] &&
-                  this.state.data.menu_combined[1].name !== "") ||
-                (!this.state.wantToOrder &&
-                  this.state.data.menu &&
-                  this.state.data.menu_combined[0] &&
-                  this.state.data.menu_combined[0].name !== "" &&
-                  this.state.data.menu_combined[1] &&
-                  this.state.data.menu_combined[1].name === "") ||
-                (!this.state.wantToOrder &&
-                  this.state.data.menu &&
-                  this.state.data.menu_combined.length === 1 &&
-                  this.state.data.menu_combined[0] &&
-                  this.state.data.menu_combined[0].name !== "") ? (
-                  <div style={{ marginTop: "30px" }}>
-                    <hr
-                      style={{
-                        color: "grey",
-                        backgroundColor: "grey",
-                        height: "1px",
-                        borderColor: "grey",
-                        width: "100%",
-                        alignItems: "center",
-                        marginBottom: "0px", // aligns See More to divider
-                      }}
-                    />
-                    <div
-                      style={{
-                        textAlign: "center",
-                        paddingRight: "15px",
-                        fontSize: "110%",
-                        cursor: "pointer",
-                        color: "grey",
-                      }}
-                      onClick={this.enterDetails}
-                    >
-                      <b>see more ↓</b>
-                    </div>
                   </div>
                 ) : null}
 
@@ -1843,6 +1801,50 @@ export class Info extends React.Component {
                     </Form>
                   </div>
                 ) : null}
+
+                {/* See more button shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
+                <div style={{ marginTop: "30px" }}>
+                    <hr
+                      style={{
+                        color: "grey",
+                        backgroundColor: "grey",
+                        height: "1px",
+                        borderColor: "grey",
+                        width: "100%",
+                        alignItems: "center",
+                        marginBottom: "0px", // aligns See More to divider
+                      }}
+                    />
+                    <div
+                      style={{
+                        textAlign: "center",
+                        paddingRight: "15px",
+                        fontSize: "110%",
+                        cursor: "pointer",
+                        color: "grey",
+                      }}
+                      onClick={this.enterDetails}
+                    >
+                    {(!this.state.wantToOrder &&
+                      this.state.data.menu &&
+                      this.state.data.menu_combined.length > 1 &&
+                      this.state.data.menu_combined[1] &&
+                      this.state.data.menu_combined[1].name !== "") ||
+                    (!this.state.wantToOrder &&
+                      this.state.data.menu &&
+                      this.state.data.menu_combined[0] &&
+                      this.state.data.menu_combined[0].name !== "" &&
+                      this.state.data.menu_combined[1] &&
+                      this.state.data.menu_combined[1].name === "") ||
+                    (!this.state.wantToOrder &&
+                      this.state.data.menu &&
+                      this.state.data.menu_combined.length === 1 &&
+                      this.state.data.menu_combined[0] &&
+                      this.state.data.menu_combined[0].name !== "") ? 
+                      <b>see more ↓</b> : <b>see less ↑</b>
+                    }
+                    </div>
+                  </div>
               </div>
             ) : null}
             <span className="d-inline-block d-md-none">
@@ -1941,77 +1943,7 @@ export class Info extends React.Component {
                 <p>{this.getMenu(false)} </p>
                 <br></br>
               </div>
-            ) : null}
-            {this.state.data.delivery_detail ||
-            this.state.data.minimum_order ||
-            this.state.data.free_delivery ? (
-              <div>
-                <h6 style={{ marginBottom: "0px" }}>
-                  <b>Details Regarding Delivery</b>
-                </h6>
-                <Linkify>
-                  <p
-                    style={{
-                      whiteSpace: "pre-line",
-                      marginBottom: "20px",
-                    }}
-                  >
-                    {this.state.data.delivery_detail}
-                  </p>
-                  {this.state.data.minimum_order ? (
-                    <span>
-                      Minimum Order: ${this.state.data.minimum_order}
-                      <br />
-                    </span>
-                  ) : null}
-                  {this.state.data.free_delivery ? (
-                    <span>Free Delivery: ${this.state.data.free_delivery}</span>
-                  ) : null}
-                </Linkify>
-              </div>
-            ) : null}
-            {this.state.data.price ? (
-              <div>
-                <h6 style={{ marginBottom: "0px" }}>
-                  <b>Delivery Fees</b>
-                </h6>
-                <p
-                  style={{
-                    whiteSpace: "pre-line",
-                    marginBottom: "20px",
-                  }}
-                >
-                  {this.state.data.price}
-                </p>
-              </div>
-            ) : null}
-            {this.state.data.opening ? (
-              <div>
-                <h6 style={{ marginBottom: "0px" }}>
-                  <b>Opening Hours</b>
-                </h6>
-                <p
-                  style={{
-                    whiteSpace: "pre-line",
-                    marginBottom: "20px",
-                  }}
-                >
-                  {this.state.data.opening}
-                </p>
-              </div>
-            ) : null}
-            {/* <p style={{ marginBottom: "20px" }}>
-                {this.state.data.website ? (
-                  this.state.data.website.slice(0, 4) === "http" ? (
-                    <a href={this.state.data.website}>Website Link</a>
-                  ) : (
-                    <a href={"https://" + this.state.data.website}>
-                      Website Link
-                    </a>
-                  )
-                ) : null}
-              </p> */}
-            
+            ) : null}            
             <div className="row" style={{ margin: "1rem 0" }}>
               <div
                 className="col-xs-6 col-sm-6 col-md-6 col-lg-6"
