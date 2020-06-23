@@ -928,11 +928,11 @@ export class Info extends React.Component {
             >
               {this.state.hero ? null : (
                 <div id="back-to-top-anchor">
-                  <h2 style={{ marginBottom: '0' }}>
+                  <h2 style={{ marginBottom: "0" }}>
                     {this.state.data.name}
                   </h2>
                   {cuisine.length > 0 ? (
-                    <div style={{ marginBottom: '0.5rem' }}>
+                    <div style={{ marginBottom: "0.5rem" }}>
                       <svg
                         className="bi bi-tag-fill"
                         width="0.88em"
@@ -1077,7 +1077,7 @@ export class Info extends React.Component {
                     <span className="badge badge-success">Delivery</span>
                   ) : null}
                   {regions.length > 0 ? (
-                    <span style={{ marginLeft: '1rem' }}>
+                    <span style={{ marginLeft: "1rem" }}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="14"
