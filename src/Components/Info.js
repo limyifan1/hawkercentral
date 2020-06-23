@@ -1123,73 +1123,6 @@ export class Info extends React.Component {
                   </span>
                 ) : null}
               </div>
-              <span className="d-none d-md-inline-block">
-                <Component.Popup
-                  data={this.state.data}
-                  id={this.state.id}
-                  onSubmitEdit={this.showReviewEditMessage}
-                  onSubmitDelete={this.showReviewDeleteMessage}
-                />
-              </span>
-              <div className="row" style={{ margin: "1rem 0" }}>
-                <div
-                  className="col-xs-6 col-sm-6 col-md-6 col-lg-6"
-                  style={{ padding: "0" }}
-                >
-                  <Clap
-                    collection={"hawkers"}
-                    id={this.state.id}
-                    claps={this.state.data.claps}
-                  />
-                </div>
-                <div
-                  className="d-none d-md-inline-block col-xs-6 col-sm-6 col-md-6 col-lg-6"
-                  style={{ padding: "0" }}
-                >
-                  <div style={{ fontSize: "12px" }}>
-                    {" "}
-                    Share this with friends!
-                  </div>
-                  <FacebookShareButton
-                    url={"www.foodleh.app/info?id=" + this.state.id}
-                    quote={"Hungry? Try out " + this.state.data.name + " now!"}
-                    hashtag={"#saveourFnB"}
-                  >
-                    <FacebookIcon size={32} round={true} />
-                  </FacebookShareButton>{" "}
-                  <span className="" style={{ marginRight: "5px" }}>
-                    <a
-                      href={
-                        "whatsapp://send?text=" +
-                        encodeURIComponent(
-                          "Hungry? Try out " +
-                            this.state.data.name +
-                            " now! Order form / more information at www.foodleh.app/info?id=" +
-                            this.state.id
-                        )
-                      }
-                    >
-                      <img
-                        alt=""
-                        src={whatsapp_icon}
-                        style={{ width: "32px", cursor: "pointer" }}
-                      />
-                    </a>
-                  </span>
-                  <TelegramShareButton
-                    url={"www.foodleh.app/info?id=" + this.state.id}
-                    title={"Hungry? Try out " + this.state.data.name + " now!"}
-                  >
-                    <TelegramIcon size={32} round={true} />
-                  </TelegramShareButton>{" "}
-                  <TwitterShareButton
-                    url={"www.foodleh.app/info?id=" + this.state.id}
-                    title={"Hungry? Try out " + this.state.data.name + " now!"}
-                  >
-                    <TwitterIcon size={32} round={true} />
-                  </TwitterShareButton>{" "}
-                </div>
-              </div>
               {this.state.data.promo ? (
                 <div
                   className="card shadow"
@@ -2043,6 +1976,72 @@ export class Info extends React.Component {
                   )
                 ) : null}
               </p> */}
+            
+            <div className="row" style={{ margin: "1rem 0" }}>
+              <div
+                className="col-xs-6 col-sm-6 col-md-6 col-lg-6"
+                style={{ padding: "0" }}
+              >
+                <Clap
+                  collection={"hawkers"}
+                  id={this.state.id}
+                  claps={this.state.data.claps}
+                />
+              </div>
+              <div
+                className="d-none d-md-inline-block col-xs-6 col-sm-6 col-md-6 col-lg-6"
+                style={{ padding: "0" }}
+              >
+                <div style={{ fontSize: "12px" }}>
+                  {" "}
+                  Share this with friends!
+                </div>
+                <FacebookShareButton
+                  url={"www.foodleh.app/info?id=" + this.state.id}
+                  quote={"Hungry? Try out " + this.state.data.name + " now!"}
+                  hashtag={"#saveourFnB"}
+                >
+                  <FacebookIcon size={32} round={true} />
+                </FacebookShareButton>{" "}
+                <span className="" style={{ marginRight: "5px" }}>
+                  <a
+                    href={
+                      "whatsapp://send?text=" +
+                      encodeURIComponent(
+                        "Hungry? Try out " +
+                          this.state.data.name +
+                          " now! Order form / more information at www.foodleh.app/info?id=" +
+                          this.state.id
+                      )
+                    }
+                  >
+                    <img
+                      alt=""
+                      src={whatsapp_icon}
+                      style={{ width: "32px", cursor: "pointer" }}
+                    />
+                  </a>
+                </span>
+                <TelegramShareButton
+                  url={"www.foodleh.app/info?id=" + this.state.id}
+                  title={"Hungry? Try out " + this.state.data.name + " now!"}
+                >
+                  <TelegramIcon size={32} round={true} />
+                </TelegramShareButton>{" "}
+                <TwitterShareButton
+                  url={"www.foodleh.app/info?id=" + this.state.id}
+                  title={"Hungry? Try out " + this.state.data.name + " now!"}
+                >
+                  <TwitterIcon size={32} round={true} />
+                </TwitterShareButton>{" "}
+              </div>
+            </div>
+            <Component.Popup
+              data={this.state.data}
+              id={this.state.id}
+              onSubmitEdit={this.showReviewEditMessage}
+              onSubmitDelete={this.showReviewDeleteMessage}
+            />
             <p style={{ color: "grey" }}>
               <small>
                 Are you the owner? Email foodleh@outlook.com for enquiries.{" "}
