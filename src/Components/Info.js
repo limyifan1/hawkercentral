@@ -932,7 +932,7 @@ export class Info extends React.Component {
                     {this.state.data.name}
                   </h2>
                   {cuisine.length > 0 ? (
-                    <div style={{ marginBottom: "0.5rem" }}>
+                    <div>
                       <svg
                         className="bi bi-tag-fill"
                         width="0.88em"
@@ -953,108 +953,112 @@ export class Info extends React.Component {
                   ) : null}
                 </div>
               )}
-              <svg
-                className="bi bi-house-fill"
-                width="1em"
-                height="1em"
-                viewBox="0 0 16 16"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 3.293l6 6V13.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z"
-                  clipRule="evenodd"
-                />
-                <path
-                  fillRule="evenodd"
-                  d="M7.293 1.5a1 1 0 011.414 0l6.647 6.646a.5.5 0 01-.708.708L8 2.207 1.354 8.854a.5.5 0 11-.708-.708L7.293 1.5z"
-                  clipRule="evenodd"
-                />
-              </svg>{" "}
-              <a href={"https://maps.google.com/?q=" + this.state.data.street} style={{ textTransform: 'capitalize' }}>
-                {(this.state.data.unit + ' ' + this.state.data.street).toLowerCase()}
-              </a>
-              {this.state.data.website ? (
-                <div>
-                  <svg
+              <div style={{ marginTop: "1rem" }}>
+                <svg
+                  className="bi bi-house-fill"
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
                   xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="black"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="feather feather-globe"
-                  >
-                    <circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                  </svg>{" "}
-                  <a
-                    href={
-                      this.state.data.website.slice(0, 4) === "http"
-                        ? this.state.data.website
-                        : "https://" + this.state.data.website
-                    }
-                    onClick={() =>
-                      onLoad("website_click", this.state.data.name)
-                    }
-                    target="blank"
-                  >
-                    {this.state.data.website.replace(/https?:\/\//,'')}
-                  </a>
-                </div>
-              ) : null}
-              {this.state.data.contact !== "0" ? (
-                <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="black"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="feather feather-phone"
-                  >
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                  </svg>{" "}
-                  <span>
-                    {this.state.data.contact} {" ("}
-                    {this.state.data.whatsapp ? (
-                      <span>
-                        <a
-                          href={whatsAppLink}
-                          target="blank"
-                          onClick={() => onLoad("message", this.state.data.name)}
-                        >
-                          WhatsApp
-                        </a>
-                        {this.state.data.sms || this.state.data.call ? ', ' : null}
-                      </span>
-                    ) : null}
-                    {this.state.data.sms ? (
-                      <span>
-                        <a href={'sms:+65' + this.state.data.contact}>SMS</a>
-                        {this.state.data.call ? ', ' : null}
-                      </span>
-                    ) : null}
-                    {this.state.data.call ? <a href={'tel:+65' + this.state.data.contact}>Call</a> : null}
-                    {") "} <br />
-                    {this.state.data.wechatid ? (
-                      <span style={{ color: "green" }}>
-                        <b>WeChat ID: {this.state.data.wechatid}</b>
-                      </span>
-                    ) : null}
-                  </span>
-                </div>
-              ) : null}
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8 3.293l6 6V13.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z"
+                    clipRule="evenodd"
+                  />
+                  <path
+                    fillRule="evenodd"
+                    d="M7.293 1.5a1 1 0 011.414 0l6.647 6.646a.5.5 0 01-.708.708L8 2.207 1.354 8.854a.5.5 0 11-.708-.708L7.293 1.5z"
+                    clipRule="evenodd"
+                  />
+                </svg>{" "}
+                <a href={"https://maps.google.com/?q=" + this.state.data.street} style={{ color: 'black', textTransform: 'capitalize' }}>
+                  {(this.state.data.unit + ' ' + this.state.data.street).toLowerCase()}
+                </a>
+                {this.state.data.website ? (
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="1em"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="black"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-globe"
+                    >
+                      <circle cx="12" cy="12" r="10"/>
+                      <line x1="2" y1="12" x2="22" y2="12"/>
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>{" "}
+                    <a
+                      href={
+                        this.state.data.website.slice(0, 4) === "http"
+                          ? this.state.data.website
+                          : "https://" + this.state.data.website
+                      }
+                      onClick={() =>
+                        onLoad("website_click", this.state.data.name)
+                      }
+                      target="blank"
+                    >
+                      {this.state.data.website.replace(/https?:\/\//,'')}
+                    </a>
+                  </div>
+                ) : null}
+                {this.state.data.contact !== "0" ? (
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="black"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-phone"
+                    >
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>{" "}
+                    <span>
+                      {this.state.data.contact} {" ("}
+                      {this.state.data.whatsapp ? (
+                        <span>
+                          <a
+                            href={whatsAppLink}
+                            target="blank"
+                            onClick={() => onLoad("message", this.state.data.name)}
+                          >
+                            WhatsApp
+                          </a>
+                          {this.state.data.sms || this.state.data.call ? ', ' : null}
+                        </span>
+                      ) : null}
+                      {this.state.data.sms ? (
+                        <span>
+                          <a href={'sms:+65' + this.state.data.contact}>SMS</a>
+                          {this.state.data.call ? ', ' : null}
+                        </span>
+                      ) : null}
+                      {this.state.data.call ? <a href={'tel:+65' + this.state.data.contact}>Call</a> : null}
+                      {") "} <br />
+                      {this.state.data.wechatid ? (
+                        <span style={{ color: "green" }}>
+                          <b>WeChat ID: {this.state.data.wechatid}</b>
+                        </span>
+                      ) : null}
+                    </span>
+                  </div>
+                ) : null}
+              </div>
               {this.state.data.pickup_option ||
               this.state.data.delivery_option ? (
-                <div>
+                <div style={{ marginTop: "1rem" }}>
                   <svg
                     className="bi bi-bag"
                     width="14"
