@@ -729,7 +729,7 @@ export class Info extends React.Component {
     let cuisine = [];
     let regions = [];
     let photos = [];
-    let link = "https://wa.me/65" + this.state.data.contact;
+    let whatsAppLink = "https://wa.me/65" + this.state.data.contact;
     if (this.state.retrieved) {
       if (this.state.data.categories) {
         this.state.data.categories.forEach((element) => {
@@ -931,10 +931,31 @@ export class Info extends React.Component {
             >
               {this.state.hero ? null : (
                 <div id="back-to-top-anchor">
-                  <h2>{this.state.data.name}</h2>
+                  <h2 style={{ marginBottom: '0' }}>
+                    {this.state.data.name}
+                  </h2>
+                  {cuisine.length > 0 ? (
+                    <div style={{ marginBottom: '0.5rem' }}>
+                      <svg
+                        className="bi bi-tag-fill"
+                        width="0.88em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M2 1a1 1 0 00-1 1v4.586a1 1 0 00.293.707l7 7a1 1 0 001.414 0l4.586-4.586a1 1 0 000-1.414l-7-7A1 1 0 006.586 1H2zm4 3.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>{" "}
+                      {cuisine}
+                      <br />
+                    </div>
+                  ) : null}
                 </div>
               )}
-              <link rel="stylesheet" href="applause-button.css" />
               <svg
                 className="bi bi-house-fill"
                 width="1em"
@@ -954,28 +975,84 @@ export class Info extends React.Component {
                   clipRule="evenodd"
                 />
               </svg>{" "}
-              <a href={"https://maps.google.com/?q=" + this.state.data.street}>
-                {this.state.data.unit} {this.state.data.street}
+              <a href={"https://maps.google.com/?q=" + this.state.data.street} style={{ textTransform: 'capitalize' }}>
+                {(this.state.data.unit + ' ' + this.state.data.street).toLowerCase()}
               </a>
-              <br />
-              {cuisine.length > 0 ? (
+              {this.state.data.website ? (
                 <div>
                   <svg
-                    className="bi bi-tag-fill"
-                    width="0.88em"
-                    height="1em"
-                    viewBox="0 0 16 16"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="black"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="feather feather-globe"
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M2 1a1 1 0 00-1 1v4.586a1 1 0 00.293.707l7 7a1 1 0 001.414 0l4.586-4.586a1 1 0 000-1.414l-7-7A1 1 0 006.586 1H2zm4 3.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
-                      clipRule="evenodd"
-                    />
+                    <circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                   </svg>{" "}
-                  {cuisine}
-                  <br />
+                  <a
+                    href={
+                      this.state.data.website.slice(0, 4) === "http"
+                        ? this.state.data.website
+                        : "https://" + this.state.data.website
+                    }
+                    onClick={() =>
+                      onLoad("website_click", this.state.data.name)
+                    }
+                    target="blank"
+                  >
+                    {this.state.data.website.replace(/https?:\/\//,'')}
+                  </a>
+                </div>
+              ) : null}
+              {this.state.data.contact !== "0" ? (
+                <div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="black"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="feather feather-phone"
+                  >
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>{" "}
+                  <span>
+                    {this.state.data.contact} {" ("}
+                    {this.state.data.whatsapp ? (
+                      <span>
+                        <a
+                          href={whatsAppLink}
+                          target="blank"
+                          onClick={() => onLoad("message", this.state.data.name)}
+                        >
+                          WhatsApp
+                        </a>
+                        {this.state.data.sms || this.state.data.call ? ', ' : null}
+                      </span>
+                    ) : null}
+                    {this.state.data.sms ? (
+                      <span>
+                        <a href={'sms:+65' + this.state.data.contact}>SMS</a>
+                        {this.state.data.call ? ', ' : null}
+                      </span>
+                    ) : null}
+                    {this.state.data.call ? <a href={'tel:+65' + this.state.data.contact}>Call</a> : null}
+                    {") "} <br />
+                    {this.state.data.wechatid ? (
+                      <span style={{ color: "green" }}>
+                        <b>WeChat ID: {this.state.data.wechatid}</b>
+                      </span>
+                    ) : null}
+                  </span>
                 </div>
               ) : null}
               {this.state.data.pickup_option ||
@@ -1001,72 +1078,30 @@ export class Info extends React.Component {
                   ) : null}
                   {this.state.data.delivery_option ? (
                     <span className="badge badge-success">Delivery</span>
-                  ) : null}{" "}
-                  <br />
-                </div>
-              ) : null}
-              {regions.length > 0 ? (
-                <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="black"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="feather feather-truck"
-                  >
-                    <rect x="1" y="3" width="15" height="13"></rect>
-                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-                    <circle cx="5.5" cy="18.5" r="2.5"></circle>
-                    <circle cx="18.5" cy="18.5" r="2.5"></circle>
-                  </svg>{" "}
-                  {regions}
-                  <br />
-                </div>
-              ) : null}
-              {this.state.data.contact !== "0" ? (
-                <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="black"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="feather feather-phone"
-                  >
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                  </svg>{" "}
-                  <span>
-                    {this.state.data.contact} {" ("}
-                    {this.state.data.whatsapp ? (
-                      <span>
-                        WhatsApp
-                        {this.state.data.sms || this.state.data.call ? (
-                          <span>, </span>
-                        ) : null}
-                      </span>
-                    ) : null}
-                    {this.state.data.sms ? (
-                      <span>
-                        SMS{this.state.data.call ? <span>, </span> : null}
-                      </span>
-                    ) : null}
-                    {this.state.data.call ? <span>Call </span> : null}
-                    {") "} <br />
-                    {this.state.data.wechatid ? (
-                      <span style={{ color: "green" }}>
-                        <b>WeChat ID: {this.state.data.wechatid}</b>
-                      </span>
-                    ) : null}
-                  </span>
+                  ) : null}
+                  {regions.length > 0 ? (
+                    <span style={{ marginLeft: '1rem' }}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="black"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="feather feather-truck"
+                      >
+                        <rect x="1" y="3" width="15" height="13"></rect>
+                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                        <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                        <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                      </svg>{" "}
+                      {regions}
+                      <br />
+                    </span>
+                  ) : null}
                 </div>
               ) : null}
               {/* Custom button display: menu, website, message */}
@@ -1108,7 +1143,7 @@ export class Info extends React.Component {
                 {this.state.data.whatsapp ? (
                   <span className="">
                     <a
-                      href={link}
+                      href={whatsAppLink}
                       target="blank"
                       onClick={() => onLoad("message", this.state.data.name)}
                     >
