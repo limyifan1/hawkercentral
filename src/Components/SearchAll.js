@@ -376,7 +376,7 @@ export class SearchAll extends React.Component {
       skeletons.push(
         <figure
           class="card shadow effect-bubba item-card"
-          style={{ margin: "5px", height: "200px"}}
+          style={{ margin: "5px", height: "200px" }}
           onClick={this.handleClick}
         >
           <Skeleton width="100%">
@@ -396,17 +396,19 @@ export class SearchAll extends React.Component {
 
       if (this.state.search.length !== 0) {
         filtered = filtered.filter((d) => {
-          return (
-            d.name.toLowerCase().includes(this.state.search.toLowerCase()) ||
-            d.description
-              .toLowerCase()
-              .includes(this.state.search.toLowerCase()) ||
-            d.description_detail
-              .toLowerCase()
-              .includes(this.state.search.toLowerCase()) ||
-            d.tags.includes(this.state.search.toLowerCase()) ||
-            d.menu_list.includes(this.state.search.toLowerCase())
-          );
+          if (d && d.name && d.description && d.description_detail && d.tags && d.menu_list) {
+            return (
+              d.name.toLowerCase().includes(this.state.search.toLowerCase()) ||
+              d.description
+                .toLowerCase()
+                .includes(this.state.search.toLowerCase()) ||
+              d.description_detail
+                .toLowerCase()
+                .includes(this.state.search.toLowerCase()) ||
+              d.tags.includes(this.state.search.toLowerCase()) ||
+              d.menu_list.includes(this.state.search.toLowerCase())
+            );
+          }
         });
       }
 

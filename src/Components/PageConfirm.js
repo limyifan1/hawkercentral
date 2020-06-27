@@ -382,7 +382,7 @@ class FullScreenDialog extends Component {
       }
     }
 
-    const delivery_fee =
+    var delivery_fee =
       (cartTotal.totalPrice <= this.context.pageData.free_delivery ||
         this.context.pageData.free_delivery === "0") &&
       this.context.delivery_fee
