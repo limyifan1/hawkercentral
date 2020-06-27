@@ -409,6 +409,9 @@ export class SearchAll extends React.Component {
               d.menu_list.includes(this.state.search.toLowerCase())
             );
           }
+          else{
+            return false
+          }
         });
       }
 
