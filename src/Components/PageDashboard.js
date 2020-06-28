@@ -778,6 +778,7 @@ const monthNames = [
 
 const OrderSettings = (props) => {
   var orders = [];
+  let count = props.orders.length
   props.orders.forEach((element, index) => {
     let items = [];
     element.orderItems.forEach((element, index) => {
@@ -819,7 +820,7 @@ const OrderSettings = (props) => {
         }}
       >
         <CardContent>
-          <h5>Order # {index + 1}</h5>
+          <h5>Order # {count - index}</h5>
           <br />
           <h5>Ordered At {order_text}</h5>
           <br />
