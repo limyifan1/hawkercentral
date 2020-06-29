@@ -121,7 +121,8 @@ class FullScreenDialog extends Component {
       this.setState({
         postal: inputValue,
       });
-      if (inputValue.length === 6) {
+
+      if (inputValue.length === 6 && this.context.channel === "delivery") {
         this.getPostal(inputValue);
       }
     }
@@ -173,10 +174,10 @@ class FullScreenDialog extends Component {
   async getPostal(postal) {
     this.setState({ loading: true });
     let data = await this.callPostal(postal);
-    if (data !== undefined) {
+    if (data !== undefined && data["ADDRESS"]) {
       this.context.addCustomerDetails("street", data["ADDRESS"]);
     }
-    if (this.context.delivery_option === "distance") {
+    if (this.context.delivery_option === "distance" && data["ADDRESS"]) {
       let distance = await this.getDirections(
         this.context.pageData.street,
         data["ADDRESS"]
@@ -198,8 +199,10 @@ class FullScreenDialog extends Component {
       this.context.addCustomerDetails("postal", userDetails.postal);
       this.context.addCustomerDetails("unit", userDetails.unit);
       this.context.addCustomerDetails("street", userDetails.street);
-      this.getPostal(userDetails.postal);
-      // this.setState(userDetails);
+      if (this.context.channel === "delivery") {
+        this.getPostal(userDetails.postal);
+        // this.setState(userDetails);
+      }
       this.setState({ shouldRememberDetails: true });
     }
   }
@@ -831,6 +834,14 @@ class FullScreenDialog extends Component {
                   }}
                 ></input>
               </div>
+              <div>
+                For any problems, please contact{" "}
+                <a href={"https://wa.me/65" + this.context.pageData.contact}>
+                  {this.context.pageData.contact}{" "}
+                </a>
+                directly.
+              </div>
+              <br />
               {this.props.toggle === "cart" ? (
                 <React.Fragment>
                   {!this.state.loading ? (
