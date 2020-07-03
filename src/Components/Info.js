@@ -22,9 +22,6 @@ import Linkify from "react-linkify";
 import { withRouter } from "react-router-dom";
 import update from "immutability-helper";
 import whatsapp_icon from "../assets/whatsapp_icon.png";
-import whatsapp_button from "../assets/whatsapp_button.png";
-import menu_button from "../assets/menu_button.png";
-import website_button from "../assets/website_button.png";
 import menu_title from "../assets/info_menu.png";
 import orderleh_title from "../assets/orderleh_title.png";
 import delivery_title from "../assets/info_delivery.png";
@@ -729,7 +726,7 @@ export class Info extends React.Component {
     let cuisine = [];
     let regions = [];
     let photos = [];
-    let link = "https://wa.me/65" + this.state.data.contact;
+    let whatsAppLink = "https://wa.me/65" + this.state.data.contact;
     if (this.state.retrieved) {
       if (this.state.data.categories) {
         this.state.data.categories.forEach((element) => {
@@ -931,56 +928,137 @@ export class Info extends React.Component {
             >
               {this.state.hero ? null : (
                 <div id="back-to-top-anchor">
-                  <h2>{this.state.data.name}</h2>
+                  <h2 style={{ marginBottom: "0" }}>
+                    {this.state.data.name}
+                  </h2>
+                  {cuisine.length > 0 ? (
+                    <div>
+                      <svg
+                        className="bi bi-tag-fill"
+                        width="0.88em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M2 1a1 1 0 00-1 1v4.586a1 1 0 00.293.707l7 7a1 1 0 001.414 0l4.586-4.586a1 1 0 000-1.414l-7-7A1 1 0 006.586 1H2zm4 3.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>{" "}
+                      {cuisine}
+                      <br />
+                    </div>
+                  ) : null}
                 </div>
               )}
-              <link rel="stylesheet" href="applause-button.css" />
-              <svg
-                className="bi bi-house-fill"
-                width="1em"
-                height="1em"
-                viewBox="0 0 16 16"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 3.293l6 6V13.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z"
-                  clipRule="evenodd"
-                />
-                <path
-                  fillRule="evenodd"
-                  d="M7.293 1.5a1 1 0 011.414 0l6.647 6.646a.5.5 0 01-.708.708L8 2.207 1.354 8.854a.5.5 0 11-.708-.708L7.293 1.5z"
-                  clipRule="evenodd"
-                />
-              </svg>{" "}
-              <a href={"https://maps.google.com/?q=" + this.state.data.street}>
-                {this.state.data.unit} {this.state.data.street}
-              </a>
-              <br />
-              {cuisine.length > 0 ? (
-                <div>
-                  <svg
-                    className="bi bi-tag-fill"
-                    width="0.88em"
-                    height="1em"
-                    viewBox="0 0 16 16"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M2 1a1 1 0 00-1 1v4.586a1 1 0 00.293.707l7 7a1 1 0 001.414 0l4.586-4.586a1 1 0 000-1.414l-7-7A1 1 0 006.586 1H2zm4 3.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>{" "}
-                  {cuisine}
-                  <br />
-                </div>
-              ) : null}
+              <div style={{ marginTop: "0.75rem" }}>
+                <svg
+                  className="bi bi-house-fill"
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8 3.293l6 6V13.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z"
+                    clipRule="evenodd"
+                  />
+                  <path
+                    fillRule="evenodd"
+                    d="M7.293 1.5a1 1 0 011.414 0l6.647 6.646a.5.5 0 01-.708.708L8 2.207 1.354 8.854a.5.5 0 11-.708-.708L7.293 1.5z"
+                    clipRule="evenodd"
+                  />
+                </svg>{" "}
+                <a href={"https://maps.google.com/?q=" + this.state.data.street} style={{ color: 'black', textTransform: 'capitalize' }}>
+                  {(this.state.data.unit + ' ' + this.state.data.street).toLowerCase()}
+                </a>
+                {this.state.data.website ? (
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="1em"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="black"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-globe"
+                    >
+                      <circle cx="12" cy="12" r="10"/>
+                      <line x1="2" y1="12" x2="22" y2="12"/>
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>{" "}
+                    <a
+                      href={
+                        this.state.data.website.slice(0, 4) === "http"
+                          ? this.state.data.website
+                          : "https://" + this.state.data.website
+                      }
+                      onClick={() =>
+                        onLoad("website_click", this.state.data.name)
+                      }
+                      target="blank"
+                    >
+                      {this.state.data.website.replace(/https?:\/\//,'')}
+                    </a>
+                  </div>
+                ) : null}
+                {this.state.data.contact !== "0" ? (
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="black"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-phone"
+                    >
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>{" "}
+                    <span>
+                      {this.state.data.contact} {" ("}
+                      {this.state.data.whatsapp ? (
+                        <span>
+                          <a
+                            href={whatsAppLink}
+                            target="blank"
+                            onClick={() => onLoad("message", this.state.data.name)}
+                          >
+                            WhatsApp
+                          </a>
+                          {this.state.data.sms || this.state.data.call ? ', ' : null}
+                        </span>
+                      ) : null}
+                      {this.state.data.sms ? (
+                        <span>
+                          <a href={'sms:+65' + this.state.data.contact}>SMS</a>
+                          {this.state.data.call ? ', ' : null}
+                        </span>
+                      ) : null}
+                      {this.state.data.call ? <a href={'tel:+65' + this.state.data.contact}>Call</a> : null}
+                      {") "} <br />
+                      {this.state.data.wechatid ? (
+                        <span style={{ color: "green" }}>
+                          <b>WeChat ID: {this.state.data.wechatid}</b>
+                        </span>
+                      ) : null}
+                    </span>
+                  </div>
+                ) : null}
+              </div>
               {this.state.data.pickup_option ||
               this.state.data.delivery_option ? (
-                <div>
+                <div style={{ marginTop: "0.75rem" }}>
                   <svg
                     className="bi bi-bag"
                     width="14"
@@ -1001,195 +1079,90 @@ export class Info extends React.Component {
                   ) : null}
                   {this.state.data.delivery_option ? (
                     <span className="badge badge-success">Delivery</span>
-                  ) : null}{" "}
-                  <br />
+                  ) : null}
+                  {regions.length > 0 ? (
+                    <span style={{ marginLeft: "1rem" }}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="black"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="feather feather-truck"
+                      >
+                        <rect x="1" y="3" width="15" height="13"></rect>
+                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                        <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                        <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                      </svg>{" "}
+                      {regions}
+                      <br />
+                    </span>
+                  ) : null}
                 </div>
               ) : null}
-              {regions.length > 0 ? (
-                <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="black"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="feather feather-truck"
-                  >
-                    <rect x="1" y="3" width="15" height="13"></rect>
-                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-                    <circle cx="5.5" cy="18.5" r="2.5"></circle>
-                    <circle cx="18.5" cy="18.5" r="2.5"></circle>
-                  </svg>{" "}
-                  {regions}
-                  <br />
-                </div>
-              ) : null}
-              {this.state.data.contact !== "0" ? (
-                <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="black"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="feather feather-phone"
-                  >
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                  </svg>{" "}
-                  <span>
-                    {this.state.data.contact} {" ("}
-                    {this.state.data.whatsapp ? (
-                      <span>
-                        WhatsApp
-                        {this.state.data.sms || this.state.data.call ? (
-                          <span>, </span>
-                        ) : null}
-                      </span>
-                    ) : null}
-                    {this.state.data.sms ? (
-                      <span>
-                        SMS{this.state.data.call ? <span>, </span> : null}
-                      </span>
-                    ) : null}
-                    {this.state.data.call ? <span>Call </span> : null}
-                    {") "} <br />
-                    {this.state.data.wechatid ? (
-                      <span style={{ color: "green" }}>
-                        <b>WeChat ID: {this.state.data.wechatid}</b>
-                      </span>
-                    ) : null}
-                  </span>
-                </div>
-              ) : null}
-              {/* Custom button display: menu, website, message */}
-              <div>
-                {this.state.data.menu &&
-                this.state.data.whatsapp &&
-                this.state.data.menu_combined.length > 0 &&
-                this.state.data.menu_combined[0].name !== "" ? (
-                  <span className="">
-                    <img
-                      alt=""
-                      onClick={this.enterDetails}
-                      src={menu_button}
-                      style={{ width: "25%", cursor: "pointer" }}
-                    />
-                  </span>
-                ) : null}
-                {this.state.data.website ? (
-                  <a
-                    href={
-                      this.state.data.website.slice(0, 4) === "http"
-                        ? this.state.data.website
-                        : "https://" + this.state.data.website
-                    }
-                    onClick={() =>
-                      onLoad("website_click", this.state.data.name)
-                    }
-                    target="blank"
-                  >
-                    <img
-                      alt=""
-                      src={website_button}
+              {this.state.data.delivery_detail ||
+              this.state.data.minimum_order ||
+              this.state.data.free_delivery ? (
+                <div style={{ marginTop: "0.5rem" }}>
+                  <h6 style={{ marginBottom: "0px" }}>
+                    <b>Details Regarding Delivery</b>
+                  </h6>
+                  <Linkify>
+                    <p
                       style={{
-                        width: "25%",
+                        whiteSpace: "pre-line",
+                        marginBottom: "20px",
                       }}
-                    />
-                  </a>
-                ) : null}
-                {this.state.data.whatsapp ? (
-                  <span className="">
-                    <a
-                      href={link}
-                      target="blank"
-                      onClick={() => onLoad("message", this.state.data.name)}
                     >
-                      <img
-                        alt=""
-                        src={whatsapp_button}
-                        style={{
-                          width: "25%",
-                        }}
-                      />
-                    </a>
-                  </span>
-                ) : null}
-              </div>
-              <span className="d-none d-md-inline-block">
-                <Component.Popup
-                  data={this.state.data}
-                  id={this.state.id}
-                  onSubmitEdit={this.showReviewEditMessage}
-                  onSubmitDelete={this.showReviewDeleteMessage}
-                />
-              </span>
-              <div className="row" style={{ margin: "1rem 0" }}>
-                <div
-                  className="col-xs-6 col-sm-6 col-md-6 col-lg-6"
-                  style={{ padding: "0" }}
-                >
-                  <Clap
-                    collection={"hawkers"}
-                    id={this.state.id}
-                    claps={this.state.data.claps}
-                  />
+                      {this.state.data.delivery_detail}
+                    </p>
+                    {this.state.data.minimum_order ? (
+                      <span>
+                        Minimum Order: ${this.state.data.minimum_order}
+                        <br />
+                      </span>
+                    ) : null}
+                    {this.state.data.free_delivery ? (
+                      <span>Free Delivery: ${this.state.data.free_delivery}</span>
+                    ) : null}
+                  </Linkify>
                 </div>
-                <div
-                  className="d-none d-md-inline-block col-xs-6 col-sm-6 col-md-6 col-lg-6"
-                  style={{ padding: "0" }}
-                >
-                  <div style={{ fontSize: "12px" }}>
-                    {" "}
-                    Share this with friends!
-                  </div>
-                  <FacebookShareButton
-                    url={"www.foodleh.app/info?id=" + this.state.id}
-                    quote={"Hungry? Try out " + this.state.data.name + " now!"}
-                    hashtag={"#saveourFnB"}
+              ) : null}
+              {this.state.data.price ? (
+                <div>
+                  <h6 style={{ marginBottom: "0px" }}>
+                    <b>Delivery Fees</b>
+                  </h6>
+                  <p
+                    style={{
+                      whiteSpace: "pre-line",
+                      marginBottom: "20px",
+                    }}
                   >
-                    <FacebookIcon size={32} round={true} />
-                  </FacebookShareButton>{" "}
-                  <span className="" style={{ marginRight: "5px" }}>
-                    <a
-                      href={
-                        "whatsapp://send?text=" +
-                        encodeURIComponent(
-                          "Hungry? Try out " +
-                            this.state.data.name +
-                            " now! Order form / more information at www.foodleh.app/info?id=" +
-                            this.state.id
-                        )
-                      }
-                    >
-                      <img
-                        alt=""
-                        src={whatsapp_icon}
-                        style={{ width: "32px", cursor: "pointer" }}
-                      />
-                    </a>
-                  </span>
-                  <TelegramShareButton
-                    url={"www.foodleh.app/info?id=" + this.state.id}
-                    title={"Hungry? Try out " + this.state.data.name + " now!"}
-                  >
-                    <TelegramIcon size={32} round={true} />
-                  </TelegramShareButton>{" "}
-                  <TwitterShareButton
-                    url={"www.foodleh.app/info?id=" + this.state.id}
-                    title={"Hungry? Try out " + this.state.data.name + " now!"}
-                  >
-                    <TwitterIcon size={32} round={true} />
-                  </TwitterShareButton>{" "}
+                    {this.state.data.price}
+                  </p>
                 </div>
-              </div>
+              ) : null}
+              {this.state.data.opening ? (
+                <div>
+                  <h6 style={{ marginBottom: "0px" }}>
+                    <b>Opening Hours</b>
+                  </h6>
+                  <p
+                    style={{
+                      whiteSpace: "pre-line",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    {this.state.data.opening}
+                  </p>
+                </div>
+              ) : null}
               {this.state.data.promo ? (
                 <div
                   className="card shadow"
@@ -1430,49 +1403,6 @@ export class Info extends React.Component {
                       </div>
                       <br />
                     </figure>
-                  </div>
-                ) : null}
-                {/* See more button shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
-                {(!this.state.wantToOrder &&
-                  this.state.data.menu &&
-                  this.state.data.menu_combined.length > 1 &&
-                  this.state.data.menu_combined[1] &&
-                  this.state.data.menu_combined[1].name !== "") ||
-                (!this.state.wantToOrder &&
-                  this.state.data.menu &&
-                  this.state.data.menu_combined[0] &&
-                  this.state.data.menu_combined[0].name !== "" &&
-                  this.state.data.menu_combined[1] &&
-                  this.state.data.menu_combined[1].name === "") ||
-                (!this.state.wantToOrder &&
-                  this.state.data.menu &&
-                  this.state.data.menu_combined.length === 1 &&
-                  this.state.data.menu_combined[0] &&
-                  this.state.data.menu_combined[0].name !== "") ? (
-                  <div style={{ marginTop: "30px" }}>
-                    <hr
-                      style={{
-                        color: "grey",
-                        backgroundColor: "grey",
-                        height: "1px",
-                        borderColor: "grey",
-                        width: "100%",
-                        alignItems: "center",
-                        marginBottom: "0px", // aligns See More to divider
-                      }}
-                    />
-                    <div
-                      style={{
-                        textAlign: "center",
-                        paddingRight: "15px",
-                        fontSize: "110%",
-                        cursor: "pointer",
-                        color: "grey",
-                      }}
-                      onClick={this.enterDetails}
-                    >
-                      <b>see more ↓</b>
-                    </div>
                   </div>
                 ) : null}
 
@@ -1875,6 +1805,48 @@ export class Info extends React.Component {
                     </Form>
                   </div>
                 ) : null}
+
+                {/* See more button shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
+                {
+                  this.state.data.menu && (
+                    (this.state.data.menu_combined.length > 1 &&
+                      this.state.data.menu_combined[1] &&
+                      this.state.data.menu_combined[1].name !== "") ||
+                    (this.state.data.menu_combined[0] &&
+                      this.state.data.menu_combined[0].name !== "" &&
+                      this.state.data.menu_combined[1] &&
+                      this.state.data.menu_combined[1].name === "") ||
+                    (this.state.data.menu_combined.length === 1 &&
+                      this.state.data.menu_combined[0] &&
+                      this.state.data.menu_combined[0].name !== "") 
+                  ) 
+                    ? <div style={{ marginTop: "30px" }}>
+                      <hr
+                        style={{
+                          color: "grey",
+                          backgroundColor: "grey",
+                          height: "1px",
+                          borderColor: "grey",
+                          width: "100%",
+                          alignItems: "center",
+                          marginBottom: "0px", // aligns See More to divider
+                        }}
+                      />
+                      <div
+                        style={{
+                          textAlign: "center",
+                          paddingRight: "15px",
+                          fontSize: "110%",
+                          cursor: "pointer",
+                          color: "grey",
+                        }}
+                        onClick={this.enterDetails}
+                      >
+                        {!this.state.wantToOrder ? <b>see more ↓</b> : <b>see less ↑</b>}
+                      </div>
+                    </div>
+                    : null
+                }
               </div>
             ) : null}
             <span className="d-inline-block d-md-none">
@@ -1973,76 +1945,72 @@ export class Info extends React.Component {
                 <p>{this.getMenu(false)} </p>
                 <br></br>
               </div>
-            ) : null}
-            {this.state.data.delivery_detail ||
-            this.state.data.minimum_order ||
-            this.state.data.free_delivery ? (
-              <div>
-                <h6 style={{ marginBottom: "0px" }}>
-                  <b>Details Regarding Delivery</b>
-                </h6>
-                <Linkify>
-                  <p
-                    style={{
-                      whiteSpace: "pre-line",
-                      marginBottom: "20px",
-                    }}
+            ) : null}            
+            <div className="row" style={{ margin: "1rem 0" }}>
+              <div
+                className="col-xs-6 col-sm-6 col-md-6 col-lg-6"
+                style={{ padding: "0" }}
+              >
+                <Clap
+                  collection={"hawkers"}
+                  id={this.state.id}
+                  claps={this.state.data.claps}
+                />
+              </div>
+              <div
+                className="d-none d-md-inline-block col-xs-6 col-sm-6 col-md-6 col-lg-6"
+                style={{ padding: "0" }}
+              >
+                <div style={{ fontSize: "12px" }}>
+                  {" "}
+                  Share this with friends!
+                </div>
+                <FacebookShareButton
+                  url={"www.foodleh.app/info?id=" + this.state.id}
+                  quote={"Hungry? Try out " + this.state.data.name + " now!"}
+                  hashtag={"#saveourFnB"}
+                >
+                  <FacebookIcon size={32} round={true} />
+                </FacebookShareButton>{" "}
+                <span className="" style={{ marginRight: "5px" }}>
+                  <a
+                    href={
+                      "whatsapp://send?text=" +
+                      encodeURIComponent(
+                        "Hungry? Try out " +
+                          this.state.data.name +
+                          " now! Order form / more information at www.foodleh.app/info?id=" +
+                          this.state.id
+                      )
+                    }
                   >
-                    {this.state.data.delivery_detail}
-                  </p>
-                  {this.state.data.minimum_order ? (
-                    <span>
-                      Minimum Order: ${this.state.data.minimum_order}
-                      <br />
-                    </span>
-                  ) : null}
-                  {this.state.data.free_delivery ? (
-                    <span>Free Delivery: ${this.state.data.free_delivery}</span>
-                  ) : null}
-                </Linkify>
-              </div>
-            ) : null}
-            {this.state.data.price ? (
-              <div>
-                <h6 style={{ marginBottom: "0px" }}>
-                  <b>Delivery Fees</b>
-                </h6>
-                <p
-                  style={{
-                    whiteSpace: "pre-line",
-                    marginBottom: "20px",
-                  }}
+                    <img
+                      alt=""
+                      src={whatsapp_icon}
+                      style={{ width: "32px", cursor: "pointer" }}
+                    />
+                  </a>
+                </span>
+                <TelegramShareButton
+                  url={"www.foodleh.app/info?id=" + this.state.id}
+                  title={"Hungry? Try out " + this.state.data.name + " now!"}
                 >
-                  {this.state.data.price}
-                </p>
-              </div>
-            ) : null}
-            {this.state.data.opening ? (
-              <div>
-                <h6 style={{ marginBottom: "0px" }}>
-                  <b>Opening Hours</b>
-                </h6>
-                <p
-                  style={{
-                    whiteSpace: "pre-line",
-                    marginBottom: "20px",
-                  }}
+                  <TelegramIcon size={32} round={true} />
+                </TelegramShareButton>{" "}
+                <TwitterShareButton
+                  url={"www.foodleh.app/info?id=" + this.state.id}
+                  title={"Hungry? Try out " + this.state.data.name + " now!"}
                 >
-                  {this.state.data.opening}
-                </p>
+                  <TwitterIcon size={32} round={true} />
+                </TwitterShareButton>{" "}
               </div>
-            ) : null}
-            {/* <p style={{ marginBottom: "20px" }}>
-                {this.state.data.website ? (
-                  this.state.data.website.slice(0, 4) === "http" ? (
-                    <a href={this.state.data.website}>Website Link</a>
-                  ) : (
-                    <a href={"https://" + this.state.data.website}>
-                      Website Link
-                    </a>
-                  )
-                ) : null}
-              </p> */}
+            </div>
+            <Component.Popup
+              data={this.state.data}
+              id={this.state.id}
+              onSubmitEdit={this.showReviewEditMessage}
+              onSubmitDelete={this.showReviewDeleteMessage}
+            />
             <p style={{ color: "grey" }}>
               <small>
                 Are you the owner? Email foodleh@outlook.com for enquiries.{" "}
