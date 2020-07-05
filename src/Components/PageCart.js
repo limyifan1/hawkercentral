@@ -2,13 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import CartProduct from "./PageCartProduct";
+import CartProgress from "./CartProgress";
 import { CartContext } from "./themeContext";
 import "./style.scss";
 import Slide from "@material-ui/core/Slide";
 import Component from "./index";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -22,16 +20,6 @@ import TextField from "@material-ui/core/TextField";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-
-function LinearProgressWithLabel(props) {
-  return (
-    <Box display="flex" alignItems="center" flexDirection="column">
-      <Box width="100%" mr={1}>
-        <LinearProgress variant="determinate" {...props} />
-      </Box>
-    </Box>
-  );
-}
 
 const PromoCodeDialog = (props) => {
   const theme = useTheme();
@@ -167,7 +155,7 @@ class PageCart extends React.Component {
       classes.push("float-cart--open");
     }
 
-    const delivery_fee =
+    const deliveryFee =
       (cartTotal.totalPrice <= this.context.pageData.free_delivery ||
       this.context.pageData.free_delivery === "0") && this.context.delivery_fee
         ? Number(this.context.delivery_fee)
@@ -194,18 +182,6 @@ class PageCart extends React.Component {
     }
 
     discount = discount.toFixed(2);
-
-    var totalPrice =
-      Number(this.context.cartTotal.totalPrice) +
-      Number(delivery_fee) -
-      Number(discount);
-
-    console.log(
-      Number(this.context.cartTotal.totalPrice),
-      Number(delivery_fee),
-      Number(discount)
-    );
-    totalPrice = totalPrice.toFixed(2);
 
     return (
       <span className={classes.join(" ")}>
@@ -311,135 +287,7 @@ class PageCart extends React.Component {
             )}
           </div>
           <div className="float-cart__footer">
-            <div class="row">
-              {this.context.pageData.minimum_order &&
-              this.context.pageData.minimum_order !== "0" &&
-              this.context.channel === "delivery" ? (
-                <React.Fragment>
-                  {this.context.pageData.minimum_order - cartTotal.totalPrice >
-                  0 ? (
-                    <div className="progress">
-                      <Grid container direction={"row"}>
-                        <Grid
-                          style={{
-                            color: "black",
-                            width: "100%",
-                            marginBottom: "20px",
-                            fontSize: "18px",
-                          }}
-                        >
-                          $
-                          {this.context.pageData.minimum_order -
-                            cartTotal.totalPrice}{" "}
-                          to minimum amount
-                        </Grid>
-                        <Grid style={{ width: "100%" }}>
-                          <LinearProgressWithLabel
-                            value={
-                              (100 * cartTotal.totalPrice) /
-                              this.context.pageData.minimum_order
-                            }
-                          />
-                        </Grid>
-                      </Grid>
-                    </div>
-                  ) : (
-                    <React.Fragment>
-                      <div className="progress">
-                        <h5 style={{ color: "green" }}>Minimum Amount Met! </h5>
-                      </div>
-                    </React.Fragment>
-                  )}
-                </React.Fragment>
-              ) : null}
-            </div>
-            <div class="row">
-              {this.context.pageData.free_delivery &&
-              this.context.pageData.free_delivery !== "0" &&
-              this.context.channel === "delivery" ? (
-                <React.Fragment>
-                  {this.context.pageData.free_delivery - cartTotal.totalPrice >
-                  0 ? (
-                    <div className="progress">
-                      <Grid container direction={"row"}>
-                        <Grid
-                          style={{
-                            color: "black",
-                            width: "100%",
-                            marginBottom: "20px",
-                            fontSize: "18px",
-                          }}
-                        >
-                          $
-                          {this.context.pageData.free_delivery -
-                            cartTotal.totalPrice}{" "}
-                          to free delivery
-                        </Grid>
-                        <Grid style={{ width: "100%" }}>
-                          <LinearProgressWithLabel
-                            value={
-                              (100 * cartTotal.totalPrice) /
-                              this.context.pageData.free_delivery
-                            }
-                          />
-                        </Grid>
-                      </Grid>
-                    </div>
-                  ) : (
-                    <React.Fragment>
-                      <div className="progress">
-                        <h5 style={{ color: "green" }}>Free Delivery Met! </h5>
-                      </div>
-                    </React.Fragment>
-                  )}
-                </React.Fragment>
-              ) : null}
-            </div>
-            {this.context.channel === "delivery" ? (
-              <div class="row">
-                {(this.context.delivery_option === "none" ||
-                  !this.context.delivery_option) && (
-                  <div className="sub">DELIVERY FEES NOT INCLUDED</div>
-                )}
-                {(this.context.delivery_option === "fixed" ||
-                  this.context.delivery_option === "distance") &&
-                  this.context.delivery_option &&
-                  this.context.delivery_fee !== undefined && (
-                    <React.Fragment>
-                      <div className="sub">DELIVERY FEES: </div>
-                      <div className="sub-price">
-                        <p className="sub-price__val">${delivery_fee}</p>
-                      </div>
-                    </React.Fragment>
-                  )}
-              </div>
-            ) : null}
-            {(this.context.all_promo || this.context.selfcollect_promo) &&
-            discount > 0 ? (
-              <div class="row">
-                <React.Fragment>
-                  <div className="sub">DISCOUNT: </div>
-                  <div className="sub-price">
-                    <p className="sub-price__val">- ${discount}</p>
-                  </div>
-                </React.Fragment>
-              </div>
-            ) : null}
-            <div class="row">
-              <div className="sub">SUBTOTAL</div>
-              <div className="sub-price">
-                {(this.context.delivery_option === "none" ||
-                  this.context.channel === "collect") && (
-                  <p className="sub-price__val">${totalPrice}</p>
-                )}
-                {(this.context.delivery_option === "fixed" ||
-                  this.context.delivery_option === "distance") &&
-                  this.context.channel === "delivery" &&
-                  this.context.delivery_fee !== undefined && (
-                    <p className="sub-price__val">${totalPrice}</p>
-                  )}
-              </div>
-            </div>
+            <CartProgress context={this.context} deliveryFee={deliveryFee} discount={discount}/>
             {this.context.promo_code ? (
               <Button
                 onClick={this.openFloatPromo}
