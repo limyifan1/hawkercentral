@@ -1849,61 +1849,6 @@ export class Info extends React.Component {
                 }
               </div>
             ) : null}
-            <span className="d-inline-block d-md-none">
-              <Component.Popup
-                data={this.state.data}
-                id={this.state.id}
-                onSubmitEdit={this.showReviewEditMessage}
-                onSubmitDelete={this.showReviewDeleteMessage}
-              />
-            </span>
-
-            <div
-              className="d-inline-block d-md-none col-xs-6 col-sm-6 col-md-6 col-lg-6"
-              style={{ padding: "0" }}
-            >
-              Share this with friends!
-              <br />
-              <FacebookShareButton
-                url={"www.foodleh.app/info?id=" + this.state.id}
-                quote={"Hungry? Try out " + this.state.data.name + " now!"}
-                hashtag={"#saveourFnB"}
-              >
-                <FacebookIcon size={32} round={true} />
-              </FacebookShareButton>{" "}
-              <span className="" style={{ marginRight: "5px" }}>
-                <a
-                  href={
-                    "whatsapp://send?text=" +
-                    encodeURIComponent(
-                      "Hungry? Try out " +
-                        this.state.data.name +
-                        " now! Order form / more information at www.foodleh.app/info?id=" +
-                        this.state.id
-                    )
-                  }
-                >
-                  <img
-                    alt=""
-                    src={whatsapp_icon}
-                    style={{ width: "32px", cursor: "pointer" }}
-                  />
-                </a>
-              </span>
-              <TelegramShareButton
-                url={"www.foodleh.app/info?id=" + this.state.id}
-                title={"Hungry? Try out " + this.state.data.name + " now!"}
-              >
-                <TelegramIcon size={32} round={true} />
-              </TelegramShareButton>{" "}
-              <TwitterShareButton
-                url={"www.foodleh.app/info?id=" + this.state.id}
-                title={"Hungry? Try out " + this.state.data.name + " now!"}
-              >
-                <TwitterIcon size={32} round={true} />
-              </TwitterShareButton>{" "}
-            </div>
-
             {this.state.data.description ? (
               <div>
                 <br />
@@ -1958,7 +1903,7 @@ export class Info extends React.Component {
                 />
               </div>
               <div
-                className="d-none d-md-inline-block col-xs-6 col-sm-6 col-md-6 col-lg-6"
+                className="d-md-inline-block col-xs-6 col-sm-6 col-md-6 col-lg-6"
                 style={{ padding: "0" }}
               >
                 <div style={{ fontSize: "12px" }}>
