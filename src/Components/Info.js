@@ -16,6 +16,7 @@ import {
 } from "react-bootstrap";
 import firebase, { db } from "./Firestore";
 import ImageGallery from "react-image-gallery";
+import CartProgress from "./CartProgress";
 import Component from "./index";
 import Clap from "./Clap";
 import Linkify from "react-linkify";
@@ -352,14 +353,26 @@ export class Info extends React.Component {
           "\n";
       }
     }
+
+    text += "\n";
+
+    const deliveryFee = this.calculateDeliveryFee();
+
+    const includesDelivery = !Number.isNaN(deliveryFee);
+
+    if (includesDelivery) {
+      text += `Item Subtotal: *$${this.state.totalPrice.toFixed(2)}*\n`;
+      text = text + `Delivery Fee: *$${deliveryFee.toFixed(2)}*\n`;
+    }
+
     text =
       text +
-      "\n\nTotal Price (not including delivery): *$" +
-      this.state.totalPrice.toFixed(2) +
+      "Total Price (" + (includesDelivery ? "" : "not ") + "including delivery): *$" +
+      (this.state.totalPrice + (deliveryFee || 0)).toFixed(2) +
       "*";
     text =
       text +
-      "\nDelivery address: *" +
+      "\n\nDelivery address: *" +
       this.state.street +
       " #" +
       this.state.unit +
@@ -722,6 +735,23 @@ export class Info extends React.Component {
 
   scrollToMyRef = () => window.scrollTo(0, this.myRef.offsetTop - 60);
 
+  defineDelivery = () => {
+    const feeString = this.state.data.price.replace("$", "");
+    const fee = feeString === "" ? NaN : Number(feeString);
+    return {
+      delivery_option: this.state.data.delivery_option && !Number.isNaN(fee) ? "fixed" : "none",
+      delivery_fee: fee,
+    };
+  };
+
+  calculateDeliveryFee = () => {
+    const feeString = this.state.data.price.replace("$", "");
+    const baseFee = feeString === "" ? NaN : Number(feeString);
+    return this.state.data.free_delivery && this.state.data.free_delivery !== "0" && this.state.totalPrice > Number(this.state.data.free_delivery)
+      ? 0 
+      : baseFee
+  }
+
   render() {
     let cuisine = [];
     let regions = [];
@@ -894,7 +924,7 @@ export class Info extends React.Component {
         ) : null}
         <div className="row">
           <div
-            className="d-md-none d-inline-block col-xs-6 col-sm-6 col-md-6 col-lg-6"
+            className="d-md-none d-inline-block col-md-6 col-lg-6"
             style={{
               padding: "0rem 1rem",
               marginBottom: "0.5rem",
@@ -921,7 +951,7 @@ export class Info extends React.Component {
               ) : null}
             </div>
           </div>
-          <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+          <div className="col-md-6 col-lg-6">
             <div
               className="container"
               style={{ textAlign: "left", paddingTop: "10px" }}
@@ -1194,7 +1224,7 @@ export class Info extends React.Component {
           </div>
 
           <div
-            className="d-none d-md-inline-block col-xs-6 col-sm-6 col-md-6 col-lg-6"
+            className="d-none d-md-inline-block col-md-6 col-lg-6"
             style={{
               padding: "2.5rem 1rem",
               height: "320px",
@@ -1425,8 +1455,7 @@ export class Info extends React.Component {
                           className="shadow"
                           style={{
                             margin: "20px",
-                            paddingLeft: "10px",
-                            paddingTop: "10px",
+                            padding: "10px",
                             backgroundColor: "#f1f1f1",
                             borderRadius: "5px",
                             position: "relative",
@@ -1548,30 +1577,22 @@ export class Info extends React.Component {
                                 alignItems: "center",
                               }}
                             />
-                            <div
-                              style={{
-                                textAlign: "right",
-                                paddingBottom: "10px",
-                                paddingRight: "15px",
-                                fontSize: "110%",
+                            <CartProgress
+                              context={{
+                                ...this.state.data,
+                                channel: "delivery",
+                                ...this.defineDelivery(),
+                                pageData: {
+                                  minimum_order: this.state.data.minimum_order,
+                                  free_delivery: this.state.data.free_delivery,
+                                },
+                                cartTotal: {
+                                  totalPrice: this.state.totalPrice,
+                                },
                               }}
-                            >
-                              <b>
-                                $
-                                {this.state.totalPrice !== undefined
-                                  ? this.state.totalPrice.toFixed(2)
-                                  : "0.00"}
-                              </b>
-                            </div>
-                            <div
-                              style={{
-                                color: "red",
-                                paddingBottom: "10px",
-                                paddingRight: "15px",
-                              }}
-                            >
-                              <b>*Delivery fees may apply</b>
-                            </div>
+                              deliveryFee={this.calculateDeliveryFee()}
+                              discount={0}
+                            />
                           </figcaption>
                         </figure>
                       </div>
@@ -1796,6 +1817,10 @@ export class Info extends React.Component {
                           name="Language"
                           onClick={() =>
                             onLoad("place_order", this.state.data.name)
+                          }
+                          disabled={
+                            this.state.data.minimum_order &&
+                            this.state.totalPrice < this.state.data.minimum_order
                           }
                         >
                           Place order via WhatsApp
