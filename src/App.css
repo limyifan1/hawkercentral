@@ -713,6 +713,25 @@ figure.effect-bubba:hover p {
   transform: translate3d(0, 0, 0);
 }
 
+figcaption .row {
+  margin: 0;
+}
+
+figcaption .progress {
+  padding: 15px 0;
+  height: 50px;
+  background-color: inherit;
+}
+
+figcaption .sub {
+  width: 20%;
+}
+
+figcaption .sub-price {
+  width: 80%;
+  text-align: right;
+}
+
 .modal-dialog {
   width: 80%;
   max-width: 90% !important;

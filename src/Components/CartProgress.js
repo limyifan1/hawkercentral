@@ -64,7 +64,7 @@ export default ({context, deliveryFee, discount}) => <>
     <div class="row">
       {(context.delivery_option === "none" ||
         !context.delivery_option) && (
-        <div className="sub">DELIVERY FEES NOT INCLUDED</div>
+        <div className="sub fees-not-included">DELIVERY FEES NOT INCLUDED</div>
       )}
       {(context.delivery_option === "fixed" ||
         context.delivery_option === "distance") &&
@@ -96,7 +96,7 @@ export default ({context, deliveryFee, discount}) => <>
           context.channel === "delivery" &&
           context.delivery_fee !== undefined
         )) && (
-        <p className="sub-price__val">${totalPrice(context, deliveryFee, discount)}</p>
+        <p className="sub-price__val">${totalPrice(context, deliveryFee || 0, discount)}</p>
       )}
     </div>
   </div>
