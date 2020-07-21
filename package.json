@@ -54,7 +54,7 @@
     "rxjs": "6.5.5",
     "ua-parser-js": "0.7.21",
     "universal-cookie": "4.0.3",
-    "vercel": "19.0.1"
+    "vercel": "19.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
