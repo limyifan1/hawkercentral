@@ -514,6 +514,12 @@ class FullScreenDialog extends Component {
         this.context.cartProducts.length !== 0 &&
         this.context.cartProducts[i].quantity !== 0
       ) {
+        var addonsArray = []
+        this.context.cartProducts[i].addons.forEach(index => {
+          var itemName = this.context.pageData.menu_combined[this.context.cartProducts[i].index].addon[index].name
+          var itemPrice = this.context.pageData.menu_combined[this.context.cartProducts[i].index].addon[index].price
+          addonsArray.push(itemName + " (+$" +itemPrice + ")")
+        });
         orderItems.push({
           name: this.context.pageData.menu_combined[
             this.context.cartProducts[i].index
@@ -525,6 +531,7 @@ class FullScreenDialog extends Component {
               this.context.cartProducts[i].index
             ].price
           ).toFixed(2),
+          addon: addonsArray 
         });
       }
     }

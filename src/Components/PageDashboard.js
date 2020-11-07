@@ -782,6 +782,12 @@ const OrderSettings = (props) => {
   props.orders.forEach((element, index) => {
     let items = [];
     element.orderItems.forEach((element, index) => {
+      let addons = ""
+      if (element.addon) {
+        element.addon.forEach(element => {
+          addons = addons + element
+        });
+      }
       items.push(
         <div>
           {element.quantity}
@@ -789,10 +795,13 @@ const OrderSettings = (props) => {
           {element.name}
           {" - "}
           {element.price}
+          {addons ? " with Addons: " : ""}
+          {addons}
         </div>
       );
     });
-    let formattedDate = element.customerDetails.date.toDate();
+    let formattedDate = element.customerDetails.datetime.toDate();
+    let orderDate = element.orderTime.toDate();
     let time_text =
       dayName[formattedDate.getDay()] +
       " " +
@@ -802,13 +811,13 @@ const OrderSettings = (props) => {
       " " +
       formatAMPM(formattedDate);
     let order_text =
-      dayName[formattedDate.getDay()] +
+      dayName[orderDate.getDay()] +
       " " +
-      formattedDate.getDate() +
+      orderDate.getDate() +
       " " +
-      monthNames[formattedDate.getMonth()] +
+      monthNames[orderDate.getMonth()] +
       " " +
-      formatAMPM(formattedDate);
+      formatAMPM(orderDate);
 
     orders.push(
       <Card
@@ -826,8 +835,12 @@ const OrderSettings = (props) => {
           <br />
           <b>Channel: </b> {element.channel}
           <br />
-          <b>Cart Total: </b> ${element.cartTotal.totalPrice}(
+          <b>Cart Total (Before Discount): </b> ${element.cartTotal.totalPrice.toFixed(2)}(
           {element.cartTotal.productQuantity} items)
+          <br />
+          <b>Discount: </b> ${element.discount}
+          <br />
+          <b>Cart Total (After Discount): </b> ${(element.cartTotal.totalPrice - element.discount).toFixed(2)}
           <br />
           <b>Name: </b> {element.customerDetails.name} <br />
           <b>Address: </b> {element.customerDetails.address} #{" "}
@@ -836,8 +849,6 @@ const OrderSettings = (props) => {
           <b>Delivery Time/ Pickup Time: </b> {time_text}
           <br />
           <b>Delivery Fee: </b> ${element.delivery_fee}
-          <br />
-          <b>Discount: </b> ${element.discount}
           <br />
           <b>Notes: </b>
           {element.customerDetails.notes} <br />
