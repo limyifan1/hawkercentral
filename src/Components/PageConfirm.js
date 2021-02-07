@@ -336,12 +336,15 @@ class FullScreenDialog extends Component {
         this.context.customerDetails.name +
         "\n";
     }
+    // count total number of items to display in customer Whatsapp message
+    let number_of_items = 0;
     for (let i = 0; i < this.context.cartProducts.length; i = i + 1) {
       if (
         this.context.cartProducts !== undefined &&
         this.context.cartProducts.length !== 0 &&
         this.context.cartProducts[i].quantity !== 0
       ) {
+        number_of_items = number_of_items + this.context.cartProducts[i].quantity;
         let addons = "";
         let addonValue = 0;
 
@@ -433,6 +436,7 @@ class FullScreenDialog extends Component {
     }
 
     text = text + "\nTotal Price: *$" + totalPrice + "*";
+    text = text + "\nTotal Number of Items: *" + number_of_items + "*";
 
     if (this.context.channel === "delivery") {
       text =
