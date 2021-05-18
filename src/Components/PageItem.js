@@ -111,7 +111,8 @@ export class PageItem extends React.Component {
   handleClick = async (event) => {
     event.preventDefault();
     if (
-      this.context.pageData.menu_combined[this.props.index].addon && this.context.pageData.menu_combined[this.props.index].addon.length > 0
+      this.context.pageData.menu_combined[this.props.index].addon &&
+      this.context.pageData.menu_combined[this.props.index].addon.length > 0
     ) {
       this.toggleDialog();
     } else {
@@ -221,18 +222,36 @@ export class PageItem extends React.Component {
                     ${this.props.price}
                   </p>
                   {this.context.pageData.whatsapp ? (
-                    <div
-                      class="btn btn-primary"
-                      style={{
-                        backgroundColor: menu_color,
-                        borderColor: menu_color,
-                        color: menu_font_color,
-                        fontSize: "12px",
-                      }}
-                      name={this.props.name}
-                      onClick={this.handleClick}
-                    >
-                      Add To Cart
+                    <div>
+                      {this.context.pageData.openOrClose == null ||
+                      this.context.pageData.openOrClose ? (
+                        <div
+                          class="btn btn-primary"
+                          style={{
+                            backgroundColor: menu_color,
+                            borderColor: menu_color,
+                            color: menu_font_color,
+                            fontSize: "12px",
+                          }}
+                          name={this.props.name}
+                          onClick={this.handleClick}
+                        >
+                          Add To Cart
+                        </div>
+                      ) : (
+                        <div
+                          class="btn btn-primary"
+                          style={{
+                            backgroundColor: "grey",
+                            borderColor: menu_color,
+                            color: menu_font_color,
+                            fontSize: "12px",
+                          }}
+                          name={this.props.name}
+                        >
+                          Store is Closed, Come Back Later!
+                        </div>
+                      )}
                     </div>
                   ) : null}
                   {/* {this.context.cartProducts} */}
