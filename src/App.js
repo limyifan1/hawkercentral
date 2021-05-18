@@ -307,6 +307,24 @@ class App extends React.Component {
       });
     };
 
+    this.toggleStoreOpenClose = () => {
+      this.setState({
+        updated: false,
+      });
+      var newPageData = this.state.pageData
+      console.log(newPageData.openOrClose)
+      if (newPageData.openOrClose === null) {
+        // toggleStoreOpenClose has not been called before, set to Close
+
+        newPageData.openOrClose = false
+      } else {
+        newPageData.openOrClose = !newPageData.openOrClose
+      }
+      return this.setState({
+        pageData: newPageData
+      });
+    };
+
     this.addAddon = (event) => {
       this.setState({
         updated: false,
@@ -929,6 +947,7 @@ class App extends React.Component {
                               updating={this.state.updating}
                               updated={this.state.updated}
                               addMenuItem={this.addMenuItem}
+                              toggleStoreOpenClose={this.toggleStoreOpenClose}
                               logo={this.state.logo}
                               cover={this.state.cover}
                               changeInfo={this.changeInfo}

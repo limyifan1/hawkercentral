@@ -351,6 +351,13 @@ const MenuSettings = (props) => {
     scrollToBottom();
   };
 
+  const toggleStoreOpenClose = async (props) => {
+    await props.toggleStoreOpenClose();
+    enqueueSnackbar("Toggled Store Opening/Closing", {
+      variant: "success",
+    });
+  };
+
   return (
     <div className="row justify-content-center align-items-center mt-4">
       <Grid container direction="column">
@@ -361,8 +368,22 @@ const MenuSettings = (props) => {
             className={classes.button}
             startIcon={<AddBoxIcon />}
             onClick={() => addMenuItem(props)}
+            style={{ margin: "20px" }}
           >
             Add New Menu Item
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            onClick={() => toggleStoreOpenClose(props)}
+            style={{ margin: "20px" }}
+          >
+            {props.data.openOrClose ? (
+              <span>Store is Open - Toggle to Close</span>
+            ) : (
+              <span>Store is Closed - Toggle to Open</span>
+            )}
           </Button>
         </Grid>
         <Grid container sm={12}>
@@ -778,14 +799,14 @@ const monthNames = [
 
 const OrderSettings = (props) => {
   var orders = [];
-  let count = props.orders.length
+  let count = props.orders.length;
   props.orders.forEach((element, index) => {
     let items = [];
     element.orderItems.forEach((element, index) => {
-      let addons = ""
+      let addons = "";
       if (element.addon) {
-        element.addon.forEach(element => {
-          addons = addons + element
+        element.addon.forEach((element) => {
+          addons = addons + element;
         });
       }
       items.push(
@@ -835,12 +856,14 @@ const OrderSettings = (props) => {
           <br />
           <b>Channel: </b> {element.channel}
           <br />
-          <b>Cart Total (Before Discount): </b> ${element.cartTotal.totalPrice.toFixed(2)}(
+          <b>Cart Total (Before Discount): </b> $
+          {element.cartTotal.totalPrice.toFixed(2)}(
           {element.cartTotal.productQuantity} items)
           <br />
           <b>Discount: </b> ${element.discount}
           <br />
-          <b>Cart Total (After Discount): </b> ${(element.cartTotal.totalPrice - element.discount).toFixed(2)}
+          <b>Cart Total (After Discount): </b> $
+          {(element.cartTotal.totalPrice - element.discount).toFixed(2)}
           <br />
           <b>Name: </b> {element.customerDetails.name} <br />
           <b>Address: </b> {element.customerDetails.address} #{" "}
@@ -1081,6 +1104,7 @@ const PageDashboardContainer = (props) => {
                 updating={props.updating}
                 updated={props.updated}
                 addMenuItem={props.addMenuItem}
+                toggleStoreOpenClose={props.toggleStoreOpenClose}
                 addAddon={props.addAddon}
                 deleteAddon={props.deleteAddon}
               />
@@ -1224,6 +1248,7 @@ class PageDashboard extends React.Component {
                 updating={this.props.updating}
                 updated={this.props.updated}
                 addMenuItem={this.props.addMenuItem}
+                toggleStoreOpenClose={this.props.toggleStoreOpenClose}
                 logo={this.props.logo}
                 cover={this.props.cover}
                 changeInfo={this.props.changeInfo}
