@@ -605,7 +605,9 @@ export class Info extends React.Component {
                             +
                           </Button>
                         </div>
-                      ) : null}
+                      ) : (
+                        <div> Store Is Closed, please come back later </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -1453,7 +1455,12 @@ export class Info extends React.Component {
                                   +
                                 </Button>
                               </div>
-                            ) : null}
+                            ) : (
+                              <div>
+                                {" "}
+                                Store Is Closed, please come back later{" "}
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -1575,7 +1582,12 @@ export class Info extends React.Component {
                                           +
                                         </Button>
                                       </div>
-                                    ) : null}
+                                    ) : (
+                                      <div>
+                                        {" "}
+                                        Store Is Closed, please come back later{" "}
+                                      </div>
+                                    )}
                                   </div>
                                   <br />
                                   <span
