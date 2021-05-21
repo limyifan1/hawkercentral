@@ -484,11 +484,11 @@ class FullScreenDialog extends Component {
     storeData.append("street_to", this.context.customerDetails.street);
     storeData.append("unit_to", this.context.customerDetails.unit);
     storeData.append("contact_to", this.context.customerDetails.customerNumber);
-    var shortenedURL = await shorten(
-      "https://foodleh.app/driver?" + storeData.toString()
-    );
-    text =
-      text + "\n For F&B Owner, request for a driver here: " + shortenedURL;
+    // var shortenedURL = await shorten(
+    //   "https://foodleh.app/driver?" + storeData.toString()
+    // );
+    // text =
+    //   text + "\n For F&B Owner, request for a driver here: " + shortenedURL;
 
     if (this.context.pageData.additional_text) {
       text = text + "\n" + this.context.pageData.additional_text;

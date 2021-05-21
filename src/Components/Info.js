@@ -367,7 +367,9 @@ export class Info extends React.Component {
 
     text =
       text +
-      "Total Price (" + (includesDelivery ? "" : "not ") + "including delivery): *$" +
+      "Total Price (" +
+      (includesDelivery ? "" : "not ") +
+      "including delivery): *$" +
       (this.state.totalPrice + (deliveryFee || 0)).toFixed(2) +
       "*";
     text =
@@ -405,11 +407,11 @@ export class Info extends React.Component {
     storeData.append("street_to", this.state.street);
     storeData.append("unit_to", this.state.unit);
     storeData.append("contact_to", this.state.customerNumber);
-    var shortenedURL = await shorten(
-      "https://foodleh.app/driver?" + storeData.toString()
-    );
-    text =
-      text + "\n For F&B Owner, request for a driver here: " + shortenedURL;
+    // var shortenedURL = await shorten(
+    //   "https://foodleh.app/driver?" + storeData.toString()
+    // );
+    // text =
+    //   text + "\n For F&B Owner, request for a driver here: " + shortenedURL;
     if (this.state.data.additional_text) {
       text = text + "\n" + this.state.data.additional_text;
     }
@@ -555,7 +557,9 @@ export class Info extends React.Component {
                       aria-label="Basic example"
                     >
                       <br />
-                      {this.state.data.whatsapp ? (
+                      {this.state.data.whatsapp &&
+                      (this.state.data.openOrClose == null ||
+                        this.state.data.openOrClose) ? (
                         <div>
                           <Button
                             variant="light"
@@ -739,7 +743,10 @@ export class Info extends React.Component {
     const feeString = this.state.data.price.replace("$", "");
     const fee = feeString === "" ? NaN : Number(feeString);
     return {
-      delivery_option: this.state.data.delivery_option && !Number.isNaN(fee) ? "fixed" : "none",
+      delivery_option:
+        this.state.data.delivery_option && !Number.isNaN(fee)
+          ? "fixed"
+          : "none",
       delivery_fee: fee,
     };
   };
@@ -747,10 +754,12 @@ export class Info extends React.Component {
   calculateDeliveryFee = () => {
     const feeString = this.state.data.price.replace("$", "");
     const baseFee = feeString === "" ? NaN : Number(feeString);
-    return this.state.data.free_delivery && this.state.data.free_delivery !== "0" && this.state.totalPrice > Number(this.state.data.free_delivery)
-      ? 0 
-      : baseFee
-  }
+    return this.state.data.free_delivery &&
+      this.state.data.free_delivery !== "0" &&
+      this.state.totalPrice > Number(this.state.data.free_delivery)
+      ? 0
+      : baseFee;
+  };
 
   render() {
     let cuisine = [];
@@ -958,9 +967,7 @@ export class Info extends React.Component {
             >
               {this.state.hero ? null : (
                 <div id="back-to-top-anchor">
-                  <h2 style={{ marginBottom: "0" }}>
-                    {this.state.data.name}
-                  </h2>
+                  <h2 style={{ marginBottom: "0" }}>{this.state.data.name}</h2>
                   {cuisine.length > 0 ? (
                     <div>
                       <svg
@@ -1003,8 +1010,15 @@ export class Info extends React.Component {
                     clipRule="evenodd"
                   />
                 </svg>{" "}
-                <a href={"https://maps.google.com/?q=" + this.state.data.street} style={{ color: 'black', textTransform: 'capitalize' }}>
-                  {(this.state.data.unit + ' ' + this.state.data.street).toLowerCase()}
+                <a
+                  href={"https://maps.google.com/?q=" + this.state.data.street}
+                  style={{ color: "black", textTransform: "capitalize" }}
+                >
+                  {(
+                    this.state.data.unit +
+                    " " +
+                    this.state.data.street
+                  ).toLowerCase()}
                 </a>
                 {this.state.data.website ? (
                   <div>
@@ -1020,9 +1034,9 @@ export class Info extends React.Component {
                       strokeLinejoin="round"
                       className="feather feather-globe"
                     >
-                      <circle cx="12" cy="12" r="10"/>
-                      <line x1="2" y1="12" x2="22" y2="12"/>
-                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="2" y1="12" x2="22" y2="12" />
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
                     </svg>{" "}
                     <a
                       href={
@@ -1035,7 +1049,7 @@ export class Info extends React.Component {
                       }
                       target="blank"
                     >
-                      {this.state.data.website.replace(/https?:\/\//,'')}
+                      {this.state.data.website.replace(/https?:\/\//, "")}
                     </a>
                   </div>
                 ) : null}
@@ -1062,20 +1076,26 @@ export class Info extends React.Component {
                           <a
                             href={whatsAppLink}
                             target="blank"
-                            onClick={() => onLoad("message", this.state.data.name)}
+                            onClick={() =>
+                              onLoad("message", this.state.data.name)
+                            }
                           >
                             WhatsApp
                           </a>
-                          {this.state.data.sms || this.state.data.call ? ', ' : null}
+                          {this.state.data.sms || this.state.data.call
+                            ? ", "
+                            : null}
                         </span>
                       ) : null}
                       {this.state.data.sms ? (
                         <span>
-                          <a href={'sms:+65' + this.state.data.contact}>SMS</a>
-                          {this.state.data.call ? ', ' : null}
+                          <a href={"sms:+65" + this.state.data.contact}>SMS</a>
+                          {this.state.data.call ? ", " : null}
                         </span>
                       ) : null}
-                      {this.state.data.call ? <a href={'tel:+65' + this.state.data.contact}>Call</a> : null}
+                      {this.state.data.call ? (
+                        <a href={"tel:+65" + this.state.data.contact}>Call</a>
+                      ) : null}
                       {") "} <br />
                       {this.state.data.wechatid ? (
                         <span style={{ color: "green" }}>
@@ -1158,7 +1178,9 @@ export class Info extends React.Component {
                       </span>
                     ) : null}
                     {this.state.data.free_delivery ? (
-                      <span>Free Delivery: ${this.state.data.free_delivery}</span>
+                      <span>
+                        Free Delivery: ${this.state.data.free_delivery}
+                      </span>
                     ) : null}
                   </Linkify>
                 </div>
@@ -1256,7 +1278,9 @@ export class Info extends React.Component {
             className="container"
             style={{ textAlign: "left", paddingTop: "10px" }}
           >
-            {this.state.data.whatsapp ? (
+            {this.state.data.whatsapp &&
+            (this.state.data.openOrClose == null ||
+              this.state.data.openOrClose) ? (
               <div>
                 {/* Display appropriate header - menu / menu with Whatsapp ordering */}
                 {this.state.data.menu &&
@@ -1383,7 +1407,9 @@ export class Info extends React.Component {
                             aria-label="Basic example"
                           >
                             <br />
-                            {this.state.data.whatsapp ? (
+                            {this.state.data.whatsapp &&
+                            (this.state.data.openOrClose == null ||
+                              this.state.data.openOrClose) ? (
                               <div>
                                 <Button
                                   variant="light"
@@ -1499,7 +1525,10 @@ export class Info extends React.Component {
                                     aria-label="Basic example"
                                   >
                                     <br />
-                                    {this.state.data.whatsapp ? (
+                                    {/* Condition for displaying add to cart option */}
+                                    {this.state.data.whatsapp &&
+                                    (this.state.data.openOrClose == null ||
+                                      this.state.data.openOrClose) ? (
                                       <div>
                                         <Button
                                           variant="light"
@@ -1820,7 +1849,8 @@ export class Info extends React.Component {
                           }
                           disabled={
                             this.state.data.minimum_order &&
-                            this.state.totalPrice < this.state.data.minimum_order
+                            this.state.totalPrice <
+                              this.state.data.minimum_order
                           }
                         >
                           Place order via WhatsApp
@@ -1832,46 +1862,47 @@ export class Info extends React.Component {
                 ) : null}
 
                 {/* See more button shows if only 1 item OR >1 item && customer hasn't clicked Menu / see more */}
-                {
-                  this.state.data.menu && (
-                    (this.state.data.menu_combined.length > 1 &&
-                      this.state.data.menu_combined[1] &&
-                      this.state.data.menu_combined[1].name !== "") ||
-                    (this.state.data.menu_combined[0] &&
-                      this.state.data.menu_combined[0].name !== "" &&
-                      this.state.data.menu_combined[1] &&
-                      this.state.data.menu_combined[1].name === "") ||
-                    (this.state.data.menu_combined.length === 1 &&
-                      this.state.data.menu_combined[0] &&
-                      this.state.data.menu_combined[0].name !== "") 
-                  ) 
-                    ? <div style={{ marginTop: "30px" }}>
-                      <hr
-                        style={{
-                          color: "grey",
-                          backgroundColor: "grey",
-                          height: "1px",
-                          borderColor: "grey",
-                          width: "100%",
-                          alignItems: "center",
-                          marginBottom: "0px", // aligns See More to divider
-                        }}
-                      />
-                      <div
-                        style={{
-                          textAlign: "center",
-                          paddingRight: "15px",
-                          fontSize: "110%",
-                          cursor: "pointer",
-                          color: "grey",
-                        }}
-                        onClick={this.enterDetails}
-                      >
-                        {!this.state.wantToOrder ? <b>see more ↓</b> : <b>see less ↑</b>}
-                      </div>
+                {this.state.data.menu &&
+                ((this.state.data.menu_combined.length > 1 &&
+                  this.state.data.menu_combined[1] &&
+                  this.state.data.menu_combined[1].name !== "") ||
+                  (this.state.data.menu_combined[0] &&
+                    this.state.data.menu_combined[0].name !== "" &&
+                    this.state.data.menu_combined[1] &&
+                    this.state.data.menu_combined[1].name === "") ||
+                  (this.state.data.menu_combined.length === 1 &&
+                    this.state.data.menu_combined[0] &&
+                    this.state.data.menu_combined[0].name !== "")) ? (
+                  <div style={{ marginTop: "30px" }}>
+                    <hr
+                      style={{
+                        color: "grey",
+                        backgroundColor: "grey",
+                        height: "1px",
+                        borderColor: "grey",
+                        width: "100%",
+                        alignItems: "center",
+                        marginBottom: "0px", // aligns See More to divider
+                      }}
+                    />
+                    <div
+                      style={{
+                        textAlign: "center",
+                        paddingRight: "15px",
+                        fontSize: "110%",
+                        cursor: "pointer",
+                        color: "grey",
+                      }}
+                      onClick={this.enterDetails}
+                    >
+                      {!this.state.wantToOrder ? (
+                        <b>see more ↓</b>
+                      ) : (
+                        <b>see less ↑</b>
+                      )}
                     </div>
-                    : null
-                }
+                  </div>
+                ) : null}
               </div>
             ) : null}
             {this.state.data.description ? (
@@ -1907,7 +1938,8 @@ export class Info extends React.Component {
               ) : null}
             </Linkify>
             {/* {Menu appears if menu data is present and whatsapp is not present} */}
-            {this.state.data.menu && !this.state.data.whatsapp ? (
+            {(this.state.data.menu && !this.state.data.whatsapp) ||
+            this.state.data.openOrClose == false ? (
               <div>
                 <h6 style={{ marginBottom: "0px" }}>
                   <b>Menu Items</b>
@@ -1915,7 +1947,7 @@ export class Info extends React.Component {
                 <p>{this.getMenu(false)} </p>
                 <br></br>
               </div>
-            ) : null}            
+            ) : null}
             <div className="row" style={{ margin: "1rem 0" }}>
               <div
                 className="col-xs-6 col-sm-6 col-md-6 col-lg-6"

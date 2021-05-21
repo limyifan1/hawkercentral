@@ -564,11 +564,11 @@ export class Page extends React.Component {
     storeData.append("street_to", this.state.street);
     storeData.append("unit_to", this.state.unit);
     storeData.append("contact_to", this.state.customerNumber);
-    var shortenedURL = await shorten(
-      "https://foodleh.app/driver?" + storeData.toString()
-    );
-    text =
-      text + "\n For F&B Owner, request for a driver here: " + shortenedURL;
+    // var shortenedURL = await shorten(
+    //   "https://foodleh.app/driver?" + storeData.toString()
+    // );
+    // text =
+    //   text + "\n For F&B Owner, request for a driver here: " + shortenedURL;
     return encodeURIComponent(text);
   };
 
