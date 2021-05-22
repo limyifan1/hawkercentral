@@ -606,7 +606,11 @@ export class Info extends React.Component {
                           </Button>
                         </div>
                       ) : (
-                        <div> Store Is Closed, please come back later </div>
+                        <div>
+                          {this.state.data.openOrClose === false ? (
+                            <div> Store Is Closed </div>
+                          ) : null}
+                        </div>
                       )}
                     </div>
                   </div>
@@ -1457,8 +1461,9 @@ export class Info extends React.Component {
                               </div>
                             ) : (
                               <div>
-                                {" "}
-                                Store Is Closed, please come back later{" "}
+                                {this.state.data.openOrClose === false ? (
+                                  <div> Store Is Closed </div>
+                                ) : null}
                               </div>
                             )}
                           </div>
@@ -1584,8 +1589,10 @@ export class Info extends React.Component {
                                       </div>
                                     ) : (
                                       <div>
-                                        {" "}
-                                        Store Is Closed, please come back later{" "}
+                                        {this.state.data.openOrClose ===
+                                        false ? (
+                                          <div> Store Is Closed </div>
+                                        ) : null}
                                       </div>
                                     )}
                                   </div>
