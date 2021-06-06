@@ -22,7 +22,7 @@
     "geofirex": "0.1.0",
     "google-map-react": "1.1.7",
     "immutability-helper": "3.1.1",
-    "jimp": "0.12.1",
+    "jimp": "0.16.1",
     "material-ui-color-picker": "3.5.0",
     "node-sass": "4.14.1",
     "notistack": "0.9.16",
