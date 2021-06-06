@@ -265,15 +265,6 @@ export class Deliveries extends React.Component {
             <b>Note: </b>
             {data.note}
             <br />
-            <b>Distance: </b>
-            {data.distance}
-            <br />
-            <b>Est. Duration: </b>
-            {data.duration}
-            <br />
-            <b>Est. Arrival Time: </b>
-            {data.arrival}
-            <br />
             <b>Delivery fee: </b>${data.cost}
             <hr
               style={{
