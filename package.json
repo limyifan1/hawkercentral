@@ -25,7 +25,6 @@
     "immutability-helper": "3.1.1",
     "jimp": "0.12.1",
     "material-ui-color-picker": "3.5.0",
-    "node-sass": "^9.0.0",
     "notistack": "0.9.16",
     "rc-progress": "3.0.0",
     "react": "16.13.1",
