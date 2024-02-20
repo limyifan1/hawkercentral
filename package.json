@@ -14,6 +14,7 @@
     "bitly": "7.1.0",
     "bootstrap": "4.5.0",
     "cheerio": "1.0.0-rc.3",
+    "css-loader": "^6.10.0",
     "csv-writer": "1.6.0",
     "emailjs-com": "2.4.1",
     "firebase": "7.15.0",
@@ -24,7 +25,7 @@
     "immutability-helper": "3.1.1",
     "jimp": "0.12.1",
     "material-ui-color-picker": "3.5.0",
-    "node-sass": "4.14.1",
+    "node-sass": "^9.0.0",
     "notistack": "0.9.16",
     "rc-progress": "3.0.0",
     "react": "16.13.1",
@@ -44,6 +45,7 @@
     "react-linkify": "1.0.0-alpha",
     "react-multi-carousel": "2.5.5",
     "react-router-dom": "5.2.0",
+    "react-script": "^2.0.5",
     "react-scripts": "3.4.1",
     "react-select": "3.1.0",
     "react-share": "4.2.0",
@@ -90,11 +92,15 @@
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
     "@loopback/cli": "2.8.0",
+    "babel-loader": "8.1.0",
     "eslint": "6.8.0",
     "husky": "4.2.5",
     "prettier": "2.0.5"
   },
   "copyright.owner": "limyifan1 <limyifan1@gmail.com>",
+  "engines": {
+    "node": ">=16.0.0 <17.0.0"
+  },
   "husky": {
     "hooks": {
       "prepare-commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
