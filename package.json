@@ -54,7 +54,7 @@
     "reactstrap": "8.4.1",
     "rxjs": "6.5.5",
     "sass": "^1.71.0",
-    "ua-parser-js": "0.7.21",
+    "ua-parser-js": "0.7.33",
     "universal-cookie": "4.0.3",
     "vercel": "19.0.1"
   },
