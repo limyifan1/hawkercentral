@@ -39,7 +39,7 @@ export class Search extends React.Component {
   callPostal = async () => {
     try {
       const response = await fetch(
-        "https://developers.onemap.sg/commonapi/search?searchVal=" +
+        "https://www.onemap.gov.sg/api/common/elastic/search?searchVal=" +
           this.state.postal +
           "&returnGeom=Y&getAddrDetails=Y"
       );

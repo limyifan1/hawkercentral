@@ -79,7 +79,7 @@ const createDomain = async (name, id, cover, uid) => {
       docid: id,
       logo: "",
       cover: cover,
-      delivery_option: "none"
+      delivery_option: "none",
     })
     .then(async () => {
       await db
@@ -474,7 +474,7 @@ export class ListForm extends React.Component {
 
   callPostal = (postal) => {
     return fetch(
-      "https://developers.onemap.sg/commonapi/search?searchVal=" +
+      "https://www.onemap.gov.sg/api/common/elastic/search?searchVal=" +
         postal +
         "&returnGeom=Y&getAddrDetails=Y"
     )

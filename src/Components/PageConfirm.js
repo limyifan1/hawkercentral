@@ -209,7 +209,7 @@ class FullScreenDialog extends Component {
 
   callPostal = (postal) => {
     return fetch(
-      "https://developers.onemap.sg/commonapi/search?searchVal=" +
+      "https://www.onemap.gov.sg/api/common/elastic/search?searchVal=" +
         postal +
         "&returnGeom=Y&getAddrDetails=Y"
     )
@@ -344,7 +344,8 @@ class FullScreenDialog extends Component {
         this.context.cartProducts.length !== 0 &&
         this.context.cartProducts[i].quantity !== 0
       ) {
-        number_of_items = number_of_items + this.context.cartProducts[i].quantity;
+        number_of_items =
+          number_of_items + this.context.cartProducts[i].quantity;
         let addons = "";
         let addonValue = 0;
 
@@ -518,11 +519,15 @@ class FullScreenDialog extends Component {
         this.context.cartProducts.length !== 0 &&
         this.context.cartProducts[i].quantity !== 0
       ) {
-        var addonsArray = []
-        this.context.cartProducts[i].addons.forEach(index => {
-          var itemName = this.context.pageData.menu_combined[this.context.cartProducts[i].index].addon[index].name
-          var itemPrice = this.context.pageData.menu_combined[this.context.cartProducts[i].index].addon[index].price
-          addonsArray.push(itemName + " (+$" +itemPrice + ")")
+        var addonsArray = [];
+        this.context.cartProducts[i].addons.forEach((index) => {
+          var itemName = this.context.pageData.menu_combined[
+            this.context.cartProducts[i].index
+          ].addon[index].name;
+          var itemPrice = this.context.pageData.menu_combined[
+            this.context.cartProducts[i].index
+          ].addon[index].price;
+          addonsArray.push(itemName + " (+$" + itemPrice + ")");
         });
         orderItems.push({
           name: this.context.pageData.menu_combined[
@@ -535,7 +540,7 @@ class FullScreenDialog extends Component {
               this.context.cartProducts[i].index
             ].price
           ).toFixed(2),
-          addon: addonsArray 
+          addon: addonsArray,
         });
       }
     }

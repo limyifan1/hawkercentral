@@ -274,7 +274,7 @@ export class Info extends React.Component {
 
   callPostal = (postal) => {
     return fetch(
-      "https://developers.onemap.sg/commonapi/search?searchVal=" +
+      "https://www.onemap.gov.sg/api/common/elastic/search?searchVal=" +
         postal +
         "&returnGeom=Y&getAddrDetails=Y"
     )
