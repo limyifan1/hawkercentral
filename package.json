@@ -12,7 +12,7 @@
     "@testing-library/user-event": "11.3.1",
     "axios": "0.19.2",
     "bitly": "7.1.0",
-    "bootstrap": "4.5.0",
+    "bootstrap": "5.0.0",
     "cheerio": "1.0.0-rc.3",
     "css-loader": "^6.10.0",
     "csv-writer": "1.6.0",
